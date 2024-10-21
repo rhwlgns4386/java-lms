@@ -27,7 +27,7 @@ public class Answers {
         answers.add(answer);
     }
 
-    void validateOwner(NsUser user) throws CannotDeleteException {
+    private void validateOwner(NsUser user) throws CannotDeleteException {
         if (isNotOwner(user)) {
             throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
         }

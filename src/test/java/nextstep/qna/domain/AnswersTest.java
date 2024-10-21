@@ -39,7 +39,7 @@ public class AnswersTest {
     @Test
     @DisplayName("다른 사람이 답변을 썼으면, CannotDeleteException 에러를 반환시킨다.")
     void 답변일치_에러() {
-        assertThatThrownBy(() -> new Answers(List.of(A1)).validateOwner(NsUserTest.SANJIGI))
+        assertThatThrownBy(() -> new Answers(List.of(A1)).deleteAnswers(NsUserTest.SANJIGI))
                 .isInstanceOf(CannotDeleteException.class);
     }
 }
