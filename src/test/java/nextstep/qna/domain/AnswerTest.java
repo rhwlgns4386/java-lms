@@ -16,7 +16,7 @@ public class AnswerTest {
     @DisplayName("답변을 삭제하면 DeleteHistory에 담아 반환한다.")
     void 답변_삭제_리스트_반환() {
         DeleteHistory deleteHistory = A1.delete();
-        assertThat(deleteHistory).isEqualTo(new DeleteHistory(ContentType.ANSWER, A1.getId(), A1.getWriter(), LocalDateTime.now()));
+        assertThat(deleteHistory).isEqualTo(DeleteHistory.ofAnswer(A1.getId(), A1.getWriter(), LocalDateTime.now()));
     }
 
     @Test

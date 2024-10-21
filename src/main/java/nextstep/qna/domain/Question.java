@@ -65,10 +65,10 @@ public class Question extends Auditable {
         validateDelete(user);
         this.deleted = true;
 
-        List<DeleteHistory> deleteAnswersHistory = answers.deleteAnswers(user);
-        DeleteHistory deleteQuestionHistory = DeleteHistory.ofQuestion(id, writer, LocalDateTime.now());
-        deleteAnswersHistory.add(deleteQuestionHistory);
-        return deleteAnswersHistory;
+        List<DeleteHistory> result = new ArrayList<>();
+        result.add(DeleteHistory.ofQuestion(id, writer, LocalDateTime.now()));
+        result.addAll(answers.deleteAnswers(user));
+        return result;
     }
 
     private void validateDelete(NsUser user) throws CannotDeleteException {

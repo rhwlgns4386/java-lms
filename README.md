@@ -32,4 +32,7 @@
 ## Step1. 피드백 구현
 - [X] Readme 에 체크리스트 적용
 - [X] DeleteHistory에 정적 팩토리 메소드 패턴 구현
-- [ ] 접근 제어자 추가 (private)
+- [X] 접근 제어자 추가 (private)
+
+## Step1. 리팩토링
+- [X] 테스트 통과하게 DeleteHistory add 순서 변경

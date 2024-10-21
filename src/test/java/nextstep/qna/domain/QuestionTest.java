@@ -27,7 +27,7 @@ public class QuestionTest {
     @DisplayName("답변을 삭제하면 DeleteHistory에 담아 반환한다.")
     void 답변_삭제_리스트_반환() throws CannotDeleteException {
         List<DeleteHistory> deleteHistories = Q1.delete(NsUserTest.JAVAJIGI);
-        assertThat(deleteHistories).isEqualTo(List.of(new DeleteHistory(ContentType.QUESTION, Q1.getId(), Q1.getWriter(), LocalDateTime.now())));
+        assertThat(deleteHistories).isEqualTo(List.of(DeleteHistory.ofQuestion(Q1.getId(), Q1.getWriter(), LocalDateTime.now())));
     }
 
 
