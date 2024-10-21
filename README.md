@@ -18,13 +18,18 @@
 * 질문과 답변 삭제 이력에 대한 정보를 DeleteHistory를 활용해 남긴다.
 
 ## Step1. 기능 구현
-* Audit 분리
-* 일급 콜렉션 래핑 (List<Answer> -> Answers)
-* 서비스 레이어 로직 이동
-  * Answer에 delete 책임 이동
-  * 삭제 시 DeleteHistory 반환
-  * Answers에서 일괄 적용
-  * Question에 delete 책임 이동
-  * 삭제 시 DeleteHistory 반환
-  * Answer, Question 주인이 아닐 시 삭제 불가 예외 추가
-* Question의 List<Answer> -> Answers로 대체
+- [X] Audit 분리
+- [X] 일급 콜렉션 래핑 (List<Answer> -> Answers)
+- [X] 서비스 레이어 로직 이동
+  - [X] Answer에 delete 책임 이동
+  - [X] 삭제 시 DeleteHistory 반환
+  - [X] Answers에서 일괄 적용
+  - [X] Question에 delete 책임 이동
+  - [X] 삭제 시 DeleteHistory 반환
+  - [X] Answer, Question 주인이 아닐 시 삭제 불가 예외 추가
+- [X] Question의 List<Answer> -> Answers로 대체
+
+## Step1. 피드백 구현
+- [X] Readme 에 체크리스트 적용
+- [X] DeleteHistory에 정적 팩토리 메소드 패턴 구현
+- [ ] 접근 제어자 추가 (private)

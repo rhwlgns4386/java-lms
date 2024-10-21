@@ -66,7 +66,7 @@ public class Question extends Auditable {
         this.deleted = true;
 
         List<DeleteHistory> deleteAnswersHistory = answers.deleteAnswers(user);
-        DeleteHistory deleteQuestionHistory = new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now());
+        DeleteHistory deleteQuestionHistory = DeleteHistory.ofQuestion(id, writer, LocalDateTime.now());
         deleteAnswersHistory.add(deleteQuestionHistory);
         return deleteAnswersHistory;
     }

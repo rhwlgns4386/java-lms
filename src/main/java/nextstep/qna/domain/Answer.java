@@ -67,6 +67,6 @@ public class Answer extends Auditable {
 
     public DeleteHistory delete() {
         this.deleted = true;
-        return new DeleteHistory(ContentType.ANSWER, id, writer, LocalDateTime.now());
+        return DeleteHistory.ofAnswer(id, writer, LocalDateTime.now());
     }
 }
