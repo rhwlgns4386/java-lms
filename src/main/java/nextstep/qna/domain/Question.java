@@ -18,8 +18,6 @@ public class Question {
 
     private List<Answer> answers = new ArrayList<>();
 
-    private List<DeleteHistory> deleteHistories = new ArrayList<>();
-
     private boolean deleted = false;
 
     private LocalDateTime createdDate = LocalDateTime.now();
@@ -62,6 +60,7 @@ public class Question {
     }
 
     public List<DeleteHistory> delete(NsUser loginUser, LocalDateTime now) throws CannotDeleteException {
+        List<DeleteHistory> deleteHistories = new ArrayList<>();
         if (!isOwner(loginUser)) {
             throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
         }
@@ -70,7 +69,7 @@ public class Question {
 
         for (Answer answer : answers) {
             DeleteHistory deleteHistory = answer.delete(loginUser, now);
-            this.deleteHistories.add(deleteHistory);
+            deleteHistories.add(deleteHistory);
         }
         return deleteHistories;
     }
