@@ -16,11 +16,11 @@ public class Answer {
     public Answer() {
     }
 
-    public Answer(NsUser writer, Question question, String contents) {
-        this(new BaseEntity(null, LocalDateTime.now(), LocalDateTime.now()), new Comments(writer, contents));
+    public Answer(NsUser writer, String contents) {
+        this(new BaseEntity(0L), new Comments(writer, contents));
     }
 
-    public Answer(Long id, NsUser writer, Question question, String contents) {
+    public Answer(Long id, NsUser writer, String contents) {
         this(new BaseEntity(id, LocalDateTime.now(), LocalDateTime.now()), new Comments(writer, contents));
     }
 

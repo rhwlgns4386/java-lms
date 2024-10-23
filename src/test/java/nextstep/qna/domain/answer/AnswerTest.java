@@ -2,6 +2,7 @@ package nextstep.qna.domain.answer;
 
 import nextstep.qna.domain.BaseEntity;
 import nextstep.users.domain.NsUser;
+import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -12,10 +13,6 @@ public class AnswerTest {
 
     @Test
     void create() {
-        LocalDateTime now = LocalDateTime.now();
-        BaseEntity baseEntity = new BaseEntity(1L, now, now);
-        Comments contents = new Comments(new NsUser(), "contents");
-
-        assertThat(new Answer(baseEntity, contents)).isEqualTo(new Answer(baseEntity, contents));
+        assertThat(new Answer(NsUserTest.JAVAJIGI, "contents")).isEqualTo(new Answer(NsUserTest.JAVAJIGI, "contents"));
     }
 }
