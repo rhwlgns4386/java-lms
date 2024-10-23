@@ -1,5 +1,8 @@
-package nextstep.qna.domain;
+package nextstep.qna.domain.question;
 
+import nextstep.qna.domain.BaseEntity;
+import nextstep.qna.domain.answer.Answers;
+import nextstep.qna.domain.answer.Comments;
 import nextstep.users.domain.NsUser;
 import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.Test;

@@ -1,6 +1,10 @@
-package nextstep.qna.domain;
+package nextstep.qna.domain.question;
 
 import nextstep.qna.CannotDeleteException;
+import nextstep.qna.domain.BaseEntity;
+import nextstep.qna.domain.answer.Comments;
+import nextstep.qna.domain.answer.Answer;
+import nextstep.qna.domain.answer.Answers;
 import nextstep.users.domain.NsUser;
 
 import java.util.List;

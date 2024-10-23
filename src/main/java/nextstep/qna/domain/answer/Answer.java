@@ -1,5 +1,7 @@
-package nextstep.qna.domain;
+package nextstep.qna.domain.answer;
 
+import nextstep.qna.domain.BaseEntity;
+import nextstep.qna.domain.question.Question;
 import nextstep.users.domain.NsUser;
 
 import java.time.LocalDateTime;
