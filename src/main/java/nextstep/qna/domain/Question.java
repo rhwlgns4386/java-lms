@@ -1,33 +1,29 @@
 package nextstep.qna.domain;
 
+import nextstep.qna.CannotDeleteException;
 import nextstep.users.domain.NsUser;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class Question {
 
-
     private final BaseEntity baseEntity;
-    private final QuestionComments questionComments;
-    private final Answers answers;
+    private final QuestionContents questionComments;
     private boolean deleted = false;
-
 
     public Question(NsUser writer, String title, String contents) {
         this(0L, writer, title, contents);
     }
 
     public Question(Long id, NsUser writer, String title, String contents) {
-        this(new BaseEntity(id), new QuestionComments(title, contents, writer), new Answers());
+        this(new BaseEntity(id), new QuestionContents(title, new Comments(writer, contents), new Answers()), false);
     }
 
-    public Question(BaseEntity baseEntity, QuestionComments questionComments, Answers answers) {
+    public Question(BaseEntity baseEntity, QuestionContents questionComments, boolean deleted) {
         this.baseEntity = baseEntity;
         this.questionComments = questionComments;
-        this.answers = answers;
+        this.deleted = deleted;
     }
 
     public Long getId() {
@@ -39,7 +35,7 @@ public class Question {
     }
 
     public void addAnswer(Answer answer) {
-        answers.add(answer);
+        questionComments.addAnswer(answer);
     }
 
     public boolean isOwner(NsUser loginUser) {
@@ -56,7 +52,17 @@ public class Question {
     }
 
     public List<Answer> getAnswers() {
-        return this.answers.getAnswers();
+        return questionComments.getAnswers();
+    }
+
+    public void throwExceptionIfAnswerIsOwner(NsUser loginUser) {
+        this.questionComments.throwExceptionIfAnswerIsOwner(loginUser);
+    }
+
+    public void throwExceptionIfOwner(NsUser loginUser) {
+        if (!this.isOwner(loginUser)) {
+            throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
+        }
     }
 
     @Override
@@ -64,11 +70,17 @@ public class Question {
         if (this == o) return true;
         if (!(o instanceof Question)) return false;
         Question question = (Question) o;
-        return deleted == question.deleted && Objects.equals(baseEntity, question.baseEntity) && Objects.equals(questionComments, question.questionComments) && Objects.equals(answers, question.answers);
+        return isDeleted() == question.isDeleted() && Objects.equals(baseEntity, question.baseEntity) && Objects.equals(questionComments, question.questionComments);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(baseEntity, questionComments, answers, deleted);
+        return Objects.hash(baseEntity, questionComments, isDeleted());
+    }
+
+    public Question delete() {
+        this.deleted = true;
+        this.questionComments.deleteAnswer();
+        return this;
     }
 }
