@@ -32,6 +32,10 @@ public class Question {
         this(new BaseEntity(id), new QuestionContents(title, new Comments(writer, contents), new Answers()), deleted);
     }
 
+    public Question(Long id, NsUser writer, String title, String contents, boolean deleted, List<Answer> answers) {
+        this(new BaseEntity(id), new QuestionContents(title, new Comments(writer, contents), new Answers(answers)), deleted);
+    }
+
     public Question(BaseEntity baseEntity, QuestionContents questionComments, boolean deleted) {
         this.baseEntity = baseEntity;
         this.questionComments = questionComments;

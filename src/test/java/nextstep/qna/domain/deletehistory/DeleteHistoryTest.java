@@ -9,6 +9,7 @@ import nextstep.qna.domain.answer.Comments;
 import nextstep.qna.domain.question.Question;
 import nextstep.qna.domain.question.QuestionContents;
 import nextstep.users.domain.NsUser;
+import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -20,15 +21,11 @@ public class DeleteHistoryTest {
 
     @Test
     void 히스토리_추가() {
-        NsUser loginUser = new NsUser();
-        LocalDateTime now = LocalDateTime.now();
-        BaseEntity baseEntity = new BaseEntity(1L, now, now);
-        Answers answers = new Answers(List.of(new Answer(baseEntity, new Comments(loginUser, "title1")), new Answer(baseEntity, new Comments(loginUser, "title1"))));
-        QuestionContents questionContents = new QuestionContents("title", new Comments(new NsUser(), "comments"), answers);
-        Question question = new Question(baseEntity, questionContents, false);
+        List<Answer> answers = List.of(new Answer(2L, NsUserTest.JAVAJIGI, "contents"), new Answer(3L, NsUserTest.JAVAJIGI, "contents"));
+        Question question = new Question(1L, NsUserTest.JAVAJIGI, "title", "contents", false, answers);
 
         List<DeleteHistory> expected = DeleteHistory.addHistory(question);
 
-        assertThat(expected).isEqualTo(List.of(new DeleteHistory(ContentType.QUESTION, 1L, loginUser, now), new DeleteHistory(ContentType.ANSWER, 1L, loginUser, now), new DeleteHistory(ContentType.ANSWER, 1L, loginUser, now)));
+        assertThat(expected).isEqualTo(List.of(new DeleteHistory(ContentType.QUESTION, 1L, NsUserTest.JAVAJIGI, LocalDateTime.now()), new DeleteHistory(ContentType.ANSWER, 2L, NsUserTest.JAVAJIGI, LocalDateTime.now()), new DeleteHistory(ContentType.ANSWER, 3L, NsUserTest.JAVAJIGI, LocalDateTime.now())));
     }
 }
