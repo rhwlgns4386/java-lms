@@ -23,15 +23,9 @@ public class Comments {
         return this.writer.equals(writer);
     }
 
-
     public NsUser getWriter() {
         return writer;
     }
-
-    public String getContents() {
-        return contents;
-    }
-
 
     @Override
     public boolean equals(Object o) {

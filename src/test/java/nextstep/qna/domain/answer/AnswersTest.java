@@ -3,6 +3,7 @@ package nextstep.qna.domain.answer;
 import nextstep.qna.CannotDeleteException;
 import nextstep.qna.domain.BaseEntity;
 import nextstep.users.domain.NsUser;
+import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -19,22 +20,17 @@ public class AnswersTest {
 
     @Test
     void 작성자가_자신인_경우_테스트() {
-        NsUser loginUser = new NsUser(1L);
-        BaseEntity baseEntity = new BaseEntity(1L);
-        Answers answers = new Answers(List.of(new Answer(baseEntity, new Comments(loginUser, "title")), new Answer(baseEntity, new Comments(loginUser, "title"))));
+        Answers answers = new Answers(List.of(new Answer(NsUserTest.JAVAJIGI, "content"), new Answer(NsUserTest.JAVAJIGI, "content")));
 
-        answers.throwExceptionIfOwner(loginUser);
+        answers.throwExceptionIfOwner(NsUserTest.JAVAJIGI);
     }
 
     @Test
     void 작성자가_자신이_아닌_경우_테스트() {
-        NsUser loginUser = new NsUser(1L);
-        NsUser loginUser2 = new NsUser(2L);
-        BaseEntity baseEntity = new BaseEntity(1L);
-        Answers answers = new Answers(List.of(new Answer(baseEntity, new Comments(loginUser, "title")), new Answer(baseEntity, new Comments(loginUser, "title"))));
+        Answers answers = new Answers(List.of(new Answer(NsUserTest.JAVAJIGI, "content"), new Answer(NsUserTest.JAVAJIGI, "content")));
 
         assertThatThrownBy(() -> {
-            answers.throwExceptionIfOwner(loginUser2);
+            answers.throwExceptionIfOwner(NsUserTest.SANJIGI);
         }).isInstanceOf(CannotDeleteException.class);
     }
 }
