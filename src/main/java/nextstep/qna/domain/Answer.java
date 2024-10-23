@@ -1,50 +1,30 @@
 package nextstep.qna.domain;
 
-import nextstep.qna.NotFoundException;
-import nextstep.qna.UnAuthorizedException;
 import nextstep.users.domain.NsUser;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class Answer {
-    private Long id;
 
-    private NsUser writer;
-
-    private Question question;
-
-    private String contents;
-
+    private BaseEntity baseEntity;
+    private Comments comments;
     private boolean deleted = false;
-
-    private LocalDateTime createdDate = LocalDateTime.now();
-
-    private LocalDateTime updatedDate;
 
     public Answer() {
     }
 
     public Answer(NsUser writer, Question question, String contents) {
-        this(null, writer, question, contents);
+        this(new BaseEntity(null, LocalDateTime.now(), LocalDateTime.now()), new Comments(writer, contents));
     }
 
     public Answer(Long id, NsUser writer, Question question, String contents) {
-        this.id = id;
-        if(writer == null) {
-            throw new UnAuthorizedException();
-        }
-
-        if(question == null) {
-            throw new NotFoundException();
-        }
-
-        this.writer = writer;
-        this.question = question;
-        this.contents = contents;
+        this(new BaseEntity(id, LocalDateTime.now(), LocalDateTime.now()), new Comments(writer, contents));
     }
 
-    public Long getId() {
-        return id;
+    public Answer(BaseEntity baseEntity, Comments comments) {
+        this.baseEntity = baseEntity;
+        this.comments = comments;
     }
 
     public Answer setDeleted(boolean deleted) {
@@ -56,24 +36,33 @@ public class Answer {
         return deleted;
     }
 
-    public boolean isOwner(NsUser writer) {
-        return this.writer.equals(writer);
+    public boolean isOwner(NsUser loginUser) {
+        return this.comments.isOwner(loginUser);
+    }
+
+    public Long getId() {
+        return this.baseEntity.getId();
     }
 
     public NsUser getWriter() {
-        return writer;
-    }
-
-    public String getContents() {
-        return contents;
-    }
-
-    public void toQuestion(Question question) {
-        this.question = question;
+        return this.comments.getWriter();
     }
 
     @Override
     public String toString() {
-        return "Answer [id=" + getId() + ", writer=" + writer + ", contents=" + contents + "]";
+        return "Answer [id=" + this.baseEntity.getId() + ", writer=" + this.comments.getWriter() + ", contents=" + comments + "]";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Answer)) return false;
+        Answer answer = (Answer) o;
+        return deleted == answer.deleted && Objects.equals(baseEntity, answer.baseEntity) && Objects.equals(comments, answer.comments);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(baseEntity, comments, deleted);
     }
 }
