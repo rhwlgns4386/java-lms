@@ -13,6 +13,10 @@ public class QuestionContents {
     private final Comments comments;
     private final Answers answers;
 
+    public QuestionContents(NsUser user, String title, String contents, List<Answer> answers) {
+        this(title, new Comments(user, contents), new Answers(answers));
+    }
+
     public QuestionContents(String title, Comments comments, Answers answers) {
         this.title = title;
         this.comments = comments;
