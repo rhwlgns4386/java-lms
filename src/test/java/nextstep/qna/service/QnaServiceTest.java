@@ -8,6 +8,7 @@ import nextstep.qna.domain.answer.Answer;
 import nextstep.qna.domain.answer.Comments;
 import nextstep.qna.domain.question.Question;
 import nextstep.qna.domain.question.QuestionRepository;
+import nextstep.qna.domain.question.QuestionTest;
 import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,6 +27,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+
 @ExtendWith(MockitoExtension.class)
 public class QnaServiceTest {
     @Mock
@@ -39,15 +41,11 @@ public class QnaServiceTest {
 
     private Question question;
     private Answer answer;
-    private BaseEntity baseEntity;
-    private Comments contents;
 
     @BeforeEach
     public void setUp() throws Exception {
         question = new Question(1L, NsUserTest.JAVAJIGI, "title1", "contents1");
-        baseEntity = new BaseEntity(1L, LocalDateTime.now(), LocalDateTime.now());
-        contents = new Comments(NsUserTest.JAVAJIGI, "Answers Contents1");
-        answer = new Answer(baseEntity, contents);
+        answer = new Answer(11L, NsUserTest.JAVAJIGI, "Answers Contents1");
         question.addAnswer(answer);
     }
 
@@ -94,7 +92,7 @@ public class QnaServiceTest {
     private void verifyDeleteHistories() {
         List<DeleteHistory> deleteHistories = Arrays.asList(
                 new DeleteHistory(ContentType.QUESTION, question.getId(), question.getWriter(), LocalDateTime.now()),
-                new DeleteHistory(ContentType.ANSWER, baseEntity.getId(), contents.getWriter(), LocalDateTime.now()));
+                new DeleteHistory(ContentType.ANSWER, answer.getId(), answer.getWriter(), LocalDateTime.now()));
         verify(deleteHistoryService).saveAll(deleteHistories);
     }
 }
