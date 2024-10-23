@@ -20,8 +20,16 @@ public class Question {
         this(0L, writer, title, contents);
     }
 
+    public Question(NsUser writer, String title, String contents, boolean deleted) {
+        this(0L, writer, title, contents, deleted);
+    }
+
     public Question(Long id, NsUser writer, String title, String contents) {
         this(new BaseEntity(id), new QuestionContents(title, new Comments(writer, contents), new Answers()), false);
+    }
+
+    public Question(Long id, NsUser writer, String title, String contents, boolean deleted) {
+        this(new BaseEntity(id), new QuestionContents(title, new Comments(writer, contents), new Answers()), deleted);
     }
 
     public Question(BaseEntity baseEntity, QuestionContents questionComments, boolean deleted) {

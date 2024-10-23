@@ -38,7 +38,7 @@ public class BaseEntity {
         if (this == o) return true;
         if (!(o instanceof BaseEntity)) return false;
         BaseEntity that = (BaseEntity) o;
-        return Objects.equals(id, that.id) && Objects.equals(createdDate, that.createdDate) && Objects.equals(updatedDate, that.updatedDate);
+        return Objects.equals(id, that.id);
     }
 
     @Override
