@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 
 public class ImageSizeTest {
 
+    public static final ImageSize is1 = new ImageSize(400, 300);
+
     @Test
     @DisplayName("이미지의 세로 길이가 200pixel 아래일 경우, 예외를 발생시킨다.")
     void 이미지_세로_체크() {
