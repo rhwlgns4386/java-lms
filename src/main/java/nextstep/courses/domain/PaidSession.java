@@ -11,7 +11,7 @@ public class PaidSession extends Session {
 
     private static void validateStudentNum(int numOfStudents, int maxNumOfStudents) {
         if (maxNumOfStudents < numOfStudents) {
-            throw new IllegalStateException("수강 정원이 초과됐습니다.");
+            throw new IllegalArgumentException("수강 정원이 초과됐습니다.");
         }
     }
 }
