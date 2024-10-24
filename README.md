@@ -56,3 +56,4 @@
 ## Step2. 기능 구현
 - [X] ImageSize validation 하는 클래스 구현
 - [X] 이미지 확장자 관리 enum 구현
+- [X] 강의 시작, 종료일 관리 클래스 구현
