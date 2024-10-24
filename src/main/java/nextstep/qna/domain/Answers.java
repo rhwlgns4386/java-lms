@@ -9,12 +9,15 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class Answers {
-    private final List<Answer> answers = new ArrayList<>();
+    private final List<Answer> answers;
 
-    public Answers(List<Answer> answers) {
-        this.answers.addAll(answers);
+    public Answers() {
+        this(new ArrayList<>());
     }
 
+    public Answers(List<Answer> answers) {
+        this.answers = answers;
+    }
 
     public List<DeleteHistory> deleteAnswers(NsUser user) throws CannotDeleteException {
         validateOwner(user);
@@ -27,6 +30,7 @@ public class Answers {
         answers.add(answer);
     }
 
+    //TODO: answer 내부로 이동
     private void validateOwner(NsUser user) throws CannotDeleteException {
         if (isNotOwner(user)) {
             throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");

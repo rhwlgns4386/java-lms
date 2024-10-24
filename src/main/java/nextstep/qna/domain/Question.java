@@ -10,13 +10,14 @@ import java.util.List;
 public class Question extends Auditable {
     private Long id;
 
+    //TODO: title, contents 분리
     private String title;
 
     private String contents;
 
     private NsUser writer;
 
-    private Answers answers = new Answers(new ArrayList<>());
+    private Answers answers = new Answers();
 
     private boolean deleted = false;
 
@@ -56,11 +57,6 @@ public class Question extends Auditable {
         return deleted;
     }
 
-    @Override
-    public String toString() {
-        return "Question [id=" + getId() + ", title=" + title + ", contents=" + contents + ", writer=" + writer + "]";
-    }
-
     public List<DeleteHistory> delete(NsUser user) throws CannotDeleteException {
         validateDelete(user);
         this.deleted = true;
@@ -75,5 +71,10 @@ public class Question extends Auditable {
         if (!isOwner(user)) {
             throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Question [id=" + getId() + ", title=" + title + ", contents=" + contents + ", writer=" + writer + "]";
     }
 }
