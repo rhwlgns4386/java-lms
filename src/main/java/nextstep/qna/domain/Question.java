@@ -4,6 +4,7 @@ import nextstep.qna.CannotDeleteException;
 import nextstep.users.domain.NsUser;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Question {
@@ -37,6 +38,7 @@ public class Question {
         this.writer = writer;
         this.title = title;
         this.contents = contents;
+        this.answers = new Answers(new ArrayList<>());
     }
 
     public Long getId() {
@@ -70,14 +72,25 @@ public class Question {
         answers.add(answer);
     }
 
-    public boolean isOwner(NsUser loginUser) {
-        return writer.equals(loginUser);
+    public void compareOwner(NsUser loginUser) throws CannotDeleteException {
+        writer.isOwner(loginUser);
+        answers.isOwner(loginUser);
+        this.deleted = true;
     }
 
-    public Question setDeleted(boolean deleted) {
-        this.deleted = deleted;
-        return this;
+    public List<DeleteHistory> deleteHistories() {
+        List<DeleteHistory> deleteHistories = new ArrayList<>();
+        deleteHistories.add(createDeleteHistory());
+        for (Answer answer : answers.getAnswers()) {
+            deleteHistories.add(answer.createDeleteHistory());
+        }
+        return deleteHistories;
     }
+
+    public DeleteHistory createDeleteHistory() {
+        return new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now());
+    }
+
 
     public boolean isDeleted() {
         return deleted;
@@ -86,11 +99,6 @@ public class Question {
     public Answers getAnswers() {
         return answers;
     }
-
-    public void checkAllAnswersEqualLoginUser(NsUser loginUser) throws CannotDeleteException {
-        answers.isOwner(loginUser);
-    }
-
 
 
     @Override

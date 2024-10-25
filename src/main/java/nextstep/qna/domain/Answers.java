@@ -6,7 +6,7 @@ import nextstep.users.domain.NsUser;
 import java.util.List;
 
 public class Answers {
-    List<Answer> answers;
+    private List<Answer> answers;
 
     public Answers(List<Answer> answers) {
         this.answers = answers;
@@ -22,6 +22,10 @@ public class Answers {
 
     public void add(Answer answer) {
         answers.add(answer);
+    }
+
+    public List<Answer> getAnswers() {
+        return answers;
     }
 }
 
