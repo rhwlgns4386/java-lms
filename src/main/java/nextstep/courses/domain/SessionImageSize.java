@@ -1,10 +1,10 @@
 package nextstep.courses.domain;
 
-public class ImageSize {
+public class SessionImageSize {
     private final int witdh;
     private final int height;
 
-    public ImageSize(int width, int height) {
+    public SessionImageSize(int width, int height) {
         validateImageSize(width, height);
         this.witdh = width;
         this.height = height;

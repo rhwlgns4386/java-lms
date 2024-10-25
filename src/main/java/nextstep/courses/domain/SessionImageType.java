@@ -2,7 +2,7 @@ package nextstep.courses.domain;
 
 import java.util.Arrays;
 
-public enum ImageType {
+public enum SessionImageType {
     GIF("gif"),
     JPG("jpg"),
     JPEG("jpeg"),
@@ -10,11 +10,11 @@ public enum ImageType {
     SVG("svg");
     private final String extension;
 
-    ImageType(String extension) {
+    SessionImageType(String extension) {
         this.extension = extension;
     }
 
-    public static ImageType getExtension(String type) {
+    public static SessionImageType getExtension(String type) {
         return Arrays.stream(values())
                 .filter(it -> it.extension.equals(type))
                 .findFirst()
