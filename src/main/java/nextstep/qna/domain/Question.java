@@ -16,8 +16,6 @@ public class Question {
 
     private NsUser writer;
 
-    //private List<Answer> answers = new ArrayList<>();
-
     private Answers answers;
 
     private boolean deleted = false;
@@ -43,24 +41,6 @@ public class Question {
 
     public Long getId() {
         return id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public Question setTitle(String title) {
-        this.title = title;
-        return this;
-    }
-
-    public String getContents() {
-        return contents;
-    }
-
-    public Question setContents(String contents) {
-        this.contents = contents;
-        return this;
     }
 
     public NsUser getWriter() {
@@ -95,11 +75,6 @@ public class Question {
     public boolean isDeleted() {
         return deleted;
     }
-
-    public Answers getAnswers() {
-        return answers;
-    }
-
 
     @Override
     public String toString() {
