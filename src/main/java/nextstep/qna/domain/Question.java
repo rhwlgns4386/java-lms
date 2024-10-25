@@ -1,9 +1,9 @@
 package nextstep.qna.domain;
 
+import nextstep.qna.CannotDeleteException;
 import nextstep.users.domain.NsUser;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Question {
@@ -15,7 +15,9 @@ public class Question {
 
     private NsUser writer;
 
-    private List<Answer> answers = new ArrayList<>();
+    //private List<Answer> answers = new ArrayList<>();
+
+    private Answers answers;
 
     private boolean deleted = false;
 
@@ -81,9 +83,15 @@ public class Question {
         return deleted;
     }
 
-    public List<Answer> getAnswers() {
+    public Answers getAnswers() {
         return answers;
     }
+
+    public void checkAllAnswersEqualLoginUser(NsUser loginUser) throws CannotDeleteException {
+        answers.isOwner(loginUser);
+    }
+
+
 
     @Override
     public String toString() {
