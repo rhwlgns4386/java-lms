@@ -1,24 +1,35 @@
 package nextstep.courses.domain;
 
-import java.util.stream.IntStream;
+import nextstep.users.domain.NsUser;
+
+import java.util.List;
+
+import static nextstep.courses.domain.SessionStatus.RECRUITING;
 
 public abstract class Session {
 
-    private final SessionDate date;
-    private final SessionImage image;
-    private final SessionStatus status;
-    private PositiveNumber numOfStudents;
+    protected final String sessionId;
+    protected final SessionDate date;
+    protected final SessionImage image;
+    protected final SessionStatus status;
+    protected List<NsUser> students;
 
-    public Session(SessionDate date, SessionImage image, SessionStatus status, PositiveNumber numOfStudents) {
+    public Session(String sessionId, SessionDate date, SessionImage image, SessionStatus status, List<NsUser> numOfStudents) {
+        this.sessionId = sessionId;
         this.date = date;
         this.image = image;
         this.status = status;
-        this.numOfStudents = numOfStudents;
+        this.students = numOfStudents;
     }
 
-    public void enroll(int num) {
-        IntStream.rangeClosed(0, num)
-                .reduce(this.numOfStudents, );
-        this.numOfStudents = numOfStudents.increase();
+    public void enroll(NsUser user) {
+        if (!RECRUITING.equals(status)) {
+            throw new IllegalStateException("강의가 모집 상태가 아닙니다.");
+        }
+        this.students.add(user);
+    }
+
+    public boolean isContainUser(NsUser user) {
+        return students.contains(user);
     }
 }
