@@ -52,7 +52,7 @@ public class Question {
         answers.add(answer);
     }
 
-    public void compareOwner(NsUser loginUser) throws CannotDeleteException {
+    public void delete(NsUser loginUser) throws CannotDeleteException {
         writer.isOwner(loginUser);
         answers.isOwner(loginUser);
         this.deleted = true;
