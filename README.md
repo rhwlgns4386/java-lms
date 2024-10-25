@@ -38,6 +38,7 @@
 - [X] 테스트 통과하게 DeleteHistory add 순서 변경
 - [X] Answers에 있던 validation 체크 로직 answer 내부로 이동
 - [X] DeleteHistory 생성, delete 메소드 분리 (CQRS 패턴)
+- [X] question에서 title, body 분리
 
 ## Step2. 요구 사항
 * 과정(Course)은 기수 단위로 운영하며, 여러 개의 강의(Session)를 가질 수 있다.

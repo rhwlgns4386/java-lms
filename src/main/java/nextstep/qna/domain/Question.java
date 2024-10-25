@@ -10,10 +10,7 @@ import java.util.List;
 public class Question extends Auditable {
     private Long id;
 
-    //TODO: title, contents 분리
-    private String title;
-
-    private String contents;
+    private QuestionBody questionBody;
 
     private NsUser writer;
 
@@ -25,14 +22,13 @@ public class Question extends Auditable {
     }
 
     public Question(NsUser writer, String title, String contents) {
-        this(0L, writer, title, contents);
+        this(0L, writer, new QuestionBody(title, contents));
     }
 
-    public Question(Long id, NsUser writer, String title, String contents) {
+    public Question(Long id, NsUser writer, QuestionBody questionBody) {
         this.id = id;
         this.writer = writer;
-        this.title = title;
-        this.contents = contents;
+        this.questionBody = questionBody;
     }
 
     public Long getId() {
@@ -78,6 +74,12 @@ public class Question extends Auditable {
 
     @Override
     public String toString() {
-        return "Question [id=" + getId() + ", title=" + title + ", contents=" + contents + ", writer=" + writer + "]";
+        return "Question{" +
+                "id=" + id +
+                ", questionBody=" + questionBody +
+                ", writer=" + writer +
+                ", answers=" + answers +
+                ", deleted=" + deleted +
+                '}';
     }
 }
