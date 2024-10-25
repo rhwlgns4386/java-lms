@@ -1,6 +1,10 @@
 package nextstep.courses.domain;
 
+import nextstep.users.domain.NsUser;
+
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Course {
     private Long id;
@@ -8,6 +12,8 @@ public class Course {
     private String title;
 
     private Long creatorId;
+
+    private List<Session> sessions;
 
     private LocalDateTime createdAt;
 
@@ -28,6 +34,10 @@ public class Course {
         this.updatedAt = updatedAt;
     }
 
+    public Course(List<Session> sessions) {
+        this.sessions = sessions;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -38,6 +48,12 @@ public class Course {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public List<Session> getSessions(NsUser user) {
+        return sessions.stream()
+                .filter(session -> session.isContainUser(user))
+                .collect(Collectors.toUnmodifiableList());
     }
 
     @Override
