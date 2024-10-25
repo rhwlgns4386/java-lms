@@ -16,30 +16,23 @@ public class Answers {
     }
 
     public Answers(List<Answer> answers) {
-        this.answers = answers;
+        this.answers = new ArrayList<>(answers);
     }
 
-    public List<DeleteHistory> deleteAnswers(NsUser user) throws CannotDeleteException {
-        validateOwner(user);
+    public void deleteAnswers(NsUser user) throws CannotDeleteException {
+        for (Answer answer : answers) {
+            answer.delete(user);
+        }
+    }
+
+    public List<DeleteHistory> ofDeleteHistories() {
         return answers.stream()
-                .map(Answer::delete)
+                .map(Answer::ofDeleteHistory)
                 .collect(Collectors.toList());
     }
 
     public void addAnswer(Answer answer) {
         answers.add(answer);
-    }
-
-    //TODO: answer 내부로 이동
-    private void validateOwner(NsUser user) throws CannotDeleteException {
-        if (isNotOwner(user)) {
-            throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
-        }
-    }
-
-    private boolean isNotOwner(NsUser user) {
-        return answers.stream()
-                .anyMatch(answer -> !answer.isOwner(user));
     }
 
     @Override
