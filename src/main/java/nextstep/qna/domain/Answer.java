@@ -63,9 +63,9 @@ public class Answer {
         this.question = question;
     }
 
-    public DeleteHistory createDeleteHistory() {
+    public DeleteHistory createDeleteHistory(LocalDateTime localDateTime) {
         deleted = true;
-        return new DeleteHistory(ContentType.ANSWER, id, writer, LocalDateTime.now());
+        return new DeleteHistory(ContentType.ANSWER, id, writer, localDateTime);
     }
 
     @Override

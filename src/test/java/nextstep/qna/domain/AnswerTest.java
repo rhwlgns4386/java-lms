@@ -10,10 +10,4 @@ public class AnswerTest {
 
 
 
-/*    @Test
-    public void 질문자와답변글의_작성자가 같은지테스트() {
-        Answer answer = new Answer(new NsUser(),new Question(), "test" );
-        assertThat(answer.)
-    }*/
-
 }

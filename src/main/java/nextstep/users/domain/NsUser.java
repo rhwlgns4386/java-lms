@@ -118,7 +118,7 @@ public class NsUser {
         return false;
     }
 
-    public void isOwner(NsUser loginUser) throws CannotDeleteException {
+    public void validateUser(NsUser loginUser) throws CannotDeleteException {
         if (!this.equals(loginUser)) {
             throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
         }

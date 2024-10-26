@@ -1,7 +1,6 @@
 package nextstep.qna.domain;
 
 import nextstep.qna.CannotDeleteException;
-import nextstep.users.domain.NsUser;
 import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.Test;
 
@@ -20,7 +19,7 @@ public class AnswersTest {
         Answers answers = new Answers(List.of(A1, A2));
 
         assertThatThrownBy(() -> {
-            answers.isOwner(NsUserTest.JAVAJIGI);
+            answers.validateAnswers(NsUserTest.JAVAJIGI);
         })
                 .isInstanceOf(CannotDeleteException.class);
     }
@@ -29,7 +28,7 @@ public class AnswersTest {
     public void 질문자와답변글의_작성자가_같은경우_성공테스트() throws CannotDeleteException {
         Answers answers = new Answers(List.of(A1, A1));
         assertDoesNotThrow(() -> {
-            answers.isOwner(NsUserTest.JAVAJIGI);
+            answers.validateAnswers(NsUserTest.JAVAJIGI);
         });
     }
 

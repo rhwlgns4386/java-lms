@@ -52,23 +52,24 @@ public class Question {
         answers.add(answer);
     }
 
-    public void delete(NsUser loginUser) throws CannotDeleteException {
-        writer.isOwner(loginUser);
-        answers.isOwner(loginUser);
+    public List<DeleteHistory> delete(NsUser loginUser, LocalDateTime localDateTime) throws CannotDeleteException {
+        writer.validateUser(loginUser);
+        answers.validateAnswers(loginUser);
         this.deleted = true;
+        return deleteHistories(localDateTime);
     }
 
-    public List<DeleteHistory> deleteHistories() {
+    public List<DeleteHistory> deleteHistories(LocalDateTime localDateTime) {
         List<DeleteHistory> deleteHistories = new ArrayList<>();
-        deleteHistories.add(createDeleteHistory());
+        deleteHistories.add(createDeleteHistory(localDateTime));
         for (Answer answer : answers.getAnswers()) {
-            deleteHistories.add(answer.createDeleteHistory());
+            deleteHistories.add(answer.createDeleteHistory(localDateTime));
         }
         return deleteHistories;
     }
 
-    public DeleteHistory createDeleteHistory() {
-        return new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now());
+    public DeleteHistory createDeleteHistory(LocalDateTime localDateTime) {
+        return new DeleteHistory(ContentType.QUESTION, id, writer, localDateTime);
     }
 
 

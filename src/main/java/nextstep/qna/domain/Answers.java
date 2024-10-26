@@ -12,11 +12,15 @@ public class Answers {
         this.answers = answers;
     }
 
-    public void isOwner(NsUser loginUser) throws CannotDeleteException {
+    public void validateAnswers(NsUser loginUser) throws CannotDeleteException {
         for (Answer answer : answers) {
-            if (!answer.isOwner(loginUser)) {
-                throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
-            }
+            compareOwner(loginUser, answer);
+        }
+    }
+
+    private void compareOwner(NsUser loginUser, Answer answer) throws CannotDeleteException {
+        if (!answer.isOwner(loginUser)) {
+            throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
         }
     }
 
