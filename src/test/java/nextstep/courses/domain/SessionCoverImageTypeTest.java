@@ -1,6 +1,6 @@
 package nextstep.courses.domain;
 
-import nextstep.qna.FileTypeException;
+import nextstep.qna.CoverImageException;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -18,7 +18,7 @@ class SessionCoverImageTypeTest {
 
     @Test
     void 허용하지_않는_확장자_입력시_예외() {
-        assertThatThrownBy(() -> SessionCoverImageType.search("exe")).isInstanceOf(FileTypeException.class);
+        assertThatThrownBy(() -> SessionCoverImageType.search("exe")).isInstanceOf(CoverImageException.class);
     }
 
 }
