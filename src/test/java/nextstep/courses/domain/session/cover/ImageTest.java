@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
 import java.io.File;
+
+import nextstep.courses.domain.session.CoverImage;
 import org.junit.jupiter.api.Test;
 
 public class ImageTest {
@@ -14,8 +16,8 @@ public class ImageTest {
     void create() {
         CoverImage coverImage = CoverImage.of(getFilePath("image.png"));
 
-        assertThat(coverImage.getSource())
-            .isEqualTo(new File(getFilePath("image.png")));
+        assertThat(coverImage)
+            .isEqualTo(CoverImage.of(new File(getFilePath("image.png"))));
     }
 
     private String getFilePath(String filename) {
