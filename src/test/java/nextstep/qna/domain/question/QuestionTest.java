@@ -48,8 +48,8 @@ public class QuestionTest {
     void 히스토리_테스트() {
         Question question = new Question(1L, NsUserTest.JAVAJIGI, "title", "contents", false, List.of());
 
-        DeleteHistory expected = question.toDeleteHistory();
+        List<DeleteHistory> expected = question.toDeleteHistories();
 
-        assertThat(expected).isEqualTo(new DeleteHistory(ContentType.QUESTION, 1L, NsUserTest.JAVAJIGI, LocalDateTime.now()));
+        assertThat(expected).isEqualTo(List.of(new DeleteHistory(ContentType.QUESTION, 1L, NsUserTest.JAVAJIGI, LocalDateTime.now())));
     }
 }

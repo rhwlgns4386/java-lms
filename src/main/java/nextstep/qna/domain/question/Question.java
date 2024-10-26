@@ -50,24 +50,12 @@ public class Question {
         questionContents.addAnswer(answer);
     }
 
-    private boolean isOwner(NsUser loginUser) {
-        return this.questionContents.isOwner(loginUser);
-    }
-
-    public boolean isDeleted() {
-        return deleted;
-    }
-
     public void delete(NsUser loginUser) {
         if (!this.isOwner(loginUser)) {
             throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
         }
         this.deleted = true;
         this.questionContents.deleteAnswer(loginUser);
-    }
-
-    public DeleteHistory toDeleteHistory() {
-        return new DeleteHistory(ContentType.QUESTION, this.baseEntity.getId(), this.questionContents.getWriter(), LocalDateTime.now());
     }
 
     public List<DeleteHistory> toDeleteHistories() {
@@ -77,16 +65,24 @@ public class Question {
         return deleteHistories;
     }
 
+    private DeleteHistory toDeleteHistory() {
+        return new DeleteHistory(ContentType.QUESTION, this.baseEntity.getId(), this.questionContents.getWriter(), LocalDateTime.now());
+    }
+
+    private boolean isOwner(NsUser loginUser) {
+        return this.questionContents.isOwner(loginUser);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Question)) return false;
         Question question = (Question) o;
-        return isDeleted() == question.isDeleted() && Objects.equals(baseEntity, question.baseEntity) && Objects.equals(questionContents, question.questionContents);
+        return deleted == question.deleted && Objects.equals(baseEntity, question.baseEntity) && Objects.equals(questionContents, question.questionContents);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(baseEntity, questionContents, isDeleted());
+        return Objects.hash(baseEntity, questionContents, deleted);
     }
 }

@@ -57,10 +57,10 @@ public class QnaServiceTest {
     public void delete_성공() throws Exception {
         when(questionRepository.findById(questionId)).thenReturn(Optional.of(question));
 
-        assertThat(question.isDeleted()).isFalse();
+        assertThat(question).isEqualTo(new Question(questionId, NsUserTest.JAVAJIGI, "title1", "contents1", false));
         qnAService.deleteQuestion(NsUserTest.JAVAJIGI, questionId);
 
-        assertThat(question.isDeleted()).isTrue();
+        assertThat(question).isEqualTo(new Question(questionId, NsUserTest.JAVAJIGI, "title1", "contents1", true));
         verifyDeleteHistories();
     }
 
@@ -79,8 +79,8 @@ public class QnaServiceTest {
 
         qnAService.deleteQuestion(NsUserTest.JAVAJIGI, questionId);
 
-        assertThat(question.isDeleted()).isTrue();
-        assertThat(answer.isDeleted()).isTrue();
+        assertThat(question).isEqualTo(new Question(questionId, NsUserTest.JAVAJIGI, "title1", "contents1", true));
+        assertThat(answer).isEqualTo(new Answer(answerId, NsUserTest.JAVAJIGI, "Answers Contents1", true));
         verifyDeleteHistories();
     }
 

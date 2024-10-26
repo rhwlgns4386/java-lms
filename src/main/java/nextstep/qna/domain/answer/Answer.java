@@ -28,6 +28,10 @@ public class Answer {
         this(new BaseEntity(id), new Comments(writer, contents), false);
     }
 
+    public Answer(Long id, NsUser writer, String contents, boolean deleted) {
+        this(new BaseEntity(id), new Comments(writer, contents), deleted);
+    }
+
     public Answer(BaseEntity baseEntity, Comments comments, boolean deleted) {
         this.baseEntity = baseEntity;
         this.comments = comments;
@@ -41,16 +45,12 @@ public class Answer {
         this.deleted = true;
     }
 
-    public boolean isDeleted() {
-        return deleted;
+    public DeleteHistory toDeleteHistory() {
+        return new DeleteHistory(ContentType.ANSWER, this.baseEntity.getId(), this.comments.getWriter(), LocalDateTime.now());
     }
 
     private boolean isOwner(NsUser loginUser) {
         return this.comments.isOwner(loginUser);
-    }
-
-    public DeleteHistory toDeleteHistory() {
-        return new DeleteHistory(ContentType.ANSWER, this.baseEntity.getId(), this.comments.getWriter(), LocalDateTime.now());
     }
 
     @Override
