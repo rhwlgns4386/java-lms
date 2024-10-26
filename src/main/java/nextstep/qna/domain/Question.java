@@ -1,5 +1,6 @@
 package nextstep.qna.domain;
 
+import nextstep.qna.CannotDeleteException;
 import nextstep.users.domain.NsUser;
 
 import java.time.LocalDateTime;
@@ -15,7 +16,7 @@ public class Question {
 
     private NsUser writer;
 
-    private List<Answer> answers = new ArrayList<>();
+    private Answers answers;
 
     private boolean deleted = false;
 
@@ -35,28 +36,11 @@ public class Question {
         this.writer = writer;
         this.title = title;
         this.contents = contents;
+        this.answers = new Answers(new ArrayList<>());
     }
 
     public Long getId() {
         return id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public Question setTitle(String title) {
-        this.title = title;
-        return this;
-    }
-
-    public String getContents() {
-        return contents;
-    }
-
-    public Question setContents(String contents) {
-        this.contents = contents;
-        return this;
     }
 
     public NsUser getWriter() {
@@ -68,21 +52,29 @@ public class Question {
         answers.add(answer);
     }
 
-    public boolean isOwner(NsUser loginUser) {
-        return writer.equals(loginUser);
+    public List<DeleteHistory> delete(NsUser loginUser, LocalDateTime localDateTime) throws CannotDeleteException {
+        writer.validateUser(loginUser);
+        answers.validateAnswers(loginUser);
+        this.deleted = true;
+        return deleteHistories(localDateTime);
     }
 
-    public Question setDeleted(boolean deleted) {
-        this.deleted = deleted;
-        return this;
+    public List<DeleteHistory> deleteHistories(LocalDateTime localDateTime) {
+        List<DeleteHistory> deleteHistories = new ArrayList<>();
+        deleteHistories.add(createDeleteHistory(localDateTime));
+        for (Answer answer : answers.getAnswers()) {
+            deleteHistories.add(answer.createDeleteHistory(localDateTime));
+        }
+        return deleteHistories;
     }
+
+    public DeleteHistory createDeleteHistory(LocalDateTime localDateTime) {
+        return new DeleteHistory(ContentType.QUESTION, id, writer, localDateTime);
+    }
+
 
     public boolean isDeleted() {
         return deleted;
-    }
-
-    public List<Answer> getAnswers() {
-        return answers;
     }
 
     @Override
