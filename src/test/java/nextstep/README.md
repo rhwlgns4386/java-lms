@@ -40,6 +40,8 @@
 
 - 높이(200px), 너비(300px), 비율(3:2) 검증
 
+## DONE
+
 
 ### SessionCoverImageType (강의 커버 이미지 확장자 타입 - [gif, jpg, jpeg, png, svg])
 
@@ -47,4 +49,3 @@
 - 허가하지 않는 확장자일 시 예외 발생 
 
 
-## DONE
