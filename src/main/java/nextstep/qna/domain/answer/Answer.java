@@ -2,6 +2,8 @@ package nextstep.qna.domain.answer;
 
 import nextstep.qna.CannotDeleteException;
 import nextstep.qna.domain.BaseEntity;
+import nextstep.qna.domain.DeleteHistory.ContentType;
+import nextstep.qna.domain.DeleteHistory.DeleteHistory;
 import nextstep.qna.domain.question.Question;
 import nextstep.users.domain.NsUser;
 
@@ -43,16 +45,12 @@ public class Answer {
         return deleted;
     }
 
-    public boolean isOwner(NsUser loginUser) {
+    private boolean isOwner(NsUser loginUser) {
         return this.comments.isOwner(loginUser);
     }
 
-    public Long getId() {
-        return this.baseEntity.getId();
-    }
-
-    public NsUser getWriter() {
-        return this.comments.getWriter();
+    public DeleteHistory toDeleteHistory() {
+        return new DeleteHistory(ContentType.ANSWER, this.baseEntity.getId(), this.comments.getWriter(), LocalDateTime.now());
     }
 
     @Override

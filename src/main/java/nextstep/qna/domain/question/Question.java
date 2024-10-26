@@ -46,16 +46,12 @@ public class Question {
         this.deleted = deleted;
     }
 
-    public NsUser getWriter() {
-        return this.questionContents.getWriter();
-    }
-
     public void addAnswer(Answer answer) {
         questionContents.addAnswer(answer);
     }
 
     private boolean isOwner(NsUser loginUser) {
-        return this.questionContents.getWriter().equals(loginUser);
+        return this.questionContents.isOwner(loginUser);
     }
 
     public boolean isDeleted() {

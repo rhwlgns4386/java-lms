@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Answers {
     private final List<Answer> answers;
@@ -19,10 +20,6 @@ public class Answers {
 
     public Answers(List<Answer> answers) {
         this.answers = answers;
-    }
-
-    public List<Answer> getAnswers() {
-        return answers;
     }
 
     public void add(Answer answer) {
@@ -36,11 +33,10 @@ public class Answers {
     }
 
     public List<DeleteHistory> toDeleteHistories() {
-        List<DeleteHistory> deleteHistories = new ArrayList<>();
-        for (Answer answer : this.answers) {
-            deleteHistories.add(new DeleteHistory(ContentType.ANSWER, answer.getId(), answer.getWriter(), LocalDateTime.now()));
-        }
-        return deleteHistories;
+        return this.answers
+                .stream()
+                .map(Answer::toDeleteHistory)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -48,11 +44,11 @@ public class Answers {
         if (this == o) return true;
         if (!(o instanceof Answers)) return false;
         Answers answers1 = (Answers) o;
-        return Objects.equals(getAnswers(), answers1.getAnswers());
+        return Objects.equals(answers, answers1.answers);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getAnswers());
+        return Objects.hashCode(answers);
     }
 }

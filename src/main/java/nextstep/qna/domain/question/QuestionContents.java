@@ -25,6 +25,22 @@ public class QuestionContents {
         this.answers = answers;
     }
 
+    public boolean isOwner(NsUser loginUser) {
+        return this.comments.isOwner(loginUser);
+    }
+
+    public void addAnswer(Answer answer) {
+        this.answers.add(answer);
+    }
+
+    public void deleteAnswer(NsUser loginUser) {
+        this.answers.deleteAnswer(loginUser);
+    }
+
+    public List<DeleteHistory> toDeleteHistories() {
+        return this.answers.toDeleteHistories();
+    }
+
     public NsUser getWriter() {
         return this.comments.getWriter();
     }
@@ -40,21 +56,5 @@ public class QuestionContents {
     @Override
     public int hashCode() {
         return Objects.hash(title, comments);
-    }
-
-    public void addAnswer(Answer answer) {
-        this.answers.add(answer);
-    }
-
-    public List<Answer> getAnswers() {
-        return this.answers.getAnswers();
-    }
-
-    public void deleteAnswer(NsUser loginUser) {
-        this.answers.deleteAnswer(loginUser);
-    }
-
-    public List<DeleteHistory> toDeleteHistories() {
-        return this.answers.toDeleteHistories();
     }
 }
