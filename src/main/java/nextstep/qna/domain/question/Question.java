@@ -16,6 +16,8 @@ import java.util.Objects;
 
 public class Question {
 
+    public static final String DELETE_EXCEPT_MESSAGGE = "질문을 삭제할 권한이 없습니다.";
+
     private final BaseEntity baseEntity;
     private final QuestionContents questionContents;
     private boolean deleted;
@@ -29,11 +31,11 @@ public class Question {
     }
 
     public Question(Long id, NsUser writer, String title, String contents) {
-        this(new BaseEntity(id), new QuestionContents(title, new Comments(writer, contents), new Answers()), false);
+        this(id, writer, title, contents, false);
     }
 
     public Question(Long id, NsUser writer, String title, String contents, boolean deleted) {
-        this(new BaseEntity(id), new QuestionContents(title, new Comments(writer, contents), new Answers()), deleted);
+        this(id, writer, title, contents, deleted, new ArrayList<>());
     }
 
     public Question(Long id, NsUser writer, String title, String contents, boolean deleted, List<Answer> answers) {
@@ -52,7 +54,7 @@ public class Question {
 
     public void delete(NsUser loginUser) {
         if (!this.isOwner(loginUser)) {
-            throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
+            throw new CannotDeleteException(DELETE_EXCEPT_MESSAGGE);
         }
         this.deleted = true;
         this.questionContents.deleteAnswer(loginUser);

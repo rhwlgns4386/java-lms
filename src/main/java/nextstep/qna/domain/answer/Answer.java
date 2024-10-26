@@ -12,20 +12,22 @@ import java.util.Objects;
 
 public class Answer {
 
+    public static final String DELETE_EXCEPT_MESSAGE = "답변을 삭제할 권한이 없습니다.";
+
     private final BaseEntity baseEntity;
     private final Comments comments;
     private boolean deleted;
 
     public Answer(NsUser writer, String contents) {
-        this(new BaseEntity(0L), new Comments(writer, contents), false);
+        this(0L, writer, contents);
     }
     
     public Answer(NsUser writer, String contents, boolean deleted) {
-        this(new BaseEntity(0L), new Comments(writer, contents), deleted);
+        this(0L, writer, contents, deleted);
     }
 
     public Answer(Long id, NsUser writer, String contents) {
-        this(new BaseEntity(id), new Comments(writer, contents), false);
+        this(id, writer, contents, false);
     }
 
     public Answer(Long id, NsUser writer, String contents, boolean deleted) {
@@ -40,7 +42,7 @@ public class Answer {
 
     public void delete(NsUser loginUser) {
         if (!this.isOwner(loginUser)) {
-            throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
+            throw new CannotDeleteException(DELETE_EXCEPT_MESSAGE);
         }
         this.deleted = true;
     }
