@@ -22,7 +22,7 @@ public class Answer {
 
     private LocalDateTime updatedDate;
 
-    public Answer() {
+    private Answer() {
     }
 
     public Answer(NsUser writer, Question question, String contents) {
@@ -78,13 +78,14 @@ public class Answer {
         return "Answer [id=" + getId() + ", writer=" + writer + ", contents=" + contents + "]";
     }
 
-    public void validate(NsUser nsUser) throws CannotDeleteException {
+    private void validate(NsUser nsUser) throws CannotDeleteException {
         if (!writer.matchUser(nsUser)) {
             throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
         }
     }
 
-    public DeleteHistory delete() {
+    public DeleteHistory delete(NsUser nsUser) throws CannotDeleteException {
+        validate(nsUser);
         this.deleted = true;
         return DeleteHistory.answerOf(id, writer);
     }

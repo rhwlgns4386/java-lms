@@ -48,8 +48,8 @@ class AnswersTest {
 
     @DisplayName("답변 전체 삭제 시 히스토리 리스트 반환 사이즈 검증")
     @Test
-    void delete() {
-        List<DeleteHistory> deleteHistories = AS2.delete();
+    void delete() throws CannotDeleteException {
+        List<DeleteHistory> deleteHistories = AS2.delete(NsUserTest.SANJIGI);
 
         assertThat(deleteHistories).hasSize(2);
     }
@@ -57,7 +57,7 @@ class AnswersTest {
     @DisplayName("답변리스트 작성자 전체 검증")
     @Test
     void validate() {
-        assertThatThrownBy(() -> AS3.validate(NsUserTest.JAVAJIGI)).isInstanceOf(CannotDeleteException.class);
+        assertThatThrownBy(() -> AS3.delete(NsUserTest.JAVAJIGI)).isInstanceOf(CannotDeleteException.class);
     }
 
 }

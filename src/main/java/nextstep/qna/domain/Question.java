@@ -94,7 +94,6 @@ public class Question {
 
     public List<DeleteHistory> delete(NsUser nsUser) throws CannotDeleteException{
         validate(nsUser);
-        answers.validate(nsUser);
 
         List<DeleteHistory> result = new ArrayList<>();
         this.deleted = true;
@@ -103,7 +102,7 @@ public class Question {
         if (answers.isEmpty()) {
             return result;
         }
-        result.addAll(answers.delete());
+        result.addAll(answers.delete(nsUser));
         return result;
     }
 
