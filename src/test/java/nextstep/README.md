@@ -30,12 +30,9 @@
 
 ### SessionCoverImage (강의 커버 이미지)
 
-- 생성자로 인한 SessionCover*의 전체 검증
-
-### SessionCoverImageStorage (강의 커버 이미지 저장소)
-
+- 생성자로 인한 SessionCoverImage*의 전체 검증
 - 이미지 크기가 1MB 보다 크면 예외처리
-
+- 파일 특수문자 검증
 
 ## DONE
 
