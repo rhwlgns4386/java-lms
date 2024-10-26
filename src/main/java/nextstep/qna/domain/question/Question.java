@@ -2,19 +2,23 @@ package nextstep.qna.domain.question;
 
 import nextstep.qna.CannotDeleteException;
 import nextstep.qna.domain.BaseEntity;
+import nextstep.qna.domain.DeleteHistory.ContentType;
+import nextstep.qna.domain.DeleteHistory.DeleteHistory;
 import nextstep.qna.domain.answer.Comments;
 import nextstep.qna.domain.answer.Answer;
 import nextstep.qna.domain.answer.Answers;
 import nextstep.users.domain.NsUser;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class Question {
 
     private final BaseEntity baseEntity;
-    private final QuestionContents questionComments;
-    private boolean deleted = false;
+    private final QuestionContents questionContents;
+    private boolean deleted;
 
     public Question(NsUser writer, String title, String contents) {
         this(0L, writer, title, contents);
@@ -38,47 +42,43 @@ public class Question {
 
     public Question(BaseEntity baseEntity, QuestionContents questionComments, boolean deleted) {
         this.baseEntity = baseEntity;
-        this.questionComments = questionComments;
+        this.questionContents = questionComments;
         this.deleted = deleted;
-    }
-
-    public Long getId() {
-        return this.baseEntity.getId();
     }
 
     public NsUser getWriter() {
-        return this.questionComments.getWriter();
+        return this.questionContents.getWriter();
     }
 
     public void addAnswer(Answer answer) {
-        questionComments.addAnswer(answer);
+        questionContents.addAnswer(answer);
     }
 
-    public boolean isOwner(NsUser loginUser) {
-        return this.questionComments.getWriter().equals(loginUser);
-    }
-
-    public Question setDeleted(boolean deleted) {
-        this.deleted = deleted;
-        return this;
+    private boolean isOwner(NsUser loginUser) {
+        return this.questionContents.getWriter().equals(loginUser);
     }
 
     public boolean isDeleted() {
         return deleted;
     }
 
-    public List<Answer> getAnswers() {
-        return questionComments.getAnswers();
-    }
-
-    public void throwExceptionIfAnswerIsOwner(NsUser loginUser) {
-        this.questionComments.throwExceptionIfAnswerIsOwner(loginUser);
-    }
-
-    public void throwExceptionIfOwner(NsUser loginUser) {
+    public void delete(NsUser loginUser) {
         if (!this.isOwner(loginUser)) {
             throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
         }
+        this.deleted = true;
+        this.questionContents.deleteAnswer(loginUser);
+    }
+
+    public DeleteHistory toDeleteHistory() {
+        return new DeleteHistory(ContentType.QUESTION, this.baseEntity.getId(), this.questionContents.getWriter(), LocalDateTime.now());
+    }
+
+    public List<DeleteHistory> toDeleteHistories() {
+        List<DeleteHistory> deleteHistories = new ArrayList<>();
+        deleteHistories.add(toDeleteHistory());
+        deleteHistories.addAll(this.questionContents.toDeleteHistories());
+        return deleteHistories;
     }
 
     @Override
@@ -86,17 +86,11 @@ public class Question {
         if (this == o) return true;
         if (!(o instanceof Question)) return false;
         Question question = (Question) o;
-        return isDeleted() == question.isDeleted() && Objects.equals(baseEntity, question.baseEntity) && Objects.equals(questionComments, question.questionComments);
+        return isDeleted() == question.isDeleted() && Objects.equals(baseEntity, question.baseEntity) && Objects.equals(questionContents, question.questionContents);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(baseEntity, questionComments, isDeleted());
-    }
-
-    public Question delete() {
-        this.deleted = true;
-        this.questionComments.deleteAnswer();
-        return this;
+        return Objects.hash(baseEntity, questionContents, isDeleted());
     }
 }

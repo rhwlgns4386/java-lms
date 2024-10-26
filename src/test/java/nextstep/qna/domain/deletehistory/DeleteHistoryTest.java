@@ -19,13 +19,5 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class DeleteHistoryTest {
 
-    @Test
-    void 히스토리_추가() {
-        List<Answer> answers = List.of(new Answer(2L, NsUserTest.JAVAJIGI, "contents"), new Answer(3L, NsUserTest.JAVAJIGI, "contents"));
-        Question question = new Question(1L, NsUserTest.JAVAJIGI, "title", "contents", false, answers);
 
-        List<DeleteHistory> expected = DeleteHistory.addHistory(question);
-
-        assertThat(expected).isEqualTo(List.of(new DeleteHistory(ContentType.QUESTION, 1L, NsUserTest.JAVAJIGI, LocalDateTime.now()), new DeleteHistory(ContentType.ANSWER, 2L, NsUserTest.JAVAJIGI, LocalDateTime.now()), new DeleteHistory(ContentType.ANSWER, 3L, NsUserTest.JAVAJIGI, LocalDateTime.now())));
-    }
 }

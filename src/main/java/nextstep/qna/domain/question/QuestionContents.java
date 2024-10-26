@@ -1,10 +1,12 @@
 package nextstep.qna.domain.question;
 
+import nextstep.qna.domain.DeleteHistory.DeleteHistory;
 import nextstep.qna.domain.answer.Comments;
 import nextstep.qna.domain.answer.Answer;
 import nextstep.qna.domain.answer.Answers;
 import nextstep.users.domain.NsUser;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -48,11 +50,11 @@ public class QuestionContents {
         return this.answers.getAnswers();
     }
 
-    public void throwExceptionIfAnswerIsOwner(NsUser loginUser) {
-        this.answers.throwExceptionIfOwner(loginUser);
+    public void deleteAnswer(NsUser loginUser) {
+        this.answers.deleteAnswer(loginUser);
     }
 
-    public void deleteAnswer() {
-        this.answers.deleteAnswer();
+    public List<DeleteHistory> toDeleteHistories() {
+        return this.answers.toDeleteHistories();
     }
 }

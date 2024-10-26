@@ -1,8 +1,11 @@
 package nextstep.qna.domain.answer;
 
 import nextstep.qna.CannotDeleteException;
+import nextstep.qna.domain.DeleteHistory.ContentType;
+import nextstep.qna.domain.DeleteHistory.DeleteHistory;
 import nextstep.users.domain.NsUser;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -26,19 +29,18 @@ public class Answers {
         this.answers.add(answer);
     }
 
-
-    public void throwExceptionIfOwner(NsUser loginUser) {
+    public void deleteAnswer(NsUser loginUser) {
         this.answers
                 .stream()
-                .filter(answer -> !answer.isOwner(loginUser))
-                .findAny()
-                .ifPresent((answer) -> {throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");});
+                .forEach(o -> o.delete(loginUser));
     }
 
-    public void deleteAnswer() {
-        this.answers
-                .stream()
-                .forEach(o -> o.setDeleted(true));
+    public List<DeleteHistory> toDeleteHistories() {
+        List<DeleteHistory> deleteHistories = new ArrayList<>();
+        for (Answer answer : this.answers) {
+            deleteHistories.add(new DeleteHistory(ContentType.ANSWER, answer.getId(), answer.getWriter(), LocalDateTime.now()));
+        }
+        return deleteHistories;
     }
 
     @Override

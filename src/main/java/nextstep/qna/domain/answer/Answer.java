@@ -1,5 +1,6 @@
 package nextstep.qna.domain.answer;
 
+import nextstep.qna.CannotDeleteException;
 import nextstep.qna.domain.BaseEntity;
 import nextstep.qna.domain.question.Question;
 import nextstep.users.domain.NsUser;
@@ -9,29 +10,33 @@ import java.util.Objects;
 
 public class Answer {
 
-    private BaseEntity baseEntity;
-    private Comments comments;
-    private boolean deleted = false;
-
-    public Answer() {
-    }
+    private final BaseEntity baseEntity;
+    private final Comments comments;
+    private boolean deleted;
 
     public Answer(NsUser writer, String contents) {
-        this(new BaseEntity(0L), new Comments(writer, contents));
+        this(new BaseEntity(0L), new Comments(writer, contents), false);
+    }
+    
+    public Answer(NsUser writer, String contents, boolean deleted) {
+        this(new BaseEntity(0L), new Comments(writer, contents), deleted);
     }
 
     public Answer(Long id, NsUser writer, String contents) {
-        this(new BaseEntity(id, LocalDateTime.now(), LocalDateTime.now()), new Comments(writer, contents));
+        this(new BaseEntity(id), new Comments(writer, contents), false);
     }
 
-    public Answer(BaseEntity baseEntity, Comments comments) {
+    public Answer(BaseEntity baseEntity, Comments comments, boolean deleted) {
         this.baseEntity = baseEntity;
         this.comments = comments;
+        this.deleted = deleted;
     }
 
-    public Answer setDeleted(boolean deleted) {
-        this.deleted = deleted;
-        return this;
+    public void delete(NsUser loginUser) {
+        if (!this.isOwner(loginUser)) {
+            throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
+        }
+        this.deleted = true;
     }
 
     public boolean isDeleted() {
