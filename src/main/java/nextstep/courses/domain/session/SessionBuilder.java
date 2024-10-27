@@ -79,7 +79,9 @@ public class SessionBuilder {
     }
 
     public Session build() {
-        validateEmpty(name, "강의명이 입력되지 않았습니다");
+        Optional.ofNullable(name)
+                .filter(string -> !string.isBlank())
+                .orElseThrow(() -> new IllegalArgumentException("강의명이 입력되지 않았습니다"));
         validateEmpty(coverImage, "강의 커버가 입력되지 않았습니다");
         validateEmpty(startDate, "강의 시작일이 입력되지 않았습니다");
         validateEmpty(endDate, "강의 종료일이 입력되지 않았습니다");
