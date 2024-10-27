@@ -13,6 +13,12 @@ public class Image {
         this.imageType = imageType;
         this.width = width;
         this.height = height;
+        if (imageSize > 1000) {
+            throw new IllegalArgumentException("Image size must be less than 1000");
+        }
+        if (((double) width / (double) height) != (3.0 / 2.0)) {
+            throw new IllegalArgumentException("width:height ratio must be 3:2");
+        }
     }
 
     public Long getId() {
