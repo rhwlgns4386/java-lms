@@ -22,6 +22,9 @@ public class PaidSession extends Session {
         if (maxNumOfStudents <= students.size()) {
             throw new IllegalStateException("수강 정원이 초과됐습니다.");
         }
+        if (!payment.isPaid(sessionFee)) {
+            throw new IllegalStateException("지불한 수강료가 일치하지 않습니다.");
+        }
         super.enroll(payment);
     }
 
