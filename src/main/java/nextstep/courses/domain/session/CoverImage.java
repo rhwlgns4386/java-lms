@@ -26,6 +26,9 @@ public class CoverImage {
     }
 
     public static CoverImage of(String imagePath) {
+        if (imagePath == null || imagePath.isBlank()) {
+            throw new IllegalArgumentException("강의 커버 파일 경로는 null 또는 공백일 수 없습니다");
+        }
         return of(new File(imagePath));
     }
 
@@ -40,11 +43,14 @@ public class CoverImage {
     }
 
     private static void validateFile(File imageFile) {
+        if (imageFile == null) {
+            throw new IllegalArgumentException("빈 파일입니다");
+        }
         if (!ALLOWED_FILE_EXTENSIONS.contains(parseExtension(imageFile.getName()))) {
-            throw new IllegalArgumentException("invalid");
+            throw new IllegalArgumentException("지원하지 않는 파일 확장자입니다");
         }
         if (imageFile.length() > MAX_FILE_SIZE) {
-            throw new IllegalArgumentException("invalid");
+            throw new IllegalArgumentException("파일 사이즈는 1mb를 초과할 수 없습니다");
         }
     }
 

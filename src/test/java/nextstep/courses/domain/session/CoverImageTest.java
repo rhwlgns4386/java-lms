@@ -24,6 +24,20 @@ public class CoverImageTest {
     }
 
     @Test
+    void throw_exception_if_null_or_empty_file_path() {
+        assertThatIllegalArgumentException().isThrownBy(() -> CoverImage
+                .of((String)null));
+        assertThatIllegalArgumentException().isThrownBy(() -> CoverImage
+                .of(""));
+    }
+
+    @Test
+    void throw_exception_if_null_file() {
+        assertThatIllegalArgumentException().isThrownBy(() -> CoverImage
+                .of((File)null));
+    }
+
+    @Test
     void throw_exception_if_invalid_file_extension() {
         assertThatIllegalArgumentException().isThrownBy(() -> CoverImage
             .of(getFilePath("image.tif")));
