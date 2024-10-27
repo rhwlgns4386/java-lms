@@ -15,7 +15,7 @@
 
 * Course class 생성 []
 * Session class 생성 [X]
-* Image class 생성 []
+* Image class 생성 [X]
 * 강의 생성 로직 개발 []
 * 강의 삭제 로직 개발 []
 * 강의 업데이트 로직 개발 []
