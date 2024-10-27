@@ -66,3 +66,7 @@
 
 ## Step2. 피드백 구현
 - [X] SessionStatus 내부에 canEnroll 메소드 구현
+- [X] Payments 클래스 삭제
+- [X] enroll 메소드 매개변수 Payment로 수정 
+- [X] sessionId string -> long 수정
+- [X] Session 내 student에 userId 수집

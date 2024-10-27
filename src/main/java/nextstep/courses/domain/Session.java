@@ -1,18 +1,19 @@
 package nextstep.courses.domain;
 
+import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
 
 import java.util.List;
 
 public abstract class Session {
 
-    protected final String sessionId;
+    protected final Long sessionId;
     protected final SessionDate date;
     protected final SessionImage image;
     protected final SessionStatus status;
-    protected List<NsUser> students;
+    protected List<Long> students;
 
-    public Session(String sessionId, SessionDate date, SessionImage image, SessionStatus status, List<NsUser> numOfStudents) {
+    public Session(Long sessionId, SessionDate date, SessionImage image, SessionStatus status, List<Long> numOfStudents) {
         this.sessionId = sessionId;
         this.date = date;
         this.image = image;
@@ -20,18 +21,18 @@ public abstract class Session {
         this.students = numOfStudents;
     }
 
-    public void enroll(NsUser user) {
+    public void enroll(Payment payment) {
         if (!status.canEnroll()) {
             throw new IllegalStateException("강의가 모집 상태가 아닙니다.");
         }
-        this.students.add(user);
+        this.students.add(payment.getNsUserId());
     }
 
     public boolean isContainUser(NsUser user) {
-        return students.contains(user);
+        return students.contains(user.getId());
     }
 
-    public String getSessionId() {
+    public Long getSessionId() {
         return sessionId;
     }
 }
