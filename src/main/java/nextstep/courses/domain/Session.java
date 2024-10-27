@@ -4,8 +4,6 @@ import nextstep.users.domain.NsUser;
 
 import java.util.List;
 
-import static nextstep.courses.domain.SessionStatus.RECRUITING;
-
 public abstract class Session {
 
     protected final String sessionId;
@@ -23,7 +21,7 @@ public abstract class Session {
     }
 
     public void enroll(NsUser user) {
-        if (!RECRUITING.equals(status)) {
+        if (!status.canEnroll()) {
             throw new IllegalStateException("강의가 모집 상태가 아닙니다.");
         }
         this.students.add(user);
@@ -31,5 +29,9 @@ public abstract class Session {
 
     public boolean isContainUser(NsUser user) {
         return students.contains(user);
+    }
+
+    public String getSessionId() {
+        return sessionId;
     }
 }
