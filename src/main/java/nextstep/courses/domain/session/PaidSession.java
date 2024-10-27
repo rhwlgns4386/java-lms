@@ -6,9 +6,14 @@ import java.time.LocalDateTime;
 
 public class PaidSession extends Session {
 
-    protected PaidSession(String name, CoverImage coverImage, SessionState sessionState, int enrollment,
+    protected PaidSession(String name, CoverImage coverImage, SessionState sessionState, int maxEnrollment,
                           long sessionFee, LocalDateTime startDate, LocalDateTime endDate) {
-        super(name, coverImage, enrollment, sessionState, sessionFee, startDate, endDate);
+        super(name, coverImage, maxEnrollment, sessionState, sessionFee, startDate, endDate);
+    }
+
+    protected PaidSession(Long id, String name, CoverImage coverImage, SessionState sessionState, int maxEnrollment,
+                          long sessionFee, LocalDateTime startDate, LocalDateTime endDate) {
+        super(id, name, coverImage, maxEnrollment, sessionState, sessionFee, startDate, endDate);
     }
 
     @Override

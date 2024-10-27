@@ -11,6 +11,7 @@ public class SessionBuilder {
 
     private static final int NOT_ASSIGNED = -1;
 
+    private Long id;
     private String name;
     private int enrollment = NOT_ASSIGNED;
     private long sessionFee = NOT_ASSIGNED;
@@ -25,6 +26,11 @@ public class SessionBuilder {
 
     public static SessionBuilder builder() {
         return new SessionBuilder();
+    }
+
+    public SessionBuilder id(Long id) {
+        this.id = id;
+        return this;
     }
 
     public SessionBuilder name(String name) {
@@ -80,12 +86,16 @@ public class SessionBuilder {
         validateEmpty(sessionType, "강의 타입이 입력되지 않았습니다");
 
         if (sessionType == SessionType.FREE) {
-            return new FreeSession(name, coverImage, sessionState, startDate, endDate);
+            return new FreeSession(getId(), name, coverImage, sessionState, startDate, endDate);
         }
 
         validateValueAssignment(enrollment, "유료 강의는 수강 인원이 필수 값입니다");
         validateValueAssignment(sessionFee, "유료 강의는 수강료가 필수 값입니다");
-        return new PaidSession(name, coverImage, sessionState, enrollment, sessionFee, startDate, endDate);
+        return new PaidSession(getId(), name, coverImage, sessionState, enrollment, sessionFee, startDate, endDate);
+    }
+
+    private Long getId() {
+        return (id == null) ? NOT_ASSIGNED : id;
     }
 
     private void validateEmpty(Object toValidate, String errorMessage) {
