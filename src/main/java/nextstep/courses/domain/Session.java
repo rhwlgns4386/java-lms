@@ -32,7 +32,4 @@ public abstract class Session {
         return students.contains(user.getId());
     }
 
-    public Long getSessionId() {
-        return sessionId;
-    }
 }
