@@ -13,7 +13,7 @@
 
 ## To-Do List
 
-* Course class 생성 []
+* Course class 생성 [X]
 * Session class 생성 [X]
 * Image class 생성 [X]
 * Image size 및 width,height 비율 체크 로직 [X]
