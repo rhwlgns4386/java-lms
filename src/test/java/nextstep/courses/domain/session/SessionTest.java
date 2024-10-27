@@ -1,6 +1,6 @@
 package nextstep.courses.domain.session;
 
-import nextstep.courses.dto.SessionReservation;
+import nextstep.courses.dto.SessionPaymentInfo;
 import nextstep.courses.type.SessionState;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUserTest;
@@ -17,9 +17,9 @@ public class SessionTest {
                 .sessionState(SessionState.OPEN)
                 .build();
 
-        SessionReservation sessionReservation = session.reserveSession();
+        SessionPaymentInfo sessionPaymentInfo = session.tryRegisterForSession();
 
-        assertThat(sessionReservation.getSessionFee()).isEqualTo(0);
+        assertThat(sessionPaymentInfo.getSessionFee()).isEqualTo(0);
     }
 
     @Test
@@ -28,9 +28,9 @@ public class SessionTest {
                 .sessionState(SessionState.OPEN)
                 .build();
 
-        SessionReservation sessionReservation = session.reserveSession();
+        SessionPaymentInfo sessionPaymentInfo = session.tryRegisterForSession();
 
-        assertThat(sessionReservation.getSessionFee()).isEqualTo(10000);
+        assertThat(sessionPaymentInfo.getSessionFee()).isEqualTo(10000);
     }
 
     @Test
@@ -40,7 +40,7 @@ public class SessionTest {
                 .sessionState(SessionState.OPEN)
                 .build();
 
-        assertThatIllegalStateException().isThrownBy(session::reserveSession);
+        assertThatIllegalStateException().isThrownBy(session::tryRegisterForSession);
     }
 
     @Test
@@ -48,29 +48,49 @@ public class SessionTest {
         Session paidSession = SessionBuilderTest.paidSessionBuilder().build();
         Session freeSession = SessionBuilderTest.freeSessionBuilder().build();
 
-        assertThatIllegalStateException().isThrownBy(paidSession::reserveSession);
-        assertThatIllegalStateException().isThrownBy(freeSession::reserveSession);
+        assertThatIllegalStateException().isThrownBy(paidSession::tryRegisterForSession);
+        assertThatIllegalStateException().isThrownBy(freeSession::tryRegisterForSession);
     }
 
     @Test
-    void complete_register_free_session() {
+    void finalize_register_free_session() {
         Session freeSession = SessionBuilderTest.freeSessionBuilder()
                 .sessionState(SessionState.OPEN)
                 .build();
 
-        Payment payment = new Payment("free", null, NsUserTest.JAVAJIGI.getId(), 0L);
+        Payment payment = new Payment("free", -1L, NsUserTest.JAVAJIGI.getId(), 0L);
 
-        assertThat(freeSession.completeRegister(payment)).isTrue();
+        assertThat(freeSession.finalizeSessionRegistration(payment)).isTrue();
     }
 
     @Test
-    void complete_register_paid_session() {
+    void finalize_register_paid_session() {
         Session paidSession = SessionBuilderTest.paidSessionBuilder()
                 .sessionState(SessionState.OPEN)
                 .build();
 
-        Payment payment = new Payment("paid", null, NsUserTest.JAVAJIGI.getId(), 10000L);
+        Payment payment = new Payment("paid", -1L, NsUserTest.JAVAJIGI.getId(), 10000L);
 
-        assertThat(paidSession.completeRegister(payment)).isTrue();
+        assertThat(paidSession.finalizeSessionRegistration(payment)).isTrue();
+    }
+
+    @Test
+    void fail_to_finalize_register_with_invalid_session_id_payment() {
+        Session paidSession = SessionBuilderTest.paidSessionBuilder()
+                .sessionState(SessionState.OPEN)
+                .build();
+
+        assertThat(paidSession.finalizeSessionRegistration(
+                new Payment("", 1L, NsUserTest.JAVAJIGI.getId(), 10000L))).isFalse();
+    }
+
+    @Test
+    void fail_to_finalize_register_with_invalid_session_fee_payment() {
+        Session paidSession = SessionBuilderTest.paidSessionBuilder()
+                .sessionState(SessionState.OPEN)
+                .build();
+
+        assertThat(paidSession.finalizeSessionRegistration(
+                new Payment("", -1L, NsUserTest.JAVAJIGI.getId(), 100L))).isFalse();
     }
 }

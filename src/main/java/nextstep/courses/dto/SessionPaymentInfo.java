@@ -1,11 +1,11 @@
 package nextstep.courses.dto;
 
-public class SessionReservation {
+public class SessionPaymentInfo {
 
     private final Long sessionId;
     private final long sessionFee;
 
-    public SessionReservation(Long sessionId, long sessionFee) {
+    public SessionPaymentInfo(Long sessionId, long sessionFee) {
         this.sessionId = sessionId;
         this.sessionFee = sessionFee;
     }
