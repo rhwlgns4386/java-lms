@@ -16,8 +16,9 @@ public class SessionTest {
         LocalDate endDate = startDate.plusDays(1);
         SessionType type = SessionType.FREE;
         SessionStatus status = SessionStatus.PREPARING;
+        Image image = new Image(1L, 1000L, ImageType.GIF, 300L, 200L);
 
-        Session session = new Session(id, name, startDate, endDate, type, status);
+        Session session = new Session(id, name, startDate, endDate, type, status, image);
 
         Assertions.assertThat(session).isNotNull();
         Assertions.assertThat(session.getId()).isEqualTo(id);

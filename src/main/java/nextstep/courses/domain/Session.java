@@ -9,14 +9,16 @@ public class Session {
     private LocalDate endDate;
     private SessionType sessionType;
     private SessionStatus sessionStatus;
+    private Image image;
 
-    public Session(Long id, String name, LocalDate startDate, LocalDate endDate, SessionType type, SessionStatus status) {
+    public Session(Long id, String name, LocalDate startDate, LocalDate endDate, SessionType type, SessionStatus status, Image image) {
         this.id = id;
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
         this.sessionType = type;
         this.sessionStatus = status;
+        this.image = image;
     }
 
     public Long getId() {

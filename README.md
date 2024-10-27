@@ -17,6 +17,7 @@
 * Session class 생성 [X]
 * Image class 생성 [X]
 * Image size 및 width,height 비율 체크 로직 [X]
+* Session과 Image 연관 관계 설정 [X]
 * 강의 생성 로직 개발 []
 * 강의 삭제 로직 개발 []
 * 강의 업데이트 로직 개발 []
