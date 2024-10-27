@@ -1,8 +1,9 @@
-package nextstep.courses.domain.session;
+package nextstep.sessions.domain;
 
 
-import nextstep.courses.domain.course.Course;
-import nextstep.courses.exception.CannotEnrollException;
+import nextstep.courses.domain.Course;
+import nextstep.registration.domain.SessionRegistrationInfo;
+import nextstep.sessions.exception.CannotEnrollException;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
 
@@ -17,7 +18,7 @@ public class Session {
 
     private SessionType type;
 
-    private EnrolledUsers enrolledUsers = new EnrolledUsers();
+    private EnrolledUserInfos enrolledUserInfos;
 
     private SessionStatus status;
 
@@ -35,6 +36,7 @@ public class Session {
         this.image = image;
         this.period = period;
         this.type = type;
+        this.enrolledUserInfos = new EnrolledUserInfos();
         this.status = SessionStatus.PREPARING;
         this.createdAt = LocalDateTime.now();
     }
@@ -42,17 +44,17 @@ public class Session {
     public void enroll(NsUser user, Payment payment) {
         validateEnrollment(user);
         validatePayment(payment);
-        enrolledUsers.add(user);
+        enrolledUserInfos.add(new SessionRegistrationInfo(this, user));
     }
 
     private void validateEnrollment(NsUser user) {
         if (!status.isRecruiting()) {
             throw new CannotEnrollException("모집중인 강의가 아닙니다.");
         }
-        if (enrolledUsers.isAlreadyEnrolled(user)) {
+        if (enrolledUserInfos.isAlreadyEnrolled(user)) {
             throw new CannotEnrollException("이미 수강 중인 사용자입니다.");
         }
-        if (type.isOverEnrollment(enrolledUsers.size())) {
+        if (type.isOverEnrollment(enrolledUserInfos.size())) {
             throw new CannotEnrollException("수강 인원이 초과되었습니다.");
         }
     }
@@ -70,7 +72,7 @@ public class Session {
         status = SessionStatus.RECRUITING;
     }
 
-    public int getEnrolledUsersSize() {
-        return enrolledUsers.size();
+    public int getEnrolledUserInfosSize() {
+        return enrolledUserInfos.size();
     }
 }

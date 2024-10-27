@@ -1,6 +1,4 @@
-package nextstep.courses.domain;
-
-import nextstep.courses.domain.session.SessionType;
+package nextstep.sessions.domain;
 
 public class SessionTypeTest {
     public static final SessionType FREE_TYPE = SessionType.freeType();

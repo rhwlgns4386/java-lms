@@ -1,7 +1,6 @@
-package nextstep.courses.domain;
+package nextstep.sessions.domain;
 
-import nextstep.courses.domain.session.Session;
-import nextstep.courses.exception.CannotEnrollException;
+import nextstep.sessions.exception.CannotEnrollException;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.Test;
@@ -17,7 +16,7 @@ public class SessionTest {
         Payment payment = new Payment("202410261140", 1L, NsUserTest.JAVAJIGI.getId(), 0L);
         session.updateToRecruiting();
         session.enroll(NsUserTest.JAVAJIGI, payment);
-        assertThat(session.getEnrolledUsersSize()).isEqualTo(1);
+        assertThat(session.getEnrolledUserInfosSize()).isEqualTo(1);
     }
 
     @Test
@@ -26,7 +25,7 @@ public class SessionTest {
         Payment payment = new Payment("202410261140", 1L, NsUserTest.JAVAJIGI.getId(), 1000L);
         session.updateToRecruiting();
         session.enroll(NsUserTest.JAVAJIGI, payment);
-        assertThat(session.getEnrolledUsersSize()).isEqualTo(1);
+        assertThat(session.getEnrolledUserInfosSize()).isEqualTo(1);
     }
 
     @Test

@@ -1,4 +1,4 @@
-package nextstep.courses.domain.session;
+package nextstep.sessions.domain;
 
 public class SessionImage {
     private static final double MAX_SIZE = 1024 * 1024;

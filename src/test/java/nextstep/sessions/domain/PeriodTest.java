@@ -1,6 +1,5 @@
-package nextstep.courses.domain;
+package nextstep.sessions.domain;
 
-import nextstep.courses.domain.session.Period;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 

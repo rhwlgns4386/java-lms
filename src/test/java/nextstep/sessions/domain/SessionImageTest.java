@@ -1,7 +1,5 @@
-package nextstep.courses.domain;
+package nextstep.sessions.domain;
 
-import nextstep.courses.domain.session.ImageType;
-import nextstep.courses.domain.session.SessionImage;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;

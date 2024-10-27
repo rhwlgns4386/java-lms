@@ -1,4 +1,4 @@
-package nextstep.courses.domain.session;
+package nextstep.sessions.domain;
 
 import java.time.LocalDate;
 
