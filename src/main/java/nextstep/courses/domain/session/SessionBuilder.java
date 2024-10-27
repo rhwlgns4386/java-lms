@@ -7,9 +7,9 @@ import java.io.File;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-public class SessionBuilder {
+import static nextstep.courses.domain.session.Session.NOT_ASSIGNED;
 
-    private static final int NOT_ASSIGNED = -1;
+public class SessionBuilder {
 
     private Long id;
     private String name;

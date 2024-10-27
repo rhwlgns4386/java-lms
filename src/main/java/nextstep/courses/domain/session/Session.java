@@ -9,7 +9,7 @@ import java.util.Objects;
 
 public abstract class Session {
 
-    private static final long NOT_ASSIGNED = -1;
+    static final int NOT_ASSIGNED = -1;
 
     private Long id;
     private final String name;
@@ -26,7 +26,7 @@ public abstract class Session {
 
     protected Session(String name, CoverImage coverImage, int maxEnrollment, SessionState sessionState,
                       long sessionFee, LocalDateTime startDate, LocalDateTime endDate) {
-        this(NOT_ASSIGNED, name, coverImage, maxEnrollment, sessionState, sessionFee, startDate, endDate);
+        this((long) NOT_ASSIGNED, name, coverImage, maxEnrollment, sessionState, sessionFee, startDate, endDate);
     }
 
     protected Session(Long id, String name, CoverImage coverImage, int maxEnrollment,
