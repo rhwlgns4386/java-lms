@@ -25,6 +25,10 @@ public class NsUser {
     public NsUser() {
     }
 
+    public NsUser(Long id) {
+        this(id, null, null, null, null, null, null);
+    }
+
     public NsUser(Long id, String userId, String password, String name, String email) {
         this(id, userId, password, name, email, LocalDateTime.now(), null);
     }
@@ -134,5 +138,18 @@ public class NsUser {
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof NsUser)) return false;
+        NsUser nsUser = (NsUser) o;
+        return Objects.equals(id, nsUser.id) && Objects.equals(userId, nsUser.userId) && Objects.equals(password, nsUser.password) && Objects.equals(name, nsUser.name) && Objects.equals(email, nsUser.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, userId, password, name, email, createdAt, updatedAt);
     }
 }
