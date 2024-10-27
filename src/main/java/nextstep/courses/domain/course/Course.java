@@ -1,6 +1,12 @@
 package nextstep.courses.domain.course;
 
+import nextstep.courses.domain.session.Session;
+import nextstep.courses.dto.SessionPaymentInfo;
+import nextstep.payments.domain.Payment;
+
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Course {
     private Long id;
@@ -12,6 +18,8 @@ public class Course {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
+    private final List<Session> sessions = new ArrayList<>();
 
     public Course() {
     }
@@ -26,6 +34,30 @@ public class Course {
         this.creatorId = creatorId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+    }
+
+    public void add(Session session) {
+        sessions.add(session);
+    }
+
+    public boolean has(Session session) {
+        return sessions.contains(session);
+    }
+
+    public SessionPaymentInfo tryRegister(Long sessionId) {
+        return sessions.stream()
+                .filter(session -> session.hasSameId(sessionId))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("해당 강의를 찾을 수 없습니다"))
+                .tryRegisterForSession();
+    }
+
+    public boolean finalizeRegistration(Payment payment) {
+        return sessions.stream()
+                .filter(session -> session.checkPaymentInfoMatch(payment))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("결제 정보에 대한 강의를 찾을 수 없습니다"))
+                .finalizeSessionRegistration(payment);
     }
 
     public String getTitle() {
