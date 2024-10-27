@@ -24,10 +24,36 @@ public class ImageTest {
     @DisplayName("Image size 체크")
     void checkImageSizeTest() {
         Long id = 1L;
-        Long imageSize = 1001L; //KB
+        Long imageSize = 1025L; //KB
         ImageType imageType = ImageType.JPG;
         Long width = 300L;
         Long height = 200L;
+
+        Assertions.assertThatThrownBy(() -> new Image(id, imageSize, imageType, width, height))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    @DisplayName("image min width 체크")
+    void checkMinImageWidthTest() {
+        Long id = 1L;
+        Long imageSize = 1000L; //KB
+        ImageType imageType = ImageType.JPG;
+        Long width = 299L;
+        Long height = 200L;
+
+        Assertions.assertThatThrownBy(() -> new Image(id, imageSize, imageType, width, height))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    @DisplayName("image min height 체크")
+    void checkMinImageHeightTest() {
+        Long id = 1L;
+        Long imageSize = 1000L; //KB
+        ImageType imageType = ImageType.JPG;
+        Long width = 300L;
+        Long height = 199L;
 
         Assertions.assertThatThrownBy(() -> new Image(id, imageSize, imageType, width, height))
                 .isInstanceOf(IllegalArgumentException.class);

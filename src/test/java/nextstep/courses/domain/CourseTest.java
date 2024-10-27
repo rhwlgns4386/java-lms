@@ -13,14 +13,44 @@ public class CourseTest {
         Long id = 1L;
         Long order = 1L;
         String title = "TDD with Java";
-        LocalDate startDate = LocalDate.of(2024, 9, 23);
-        LocalDate endDate = LocalDate.of(2024, 11, 7);
         Long creatorId = 1L;
 
 
-        Course course = new Course(id, order, title, startDate, endDate, creatorId);
+        Course course = new Course(id, order, title, creatorId);
 
         Assertions.assertThat(course).isNotNull();
         Assertions.assertThat(course.getId()).isEqualTo(id);
+    }
+
+    @Test
+    @DisplayName("Course에 Session 추가")
+    void addSessionInCourseTest() {
+        Long id = 1L;
+        Long order = 1L;
+        String title = "TDD with Java";
+        Long creatorId = 1L;
+
+        Course course = new Course(id, order, title, creatorId);
+
+        Session session = createSession();
+
+        course.addSession(session);
+
+        Assertions.assertThat(course.getSessions()).hasSize(1);
+        Assertions.assertThat(course.getSessions().get(0)).isEqualTo(session);
+    }
+
+    private Session createSession() {
+        Long id = 1L;
+        String name = "session1";
+        LocalDate startDate = LocalDate.now();
+        LocalDate endDate = startDate.plusDays(1);
+        SessionType type = SessionType.FREE;
+        SessionStatus status = SessionStatus.PREPARING;
+        Image image = new Image(1L, 1000L, ImageType.GIF, 300L, 200L);
+        Long price = 400_000L;
+        Long students = Long.MAX_VALUE;
+
+        return new Session(id, name, startDate, endDate, type, status, image, price, students);
     }
 }

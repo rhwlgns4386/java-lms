@@ -17,8 +17,10 @@ public class SessionTest {
         SessionType type = SessionType.FREE;
         SessionStatus status = SessionStatus.PREPARING;
         Image image = new Image(1L, 1000L, ImageType.GIF, 300L, 200L);
+        Long price = 400_000L;
+        Long students = Long.MAX_VALUE;
 
-        Session session = new Session(id, name, startDate, endDate, type, status, image);
+        Session session = new Session(id, name, startDate, endDate, type, status, image, price, students);
 
         Assertions.assertThat(session).isNotNull();
         Assertions.assertThat(session.getId()).isEqualTo(id);
