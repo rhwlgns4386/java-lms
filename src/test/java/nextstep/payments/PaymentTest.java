@@ -9,6 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PaymentTest {
 
     public static final Payment p1 = new Payment("1", 1L, 1L, 3000L);
+    public static final Payment p2 = new Payment("1", 1L, 1L, 0L);
 
     @Test
     @DisplayName("지불한 금액이 다르면 false 반환")

@@ -12,6 +12,9 @@ public class FreeSession extends Session {
 
     @Override
     public void enroll(Payment payment) {
+        if (!payment.isPaid(0)) {
+            throw new IllegalStateException("무료강의의 수강료는 지불되어선 안됩니다.");
+        }
         super.enroll(payment);
     }
 }

@@ -72,3 +72,4 @@
 - [X] Session 내 student에 userId 수집
 - [X] Payment 내 지불한 금액 확인 메소드 추가 
 - [X] PaidSession 내 지불한 금액 확인 validation 추가
+- [X] FreeSession 내 지불한 금액 확인 validation 추가
