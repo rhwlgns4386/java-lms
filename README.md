@@ -70,3 +70,4 @@
 - [X] enroll 메소드 매개변수 Payment로 수정 
 - [X] sessionId string -> long 수정
 - [X] Session 내 student에 userId 수집
+- [X] Payment 내 지불한 금액 확인 메소드 추가 
