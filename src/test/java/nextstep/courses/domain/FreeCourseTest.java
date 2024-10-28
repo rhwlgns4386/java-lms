@@ -5,7 +5,8 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
 
 class FreeCourseTest {
 
@@ -15,8 +16,8 @@ class FreeCourseTest {
         LocalDate startDate = LocalDate.of(2024, 10, 10);
         LocalDate endDate = LocalDate.of(2024, 10, 19);
         FreeCourse freeCourse = new FreeCourse(CourseStatus.OPEN, new Course2Period(startDate, endDate));
+        Money paidAmount = new Money(0);
 
-        assertThat(freeCourse.canEnroll()).isTrue();
-
+        assertDoesNotThrow(() -> freeCourse.register(paidAmount));
     }
 }

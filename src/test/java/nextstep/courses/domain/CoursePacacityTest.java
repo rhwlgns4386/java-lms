@@ -21,4 +21,11 @@ class CoursePacacityTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
+    @DisplayName("현재 수강인원이 최대 수강인원을 초과하면 예외로 처리한다.")
+    @Test
+    void currentCapacityOverMaxCapacity() {
+        assertThatThrownBy(() -> new CourseCapacity(2, 1))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
 }
