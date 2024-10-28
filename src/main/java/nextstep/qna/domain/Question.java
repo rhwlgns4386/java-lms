@@ -53,10 +53,16 @@ public class Question {
     }
 
     public List<DeleteHistory> delete(NsUser loginUser, LocalDateTime localDateTime) throws CannotDeleteException {
-        writer.validateUser(loginUser);
+        validateUser(loginUser);
         answers.validateAnswers(loginUser);
         this.deleted = true;
         return deleteHistories(localDateTime);
+    }
+
+    public void validateUser(NsUser loginUser) throws CannotDeleteException {
+        if (!writer.equals(loginUser)) {
+            throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
+        }
     }
 
     public List<DeleteHistory> deleteHistories(LocalDateTime localDateTime) {
