@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 
 public class CourseTest {
 
@@ -41,8 +42,8 @@ public class CourseTest {
 
     @Test
     void succeed_to_try_register() {
-        SessionPaymentInfo paidPaymentInfo = course.tryRegister(PAID_SESSION_ID);
-        SessionPaymentInfo freePaymentInfo = course.tryRegister(FREE_SESSION_ID);
+        SessionPaymentInfo paidPaymentInfo = course.preCheckForRegister(PAID_SESSION_ID);
+        SessionPaymentInfo freePaymentInfo = course.preCheckForRegister(FREE_SESSION_ID);
 
         assertThat(paidPaymentInfo.getSessionId()).isEqualTo(PAID_SESSION_ID);
         assertThat(paidPaymentInfo.getSessionFee()).isEqualTo(10000);
@@ -52,7 +53,7 @@ public class CourseTest {
 
     @Test
     void throw_exception_if_try_register_invalid_session_id() {
-        assertThatIllegalArgumentException().isThrownBy(() -> course.tryRegister(3L));
+        assertThatIllegalArgumentException().isThrownBy(() -> course.preCheckForRegister(3L));
     }
 
     @Test
@@ -71,7 +72,7 @@ public class CourseTest {
 
     @Test
     void throw_exception_if_finalize_register_with_invalid_session_fee_payment() {
-        assertThatIllegalArgumentException().isThrownBy(() ->
+        assertThatIllegalStateException().isThrownBy(() ->
                 course.finalizeRegistration(new Payment("", 1L, NsUserTest.JAVAJIGI.getId(), 100L)));
     }
 }

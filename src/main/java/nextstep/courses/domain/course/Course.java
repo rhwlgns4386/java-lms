@@ -13,11 +13,7 @@ public class Course {
 
     private String title;
 
-    private Long creatorId;
-
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
+    private CreationInfo creationInfo;
 
     private final List<Session> sessions = new ArrayList<>();
 
@@ -31,9 +27,7 @@ public class Course {
     public Course(Long id, String title, Long creatorId, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.title = title;
-        this.creatorId = creatorId;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        this.creationInfo = new CreationInfo(creatorId, createdAt, updatedAt);
     }
 
     public void add(Session session) {
@@ -44,17 +38,17 @@ public class Course {
         return sessions.contains(session);
     }
 
-    public SessionPaymentInfo tryRegister(Long sessionId) {
+    public SessionPaymentInfo preCheckForRegister(Long sessionId) {
         return sessions.stream()
-                .filter(session -> session.hasSameId(sessionId))
+                .filter(session -> session.isSameId(sessionId))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("해당 강의를 찾을 수 없습니다"))
-                .tryRegisterForSession();
+                .preCheckForRegister();
     }
 
     public boolean finalizeRegistration(Payment payment) {
         return sessions.stream()
-                .filter(session -> session.checkPaymentInfoMatch(payment))
+                .filter(session -> session.isSameId(payment))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("결제 정보에 대한 강의를 찾을 수 없습니다"))
                 .finalizeSessionRegistration(payment);
@@ -65,11 +59,11 @@ public class Course {
     }
 
     public Long getCreatorId() {
-        return creatorId;
+        return creationInfo.getCreatorId();
     }
 
     public LocalDateTime getCreatedAt() {
-        return createdAt;
+        return creationInfo.getCreatedAt();
     }
 
     @Override
@@ -77,9 +71,8 @@ public class Course {
         return "Course{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
-                ", creatorId=" + creatorId +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
+                ", creationInfo=" + creationInfo +
+                ", sessions=" + sessions +
                 '}';
     }
 }

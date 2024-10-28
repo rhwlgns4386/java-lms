@@ -24,12 +24,9 @@ public class CourseService {
     public Payment registerSession(Long courseId, Long sessionId, NsUser courseApplicant) {
         Course foundCourse = Optional.ofNullable(courseRepository.findById(courseId))
                 .orElseThrow(() -> new IllegalArgumentException("해당 강의 기수를 찾을 수 없습니다"));
-        SessionPaymentInfo sessionPaymentInfo = foundCourse.tryRegister(sessionId);
+        SessionPaymentInfo sessionPaymentInfo = foundCourse.preCheckForRegister(sessionId);
         Payment payment = paymentService.payment("결제 진행 아이디", courseApplicant.getId(), sessionPaymentInfo);
-
-        if (!foundCourse.finalizeRegistration(payment)) {
-            throw new IllegalStateException("강의 수강 신청에 실패했습니다. 다시 시도해주세요.");
-        }
+        foundCourse.finalizeRegistration(payment);
         return payment;
     }
 }
