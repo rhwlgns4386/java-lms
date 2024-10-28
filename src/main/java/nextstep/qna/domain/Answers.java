@@ -9,33 +9,30 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class Answers {
-    private final List<Answer> answers = new ArrayList<>();
+    private final List<Answer> answers;
 
-    public Answers(List<Answer> answers) {
-        this.answers.addAll(answers);
+    public Answers() {
+        this(new ArrayList<>());
     }
 
+    public Answers(List<Answer> answers) {
+        this.answers = new ArrayList<>(answers);
+    }
 
-    public List<DeleteHistory> deleteAnswers(NsUser user) throws CannotDeleteException {
-        validateOwner(user);
+    public void deleteAnswers(NsUser user) throws CannotDeleteException {
+        for (Answer answer : answers) {
+            answer.delete(user);
+        }
+    }
+
+    public List<DeleteHistory> ofDeleteHistories() {
         return answers.stream()
-                .map(Answer::delete)
+                .map(Answer::ofDeleteHistory)
                 .collect(Collectors.toList());
     }
 
     public void addAnswer(Answer answer) {
         answers.add(answer);
-    }
-
-    void validateOwner(NsUser user) throws CannotDeleteException {
-        if (isNotOwner(user)) {
-            throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
-        }
-    }
-
-    private boolean isNotOwner(NsUser user) {
-        return answers.stream()
-                .anyMatch(answer -> !answer.isOwner(user));
     }
 
     @Override
