@@ -51,6 +51,6 @@ public class CourseTest {
         Long price = 400_000L;
         Long students = Long.MAX_VALUE;
 
-        return new Session(id, name, startDate, endDate, type, status, image, price, students);
+        return Session.createFree(name, startDate, endDate, image);
     }
 }

@@ -12,9 +12,10 @@ public class Session {
     private SessionStatus sessionStatus;
     private Image image;
     private Long price;
-    private Long maxStudents;
+    private Long capacity;
+    private Boolean isDeleted;
 
-    public Session(Long id, String name, LocalDate startDate, LocalDate endDate, SessionType sessionType, SessionStatus sessionStatus, Image image, Long price, Long maxStudents) {
+    public Session(Long id, String name, LocalDate startDate, LocalDate endDate, SessionType sessionType, SessionStatus sessionStatus, Image image, Long price, Long capacity, Boolean isDeleted) {
         this.id = id;
         this.name = name;
         this.startDate = startDate;
@@ -23,23 +24,24 @@ public class Session {
         this.sessionStatus = sessionStatus;
         this.image = image;
         this.price = price;
-        this.maxStudents = maxStudents;
+        this.capacity = capacity;
+        this.isDeleted = isDeleted;
     }
 
     public static Session createFree(String name, LocalDate startDate, LocalDate endDate, Image image) {
-        return new Session(null, name, startDate, endDate, SessionType.FREE, SessionStatus.PREPARING, image, 0L, Long.MAX_VALUE);
+        return new Session(null, name, startDate, endDate, SessionType.FREE, SessionStatus.PREPARING, image, 0L, Long.MAX_VALUE, false);
     }
 
     public static Session createPaid(String name, LocalDate startDate, LocalDate endDate, Image image, Long price, Long students) {
         validatePaidSession(price, students);
-        return new Session(null, name, startDate, endDate, SessionType.PAID, SessionStatus.PREPARING, image, price, students);
+        return new Session(null, name, startDate, endDate, SessionType.PAID, SessionStatus.PREPARING, image, price, students, false);
     }
 
     private static void validatePaidSession(Long price, Long students) {
-        if(price == null || price <= 0){
+        if (price == null || price <= 0) {
             throw new IllegalArgumentException("Price must be greater than 0");
         }
-        if(students == null || students <= 0){
+        if (students == null || students <= 0) {
             throw new IllegalArgumentException("Students must be greater than 0");
         }
     }
@@ -68,12 +70,20 @@ public class Session {
         return sessionStatus;
     }
 
-    public Long getMaxStudents() {
-        return maxStudents;
+    public Long getCapacity() {
+        return capacity;
     }
 
     public Long getPrice() {
         return price;
+    }
+
+    public Image getImage() {
+        return image;
+    }
+
+    public Boolean getDeleted() {
+        return isDeleted;
     }
 
     @Override
@@ -91,5 +101,9 @@ public class Session {
     @Override
     public int hashCode() {
         return Objects.hashCode(getId());
+    }
+
+    public void delete() {
+        this.isDeleted = true;
     }
 }
