@@ -32,16 +32,16 @@ public class Session {
         return new Session(null, name, startDate, endDate, SessionType.FREE, SessionStatus.PREPARING, image, 0L, Long.MAX_VALUE, false);
     }
 
-    public static Session createPaid(String name, LocalDate startDate, LocalDate endDate, Image image, Long price, Long students) {
-        validatePaidSession(price, students);
-        return new Session(null, name, startDate, endDate, SessionType.PAID, SessionStatus.PREPARING, image, price, students, false);
+    public static Session createPaid(String name, LocalDate startDate, LocalDate endDate, Image image, Long price, Long capacity) {
+        validatePaidSession(price, capacity);
+        return new Session(null, name, startDate, endDate, SessionType.PAID, SessionStatus.PREPARING, image, price, capacity, false);
     }
 
-    private static void validatePaidSession(Long price, Long students) {
+    private static void validatePaidSession(Long price, Long capacity) {
         if (price == null || price <= 0) {
             throw new IllegalArgumentException("Price must be greater than 0");
         }
-        if (students == null || students <= 0) {
+        if (capacity == null || capacity <= 0) {
             throw new IllegalArgumentException("Students must be greater than 0");
         }
     }
