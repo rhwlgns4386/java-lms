@@ -23,7 +23,7 @@ public class SessionManagerTest {
         LocalDateTime end = LocalDateTime.of(2024, 10, 10, 10, 11);
         SessionDate sessionDate = new SessionDate(start, end);
         SessionId sessionId = SessionId.of(1L, "TDD");
-        FreeSession freeSession = new FreeSession(sessionDate, image, sessionId);
+        FreeSession freeSession = new FreeSession(sessionId, sessionDate, image);
 
         SessionManager sessionManager = new SessionManager();
 

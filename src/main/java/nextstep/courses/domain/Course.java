@@ -15,6 +15,8 @@ public class Course {
 
     private LocalDateTime updatedAt;
 
+    private SessionManager sessionManager;
+
     public Course() {
     }
 
@@ -37,6 +39,16 @@ public class Course {
         this.creatorId = creatorId;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
+        this.sessionManager = new SessionManager();
+    }
+
+    public void registerSession(SessionType sessionType, SessionDate sessionDate, Image image, SessionId sessionId, Integer capacity, Long price) {
+        if (sessionType.equals(SessionType.FREE)) {
+            this.sessionManager.addFreeSession(sessionDate, image, sessionId);
+            return;
+        }
+
+        this.sessionManager.addPaidSession(sessionDate, image, sessionId, capacity, price);
     }
 
     public Long getId() {
@@ -59,6 +71,9 @@ public class Course {
         return order;
     }
 
+    public SessionManager getSessionManager() {
+        return sessionManager;
+    }
 
     @Override
     public String toString() {

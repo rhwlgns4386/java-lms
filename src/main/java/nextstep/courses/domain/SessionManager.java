@@ -21,4 +21,18 @@ public class SessionManager {
     public List<Session> getSessions() {
         return sessions;
     }
+
+    public Session findBySessionId(SessionId sessionId) {
+        return sessions.stream().filter(it -> it.getSessionId().equals(sessionId)).findFirst().orElse(null);
+    }
+
+    public void addFreeSession(SessionDate sessionDate, Image image, SessionId sessionId) {
+        FreeSession freeSession = new FreeSession(sessionId, sessionDate, image);
+        addSessions(freeSession);
+    }
+
+    public void addPaidSession(SessionDate sessionDate, Image image, SessionId sessionId, Integer capacity, Long price) {
+        PaidSession paidSession = new PaidSession(sessionDate, image, sessionId, capacity, price);
+        addSessions(paidSession);
+    }
 }

@@ -25,7 +25,7 @@ public class FreeSessionTest {
     @DisplayName("FreeSession 생성")
     void createFreeSessionTest() {
         SessionId sessionId = SessionId.of(1L, "TDD");
-        FreeSession freeSession = new FreeSession(sessionDate, image, sessionId);
+        FreeSession freeSession = new FreeSession(sessionId, sessionDate, image);
 
         Assertions.assertThat(freeSession).isNotNull();
         Assertions.assertThat(freeSession.getSessionId()).isEqualTo(sessionId);

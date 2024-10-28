@@ -24,7 +24,7 @@
 * SessionDate class 생성 [X]
 * StudentManager class 생성 [X]
 * SessionManager class 생성 [X]
-* 과정 생성 로직 개발 []
+* 과정 생성 로직 개발 [X]
 * 과정 삭제 로직 개발 []
 * 무료 강의 신청 로직 개발 []
 * 유료 강의 신청 로직 개발 []
