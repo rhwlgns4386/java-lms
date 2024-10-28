@@ -3,27 +3,27 @@ package nextstep.payments.domain;
 import java.time.LocalDateTime;
 
 public class Payment {
-    private String id;
 
-    // 결제한 강의 아이디
+    private static final String MATCH_AMOUNT_MESSAGE = "결제 금액이 일치하지 않습니다.";
+
+    private Long id;
     private Long sessionId;
-
-    // 결제한 사용자 아이디
     private Long nsUserId;
-
-    // 결제 금액
-    private Long amount;
+    private int amount;
 
     private LocalDateTime createdAt;
 
-    public Payment() {
-    }
-
-    public Payment(String id, Long sessionId, Long nsUserId, Long amount) {
+    public Payment(Long id, Long sessionId, Long nsUserId, int amount) {
         this.id = id;
         this.sessionId = sessionId;
         this.nsUserId = nsUserId;
         this.amount = amount;
         this.createdAt = LocalDateTime.now();
+    }
+
+    public void checkMatchAmount(int amount) {
+        if (this.amount != amount) {
+            throw new IllegalArgumentException(MATCH_AMOUNT_MESSAGE);
+        }
     }
 }
