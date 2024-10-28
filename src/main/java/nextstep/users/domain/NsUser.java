@@ -22,7 +22,7 @@ public class NsUser {
 
     private LocalDateTime updatedAt;
 
-    public NsUser() {
+    public NsUser(long l, String writer, String password, String name) {
     }
 
     public NsUser(Long id, String userId, String password, String name, String email) {
@@ -118,6 +118,10 @@ public class NsUser {
     }
 
     private static class GuestNsUser extends NsUser {
+        private GuestNsUser() {
+            super(1L, "writer", "password", "name");
+        }
+
         @Override
         public boolean isGuestUser() {
             return true;

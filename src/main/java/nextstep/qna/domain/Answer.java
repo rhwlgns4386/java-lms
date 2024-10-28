@@ -64,10 +64,6 @@ public class Answer {
         return writer;
     }
 
-    public String getContents() {
-        return contents;
-    }
-
     public void toQuestion(Question question) {
         this.question = question;
     }
@@ -75,5 +71,10 @@ public class Answer {
     @Override
     public String toString() {
         return "Answer [id=" + getId() + ", writer=" + writer + ", contents=" + contents + "]";
+    }
+
+    public DeleteHistory delete() {
+        this.deleted = true;
+        return new DeleteHistory(ContentType.ANSWER, id, writer, LocalDateTime.now());
     }
 }
