@@ -9,6 +9,10 @@ public enum SessionState {
         this.desc = desc;
     }
 
+    public boolean canRegister() {
+        return this == SessionState.OPEN;
+    }
+
     public String getDesc() {
         return desc;
     }

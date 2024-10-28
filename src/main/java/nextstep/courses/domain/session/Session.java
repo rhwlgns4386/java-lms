@@ -11,59 +11,45 @@ public abstract class Session {
 
     static final int NOT_ASSIGNED = -1;
 
-    private Long id;
-    private final String name;
-    private final CoverImage coverImage;
+    protected Long id;
+    protected SessionInfo sessionInfo;
+    protected Enrollment enrollment;
+    protected SessionDuration sessionDuration;
 
-    protected int enrollment;
-    protected final int maxEnrollment;
-    protected final long sessionFee;
-
-    protected SessionState sessionState;
-
-    protected LocalDateTime startDate;
-    protected LocalDateTime endDate;
-
-    protected Session(String name, CoverImage coverImage, int maxEnrollment, SessionState sessionState,
+    protected Session(String title, CoverImage coverImage, int maxEnrollment, SessionState sessionState,
                       long sessionFee, LocalDateTime startDate, LocalDateTime endDate) {
-        this((long) NOT_ASSIGNED, name, coverImage, maxEnrollment, sessionState, sessionFee, startDate, endDate);
+        this((long) NOT_ASSIGNED, title, coverImage, maxEnrollment, sessionState, sessionFee, startDate, endDate);
     }
 
-    protected Session(Long id, String name, CoverImage coverImage, int maxEnrollment,
+    protected Session(Long id, String title, CoverImage coverImage, int maxEnrollment,
                       SessionState sessionState, long sessionFee, LocalDateTime startDate, LocalDateTime endDate) {
         this.id = id;
-        this.name = name;
-        this.coverImage = coverImage;
-        this.maxEnrollment = maxEnrollment;
-        this.sessionFee = sessionFee;
-        this.sessionState = sessionState;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.sessionInfo = new SessionInfo(title, coverImage, sessionFee, sessionState);
+        this.enrollment = new Enrollment(maxEnrollment);
+        this.sessionDuration = new SessionDuration(startDate, endDate);
     }
 
-    public final SessionPaymentInfo tryRegisterForSession() {
-        if (sessionState != SessionState.OPEN) {
-            throw new IllegalStateException(sessionState.getDesc() + " 상태이기 때문에 강의 신청할 수 없습니다");
-        }
-        checkRegister();
-        return new SessionPaymentInfo(id, sessionFee);
+    public final SessionPaymentInfo preCheckForRegister() {
+        sessionInfo.checkIsOpenSession();
+        enrollment.validateAvailability();
+        return sessionInfo.sessionPaymentInfo(id);
     }
-
-    protected abstract void checkRegister();
 
     public boolean finalizeSessionRegistration(Payment payment) {
-        if (payment.match(id, sessionFee)) {
-            enrollment++;
+        if (isValidPayment(payment)) {
+            enrollment.register();
             return true;
         }
-        return false;
+        throw new IllegalStateException("결제 내역(금액 등)과 강의 수강 조건이 일치하지 않습니다");
     }
 
-    public boolean checkPaymentInfoMatch(Payment payment) {
-        return payment.match(id, sessionFee);
+    protected abstract boolean isValidPayment(Payment payment);
+
+    public boolean isSameId(Payment payment) {
+        return payment.isSameSessionId(id);
     }
 
-    public boolean hasSameId(Long id) {
+    public boolean isSameId(Long id) {
         return this.id.equals(id);
     }
 
