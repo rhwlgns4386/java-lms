@@ -22,4 +22,8 @@ public abstract class Session {
     public SessionId getSessionId() {
         return sessionId;
     }
+
+    public SessionType getSessionType() {
+        return sessionType;
+    }
 }
