@@ -27,7 +27,7 @@
     * [x] 이미지 크기 1mb 검증
     * [x] 이미지 타입 검증
     * [x] 크기 300px * 200px 이상 검증
-* [ ] Session(강의) 추상 클래스
+* [x] Session(강의) 추상 클래스
     * [x] 강의 커버 공통적으로 가짐
     * [x] 강의 상태
       * 준비중
@@ -43,7 +43,7 @@
         * [x] Payment 객체를 검증하여 금액이 맞으면 수강 신청 완료
             * [x] Payment 객체 persistence
             * [x] 수강 인원 증가
-            * [] Session 객체 update
+            * Session 객체 update
 * [x] Course(기수)
     * [x] 수강하고자 하는 강의 객체 가져옴
     * [x] 수강 가능 여부 검증
