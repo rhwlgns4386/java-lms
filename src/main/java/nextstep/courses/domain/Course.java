@@ -1,8 +1,6 @@
 package nextstep.courses.domain;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Course {
     private Long id;
@@ -10,8 +8,6 @@ public class Course {
     private Long order;
 
     private String title;
-
-    private List<Session> sessions = new ArrayList<>();
 
     private Long creatorId;
 
@@ -43,11 +39,6 @@ public class Course {
         this.updatedAt = LocalDateTime.now();
     }
 
-    public void addSession(Session session) {
-        this.sessions.add(session);
-        this.createdAt = LocalDateTime.now();
-    }
-
     public Long getId() {
         return id;
     }
@@ -68,9 +59,6 @@ public class Course {
         return order;
     }
 
-    public List<Session> getSessions() {
-        return sessions;
-    }
 
     @Override
     public String toString() {
