@@ -1,5 +1,7 @@
 package nextstep.courses.domain;
 
+import nextstep.users.domain.NsUser;
+
 public class FreeSession extends Session {
     private SessionStatus sessionStatus;
     private StudentManager studentManager;
@@ -14,7 +16,15 @@ public class FreeSession extends Session {
         return super.getSessionId();
     }
 
+    public StudentManager getStudentManager() {
+        return studentManager;
+    }
+
     public SessionStatus getSessionStatus() {
         return sessionStatus;
+    }
+
+    public void addStudents(NsUser... nsUsers) {
+        studentManager.addStudents(nsUsers);
     }
 }

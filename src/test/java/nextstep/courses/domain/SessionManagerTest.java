@@ -73,4 +73,10 @@ public class SessionManagerTest {
         Assertions.assertThat(foundSession).isNotNull();
         Assertions.assertThat(foundSession.getSessionType()).isEqualTo(SessionType.PAID);
     }
+
+    @Test
+    @DisplayName("무료 강의 신청")
+    void registerFreeSessionTest() {
+
+    }
 }
