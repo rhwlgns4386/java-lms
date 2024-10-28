@@ -1,11 +1,11 @@
 package nextstep.courses.domain;
 
-public class PaidCourse extends DefaultCourse {
+public class PaidSession extends DefaultSession {
     private final Money courseFee;
-    private CourseCapacity capacity;
+    private SessionCapacity capacity;
 
-    public PaidCourse(CourseStatus courseStatus, Course2Period period, CourseCapacity capacity, Money courseFee) {
-        super(courseStatus, period);
+    public PaidSession(SessionStatus sessionStatus, SessionPeriod period, SessionCapacity capacity, Money courseFee) {
+        super(sessionStatus, period);
         this.capacity = capacity;
         this.courseFee = courseFee;
     }

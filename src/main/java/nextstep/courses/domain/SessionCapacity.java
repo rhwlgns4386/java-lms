@@ -2,12 +2,12 @@ package nextstep.courses.domain;
 
 import java.util.Objects;
 
-public class CourseCapacity {
+public class SessionCapacity {
     private static final int EMTY = 0;
     private final int current;
     private final int max;
 
-    public CourseCapacity(int current, int max) {
+    public SessionCapacity(int current, int max) {
         if (max <= EMTY) {
             throw new IllegalArgumentException("최대 수강 인원은 0보다 커야 합니다.");
         }
@@ -21,11 +21,11 @@ public class CourseCapacity {
         this.max = max;
     }
 
-    public CourseCapacity increase() {
+    public SessionCapacity increase() {
         if (isFull()) {
             throw new IllegalArgumentException("수강인원이 꽉 찼습니다.");
         }
-        return new CourseCapacity(current + 1, max);
+        return new SessionCapacity(current + 1, max);
     }
 
     public boolean isFull() {
@@ -36,7 +36,7 @@ public class CourseCapacity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CourseCapacity that = (CourseCapacity) o;
+        SessionCapacity that = (SessionCapacity) o;
         return current == that.current && max == that.max;
     }
 

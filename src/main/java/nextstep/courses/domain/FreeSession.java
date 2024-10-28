@@ -1,8 +1,8 @@
 package nextstep.courses.domain;
 
-public class FreeCourse extends DefaultCourse {
+public class FreeSession extends DefaultSession {
 
-    public FreeCourse(CourseStatus status, Course2Period period) {
+    public FreeSession(SessionStatus status, SessionPeriod period) {
         super(status, period);
     }
 

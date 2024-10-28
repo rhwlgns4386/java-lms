@@ -1,10 +1,10 @@
 package nextstep.courses.domain;
 
-public abstract class DefaultCourse {
-    protected final CourseStatus status;
-    protected final Course2Period period;
+public abstract class DefaultSession {
+    protected final SessionStatus status;
+    protected final SessionPeriod period;
 
-    protected DefaultCourse(CourseStatus status, Course2Period period) {
+    protected DefaultSession(SessionStatus status, SessionPeriod period) {
         this.status = status;
         this.period = period;
     }

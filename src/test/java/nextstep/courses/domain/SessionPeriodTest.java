@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class Course2PeriodTest {
+class SessionPeriodTest {
 
     @DisplayName("강의 종료일이 시작일 보다 빠르면 예외로 처리한다.")
     @Test
@@ -15,7 +15,7 @@ class Course2PeriodTest {
         LocalDate startDate = LocalDate.of(2024, 10, 10);
         LocalDate endDate = LocalDate.of(2023, 2, 19);
 
-        assertThatThrownBy(() -> new Course2Period(startDate, endDate))
+        assertThatThrownBy(() -> new SessionPeriod(startDate, endDate))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 

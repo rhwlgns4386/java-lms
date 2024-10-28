@@ -15,7 +15,7 @@ class FreeCourseTest {
     void register() {
         LocalDate startDate = LocalDate.of(2024, 10, 10);
         LocalDate endDate = LocalDate.of(2024, 10, 19);
-        FreeCourse freeCourse = new FreeCourse(CourseStatus.OPEN, new Course2Period(startDate, endDate));
+        FreeSession freeCourse = new FreeSession(SessionStatus.OPEN, new SessionPeriod(startDate, endDate));
         Money paidAmount = new Money(0);
 
         assertDoesNotThrow(() -> freeCourse.register(paidAmount));

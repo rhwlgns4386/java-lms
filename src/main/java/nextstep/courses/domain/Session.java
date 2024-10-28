@@ -1,11 +1,11 @@
 package nextstep.courses.domain;
 
-public class Course2 {
-    private final CourseStatus status;
-    private final Course2Period period;
+public class Session {
+    private final SessionStatus status;
+    private final SessionPeriod period;
 
-    public Course2(CourseStatus courseStatus, Course2Period period) {
-        this.status = courseStatus;
+    public Session(SessionStatus sessionStatus, SessionPeriod period) {
+        this.status = sessionStatus;
         this.period = period;
     }
 
