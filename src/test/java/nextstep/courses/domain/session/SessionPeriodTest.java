@@ -1,6 +1,6 @@
 package nextstep.courses.domain.session;
 
-import nextstep.qna.SessionPeriodException;
+import nextstep.qna.SessionException;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -10,7 +10,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class SessionPeriodTest {
 
-
     @Test
     void 시작일이_종료일이전이면_예외() {
         LocalDateTime startDate = LocalDateTime.of(2024, 10, 28, 0, 0);
@@ -18,7 +17,7 @@ public class SessionPeriodTest {
 
         assertThatThrownBy(
                 () -> new SessionPeriod(startDate, endDate)
-        ).isInstanceOf(SessionPeriodException.class);
+        ).isInstanceOf(SessionException.class);
     }
 
     @Test
@@ -33,6 +32,6 @@ public class SessionPeriodTest {
 
         assertThatThrownBy(
                 () -> sessionPeriod.registration(targetDate)
-        ).isInstanceOf(SessionPeriodException.class);
+        ).isInstanceOf(SessionException.class);
     }
 }

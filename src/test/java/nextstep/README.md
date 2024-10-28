@@ -12,21 +12,18 @@
 - 강의 시작일 이후는 강의 상태는 종료인지 검증
 - 결제한 수강료와 강의 가격 검증
 
+### SessionPayType (강의 결제 타입 Enum - [무료, 유료])
+- 무료, 유료에 따라 boolean으로 유무 검증  
+
+## DONE
+
 
 ### SessionStudents (강의 수강생)
 - 중복 수강 신청 검증(예외 처리) - Course는 기수 단위로 운영되므로 강의는 중복 결제를 하면 안됨
 - (유료일 시)최대 인원 초과 검증
 
 ### SessionStatus (강의 상태 - [준비중, 모집중, 종료])
-
 - 수강 신청 시 모집중이 아니라면 예외 처리
-
-### SessionPayType (강의 결제 타입 Enum - [무료, 유료])
-- 무료, 유료에 따라 boolean으로 유무 검증  
-
-
-## DONE
-
 
 ### SessionPeriod (강의 기간)
 - 종료일이 시작일 이전이면 예외처리
@@ -36,11 +33,9 @@
 - 이미지 크기가 1MB 보다 크면 예외처리
 
 ### SessionCoverImagePath (강의 커버 이미지 확장자 타입 - [gif, jpg, jpeg, png, svg])
-
 - 일치하는 확장자 검증
 - 허가하지 않는 확장자일 시 예외 발생 
 
 ### SessionCoverImageSize (강의 커버 이미지 사이즈)
-
 - 높이(200px), 너비(300px), 비율(3:2) 검증
 

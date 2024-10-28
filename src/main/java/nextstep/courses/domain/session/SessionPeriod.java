@@ -1,6 +1,6 @@
 package nextstep.courses.domain.session;
 
-import nextstep.qna.SessionPeriodException;
+import nextstep.qna.SessionException;
 
 import java.time.LocalDateTime;
 
@@ -18,13 +18,13 @@ public class SessionPeriod {
 
     private void validate(LocalDateTime startDate, LocalDateTime endDate) {
         if(endDate.isBefore(startDate)){
-            throw new SessionPeriodException("종료일이 시작일 이전입니다. 확인해 주세요");
+            throw new SessionException("종료일이 시작일 이전입니다. 확인해 주세요");
         }
     }
 
     public void registration(LocalDateTime targetDate){
         if(targetDate.isAfter(startDate)){
-            throw new SessionPeriodException("시작일 이후에는 수강신청 할 수 없습니다");
+            throw new SessionException("시작일 이후에는 수강신청 할 수 없습니다");
         }
     }
 
