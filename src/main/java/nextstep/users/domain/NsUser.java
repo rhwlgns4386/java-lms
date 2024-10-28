@@ -1,15 +1,12 @@
 package nextstep.users.domain;
 
+import nextstep.global.domain.BaseEntity;
 import nextstep.qna.UnAuthorizedException;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class NsUser {
-    public static final GuestNsUser GUEST_USER = new GuestNsUser();
-
-    private Long id;
-
+public class NsUser extends BaseEntity {
     private String userId;
 
     private String password;
@@ -18,11 +15,8 @@ public class NsUser {
 
     private String email;
 
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
-
     public NsUser() {
+        super();
     }
 
     public NsUser(Long id, String userId, String password, String name, String email) {
@@ -30,13 +24,11 @@ public class NsUser {
     }
 
     public NsUser(Long id, String userId, String password, String name, String email, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.id = id;
+        super(id, createdAt, updatedAt);
         this.userId = userId;
         this.password = password;
         this.name = name;
         this.email = email;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
     }
 
     public Long getId() {
@@ -47,37 +39,14 @@ public class NsUser {
         return userId;
     }
 
-    public NsUser setUserId(String userId) {
-        this.userId = userId;
-        return this;
-    }
-
     public String getPassword() {
         return password;
-    }
-
-    public NsUser setPassword(String password) {
-        this.password = password;
-        return this;
     }
 
     public String getName() {
         return name;
     }
 
-    public NsUser setName(String name) {
-        this.name = name;
-        return this;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public NsUser setEmail(String email) {
-        this.email = email;
-        return this;
-    }
 
     public void update(NsUser loginUser, NsUser target) {
         if (!matchUserId(loginUser.getUserId())) {
@@ -116,6 +85,11 @@ public class NsUser {
     public boolean isGuestUser() {
         return false;
     }
+
+    public boolean isSameUser(NsUser target) {
+        return !this.equals(target);
+    }
+
 
     private static class GuestNsUser extends NsUser {
         @Override
