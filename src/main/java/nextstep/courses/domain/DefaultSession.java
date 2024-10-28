@@ -1,15 +1,20 @@
 package nextstep.courses.domain;
 
+import nextstep.courses.domain.cover.CoverImage;
+import nextstep.payments.domain.Payment;
+
 public abstract class DefaultSession {
     protected final SessionStatus status;
     protected final SessionPeriod period;
+    protected final CoverImage coverImage;
 
-    protected DefaultSession(SessionStatus status, SessionPeriod period) {
+    protected DefaultSession(SessionStatus status, SessionPeriod period, CoverImage coverImage) {
         this.status = status;
         this.period = period;
+        this.coverImage = coverImage;
     }
 
-    protected abstract void register(Money amount);
+    protected abstract void register(Payment payment);
 
     protected void validateRegisterStatus() {
         if(status.isOpen()){

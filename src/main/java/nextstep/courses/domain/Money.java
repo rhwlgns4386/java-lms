@@ -1,13 +1,24 @@
 package nextstep.courses.domain;
 
+import nextstep.payments.domain.Payment;
+
 import java.util.Objects;
 
 public class Money {
-    private final int amount;
+    private static final int EMPTY = 0;
+    private final long amount;
+
+    public Money(Payment payment) {
+        this(payment.getAmount());
+    }
 
     public Money(int amount) {
-        if (amount < 0) {
-            throw new IllegalArgumentException("금액은 0보다 작을 수 없습니다.");
+        this((long) amount);
+    }
+
+    public Money(long amount) {
+        if (amount < EMPTY) {
+            throw new IllegalArgumentException("금액은 " + EMPTY + "보다 작을 수 없습니다.");
         }
 
         this.amount = amount;

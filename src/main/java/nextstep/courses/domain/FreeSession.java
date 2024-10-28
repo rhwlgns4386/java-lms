@@ -1,13 +1,22 @@
 package nextstep.courses.domain;
 
+import nextstep.courses.domain.cover.CoverImage;
+import nextstep.payments.domain.Payment;
+
 public class FreeSession extends DefaultSession {
 
-    public FreeSession(SessionStatus status, SessionPeriod period) {
-        super(status, period);
+    public FreeSession(SessionStatus status, SessionPeriod period, CoverImage coverImage) {
+        super(status, period, coverImage);
     }
 
     @Override
-    protected void register(Money amount) {
+    protected void register(Payment payment) {
         validateRegisterStatus();
     }
+
+    public void register() {
+        register(null);
+    }
+
+
 }

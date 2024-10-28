@@ -1,21 +1,25 @@
 package nextstep.courses.domain;
 
+import nextstep.courses.domain.cover.CoverImage;
+import nextstep.payments.domain.Payment;
+
 public class PaidSession extends DefaultSession {
     private final Money courseFee;
     private SessionCapacity capacity;
 
-    public PaidSession(SessionStatus sessionStatus, SessionPeriod period, SessionCapacity capacity, Money courseFee) {
-        super(sessionStatus, period);
+    public PaidSession(SessionStatus sessionStatus, SessionPeriod period, SessionCapacity capacity, Money courseFee, CoverImage coverImage) {
+        super(sessionStatus, period, coverImage);
         this.capacity = capacity;
         this.courseFee = courseFee;
     }
 
     @Override
-    protected void register(Money amount) {
+    protected void register(Payment payment) {
         validateRegisterStatus();
         validateCapacity();
-        validatePayment(amount);
-        this.capacity = capacity.increase();
+        validatePayment(payment);
+
+        capacity = capacity.increase();
     }
 
     private void validateCapacity() {
@@ -24,8 +28,11 @@ public class PaidSession extends DefaultSession {
         }
     }
 
-    private void validatePayment(Money amount) {
-        if (courseFee.isDifferent(amount)) {
+    private void validatePayment(Payment payment) {
+        if (payment == null) {
+            throw new IllegalArgumentException("결제 정보가 없습니다.");
+        }
+        if (courseFee.isDifferent(new Money(payment))) {
             throw new IllegalArgumentException("결제 금액이 수강료와 일치하지 않습니다");
         }
     }
