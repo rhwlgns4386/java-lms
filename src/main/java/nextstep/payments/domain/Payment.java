@@ -28,7 +28,11 @@ public class Payment {
         this.createdAt = LocalDateTime.now();
     }
 
-    public boolean match(Long sessionId, long amount) {
+    public boolean isValidPayment(Long sessionId, long amount) {
         return Objects.equals(this.sessionId, sessionId) && this.amount == amount;
+    }
+
+    public boolean isSameSessionId(Long sessionId) {
+        return this.sessionId.equals(sessionId);
     }
 }
