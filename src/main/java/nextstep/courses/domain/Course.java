@@ -42,7 +42,7 @@ public class Course {
         this.sessionManager = new SessionManager();
     }
 
-    public void registerSession(SessionType sessionType, SessionDate sessionDate, Image image, SessionId sessionId, Integer capacity, Long price) {
+    public void addSession(SessionType sessionType, SessionDate sessionDate, Image image, SessionId sessionId, Integer capacity, Long price) {
         if (sessionType.equals(SessionType.FREE)) {
             this.sessionManager.addFreeSession(sessionDate, image, sessionId);
             return;

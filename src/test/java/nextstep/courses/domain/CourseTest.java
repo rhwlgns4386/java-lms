@@ -39,7 +39,7 @@ public class CourseTest {
 
         FreeSession freeSession = new FreeSession(sessionId, sessionDate, image);
 
-        course.registerSession(SessionType.FREE, sessionDate, image, sessionId, null, null);
+        course.addSession(SessionType.FREE, sessionDate, image, sessionId, null, null);
 
         SessionManager sessionManager = course.getSessionManager();
         Assertions.assertThat(sessionManager.findBySessionId(sessionId).getSessionId()).isEqualTo(freeSession.getSessionId());
