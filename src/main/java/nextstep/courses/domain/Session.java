@@ -26,6 +26,24 @@ public class Session {
         this.maxStudents = maxStudents;
     }
 
+    public static Session createFree(String name, LocalDate startDate, LocalDate endDate, Image image) {
+        return new Session(null, name, startDate, endDate, SessionType.FREE, SessionStatus.PREPARING, image, 0L, Long.MAX_VALUE);
+    }
+
+    public static Session createPaid(String name, LocalDate startDate, LocalDate endDate, Image image, Long price, Long students) {
+        validatePaidSession(price, students);
+        return new Session(null, name, startDate, endDate, SessionType.PAID, SessionStatus.PREPARING, image, price, students);
+    }
+
+    private static void validatePaidSession(Long price, Long students) {
+        if(price == null || price <= 0){
+            throw new IllegalArgumentException("Price must be greater than 0");
+        }
+        if(students == null || students <= 0){
+            throw new IllegalArgumentException("Students must be greater than 0");
+        }
+    }
+
     public Long getId() {
         return id;
     }
@@ -48,6 +66,14 @@ public class Session {
 
     public SessionStatus getSessionStatus() {
         return sessionStatus;
+    }
+
+    public Long getMaxStudents() {
+        return maxStudents;
+    }
+
+    public Long getPrice() {
+        return price;
     }
 
     @Override

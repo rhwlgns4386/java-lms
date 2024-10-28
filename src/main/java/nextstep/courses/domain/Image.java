@@ -12,6 +12,10 @@ public class Image {
     private Long width;
     private Long height;
 
+    public Image(Long imageSize, ImageType imageType, Long width, Long height) {
+        this(null, imageSize, imageType, width, height);
+    }
+
     public Image(Long id, Long imageSize, ImageType imageType, Long width, Long height) {
         validateImage(imageSize, width, height);
         this.id = id;
