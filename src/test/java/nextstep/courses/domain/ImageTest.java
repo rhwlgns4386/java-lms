@@ -9,59 +9,50 @@ public class ImageTest {
     private ImageSize imageSize;
     private ImageProperty imageProperty;
     private ImageType imageType;
+    private Long imageId;
 
     @BeforeEach
     void init() {
         this.imageSize = new ImageSize(1024);
         this.imageProperty = new ImageProperty(300L, 200L);
         this.imageType = ImageType.JPG;
+        this.imageId = 1L;
     }
 
     @Test
     @DisplayName("Image class 생성")
     void createImageTest() {
-        Long id = 1L;
-        ImageType imageType = ImageType.JPG;
-
-        Image image = new Image(id, imageSize, imageType, imageProperty);
+        Image image = new Image(imageId, imageSize, imageType, imageProperty);
 
         Assertions.assertThat(image).isNotNull();
-        Assertions.assertThat(image.getId()).isEqualTo(id);
+        Assertions.assertThat(image.getId()).isEqualTo(imageId);
     }
 
     @Test
     @DisplayName("Image size 체크")
     void checkImageSizeTest() {
-        Long id = 1L;
-
-        Assertions.assertThatThrownBy(() -> new Image(id, imageSize, imageType, imageProperty))
+        Assertions.assertThatThrownBy(() -> new Image(imageId, new ImageSize(1025), imageType, imageProperty))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     @DisplayName("image min width 체크")
     void checkMinImageWidthTest() {
-        Long id = 1L;
-
-        Assertions.assertThatThrownBy(() -> new Image(id, imageSize, imageType, imageProperty))
+        Assertions.assertThatThrownBy(() -> new Image(imageId, imageSize, imageType, new ImageProperty(299L, 200L)))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     @DisplayName("image min height 체크")
     void checkMinImageHeightTest() {
-        Long id = 1L;
-
-        Assertions.assertThatThrownBy(() -> new Image(id, imageSize, imageType, imageProperty))
+        Assertions.assertThatThrownBy(() -> new Image(imageId, imageSize, imageType, new ImageProperty(300L, 199L)))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     @DisplayName("Image width,height 비율 체크")
     void checkImageWidthHeightRatioTest() {
-        Long id = 1L;
-
-        Assertions.assertThatThrownBy(() -> new Image(id, imageSize, imageType, imageProperty))
+        Assertions.assertThatThrownBy(() -> new Image(imageId, imageSize, imageType, new ImageProperty(299L, 199L)))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 }

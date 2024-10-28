@@ -16,10 +16,6 @@ public class StudentManager {
         this.students = students;
     }
 
-    public void addStudent(NsUser student) {
-        this.students.add(student);
-    }
-
     public void addStudents(NsUser... students) {
         this.students.addAll(List.of(students));
     }
