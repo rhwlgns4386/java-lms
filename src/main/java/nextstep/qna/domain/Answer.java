@@ -31,11 +31,11 @@ public class Answer {
 
     public Answer(Long id, NsUser writer, Question question, String contents) {
         this.id = id;
-        if(writer == null) {
+        if (writer == null) {
             throw new UnAuthorizedException();
         }
 
-        if(question == null) {
+        if (question == null) {
             throw new NotFoundException();
         }
 
@@ -44,8 +44,12 @@ public class Answer {
         this.contents = contents;
     }
 
-    public Long getId() {
-        return id;
+    public void toQuestion(Question question) {
+        this.question = question;
+    }
+
+    public DeleteHistory toDeleteHistory(LocalDateTime createdDate) {
+        return new DeleteHistory(ContentType.ANSWER, this.id, this.writer, createdDate);
     }
 
     public boolean isDeleted() {
@@ -69,13 +73,10 @@ public class Answer {
         return writer;
     }
 
-    public String getContents() {
-        return contents;
+    public Long getId() {
+        return id;
     }
 
-    public void toQuestion(Question question) {
-        this.question = question;
-    }
 
     @Override
     public boolean equals(Object o) {

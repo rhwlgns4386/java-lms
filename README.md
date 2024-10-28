@@ -28,3 +28,12 @@
   - [x] 규칙 8: 일급 콜렉션을 쓴다. Question의 List를 일급 콜렉션으로 구현해 본다.
   - [x] 규칙 7: 3개 이상의 인스턴스 변수를 가진 클래스를 쓰지 않는다. 인스턴스 변수의 수를 줄이기 위해 도전한다.
   - [x] 도메인 모델에 setter 메서드 추가하지 않는다
+- [x] 피드백
+  - [x] deleteWithAnswers로 확인 가능한 테스트 제거 
+  - [x] DeleteHistory 정적 팩토리 메서드 제거(현재 불필요하다고 판단)
+  - [x] DeleteHistoriesTest 불필요 테스트 제거
+  - [x] Question 내부 미사용 메서드 제거
+  - [x] 동시 삭제 히스토리 외부 삭제 시간 주입 
+  - [x] answers 삭제의 validate -> detelte 메소드 내부로 이동
+  - [x] deleteHisories 삭제
+

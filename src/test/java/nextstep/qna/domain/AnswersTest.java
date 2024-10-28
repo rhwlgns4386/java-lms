@@ -8,51 +8,33 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static nextstep.qna.domain.AnswerTest.*;
+import static nextstep.qna.domain.AnswerTest.A1;
+import static nextstep.qna.domain.AnswerTest.A2;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class AnswersTest {
 
-    @DisplayName("답변 리스트를 가지는 Answers를 만들 수 있다.")
+    @DisplayName("답변 리스트를 삭제 할 수 있다.")
     @Test
-    void create() {
-        Answers result = new Answers(List.of(A1, A2));
+    void deleteAll() throws CannotDeleteException {
+        Answers answers = new Answers(List.of(A1));
 
-        assertThat(result).isEqualTo(new Answers(List.of(A1, A2)));
-    }
+        answers.deleteAll(NsUserTest.JAVAJIGI);
 
-    @DisplayName("답변 리스트에 답변을 추가할 수 있다.")
-    @Test
-    void add() {
-        Answers answer = new Answers();
-
-        answer.add(A1);
-
-        assertThat(answer).isEqualTo(new Answers(List.of(A1)));
-    }
-
-    @DisplayName("답변 리스트의 권한과 입력한 유저가 같지 않으면 예외를 발생한다.")
-    @Test
-    void validateOwner() {
-        Answers answers = new Answers(List.of(A1, A2));
-
-        assertThatThrownBy(() -> answers.validateOnwer(NsUserTest.GREEN))
-                .isInstanceOf(CannotDeleteException.class);
-    }
-
-    @DisplayName("답변 리스트를 삭제한다.")
-    @Test
-    void deleteAll() {
-        Answers answers = new Answers(List.of(A1, A2));
-
-        List<Answer> result = answers.deleteAll();
-
-        assertThat(result)
+        assertThat(answers.getAnswers())
                 .extracting(Answer::getId, Answer::isDeleted)
                 .containsExactly(
-                        Tuple.tuple(A1.getId(), true),
-                        Tuple.tuple(A2.getId(), true)
+                        Tuple.tuple(A1.getId(), true)
                 );
+    }
+
+    @DisplayName("다른 사람의 답변이 있으면 예외가 발생한다.")
+    @Test
+    void deleteAllThrowingException() {
+        Answers answers = new Answers(List.of(A1, A2));
+
+        assertThatThrownBy(() -> answers.deleteAll(NsUserTest.JAVAJIGI))
+                .isInstanceOf(CannotDeleteException.class);
     }
 }
