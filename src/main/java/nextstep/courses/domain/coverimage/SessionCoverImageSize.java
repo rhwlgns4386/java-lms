@@ -1,4 +1,4 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.coverimage;
 
 public class SessionCoverImageSize {
     private static final int MIN_WIDTH = 300;
@@ -7,14 +7,14 @@ public class SessionCoverImageSize {
     private static final double WIDTH_RATIO = 3.0;
     private static final double HEIGHT_RATIO = 2.0;
 
-    private final Long sessionImageId;
+    private Long id;
+    private SessionCoverImage sessionCoverImage;
 
     private final int width;
     private final int height;
 
-    public SessionCoverImageSize(Long sessionImageId,int width, int height) {
+    public SessionCoverImageSize(int width, int height) {
         validate(width, height);
-        this.sessionImageId = sessionImageId;
         this.width = width;
         this.height = height;
     }
@@ -46,5 +46,9 @@ public class SessionCoverImageSize {
 
         System.out.println(Math.abs(targetAspectRatio - currentAspectRation));
         return Math.abs(targetAspectRatio - currentAspectRation) < 0.01;
+    }
+
+    public void mapping(SessionCoverImage sessionCoverImage){
+        this.sessionCoverImage = sessionCoverImage;
     }
 }

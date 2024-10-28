@@ -28,17 +28,14 @@
 ### SessionPayType (강의 결제 타입 Enum - [무료, 유료])
 - 무료, 유료에 따라 boolean으로 유무 검증  
 
-### SessionCoverImage (강의 커버 이미지)
-
-- 생성자로 인한 SessionCoverImage*의 전체 검증
-- 이미지 크기가 1MB 보다 크면 예외처리
-- 파일 특수문자 검증 (마침표 2개 이상이면 예외)
-
 
 ## DONE
 
 
-### SessionCoverImageType (강의 커버 이미지 확장자 타입 - [gif, jpg, jpeg, png, svg])
+### SessionCoverImage (강의 커버 이미지)
+- 이미지 크기가 1MB 보다 크면 예외처리
+
+### SessionCoverImagePath (강의 커버 이미지 확장자 타입 - [gif, jpg, jpeg, png, svg])
 
 - 일치하는 확장자 검증
 - 허가하지 않는 확장자일 시 예외 발생 
@@ -46,5 +43,3 @@
 ### SessionCoverImageSize (강의 커버 이미지 사이즈)
 
 - 높이(200px), 너비(300px), 비율(3:2) 검증
-
-

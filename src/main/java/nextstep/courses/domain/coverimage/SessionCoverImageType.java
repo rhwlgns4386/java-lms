@@ -1,4 +1,4 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.coverimage;
 
 import nextstep.qna.CoverImageException;
 
@@ -21,5 +21,9 @@ public enum SessionCoverImageType {
         return Arrays.stream(SessionCoverImageType.values())
                 .filter(type -> type.extension.equalsIgnoreCase(fileType)).findFirst()
                 .orElseThrow(() -> new CoverImageException("gif, jpg, jpeg, png, svg 만 사용 가능합니다"));
+    }
+
+    public String getExtension() {
+        return extension;
     }
 }
