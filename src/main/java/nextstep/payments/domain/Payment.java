@@ -1,6 +1,7 @@
 package nextstep.payments.domain;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class Payment {
     private String id;
@@ -25,5 +26,17 @@ public class Payment {
         this.nsUserId = nsUserId;
         this.amount = amount;
         this.createdAt = LocalDateTime.now();
+    }
+
+    public boolean isSamePrice(Long price) {
+        return Objects.equals(this.amount, price);
+    }
+
+    public boolean verifyUser(Long id) {
+        return Objects.equals(this.nsUserId, id);
+    }
+
+    public boolean verifySession(Long id) {
+        return Objects.equals(this.sessionId, id);
     }
 }

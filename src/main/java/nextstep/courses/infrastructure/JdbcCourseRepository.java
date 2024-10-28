@@ -2,6 +2,8 @@ package nextstep.courses.infrastructure;
 
 import nextstep.courses.domain.Course;
 import nextstep.courses.domain.CourseRepository;
+import nextstep.courses.domain.Sessions;
+
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -25,13 +27,16 @@ public class JdbcCourseRepository implements CourseRepository {
 
     @Override
     public Course findById(Long id) {
-        String sql = "select id, title, creator_id, created_at, updated_at from course where id = ?";
+        String sql = "select id, title, generation, creator_id, created_at, updated_at from course where id = ?";
         RowMapper<Course> rowMapper = (rs, rowNum) -> new Course(
                 rs.getLong(1),
                 rs.getString(2),
-                rs.getLong(3),
-                toLocalDateTime(rs.getTimestamp(4)),
-                toLocalDateTime(rs.getTimestamp(5)));
+                rs.getInt(3),
+                rs.getLong(4),
+                toLocalDateTime(rs.getTimestamp(5)),
+                toLocalDateTime(rs.getTimestamp(6)),
+                new Sessions()
+            );
         return jdbcTemplate.queryForObject(sql, rowMapper, id);
     }
 

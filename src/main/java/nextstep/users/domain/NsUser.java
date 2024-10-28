@@ -1,5 +1,6 @@
 package nextstep.users.domain;
 
+import nextstep.payments.domain.Payment;
 import nextstep.qna.UnAuthorizedException;
 
 import java.time.LocalDateTime;
@@ -115,6 +116,10 @@ public class NsUser {
 
     public boolean isGuestUser() {
         return false;
+    }
+
+    public boolean verifyId(Payment payment) {
+        return payment.verifyUser(this.id);
     }
 
     private static class GuestNsUser extends NsUser {
