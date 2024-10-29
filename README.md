@@ -76,3 +76,4 @@
 - [X] 무료강의인 경우 isFree로 결제 정보의 책임을 Payment로 이동
 - [X] Payment Fixture 분리
 - [X] PaidSession Fixture 분리
+- [X] FreeSession Fixture 분리
