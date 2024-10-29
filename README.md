@@ -74,4 +74,4 @@
 - [X] PaidSession 내 지불한 금액 확인 validation 추가
 - [X] FreeSession 내 지불한 금액 확인 validation 추가
 - [X] 무료강의인 경우 isFree로 결제 정보의 책임을 Payment로 이동
-- [X]
+- [X] Payment Fixture 분리
