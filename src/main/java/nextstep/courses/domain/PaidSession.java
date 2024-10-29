@@ -1,20 +1,36 @@
 package nextstep.courses.domain;
 
-public class PaidSession extends Session {
-    private SessionStatus sessionStatus;
-    private Integer capacity;
-    private Long price;
-    private StudentManager studentManager;
+import nextstep.payments.domain.Payment;
 
-    public PaidSession(SessionDate sessionDate, Image image, SessionId sessionId, Integer capacity, Long price) {
-        super(sessionId, sessionDate, image, SessionType.PAID);
-        this.sessionStatus = SessionStatus.PREPARING;
+public class PaidSession extends Session {
+    private SessionCapacity capacity;
+    private Money fee;
+
+    public PaidSession(Image image,
+        SessionDate sessionDate,
+        SessionId sessionId,
+        SessionStatus sessionStatus,
+        SessionType sessionType,
+        SessionCapacity capacity,
+        Money fee
+    ) {
+        super(image, sessionDate, sessionId, sessionStatus, sessionType);
         this.capacity = capacity;
-        this.price = price;
-        this.studentManager = new StudentManager();
+        this.fee = fee;
     }
 
-    public SessionId getSessionId() {
-        return super.getSessionId();
+    @Override
+    protected void register(Payment payment) {
+        if(!isAvailableForRegistration()){
+            throw new IllegalStateException("Can't register session");
+        }
+        if(payment == null){
+            throw new IllegalArgumentException("Payment must not be null");
+        }
+        if(!this.fee.equals(new Money(payment.getAmount()))){
+            throw new IllegalArgumentException("amount must be equal to session fee");
+        }
+
+        this.capacity.increase();
     }
 }
