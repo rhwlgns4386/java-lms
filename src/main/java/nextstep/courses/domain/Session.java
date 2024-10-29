@@ -1,7 +1,7 @@
 package nextstep.courses.domain;
 
 
-import java.awt.*;
+import nextstep.courses.domain.Image.CoverImage;
 
 public class Session {
     private static final int MAX_STUDENT_COUNT = 100;
@@ -9,11 +9,9 @@ public class Session {
     private final String name;
     private final String description;
     private final CoverImage image;
-    private final boolean isFree;
-    private final int sessionFee;
     private final SessionState state;
-    private final String startDate;
-    private final String endDate;
+    private final SessionDetail sessionDetail;
+    private final SessionDate sessionDate;
 
 
     public Session(Long id, String name, String description, CoverImage image, boolean isFree, int sessionFee, String startDate, String endDate) {
@@ -21,11 +19,9 @@ public class Session {
         this.name = name;
         this.description = description;
         this.image = image;
-        this.isFree = isFree;
-        this.sessionFee = sessionFee;
+        this.sessionDetail = new SessionDetail(isFree, MAX_STUDENT_COUNT, sessionFee);
         this.state = SessionState.READY;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.sessionDate = new SessionDate(startDate, endDate);
     }
 
     public Long getId() {
@@ -38,21 +34,5 @@ public class Session {
 
     public String getDescription() {
         return description;
-    }
-
-    public String getStartDate() {
-        return startDate;
-    }
-
-    public String getEndDate() {
-        return endDate;
-    }
-
-    public boolean isFree() {
-        return isFree;
-    }
-
-    public int getSessionFee() {
-        return sessionFee;
     }
 }
