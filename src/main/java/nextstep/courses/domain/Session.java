@@ -1,50 +1,74 @@
 package nextstep.courses.domain;
 
-import nextstep.payments.domain.Payment;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class Session {
-    private Long sessionId;
+    private final Long id;
 
-    private SessionPeriod sessionPeriod;
+    private final SessionPeriod period;
 
-    private SessionCoverImage sessionCoverImage;
+    private final SessionCoverImage coverImage;
 
-    private SessionFeeType sessionFeeType;
+    private final SessionFeeType feeType;
 
-    private Long amount;
+    private final SessionAmount amount;
 
-    private Integer maxPersonnel;
+    private final int maxPersonnel;
 
-    private SessionStatus sessionStatus;
+    private final SessionStatus status;
 
-    private List<Long> nsUserIds = new ArrayList<>();
+    private final List<Long> nsUserIds = new ArrayList<>();
 
-    public Session(Long sessionId, SessionPeriod sessionPeriod, SessionCoverImage sessionCoverImage, SessionFeeType sessionFeeType, Long amount, Integer maxPersonnel, SessionStatus sessionStatus) {
-        this.sessionId = sessionId;
-        this.sessionPeriod = sessionPeriod;
-        this.sessionCoverImage = sessionCoverImage;
-        this.sessionFeeType = sessionFeeType;
+    protected Session(Long id, SessionPeriod period, SessionCoverImage coverImage, SessionFeeType feeType, SessionAmount amount, int maxPersonnel, SessionStatus status) {
+        this.id = id;
+        this.period = period;
+        this.coverImage = coverImage;
+        this.feeType = feeType;
         this.amount = amount;
         this.maxPersonnel = maxPersonnel;
-        this.sessionStatus = sessionStatus;
+        this.status = status;
     }
 
-    public void add(Payment payment) {
-        if (!sessionStatus.isRecruiting()) {
-            throw new IllegalArgumentException("Session is not recruiting.");
+    public static Session createPaidSession(Long id, SessionPeriod period, SessionCoverImage coverImage, SessionAmount amount, int maxPersonnel, SessionStatus status) {
+        validPaidSessionAmount(amount);
+        return new Session(id, period, coverImage, SessionFeeType.PAID, amount, maxPersonnel, status);
+    }
+
+    private static void validPaidSessionAmount(SessionAmount amount) {
+        if (Objects.equals(amount, new SessionAmount(0))) {
+            throw new IllegalArgumentException("Amount must be greater than zero");
         }
-        if (!Objects.equals(amount, payment.getAmount())) {
-            throw new IllegalArgumentException("Payment amount does not match.");
-        }
-        if (sessionFeeType.isPaid() && sizeNsUsers() >= maxPersonnel) {
+    }
+
+    public static Session createFreeSession(Long id, SessionPeriod period, SessionCoverImage coverImage, SessionStatus status) {
+        return new Session(id, period, coverImage, SessionFeeType.FREE, new SessionAmount(0L), 0, status);
+    }
+
+    private void validMaxPersonnel() {
+        if (feeType.isPaid() && sizeNsUsers() >= maxPersonnel) {
             throw new IllegalArgumentException("Max personnel exceeded.");
         }
+    }
 
-        nsUserIds.add(payment.getNsUserId());
+    private void validAmount(SessionAddInfo addInfo) {
+        if (!Objects.equals(new SessionAmount(addInfo.getAmount()), this.amount)) {
+            throw new IllegalArgumentException("Payment amount does not match.");
+        }
+    }
+
+    private void validStatus() {
+        if (!status.isRecruiting()) {
+            throw new IllegalArgumentException("Session is not recruiting.");
+        }
+    }
+
+    public void add(SessionAddInfo addInfo) {
+        validStatus();
+        validAmount(addInfo);
+        validMaxPersonnel();
+        nsUserIds.add(addInfo.getNsUserId());
     }
 
     public int sizeNsUsers() {
@@ -60,11 +84,6 @@ public class Session {
             return false;
         }
         Session session = (Session) o;
-        return Objects.equals(sessionId, session.sessionId) && Objects.equals(sessionPeriod, session.sessionPeriod) && Objects.equals(sessionCoverImage, session.sessionCoverImage) && sessionFeeType == session.sessionFeeType && Objects.equals(amount, session.amount) && Objects.equals(maxPersonnel, session.maxPersonnel) && sessionStatus == session.sessionStatus && Objects.equals(nsUserIds, session.nsUserIds);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(sessionId, sessionPeriod, sessionCoverImage, sessionFeeType, amount, maxPersonnel, sessionStatus, nsUserIds);
+        return Objects.equals(id, session.id) && Objects.equals(period, session.period) && Objects.equals(coverImage, session.coverImage) && feeType == session.feeType && Objects.equals(amount, session.amount) && Objects.equals(maxPersonnel, session.maxPersonnel) && status == session.status && Objects.equals(nsUserIds, session.nsUserIds);
     }
 }
