@@ -67,22 +67,26 @@ public class Answer {
         this.question = question;
     }
 
-    public void validateAuthority(NsUser loginUser) throws CannotDeleteException {
-        if (!isOwner(loginUser)) {
-            throw new CannotDeleteException(ANSWER_AUTHORITY_ERROR);
-        }
-    }
-
     public DeleteHistory deleted(NsUser loginUser) throws CannotDeleteException {
         validateAuthority(loginUser);
         deleted = true;
         return new DeleteHistory(ContentType.ANSWER, id, writer, LocalDateTime.now());
     }
 
+    private void validateAuthority(NsUser loginUser) throws CannotDeleteException {
+        if (!isOwner(loginUser)) {
+            throw new CannotDeleteException(ANSWER_AUTHORITY_ERROR);
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Answer answer = (Answer) o;
         return Objects.equals(id, answer.id);
     }
