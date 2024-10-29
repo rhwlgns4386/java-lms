@@ -23,4 +23,8 @@ public class PaidSessionCreator {
     public static PaidSession fee(int sessionFee) {
         return new PaidSession(1L, sd1, si1, RECRUITING, new ArrayList<>(), 80, sessionFee);
     }
+
+    public static PaidSession user(Long userId) {
+        return new PaidSession(1L, sd1, si1, RECRUITING, List.of(userId), 80, 25000);
+    }
 }

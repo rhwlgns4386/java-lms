@@ -7,16 +7,10 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static nextstep.courses.domain.SessionDateTest.sd1;
-import static nextstep.courses.domain.SessionImageTest.si1;
 import static nextstep.courses.domain.SessionStatus.END;
-import static nextstep.courses.domain.SessionStatus.RECRUITING;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class PaidSessionTest {
-    public static final PaidSession ps2 = new PaidSession(1L, sd1, si1, RECRUITING, List.of(1L), 1, 25000);
-    public static final PaidSession ps3 = new PaidSession(1L, sd1, si1, RECRUITING, List.of(1L), 1, 25000);
-
     @Test
     @DisplayName("결제한 금액과 수강료가 일치하지 않을 때, 예외를 발생시킨다.")
     void 결제금액_불일치() {
