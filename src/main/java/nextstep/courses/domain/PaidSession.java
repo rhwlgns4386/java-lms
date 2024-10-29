@@ -7,30 +7,46 @@ public class PaidSession extends Session {
     private Money fee;
 
     public PaidSession(Image image,
-        SessionDate sessionDate,
-        SessionId sessionId,
-        SessionStatus sessionStatus,
-        SessionType sessionType,
-        SessionCapacity capacity,
-        Money fee
+                       SessionDate sessionDate,
+                       SessionId sessionId,
+                       SessionCapacity capacity,
+                       Money fee
     ) {
-        super(image, sessionDate, sessionId, sessionStatus, sessionType);
+        super(image, sessionDate, sessionId, SessionStatus.PREPARING, SessionType.PAID);
         this.capacity = capacity;
         this.fee = fee;
     }
 
+    public SessionCapacity getCapacity() {
+        return capacity;
+    }
+
+    public Money getFee() {
+        return fee;
+    }
+
     @Override
     protected void register(Payment payment) {
-        if(!isAvailableForRegistration()){
+        if (!isAvailableForRegistration()) {
             throw new IllegalStateException("Can't register session");
         }
-        if(payment == null){
+        if (payment == null) {
             throw new IllegalArgumentException("Payment must not be null");
         }
-        if(!this.fee.equals(new Money(payment.getAmount()))){
+        if (!this.fee.equals(new Money(payment.getAmount()))) {
             throw new IllegalArgumentException("amount must be equal to session fee");
         }
 
         this.capacity.increase();
+    }
+
+    @Override
+    protected void open() {
+        super.updateStatus(SessionStatus.RECRUITING);
+    }
+
+    @Override
+    protected void close() {
+        super.updateStatus(SessionStatus.CLOSE);
     }
 }

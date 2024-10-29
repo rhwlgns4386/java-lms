@@ -9,17 +9,24 @@ public class SessionCapacity {
     }
 
     public SessionCapacity(int capacity, int currentCount) {
-        if(capacity <= 0) {
+        if (capacity <= 0) {
             throw new IllegalArgumentException("Capacity must be greater than 0");
         }
         this.capacity = capacity;
         this.currentCount = currentCount;
     }
 
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public int getCurrentCount() {
+        return currentCount;
+    }
 
     public void increase() {
         this.currentCount++;
-        if(this.currentCount > this.capacity){
+        if (this.currentCount > this.capacity) {
             throw new IllegalArgumentException("Capacity is full");
         }
     }

@@ -14,12 +14,24 @@ public class FreeSession extends Session {
 
     @Override
     protected void register(Payment payment) {
-        if(!isAvailableForRegistration()){
+        if (!isAvailableForRegistration()) {
             throw new IllegalStateException("Can't register session");
         }
     }
 
-    public void register(){
+    @Override
+    protected void open() {
+        super.updateStatus(SessionStatus.RECRUITING);
+    }
+
+    @Override
+    protected void close() {
+        super.updateStatus(SessionStatus.CLOSE);
+    }
+
+    public void register() {
         register(null);
     }
+
+
 }

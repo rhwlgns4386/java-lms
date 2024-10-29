@@ -23,7 +23,19 @@ public abstract class Session {
 
     protected abstract void register(Payment payment);
 
+    protected abstract void open();
+
+    protected abstract void close();
+
     protected boolean isAvailableForRegistration() {
         return this.sessionStatus.isOpen();
+    }
+
+    protected void updateStatus(SessionStatus sessionStatus) {
+        this.sessionStatus = sessionStatus;
+    }
+
+    protected SessionStatus getSessionStatus() {
+        return sessionStatus;
     }
 }

@@ -4,11 +4,11 @@ import java.util.Objects;
 
 public class SessionId {
     private Long id;
-    private String name;
+    private String title;
 
-    public SessionId(Long id, String name) {
+    public SessionId(Long id, String title) {
         this.id = id;
-        this.name = name;
+        this.title = title;
     }
 
     public static SessionId of(Long id, String name) {
@@ -19,8 +19,8 @@ public class SessionId {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
     @Override
@@ -32,11 +32,11 @@ public class SessionId {
             return false;
         }
         SessionId sessionId = (SessionId) o;
-        return Objects.equals(id, sessionId.id) && Objects.equals(name, sessionId.name);
+        return Objects.equals(id, sessionId.id) && Objects.equals(title, sessionId.title);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hash(id, title);
     }
 }

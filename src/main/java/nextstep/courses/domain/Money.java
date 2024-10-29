@@ -4,10 +4,14 @@ public class Money {
     private long price;
 
     public Money(long price) {
-        if(price <= 0) {
+        if (price <= 0) {
             throw new IllegalArgumentException("Price must be greater than 0");
         }
         this.price = price;
+    }
+
+    public long getPrice() {
+        return price;
     }
 
     @Override
