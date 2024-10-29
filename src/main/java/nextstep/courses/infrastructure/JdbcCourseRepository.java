@@ -1,6 +1,6 @@
 package nextstep.courses.infrastructure;
 
-import nextstep.courses.domain.Course;
+import nextstep.courses.domain.course.Course;
 import nextstep.courses.domain.CourseRepository;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
@@ -20,7 +20,11 @@ public class JdbcCourseRepository implements CourseRepository {
     @Override
     public int save(Course course) {
         String sql = "insert into course (title, creator_id, created_at) values(?, ?, ?)";
-        return jdbcTemplate.update(sql, course.getTitle(), course.getCreatorId(), course.getCreatedAt());
+        return jdbcTemplate.update(sql,
+                course.getCourseTitle(),
+                course.getCreatorId(),
+                course.getCreatedAt()
+        );
     }
 
     @Override
