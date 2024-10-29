@@ -48,7 +48,7 @@ public class SessionCoverImagePath {
         return true;
     }
 
-    public void mapping(SessionCoverImage sessionCoverImage){
+    public void mapping(SessionCoverImage sessionCoverImage) {
         this.sessionCoverImage = sessionCoverImage;
     }
 

@@ -9,12 +9,10 @@ import java.util.List;
 public class SessionStudents {
 
     private Long id;
-    private SessionType sessionType;
     private int maximumNumberPeople;
     private List<NsUser> students = new ArrayList<>();
 
-    public SessionStudents(SessionType sessionType, int maximumNumberPeople) {
-        this.sessionType = sessionType;
+    public SessionStudents(int maximumNumberPeople) {
         this.maximumNumberPeople = maximumNumberPeople;
     }
 
@@ -23,15 +21,12 @@ public class SessionStudents {
         this.students.add(nsUser);
     }
 
-    private void validate(NsUser nsUser) {
-        duplicate(nsUser);
-        validateMaximumNumberPeople();
+    public boolean isExceeds() {
+        return this.students.size() == maximumNumberPeople;
     }
 
-    private void validateMaximumNumberPeople() {
-        if (sessionType == SessionType.PAID && this.students.size() == maximumNumberPeople) {
-            throw new SessionException("최대 정원 모집이 끝났습니다");
-        }
+    private void validate(NsUser nsUser) {
+        duplicate(nsUser);
     }
 
     private void duplicate(NsUser nsUser) {
@@ -39,5 +34,6 @@ public class SessionStudents {
             throw new SessionException("이미 수강신청을 했습니다.");
         }
     }
+
 
 }

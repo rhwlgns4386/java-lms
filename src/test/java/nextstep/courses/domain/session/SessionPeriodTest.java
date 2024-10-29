@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class SessionPeriodTest {
@@ -25,7 +24,6 @@ public class SessionPeriodTest {
 
         LocalDateTime startDate = LocalDateTime.of(2024, 10, 28, 0, 0);
         LocalDateTime endDate = LocalDateTime.of(2024, 10, 30, 23, 59);
-
         LocalDateTime targetDate = LocalDateTime.of(2024, 10, 29, 23, 59);
 
         SessionPeriod sessionPeriod = new SessionPeriod(startDate, endDate);

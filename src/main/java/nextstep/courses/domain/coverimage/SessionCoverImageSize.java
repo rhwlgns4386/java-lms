@@ -9,7 +9,6 @@ public class SessionCoverImageSize {
 
     private Long id;
     private SessionCoverImage sessionCoverImage;
-
     private final int width;
     private final int height;
 
@@ -33,6 +32,7 @@ public class SessionCoverImageSize {
             throw new IllegalArgumentException("높이가 " + MIN_HEIGHT + "미만 입니다.");
         }
     }
+
     private void validateRatio(int width, int height) {
         if (!isRatio(width, height)) {
             throw new IllegalArgumentException("비율이 " + WIDTH_RATIO + " : " + HEIGHT_RATIO + "이 아닙니다");
@@ -48,7 +48,7 @@ public class SessionCoverImageSize {
         return Math.abs(targetAspectRatio - currentAspectRation) < 0.01;
     }
 
-    public void mapping(SessionCoverImage sessionCoverImage){
+    public void mapping(SessionCoverImage sessionCoverImage) {
         this.sessionCoverImage = sessionCoverImage;
     }
 }

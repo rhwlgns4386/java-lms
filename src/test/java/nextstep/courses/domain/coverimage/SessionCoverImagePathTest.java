@@ -1,6 +1,5 @@
 package nextstep.courses.domain.coverimage;
 
-import nextstep.courses.domain.coverimage.SessionCoverImagePath;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -10,7 +9,7 @@ class SessionCoverImagePathTest {
     @Test
     void 파일_명_특수문자_있을_시_예외() {
         assertThatThrownBy(
-                () -> new SessionCoverImagePath("/","?파일이다.jpg")
+                () -> new SessionCoverImagePath("/", "?파일이다.jpg")
         );
     }
 

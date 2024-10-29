@@ -1,5 +1,5 @@
 package nextstep.courses.domain.session;
 
-public enum SessionType {
+public enum SessionPayType {
     FREE, PAID
 }

@@ -1,6 +1,5 @@
 package nextstep.courses.domain.coverimage;
 
-import nextstep.courses.domain.coverimage.SessionCoverImageType;
 import nextstep.qna.CoverImageException;
 import org.junit.jupiter.api.Test;
 

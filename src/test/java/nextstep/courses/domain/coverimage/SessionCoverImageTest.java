@@ -1,14 +1,15 @@
 package nextstep.courses.domain.coverimage;
 
-import nextstep.courses.domain.coverimage.SessionCoverImage;
-import nextstep.courses.domain.coverimage.SessionCoverImagePath;
-import nextstep.courses.domain.coverimage.SessionCoverImageSize;
 import nextstep.qna.CoverImageException;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class SessionCoverImageTest {
+public class SessionCoverImageTest {
+    private static final SessionCoverImageSize SIZE = new SessionCoverImageSize(300, 200);
+    private static final SessionCoverImagePath PATH = new SessionCoverImagePath("/", "example.jpg");
+
+    public static final SessionCoverImage IMAGE = new SessionCoverImage(1 * 1024 * 1024, PATH, SIZE);
 
     @Test
     void 사이즈_1MB_초과_예외() {
