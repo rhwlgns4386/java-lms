@@ -5,5 +5,8 @@ public enum SessionState {
     RECRUITING,
     CLOSED;
 
+    public static boolean isOpen(SessionState state) {
+        return state == RECRUITING;
+    }
 
 }
