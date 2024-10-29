@@ -2,6 +2,7 @@ package nextstep.courses.domain.session;
 
 import nextstep.courses.domain.coverimage.SessionCoverImageTest;
 import nextstep.payments.domain.Payment;
+import nextstep.qna.SessionException;
 import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.Test;
 
@@ -22,7 +23,7 @@ public class SessionTest {
 
         assertThatThrownBy(
                 () -> session.registration(NsUserTest.JAVAJIGI, payment)
-        );
+        ).isInstanceOf(SessionException.class);
     }
 
     @Test
@@ -39,7 +40,7 @@ public class SessionTest {
 
         assertThatThrownBy(
                 () -> session.registration(NsUserTest.SANJIGI, payment)
-        );
+        ).isInstanceOf(SessionException.class);
     }
 
 }
