@@ -31,9 +31,7 @@ public class Session {
         validate();
         validateSessionState();
         premium.validateAmount(payment);
-        NsUser payingUser = payment.payingUser();
-        students.addStudent(payingUser);
-
+        students.addStudent(payment.payingUser());
     }
 
     public void validate() {
