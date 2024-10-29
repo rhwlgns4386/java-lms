@@ -13,7 +13,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @JdbcTest
-public class CourseRepositoryTest {
+class CourseRepositoryTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(CourseRepositoryTest.class);
 
     @Autowired
@@ -32,7 +32,7 @@ public class CourseRepositoryTest {
         int count = courseRepository.save(course);
         assertThat(count).isEqualTo(1);
         Course savedCourse = courseRepository.findById(1L);
-        assertThat(course.getTitle()).isEqualTo(savedCourse.getTitle());
+        assertThat(course.getCourseTitle()).isEqualTo(savedCourse.getCourseTitle());
         LOGGER.debug("Course: {}", savedCourse);
     }
 }

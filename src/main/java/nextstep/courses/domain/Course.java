@@ -1,53 +1,52 @@
 package nextstep.courses.domain;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Course {
-    private Long id;
-
-    private String title;
-
-    private Long creatorId;
-
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
-
-    public Course() {
-    }
+    private CourseMetadata courseMetadata;
+    private Generation generation;
+    private BaseTime baseTime;
+    private List<DefaultSession> sessions;
 
     public Course(String title, Long creatorId) {
         this(0L, title, creatorId, LocalDateTime.now(), null);
     }
 
     public Course(Long id, String title, Long creatorId, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.id = id;
-        this.title = title;
-        this.creatorId = creatorId;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        this(
+                new CourseMetadata(id, title, creatorId),
+                new Generation(),
+                new ArrayList<>(),
+                new BaseTime(createdAt, updatedAt)
+        );
     }
 
-    public String getTitle() {
-        return title;
+    public Course(CourseMetadata courseMetadata, Generation generation, List<DefaultSession> sessions, BaseTime baseTime) {
+        this.courseMetadata = courseMetadata;
+        this.generation = generation;
+        this.sessions = sessions;
+        this.baseTime = baseTime;
     }
 
-    public Long getCreatorId() {
-        return creatorId;
+    public void addSession(DefaultSession session) {
+        sessions.add(session);
+    }
+
+    public List<DefaultSession> getSessions() {
+        return sessions;
+    }
+
+    public String getCourseTitle() {
+        return courseMetadata.getTitle();
+    }
+
+    public long getCreatorId() {
+        return courseMetadata.getCreatorId();
     }
 
     public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    @Override
-    public String toString() {
-        return "Course{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", creatorId=" + creatorId +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                '}';
+        return baseTime.getCreatedAt();
     }
 }
