@@ -111,4 +111,30 @@ public class PaidSessionTest {
         Assertions.assertThatThrownBy(() -> paidSession.register(payment))
                 .isInstanceOf(IllegalArgumentException.class);
     }
+
+    @Test
+    @DisplayName("강의 모집중")
+    void openPaidSessionTest() {
+        SessionCapacity sessionCapacity = new SessionCapacity(1);
+        Money fee = new Money(200_000L);
+
+        PaidSession paidSession = new PaidSession(image, sessionDate, sessionId, sessionCapacity, fee);
+
+        paidSession.open();
+
+        Assertions.assertThat(paidSession.getSessionStatus()).isEqualTo(SessionStatus.RECRUITING);
+    }
+
+    @Test
+    @DisplayName("강의 종료")
+    void closePaidSessionTest() {
+        SessionCapacity sessionCapacity = new SessionCapacity(1);
+        Money fee = new Money(200_000L);
+
+        PaidSession paidSession = new PaidSession(image, sessionDate, sessionId, sessionCapacity, fee);
+
+        paidSession.close();
+
+        Assertions.assertThat(paidSession.getSessionStatus()).isEqualTo(SessionStatus.CLOSE);
+    }
 }

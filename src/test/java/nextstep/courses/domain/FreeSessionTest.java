@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 public class FreeSessionTest {
     private Image image;
     private SessionDate sessionDate;
+    private SessionId sessionId;
 
     @BeforeEach
     void init() {
@@ -19,12 +20,12 @@ public class FreeSessionTest {
         LocalDateTime end = LocalDateTime.of(2024, 10, 10, 10, 11);
 
         this.sessionDate = new SessionDate(start, end);
+        this.sessionId = SessionId.of(1L, "TDD");
     }
 
     @Test
     @DisplayName("FreeSession 생성")
     void createFreeSessionTest() {
-        SessionId sessionId = SessionId.of(1L, "TDD");
         FreeSession freeSession = new FreeSession(sessionId, sessionDate, image);
 
         Assertions.assertThat(freeSession).isNotNull();
@@ -34,7 +35,6 @@ public class FreeSessionTest {
     @Test
     @DisplayName("FreeSession 수강 신청")
     void registerFreeSessionTest() {
-        SessionId sessionId = SessionId.of(1L, "TDD");
         FreeSession freeSession = new FreeSession(sessionId, sessionDate, image);
 
         freeSession.open();
@@ -48,13 +48,29 @@ public class FreeSessionTest {
     @Test
     @DisplayName("FreeSession 수강 신청 - 모집중이 아닌 강좌 신청 체크")
     void checkRegisterNotOpenFreeSessionTest() {
-        SessionId sessionId = SessionId.of(1L, "TDD");
         FreeSession freeSession = new FreeSession(sessionId, sessionDate, image);
-
 
         Assertions.assertThatThrownBy(() -> freeSession.register())
                 .isInstanceOf(IllegalStateException.class);
-
     }
 
+    @Test
+    @DisplayName("강의 모집중")
+    void openFreeSessionTest() {
+        FreeSession freeSession = new FreeSession(sessionId, sessionDate, image);
+
+        freeSession.open();
+
+        Assertions.assertThat(freeSession.getSessionStatus()).isEqualTo(SessionStatus.RECRUITING);
+    }
+
+    @Test
+    @DisplayName("강의 종료")
+    void closeFreeSessionTest() {
+        FreeSession freeSession = new FreeSession(sessionId, sessionDate, image);
+
+        freeSession.close();
+
+        Assertions.assertThat(freeSession.getSessionStatus()).isEqualTo(SessionStatus.CLOSE);
+    }
 }
