@@ -1,27 +1,43 @@
 package nextstep.courses.domain;
 
+import nextstep.payments.domain.Payment;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Session {
 
-
     private final SessionImage sessionImage;
     private final SessionState sessionState;
-    private final SessionStrategy sessionStrategy;
-    private final LocalDateTime createAt;
-    private final LocalDateTime endAt;
+    private final PaymentStrategy sessionStrategy;
+    private final SessionDate sessionDate;
 
-    public Session(int size, String imageType, int width, int height, SessionState sessionState, SessionStrategy sessionStrategy) {
-        this(new SessionImage(size, imageType, width, height), sessionState, sessionStrategy);
+    public Session(int size, String imageType, int width, int height, SessionState sessionState, PaymentStrategy sessionStrategy, LocalDate startDate, LocalDate endDate) {
+        this(new SessionImage(size, imageType, width, height), sessionState, sessionStrategy, new SessionDate(startDate, endDate));
     }
 
-    public Session(SessionImage sessionImage, SessionState sessionState, SessionStrategy sessionStrategy) {
+    public Session(SessionImage sessionImage, SessionState sessionState, PaymentStrategy sessionStrategy, SessionDate sessionDate) {
         this.sessionImage = sessionImage;
         this.sessionState = sessionState;
         this.sessionStrategy = sessionStrategy;
-        this.createAt = LocalDateTime.now();
-        this.endAt = LocalDateTime.now();
+        this.sessionDate = sessionDate;
+    }
+
+    public boolean applyForCourse(Payment payment, LocalDate date) {
+        if (!SessionState.isOpen(this.sessionState)) {
+            return false;
+        }
+
+        if (!sessionDate.isInclude(date)) {
+            return false;
+        }
+
+        if (!this.sessionStrategy.payable(payment)) {
+            return false;
+        }
+
+        return true;
     }
 
     @Override
@@ -35,9 +51,5 @@ public class Session {
     @Override
     public int hashCode() {
         return Objects.hash(sessionImage, sessionState, sessionStrategy);
-    }
-
-    public boolean applyForCourse(int price) {
-        return this.sessionStrategy.applyForCourse(this.sessionState, price);
     }
 }
