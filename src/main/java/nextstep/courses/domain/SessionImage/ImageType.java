@@ -1,19 +1,19 @@
 package nextstep.courses.domain.SessionImage;
 
-import java.util.List;
+import java.util.Arrays;
 
-public class ImageType {
-    private final String imageType;
-    private final List<String> imageTypeList = List.of("gif","jpg","jpeg","png","svg");
+public enum ImageType {
 
-    public ImageType(String imageType) {
-        validateType(imageType);
-        this.imageType = imageType;
-    }
+    gif,
+    jpg,
+    jpeg,
+    png,
+    svg;
 
-    private void validateType(String imageType) {
-        if (!imageTypeList.contains(imageType)) {
-            throw new IllegalArgumentException("이미지 타입이 올바르지 않습니다.");
-        }
+
+    public static ImageType validateType(String imageType) {
+        return Arrays.stream(values()).filter(type -> type.name().equals(imageType))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("이미지 타입이 올바르지 않습니다."));
     }
 }

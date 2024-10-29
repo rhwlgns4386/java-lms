@@ -1,5 +1,7 @@
 package nextstep.courses.domain;
 
+import nextstep.payments.domain.Payment;
+
 public class Premium {
 
     private final int sessionAmount;
@@ -14,8 +16,8 @@ public class Premium {
         return isPremium;
     }
 
-    public void validateAmount(int requestAmount) {
-        if (isPremium && sessionAmount!= requestAmount) {
+    public void validateAmount(Payment payment) {
+        if (isPremium && !payment.matchingAmount(sessionAmount)) {
             throw new IllegalArgumentException("강의 금액과 맞지 않습니다.");
         }
     }

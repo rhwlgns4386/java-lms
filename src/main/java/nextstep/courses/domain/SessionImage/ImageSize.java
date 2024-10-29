@@ -7,6 +7,7 @@ public class ImageSize {
     public static final int MINIMUM_WIDTH = 300;
     public static final int MINIMUM_HEIGHT = 200;
     public static final double EXPECTED_SIZE_PERCENT = 1.5;
+    public static final int FIRST_DECIMAL_PLACE = 2;
     private final int width;
     private final int height;
 
@@ -21,8 +22,8 @@ public class ImageSize {
             throw new IllegalArgumentException("이미지 사이즈 오류입니다.");
         }
 
-        if (new BigDecimal(width / height)
-                .setScale(1, RoundingMode.FLOOR).intValue() != EXPECTED_SIZE_PERCENT) {
+        if (new BigDecimal((double) width / height)
+                .setScale(FIRST_DECIMAL_PLACE, RoundingMode.FLOOR).doubleValue() != EXPECTED_SIZE_PERCENT) {
             throw new IllegalArgumentException("이미지 비율 오류");
         }
     }

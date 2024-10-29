@@ -7,12 +7,10 @@ public class SessionImage {
     private final ImageSize imageSize;
 
 
-    public SessionImage(int imageCapacity, String imageType, int width, int height) {
-        this.imageCapacity = new ImageCapacity(imageCapacity);
-        this.imageType = new ImageType(imageType);
-        this.imageSize = new ImageSize(width, height);
-
-
-
+    public SessionImage(ImageCapacity imageCapacity, ImageType imageType, ImageSize imageSize) {
+        ImageType.validateType(imageType.name());
+        this.imageCapacity = imageCapacity;
+        this.imageType = imageType;
+        this.imageSize = imageSize;
     }
 }
