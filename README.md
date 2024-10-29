@@ -21,8 +21,8 @@
 - QnaService의 deleteQuestion() 메서드에 대한 단위 테스트는 src/test/java 폴더 nextstep.qna.service.QnaServiceTest이다. 도메인 모델로 로직을 이동한 후에도 QnaServiceTest의 모든 테스트는 통과해야 한다.
 
 ## 수강 신청 기능 요구사항
-- [ ] 과정(Course)은 기수 단위로 운영하며, 여러 개의 강의(Session)를 가질 수 있다.
-- [ ] 강의는 시작일과 종료일을 가진다.
+- [x] 과정(Course)은 기수 단위로 운영하며, 여러 개의 강의(Session)를 가질 수 있다.
+- [x] 강의는 시작일과 종료일을 가진다.
 - [ ] 강의는 강의 커버 이미지 정보를 가진다.
   - [ ] 이미지 크기는 1MB 이하여야 한다.
   - [ ] 이미지 타입은 gif, jpg(jpeg 포함),, png, svg만 허용한다.
