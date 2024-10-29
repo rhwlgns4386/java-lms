@@ -4,7 +4,6 @@ import nextstep.courses.domain.cover.CoverImage;
 import nextstep.courses.domain.cover.CoverImageFile;
 import nextstep.courses.domain.cover.CoverImageSize;
 import nextstep.courses.domain.cover.CoverImageType;
-import nextstep.payments.domain.Payment;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,7 +13,7 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 
-class FreeCourseTest {
+class FreeSessionTest {
 
     private CoverImage coverImage;
 
