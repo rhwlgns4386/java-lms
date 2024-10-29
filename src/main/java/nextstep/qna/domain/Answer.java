@@ -83,6 +83,7 @@ public class Answer {
             throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
         }
         deleted = true;
-        return new DeleteHistory(ContentType.ANSWER, id, user, LocalDateTime.now());
+        return DeleteHistory.ofAnswer(id, user);
+
     }
 }

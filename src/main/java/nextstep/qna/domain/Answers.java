@@ -7,20 +7,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Answers {
-    List<Answer> answerList;
+    List<Answer> answers;
 
-    public Answers(List<Answer> answerList) {
-        this.answerList = answerList;
+    public Answers(List<Answer> answers) {
+        this.answers = answers;
+    }
+
+    public Answers() {
+        this.answers = new ArrayList<>();
     }
 
     public void add(Answer answer) {
-        answerList.add(answer);
+        answers.add(answer);
     }
 
-    public List<DeleteHistory> delete(NsUser nsUser) throws CannotDeleteException {
-
-       List<DeleteHistory> deleteHistories = new ArrayList<>();
-        for (Answer answer : answerList) {
+    public DeleteHistories deleteAll(NsUser nsUser) throws CannotDeleteException {
+        DeleteHistories deleteHistories = new DeleteHistories();
+        for (Answer answer : answers) {
             deleteHistories.add(answer.delete(nsUser));
         }
         return deleteHistories;
