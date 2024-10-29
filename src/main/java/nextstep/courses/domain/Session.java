@@ -4,13 +4,16 @@ public class Session {
     private StudentCount studentCount;
     private Premium premium;
 
-    public Session(boolean isPremium, int maxStudentCount) {
-        this.premium = new Premium(isPremium);
+
+    public Session(Premium premium, int maxStudentCount) {
+        this.premium = premium;
         this.studentCount = new StudentCount(maxStudentCount);
     }
 
-    public void requestSession() {
-        studentCount.increaseCount(premium);
+    public void requestSession(int requestAmount) {
+        studentCount.validate(premium);
+        premium.validateAmount(requestAmount);
+        studentCount.increaseCount();
     }
 
 }
