@@ -63,6 +63,10 @@ public class Course {
         return order;
     }
 
+    public List<Session> getSessions() {
+        return sessions;
+    }
+
     @Override
     public String toString() {
         return "Course{" +
@@ -72,5 +76,9 @@ public class Course {
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';
+    }
+
+    public void addSessions(Session... sessions) {
+        this.sessions.addAll(List.of(sessions));
     }
 }

@@ -38,4 +38,22 @@ public abstract class Session {
     protected SessionStatus getSessionStatus() {
         return sessionStatus;
     }
+
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Session)) {
+            return false;
+        }
+
+        Session session = (Session) o;
+        return getSessionId().equals(session.getSessionId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getSessionId().hashCode();
+    }
 }
