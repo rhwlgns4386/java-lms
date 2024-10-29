@@ -1,9 +1,10 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.course;
 
 import nextstep.courses.domain.cover.CoverImage;
 import nextstep.courses.domain.cover.CoverImageFile;
 import nextstep.courses.domain.cover.CoverImageSize;
 import nextstep.courses.domain.cover.CoverImageType;
+import nextstep.courses.domain.session.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

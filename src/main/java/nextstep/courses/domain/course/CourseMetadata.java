@@ -1,4 +1,4 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.course;
 
 public class CourseMetadata {
     public static final int MINIMUM_ID = 0;

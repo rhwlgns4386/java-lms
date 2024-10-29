@@ -1,11 +1,11 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.session;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class SessionPacacityTest {
+class SessionCpacityTest {
 
     @DisplayName("최대 수강인원이 0명이면 예외로 처리한다.")
     @Test

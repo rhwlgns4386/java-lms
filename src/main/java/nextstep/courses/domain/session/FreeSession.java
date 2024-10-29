@@ -1,4 +1,4 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.session;
 
 import nextstep.courses.domain.cover.CoverImage;
 import nextstep.payments.domain.Payment;
