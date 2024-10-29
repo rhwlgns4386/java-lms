@@ -34,4 +34,8 @@ public class Payment {
     public boolean isPaid(long amount) {
         return this.amount == amount;
     }
+
+    public boolean isFree() {
+        return this.amount == 0;
+    }
 }
