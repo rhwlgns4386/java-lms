@@ -78,3 +78,4 @@
 - [X] PaidSession Fixture 분리
 - [X] FreeSession Fixture 분리
 - [X] Course Fixture 분리
+- [X] SessionDate Fixture 분리
