@@ -48,7 +48,7 @@ public class Answer {
     }
 
     public DeleteHistory toDeleteHistory() {
-        return new DeleteHistory(ContentType.ANSWER, this.baseEntity.getId(), this.comments.getWriter(), LocalDateTime.now());
+        return DeleteHistory.answerOf(this.baseEntity.getId(), this.comments.getWriter());
     }
 
     private boolean isOwner(NsUser loginUser) {
