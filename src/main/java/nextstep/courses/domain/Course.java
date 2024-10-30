@@ -1,5 +1,7 @@
 package nextstep.courses.domain;
 
+import nextstep.payments.domain.Payment;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,21 +33,14 @@ public class Course {
         this.updatedAt = updatedAt;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public Long getCreatorId() {
-        return creatorId;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
     public int getCohort() {
         return cohort;
     }
+
+    public void addSession(Session session) {
+        sessions.add(session);
+    }
+
     @Override
     public String toString() {
         return "Course{" +
@@ -56,5 +51,12 @@ public class Course {
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';
+    }
+
+    public Payment processPayment(Student student, Long amount, Session session) {
+        if (!sessions.contains(session)) {
+            throw new IllegalStateException("해당 코스에 해당하는 강의가 아닙니다.");
+        }
+        return session.register(student, amount);
     }
 }

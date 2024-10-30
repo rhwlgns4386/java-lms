@@ -1,4 +1,4 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.image;
 
 import nextstep.courses.domain.Image.ImageType;
 import org.junit.jupiter.api.Test;

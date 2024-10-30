@@ -8,19 +8,16 @@ import java.util.List;
 
 public class Student extends NsUser {
     private List<Session> sessions = new ArrayList<>();
-    private int paymentAmount;
 
+    public Student(Long id, String userId, String password, String name, String email) {
+        super(id, userId, password, name, email, LocalDateTime.now(), LocalDateTime.now());
+    }
     public Student(Long id, String userId, String password, String name, String email, LocalDateTime createdAt, LocalDateTime updatedAt) {
         super(id, userId, password, name, email, createdAt, updatedAt);
     }
 
     public void registerSession(Session session) {
         sessions.add(session);
-        paymentAmount += session.getSessionFee();
-    }
-
-    public int getPaymentAmount() {
-        return paymentAmount;
     }
 
     public int getSessionCount() {
