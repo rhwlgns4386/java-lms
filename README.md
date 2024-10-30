@@ -81,3 +81,10 @@
 - [X] SessionDate Fixture 분리
 - [X] SessionImageType Fixture 분리
 - [X] SessionImage Fixture 분리
+
+## Step3. 요구사항
+* 도메인과 DB 테이블 매핑
+* CRUD 구현
+
+## Step3. 기능 구현
+- [X] session_image 테이블 생성
