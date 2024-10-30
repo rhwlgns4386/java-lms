@@ -3,7 +3,7 @@ package nextstep.courses.domain.course;
 import java.util.Objects;
 
 public class Generation {
-    public static final int INIT_GENERATION = 1;
+    private static final int INIT_GENERATION = 1;
     private final int generation;
 
     public Generation() {

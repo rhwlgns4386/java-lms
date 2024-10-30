@@ -11,4 +11,15 @@ public class CoverImage {
         this.imageSize = coverImageSize;
     }
 
+    public CoverImageFile getFile() {
+        return file;
+    }
+
+    public CoverImageType getType() {
+        return type;
+    }
+
+    public CoverImageSize getImageSize() {
+        return imageSize;
+    }
 }
