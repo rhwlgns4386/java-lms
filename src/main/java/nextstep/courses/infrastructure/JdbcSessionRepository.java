@@ -41,26 +41,8 @@ public class JdbcSessionRepository implements SessionRepository {
     public Session findById(Long id) {
         String sql = "select id, session_start_date, session_end_date, status, image_id, session_type, session_fee, max_student from session where id = ?";
         RowMapper<Session> rowMapper = (rs, rowNum) -> {
-            String sessionType = rs.getString("session_type");
             SessionImage sessionImage = getSessionImage(rs);
-            if (PAID_SESSION.equals(sessionType)) {
-                return new PaidSession(
-                        rs.getLong("id"),
-                        rs.getTimestamp("session_start_date"),
-                        rs.getTimestamp("session_end_date"),
-                        sessionImage,
-                        rs.getString("status"),
-                        rs.getInt("max_student"),
-                        rs.getInt("session_fee")
-                        );
-            }
-            return new FreeSession(
-                    rs.getLong("id"),
-                    rs.getTimestamp("session_start_date"),
-                    rs.getTimestamp("session_end_date"),
-                    sessionImage,
-                    rs.getString("status")
-            );
+            return getSession(rs, sessionImage);
         };
         return jdbcTemplate.queryForObject(sql, rowMapper, id);
     }
@@ -68,5 +50,34 @@ public class JdbcSessionRepository implements SessionRepository {
     private SessionImage getSessionImage(ResultSet rs) throws SQLException {
         Long imageId = rs.getLong("image_id");
         return sessionImageRepository.findById(imageId);
+    }
+
+    private static Session getSession(ResultSet rs, SessionImage sessionImage) throws SQLException {
+        if (PAID_SESSION.equals(rs.getString("session_type"))) {
+            return getPaidSession(rs, sessionImage);
+        }
+        return getFreeSession(rs, sessionImage);
+    }
+
+    private static PaidSession getPaidSession(ResultSet rs, SessionImage sessionImage) throws SQLException {
+        return new PaidSession(
+                rs.getLong("id"),
+                rs.getTimestamp("session_start_date"),
+                rs.getTimestamp("session_end_date"),
+                sessionImage,
+                rs.getString("status"),
+                rs.getInt("max_student"),
+                rs.getInt("session_fee")
+        );
+    }
+
+    private static FreeSession getFreeSession(ResultSet rs, SessionImage sessionImage) throws SQLException {
+        return new FreeSession(
+                rs.getLong("id"),
+                rs.getTimestamp("session_start_date"),
+                rs.getTimestamp("session_end_date"),
+                sessionImage,
+                rs.getString("status")
+        );
     }
 }
