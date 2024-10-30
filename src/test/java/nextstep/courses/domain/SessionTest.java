@@ -9,11 +9,11 @@ import org.junit.jupiter.api.Test;
 
 class SessionTest {
     @Test
-    @DisplayName("Course 가 진행중 상태로 생성된다.")
+    @DisplayName("Session 가 진행중 상태로 생성된다.")
     void initCourseStatusTest() {
         LocalDate startAt = LocalDate.of(2024, 1, 1);
         LocalDate endAt = LocalDate.of(2024, 12, 1);
-        Session session = Session.create(startAt, endAt, null, PaymentPolicy.FREE);
+        Session session = Session.createFreeSession(startAt, endAt, null);
 
         assertThat(session.getCourseStatus()).isEqualTo(CourseStatus.PENDING);
     }
@@ -23,10 +23,24 @@ class SessionTest {
     void openTest() {
         LocalDate startAt = LocalDate.of(2024, 1, 1);
         LocalDate endAt = LocalDate.of(2024, 12, 1);
-        Session session = Session.create(startAt, endAt, null, PaymentPolicy.FREE);
+        Session session = Session.createFreeSession(startAt, endAt, null);
 
         session.open();
 
         assertThat(session.getCourseStatus()).isEqualTo(CourseStatus.OPEN);
+    }
+
+    @Test
+    @DisplayName("유료강의 수강신청 시 인원이 초과된 경우 예외가 발생한다.")
+    void throwExceptionWhenOverCapacity() {
+        LocalDate startAt = LocalDate.of(2024, 1, 1);
+        LocalDate endAt = LocalDate.of(2024, 12, 1);
+        Session session = Session.createPaidSession(startAt, endAt, null, 1);
+
+        session.register();
+
+        assertThatThrownBy(() -> session.register())
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("정원을 초과했습니다.");
     }
 }

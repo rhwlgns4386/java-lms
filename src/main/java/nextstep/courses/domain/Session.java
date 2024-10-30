@@ -15,18 +15,26 @@ public class Session {
 
     private CourseStatus courseStatus;
 
-    private int studentCount;
+    private StudentCapacity studentCapacity;
 
-    public Session(LocalDate startAt, LocalDate endAt, CoverImage image, PaymentPolicy paymentPolicy) {
+    private int enrollStudentCount;
+
+    public Session(LocalDate startAt, LocalDate endAt, CoverImage image, StudentCapacity studentCapacity,
+        PaymentPolicy paymentPolicy) {
         this.startAt = startAt;
         this.endAt = endAt;
         this.image = image;
         this.paymentPolicy = paymentPolicy;
+        this.studentCapacity = studentCapacity;
         this.courseStatus = CourseStatus.PENDING;
     }
 
-    public static Session create(LocalDate startAt, LocalDate endAt, CoverImage image, PaymentPolicy paymentPolicy) {
-        return new Session(startAt, endAt, image, paymentPolicy);
+    public static Session createFreeSession(LocalDate startAt, LocalDate endAt, CoverImage image) {
+        return new Session(startAt, endAt, image, null, PaymentPolicy.FREE);
+    }
+
+    public static Session createPaidSession(LocalDate startAt, LocalDate endAt, CoverImage image, int studentCapacity) {
+        return new Session(startAt, endAt, image, new StudentCapacity(studentCapacity), PaymentPolicy.PAID);
     }
 
     public CourseStatus getCourseStatus() {
@@ -35,5 +43,12 @@ public class Session {
 
     public void open() {
         courseStatus = CourseStatus.OPEN;
+    }
+
+    public void register() {
+        if (!studentCapacity.isApplicable(enrollStudentCount)) {
+            throw new IllegalArgumentException("정원을 초과했습니다.");
+        }
+        enrollStudentCount++;
     }
 }
