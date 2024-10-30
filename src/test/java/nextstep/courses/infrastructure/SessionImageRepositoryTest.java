@@ -41,6 +41,6 @@ public class SessionImageRepositoryTest {
                 () -> assertThat(sessionImage.getType()).isEqualTo(savedSessionImage.getType()),
                 () -> assertThat(sessionImage.getSessionImageSize()).isEqualTo(savedSessionImage.getSessionImageSize())
         );
-
+        LOGGER.debug("SessionImage: {}", savedSessionImage);
     }
 }

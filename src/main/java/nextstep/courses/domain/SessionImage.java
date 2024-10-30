@@ -39,4 +39,14 @@ public class SessionImage {
     public SessionImageSize getSessionImageSize() {
         return sessionImageSize;
     }
+
+    @Override
+    public String toString() {
+        return "SessionImage{" +
+                "id=" + id +
+                ", volume=" + volume +
+                ", type=" + type +
+                ", sessionImageSize=" + sessionImageSize +
+                '}';
+    }
 }

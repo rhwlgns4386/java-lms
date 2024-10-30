@@ -38,4 +38,12 @@ public class SessionImageSize {
     public int hashCode() {
         return Objects.hash(getWitdh(), getHeight());
     }
+
+    @Override
+    public String toString() {
+        return "SessionImageSize{" +
+                "witdh=" + witdh +
+                ", height=" + height +
+                '}';
+    }
 }
