@@ -1,4 +1,4 @@
-package nextstep.courses.domain.session;
+package nextstep.courses.domain.enroll;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
