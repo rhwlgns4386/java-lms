@@ -1,5 +1,6 @@
 package nextstep.qna.domain;
 
+import nextstep.qna.CannotDeleteException;
 import nextstep.users.domain.NsUser;
 
 import java.time.LocalDateTime;
@@ -15,7 +16,7 @@ public class Question {
 
     private NsUser writer;
 
-    private List<Answer> answers = new ArrayList<>();
+    private Answers answers = new Answers(new ArrayList<>());
 
     private boolean deleted = false;
 
@@ -81,12 +82,50 @@ public class Question {
         return deleted;
     }
 
-    public List<Answer> getAnswers() {
+    public Answers getAnswers() {
         return answers;
     }
 
     @Override
     public String toString() {
         return "Question [id=" + getId() + ", title=" + title + ", contents=" + contents + ", writer=" + writer + "]";
+    }
+
+    public List<DeleteHistory> deleteQuestion(NsUser loginUser) throws CannotDeleteException {
+        deletable(loginUser);
+
+        answers.setAllDelete();
+        this.deleted = true;
+
+        return createDeleteHistory();
+    }
+
+    private void deletable(NsUser loginUser) throws CannotDeleteException {
+        validateIsWriter(loginUser);
+        validateHaveOtherUserAnswer(loginUser);
+    }
+
+    private void validateHaveOtherUserAnswer(NsUser loginUser) throws CannotDeleteException {
+        if (answers.isContainsOtherUser(loginUser)) {
+            throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
+        }
+    }
+
+    private void validateIsWriter(NsUser loginUser) throws CannotDeleteException {
+        if (!isOwner(loginUser)) {
+            throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
+        }
+    }
+
+    private List<DeleteHistory> createDeleteHistory() {
+        List<DeleteHistory> deleteHistories = new ArrayList<>();
+        LocalDateTime deleteTimestamp = LocalDateTime.now();
+        deleteHistories.add(new DeleteHistory(ContentType.QUESTION, this.id, this.writer, deleteTimestamp));
+
+        for (Answer answer : answers.getAnswers()) {
+            deleteHistories.add(new DeleteHistory(ContentType.ANSWER, answer.getId(), answer.getWriter(), deleteTimestamp));
+        }
+
+        return deleteHistories;
     }
 }
