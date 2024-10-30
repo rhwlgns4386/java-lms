@@ -27,4 +27,12 @@ class StudentCapacityTest {
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("정원을 초과했습니다.");
     }
+
+    @Test
+    @DisplayName("increment 메서드가 수강신청 인원을 초과하지 않을 경우 수강 신청한 인원 수를 증가시킨다.")
+    void incrementTest() {
+        StudentCapacity studentCapacity = new StudentCapacity(10);
+        studentCapacity.increment();
+        assertThat(studentCapacity.getCount()).isOne();
+    }
 }
