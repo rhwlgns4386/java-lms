@@ -1,7 +1,7 @@
 package nextstep.courses.service;
 
 import nextstep.courses.domain.course.Course;
-import nextstep.courses.infrastructure.CourseRepository;
+import nextstep.courses.infrastructure.course.CourseRepository;
 import nextstep.payments.domain.Payment;
 import org.springframework.stereotype.Service;
 
