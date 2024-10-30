@@ -21,37 +21,37 @@ class SessionTest {
 
     @BeforeEach
     void setUp() {
-        paidSession = Session.createPaidSession(0L, PERIOD, COVER_IMAGE, AMOUNT, 1, SessionStatus.RECRUITING);
+        paidSession = Session.paidSession(0L, PERIOD, COVER_IMAGE, AMOUNT, 1, SessionStatus.RECRUITING);
     }
 
     @Test
     void 유료강의_최대인원초과_예외발생() {
-        paidSession.add(ADD_INFO);
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> paidSession.add(ADD_INFO));
+        paidSession.apply(ADD_INFO);
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> paidSession.apply(ADD_INFO));
         assertEquals(exception.getMessage(), "Max personnel exceeded.");
     }
 
     @Test
     void 결제금액_수강료_불일치_예외발생() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> paidSession.add(DISMATCH_ADD_INFO));
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> paidSession.apply(DISMATCH_ADD_INFO));
         assertEquals(exception.getMessage(), "Payment amount does not match.");
     }
 
     @Test
     void 수강상태_모집중_아닐때_예외발생() {
-        Session preparingSession = Session.createFreeSession(0L, PERIOD, COVER_IMAGE, SessionStatus.PREPARING);
-        Exception exception1 = assertThrows(IllegalArgumentException.class, () -> preparingSession.add(ADD_INFO));
+        Session preparingSession = Session.freeSession(0L, PERIOD, COVER_IMAGE, SessionStatus.PREPARING);
+        Exception exception1 = assertThrows(IllegalArgumentException.class, () -> preparingSession.apply(ADD_INFO));
         assertEquals(exception1.getMessage(), "Session is not recruiting.");
 
-        Session closedSession = Session.createFreeSession(0L, PERIOD, COVER_IMAGE, SessionStatus.CLOSED);
-        Exception exception2 = assertThrows(IllegalArgumentException.class, () -> closedSession.add(ADD_INFO));
+        Session closedSession = Session.freeSession(0L, PERIOD, COVER_IMAGE, SessionStatus.CLOSED);
+        Exception exception2 = assertThrows(IllegalArgumentException.class, () -> closedSession.apply(ADD_INFO));
         assertEquals(exception2.getMessage(), "Session is not recruiting.");
     }
 
     @Test
     void 수강신청() {
         assertEquals(paidSession.sizeNsUsers(), 0);
-        paidSession.add(ADD_INFO);
+        paidSession.apply(ADD_INFO);
         assertEquals(paidSession.sizeNsUsers(), 1);
     }
 }

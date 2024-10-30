@@ -31,7 +31,7 @@ public class Session {
         this.status = status;
     }
 
-    public static Session createPaidSession(Long id, SessionPeriod period, SessionCoverImage coverImage, SessionAmount amount, int maxPersonnel, SessionStatus status) {
+    public static Session paidSession(Long id, SessionPeriod period, SessionCoverImage coverImage, SessionAmount amount, int maxPersonnel, SessionStatus status) {
         validPaidSessionAmount(amount);
         return new Session(id, period, coverImage, SessionFeeType.PAID, amount, maxPersonnel, status);
     }
@@ -42,8 +42,15 @@ public class Session {
         }
     }
 
-    public static Session createFreeSession(Long id, SessionPeriod period, SessionCoverImage coverImage, SessionStatus status) {
+    public static Session freeSession(Long id, SessionPeriod period, SessionCoverImage coverImage, SessionStatus status) {
         return new Session(id, period, coverImage, SessionFeeType.FREE, new SessionAmount(0L), 0, status);
+    }
+
+    public void apply(SessionAddInfo addInfo) {
+        validStatus();
+        validAmount(addInfo);
+        validMaxPersonnel();
+        nsUserIds.add(addInfo.getNsUserId());
     }
 
     private void validMaxPersonnel() {
@@ -62,13 +69,6 @@ public class Session {
         if (!status.isRecruiting()) {
             throw new IllegalArgumentException("Session is not recruiting.");
         }
-    }
-
-    public void add(SessionAddInfo addInfo) {
-        validStatus();
-        validAmount(addInfo);
-        validMaxPersonnel();
-        nsUserIds.add(addInfo.getNsUserId());
     }
 
     public int sizeNsUsers() {
