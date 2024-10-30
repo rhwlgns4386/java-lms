@@ -32,4 +32,8 @@ public class Session {
     public CourseStatus getCourseStatus() {
         return courseStatus;
     }
+
+    public void open() {
+        courseStatus = CourseStatus.OPEN;
+    }
 }
