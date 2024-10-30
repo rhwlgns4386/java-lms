@@ -13,9 +13,11 @@ class SessionTest {
     void initCourseStatusTest() {
         LocalDate startAt = LocalDate.of(2024, 1, 1);
         LocalDate endAt = LocalDate.of(2024, 12, 1);
-        Session session = Session.createFreeSession(startAt, endAt, null);
+        Session freeSession = Session.createFreeSession(startAt, endAt, null);
+        Session paidSession = Session.createPaidSession(startAt, endAt, null, 1);
 
-        assertThat(session.getCourseStatus()).isEqualTo(SessionStatus.PENDING);
+        assertThat(freeSession.getCourseStatus()).isEqualTo(SessionStatus.PENDING);
+        assertThat(paidSession.getCourseStatus()).isEqualTo(SessionStatus.PENDING);
     }
 
     @Test
