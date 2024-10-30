@@ -19,16 +19,6 @@ public class FreeSession extends Session {
         }
     }
 
-    @Override
-    protected void open() {
-        super.updateStatus(SessionStatus.RECRUITING);
-    }
-
-    @Override
-    protected void close() {
-        super.updateStatus(SessionStatus.CLOSE);
-    }
-
     public void register() {
         register(null);
     }

@@ -39,14 +39,4 @@ public class PaidSession extends Session {
 
         this.capacity.increase();
     }
-
-    @Override
-    protected void open() {
-        super.updateStatus(SessionStatus.RECRUITING);
-    }
-
-    @Override
-    protected void close() {
-        super.updateStatus(SessionStatus.CLOSE);
-    }
 }

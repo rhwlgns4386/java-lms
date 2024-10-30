@@ -23,9 +23,13 @@ public abstract class Session {
 
     protected abstract void register(Payment payment);
 
-    protected abstract void open();
+    protected void open() {
+        updateStatus(SessionStatus.RECRUITING);
+    }
 
-    protected abstract void close();
+    protected void close() {
+        updateStatus(SessionStatus.CLOSE);
+    }
 
     protected boolean isAvailableForRegistration() {
         return this.sessionStatus.isOpen();
