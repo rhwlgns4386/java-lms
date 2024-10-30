@@ -1,4 +1,4 @@
-package nextstep.courses.domain;
+package nextstep.sessions.domain;
 
 public class SessionStatus {
     private String status;

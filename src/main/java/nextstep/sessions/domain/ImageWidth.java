@@ -1,4 +1,4 @@
-package nextstep.courses.domain;
+package nextstep.sessions.domain;
 
 public class ImageWidth {
     private static int PROPORTION = 2;

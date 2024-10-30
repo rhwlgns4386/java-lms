@@ -1,6 +1,4 @@
-package nextstep.courses.domain;
-
-import org.springframework.util.StringUtils;
+package nextstep.sessions.domain;
 
 public class SessionPeriod {
     private String startDate;

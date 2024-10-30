@@ -1,6 +1,4 @@
-package nextstep.courses.domain;
-
-import nextstep.qna.domain.Question;
+package nextstep.sessions.domain;
 
 import java.util.Optional;
 

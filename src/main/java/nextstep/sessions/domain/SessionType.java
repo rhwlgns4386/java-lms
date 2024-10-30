@@ -1,6 +1,4 @@
-package nextstep.courses.domain;
-
-import java.math.BigDecimal;
+package nextstep.sessions.domain;
 
 public class SessionType {
     private String typeCd;

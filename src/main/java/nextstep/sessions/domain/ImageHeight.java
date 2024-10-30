@@ -1,4 +1,4 @@
-package nextstep.courses.domain;
+package nextstep.sessions.domain;
 
 public class ImageHeight {
     private static int PROPORTION = 3;

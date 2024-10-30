@@ -1,4 +1,4 @@
-package nextstep.courses.domain;
+package nextstep.sessions.domain;
 
 public enum SessionTypeEnum {
     PAID("01", "유료"),

@@ -1,10 +1,8 @@
-package nextstep.courses.domain;
+package nextstep.sessions.domain;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.math.BigDecimal;
 
 public class SessionTypeTest {
     public static SessionType PAID_SESSION = new SessionType(Long.valueOf(200000), 100);
