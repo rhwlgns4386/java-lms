@@ -1,17 +1,18 @@
 package nextstep.courses.domain.enroll;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import nextstep.courses.domain.session.SessionPriceType;
+
+import java.util.*;
 
 public class EnrollUserInfos {
+    private static final String FULL_CAPACITY_ERROR = "수강 정원이 모두 찼습니다.";
     private static final String ENROLL_USER_ERROR = "이미 수강 신청한 회원입니다.";
-    private static final String ENROLL_CAPACITY_ERROR = "수강 신청 인원이 꽉차서 신청 할 수 없습니다.";
 
-    private final List<EnrollUserInfo> enrollUserInfos = new ArrayList<>();
+    private final Set<EnrollUserInfo> enrollUserInfos;
     private final int availableEnrollCount;
 
     public EnrollUserInfos(int availableEnrollCount) {
+        this.enrollUserInfos = new HashSet<>();
         this.availableEnrollCount = availableEnrollCount;
     }
 
@@ -19,27 +20,34 @@ public class EnrollUserInfos {
         return enrollUserInfos.size();
     }
 
-    public List<EnrollUserInfo> getEnrollUserInfos() {
+    public Set<EnrollUserInfo> getEnrollUserInfos() {
         return enrollUserInfos;
     }
 
     public void add(EnrollUserInfo enrollUserInfo) {
-        isValid(enrollUserInfo);
-
+        int prevEnrollCount = enrollUserInfos.size();
         enrollUserInfos.add(enrollUserInfo);
+        isValid(prevEnrollCount);
     }
 
-    private void isValid(EnrollUserInfo enrollUserInfo) {
-        if (enrollUserInfos.contains(enrollUserInfo)) {
+    private void isValid(int prevEnrollCount) {
+        if (prevEnrollCount == enrollUserInfos.size()) {
             throw new IllegalArgumentException(ENROLL_USER_ERROR);
         }
 
-        if(getSize()==availableEnrollCount) {
-            throw new RuntimeException(ENROLL_CAPACITY_ERROR);
-        }
-
     }
 
+    public void checkPaidSessionEnroll(SessionPriceType sessionPriceType) {
+        if(!sessionPriceType.isFree())  {
+            checkSize();
+        }
+    }
+
+    private void checkSize() {
+        if(enrollUserInfos.size() == availableEnrollCount) {
+            throw new IllegalArgumentException(FULL_CAPACITY_ERROR);
+        }
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -53,5 +61,6 @@ public class EnrollUserInfos {
     public int hashCode() {
         return Objects.hash(enrollUserInfos);
     }
+
 
 }

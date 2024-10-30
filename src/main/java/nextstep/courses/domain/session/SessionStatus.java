@@ -1,9 +1,7 @@
 package nextstep.courses.domain.session;
 
-import java.util.Arrays;
-
-public enum CourseStatus {
-    COMPLETED, ENROLLING,
-    PROGRESS;
+public enum SessionStatus {
+    PENDING, ENROLLING,
+    COMPLETED;
 
 }
