@@ -9,14 +9,14 @@ public class FreeSession extends Session {
 
     static final int FREE_SESSION_FEE = 0;
 
-    protected FreeSession(String name, CoverImage coverImage, SessionState sessionState,
+    protected FreeSession(CoverImage coverImage, SessionState sessionState,
                           LocalDateTime startDate, LocalDateTime endDate) {
-        super(name, coverImage, Enrollment.INFINITE_ENROLLMENT, sessionState, FREE_SESSION_FEE, startDate, endDate);
+        this((long) NOT_ASSIGNED, coverImage, sessionState, startDate, endDate);
     }
 
-    protected FreeSession(Long id, String name, CoverImage coverImage, SessionState sessionState,
+    protected FreeSession(Long id, CoverImage coverImage, SessionState sessionState,
                           LocalDateTime startDate, LocalDateTime endDate) {
-        super(id, name, coverImage, Enrollment.INFINITE_ENROLLMENT, sessionState, FREE_SESSION_FEE, startDate, endDate);
+        super(id, coverImage, Enrollment.INFINITE_ENROLLMENT, sessionState, startDate, endDate);
     }
 
     @Override

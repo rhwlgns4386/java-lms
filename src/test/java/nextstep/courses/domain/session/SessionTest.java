@@ -27,8 +27,8 @@ public class SessionTest {
 
     @Test
     void throw_exception_if_session_is_not_open() {
-        Session paidSession = SessionBuilderTest.paidSessionBuilder().build();
-        Session freeSession = SessionBuilderTest.freeSessionBuilder().build();
+        Session paidSession = SessionBuilderTest.paidSessionBuilder().sessionState(SessionState.PREPARING).build();
+        Session freeSession = SessionBuilderTest.freeSessionBuilder().sessionState(SessionState.END).build();
 
         assertThatIllegalStateException().isThrownBy(() -> paidSession.register(paidPayment));
         assertThatIllegalStateException().isThrownBy(() -> freeSession.register(freePayment));

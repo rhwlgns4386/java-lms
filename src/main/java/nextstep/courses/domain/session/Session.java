@@ -11,31 +11,39 @@ public abstract class Session {
     static final int NOT_ASSIGNED = -1;
 
     protected Long id;
-    protected SessionInfo sessionInfo;
+    private CoverImage coverImage;
+    private SessionState sessionState;
     protected Enrollment enrollment;
     protected SessionDuration sessionDuration;
 
-    protected Session(String title, CoverImage coverImage, int maxEnrollment, SessionState sessionState,
-                      long sessionFee, LocalDateTime startDate, LocalDateTime endDate) {
-        this((long) NOT_ASSIGNED, title, coverImage, maxEnrollment, sessionState, sessionFee, startDate, endDate);
+    protected Session(CoverImage coverImage, int maxEnrollment, SessionState sessionState,
+                      LocalDateTime startDate, LocalDateTime endDate) {
+        this((long) NOT_ASSIGNED, coverImage, maxEnrollment, sessionState, startDate, endDate);
     }
 
-    protected Session(Long id, String title, CoverImage coverImage, int maxEnrollment,
-                      SessionState sessionState, long sessionFee, LocalDateTime startDate, LocalDateTime endDate) {
+    protected Session(Long id, CoverImage coverImage, int maxEnrollment,
+                      SessionState sessionState, LocalDateTime startDate, LocalDateTime endDate) {
         this.id = id;
-        this.sessionInfo = new SessionInfo(title, coverImage, sessionFee, sessionState);
+        this.sessionState = sessionState;
+        this.coverImage = coverImage;
         this.enrollment = new Enrollment(maxEnrollment);
         this.sessionDuration = new SessionDuration(startDate, endDate);
     }
 
     public final boolean register(Payment payment) {
-        sessionInfo.checkIsOpenSession();
+        validateSessionState();
         enrollment.validateAvailability();
         if (isValidPayment(payment)) {
             enrollment.register();
             return true;
         }
         throw new IllegalStateException("결제 내역(금액 등)과 강의 수강 조건이 일치하지 않습니다");
+    }
+
+    private void validateSessionState() {
+        if (!sessionState.canRegister()) {
+            throw new IllegalStateException(sessionState.getDesc() + " 상태이기 때문에 강의 신청할 수 없습니다");
+        }
     }
 
     protected abstract boolean isValidPayment(Payment payment);

@@ -12,7 +12,6 @@ import static nextstep.courses.domain.session.Session.NOT_ASSIGNED;
 public class SessionBuilder {
 
     private Long id;
-    private String title;
     private int enrollment = NOT_ASSIGNED;
     private long sessionFee = NOT_ASSIGNED;
     private SessionState sessionState = SessionState.PREPARING;
@@ -30,11 +29,6 @@ public class SessionBuilder {
 
     public SessionBuilder id(Long id) {
         this.id = id;
-        return this;
-    }
-
-    public SessionBuilder title(String title) {
-        this.title = title;
         return this;
     }
 
@@ -79,21 +73,18 @@ public class SessionBuilder {
     }
 
     public Session build() {
-        Optional.ofNullable(title)
-                .filter(string -> !string.isBlank())
-                .orElseThrow(() -> new IllegalArgumentException("강의명이 입력되지 않았습니다"));
         validateEmpty(coverImage, "강의 커버가 입력되지 않았습니다");
         validateEmpty(startDate, "강의 시작일이 입력되지 않았습니다");
         validateEmpty(endDate, "강의 종료일이 입력되지 않았습니다");
         validateEmpty(sessionType, "강의 타입이 입력되지 않았습니다");
 
         if (sessionType == SessionType.FREE) {
-            return new FreeSession(getId(), title, coverImage, sessionState, startDate, endDate);
+            return new FreeSession(getId(), coverImage, sessionState, startDate, endDate);
         }
 
         validateValueAssignment(enrollment, "유료 강의는 수강 인원이 필수 값입니다");
         validateValueAssignment(sessionFee, "유료 강의는 수강료가 필수 값입니다");
-        return new PaidSession(getId(), title, coverImage, sessionState, enrollment, sessionFee, startDate, endDate);
+        return new PaidSession(getId(), coverImage, sessionState, enrollment, sessionFee, startDate, endDate);
     }
 
     private Long getId() {

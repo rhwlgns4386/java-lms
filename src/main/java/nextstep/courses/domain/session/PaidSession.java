@@ -7,18 +7,21 @@ import java.time.LocalDateTime;
 
 public class PaidSession extends Session {
 
-    protected PaidSession(String name, CoverImage coverImage, SessionState sessionState, int maxEnrollment,
+    private long sessionFee;
+
+    protected PaidSession(CoverImage coverImage, SessionState sessionState, int maxEnrollment,
                           long sessionFee, LocalDateTime startDate, LocalDateTime endDate) {
-        super(name, coverImage, maxEnrollment, sessionState, sessionFee, startDate, endDate);
+        this((long) NOT_ASSIGNED, coverImage, sessionState, maxEnrollment, sessionFee, startDate, endDate);
     }
 
-    protected PaidSession(Long id, String name, CoverImage coverImage, SessionState sessionState, int maxEnrollment,
+    protected PaidSession(Long id, CoverImage coverImage, SessionState sessionState, int maxEnrollment,
                           long sessionFee, LocalDateTime startDate, LocalDateTime endDate) {
-        super(id, name, coverImage, maxEnrollment, sessionState, sessionFee, startDate, endDate);
+        super(id, coverImage, maxEnrollment, sessionState, startDate, endDate);
+        this.sessionFee = sessionFee;
     }
 
     @Override
     protected boolean isValidPayment(Payment payment) {
-        return sessionInfo.isValidPayment(payment, id);
+        return payment.isValidPayment(id, sessionFee);
     }
 }

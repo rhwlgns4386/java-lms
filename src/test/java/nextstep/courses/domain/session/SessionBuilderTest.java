@@ -20,7 +20,6 @@ public class SessionBuilderTest {
 
     public static SessionBuilder freeSessionBuilder() {
         return SessionBuilder.builder()
-                .title("무료강의")
                 .coverImage("src/test/java/nextstep/courses/domain/session/file/image.png")
                 .sessionType(SessionType.FREE)
                 .startDate(LocalDateTime.now())
@@ -36,7 +35,6 @@ public class SessionBuilderTest {
 
     public static SessionBuilder paidSessionBuilder() {
         return SessionBuilder.builder()
-                .title("유료강의")
                 .enrollment(30)
                 .sessionFee(10000)
                 .coverImage("src/test/java/nextstep/courses/domain/session/file/image.png")
@@ -46,17 +44,8 @@ public class SessionBuilderTest {
     }
 
     @Test
-    void throw_exception_if_title_null_or_empty() {
-        assertThatIllegalArgumentException().isThrownBy(() ->
-                freeSessionBuilder().title(null).build()).withMessageContaining("강의명");
-        assertThatIllegalArgumentException().isThrownBy(() ->
-                freeSessionBuilder().title(" ").build()).withMessageContaining("강의명");
-    }
-
-    @Test
     void throw_exception_if_cover_image_null() {
         SessionBuilder builder = SessionBuilder.builder()
-                .title("무료강의")
                 .sessionType(SessionType.FREE)
                 .startDate(LocalDateTime.now())
                 .endDate(LocalDateTime.now().plusDays(90));
@@ -68,13 +57,11 @@ public class SessionBuilderTest {
     void throw_exception_if_start_or_end_date_not_assign() {
         SessionBuilder endDate = SessionBuilder.builder()
                 .coverImage("src/test/java/nextstep/courses/domain/session/file/image.png")
-                .title("무료강의")
                 .sessionType(SessionType.FREE)
                 .endDate(LocalDateTime.now().plusDays(90));
 
         SessionBuilder startDate = SessionBuilder.builder()
                 .coverImage("src/test/java/nextstep/courses/domain/session/file/image.png")
-                .title("무료강의")
                 .sessionType(SessionType.FREE)
                 .startDate(LocalDateTime.now());
 
@@ -86,7 +73,6 @@ public class SessionBuilderTest {
     void throw_exception_if_session_type_not_assign() {
         SessionBuilder builder = SessionBuilder.builder()
                 .coverImage("src/test/java/nextstep/courses/domain/session/file/image.png")
-                .title("무료강의")
                 .startDate(LocalDateTime.now())
                 .endDate(LocalDateTime.now().plusDays(90));
 
@@ -96,7 +82,6 @@ public class SessionBuilderTest {
     @Test
     void throw_exception_if_enrollment_not_assign() {
         SessionBuilder builder = SessionBuilder.builder()
-                .title("유료강의")
                 .sessionFee(10000)
                 .coverImage("src/test/java/nextstep/courses/domain/session/file/image.png")
                 .sessionType(SessionType.PAID)
@@ -109,7 +94,6 @@ public class SessionBuilderTest {
     @Test
     void throw_exception_if_sessionFee_not_assign() {
         SessionBuilder builder = SessionBuilder.builder()
-                .title("유료강의")
                 .enrollment(30)
                 .coverImage("src/test/java/nextstep/courses/domain/session/file/image.png")
                 .sessionType(SessionType.PAID)
