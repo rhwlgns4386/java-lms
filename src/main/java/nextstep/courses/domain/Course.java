@@ -1,6 +1,7 @@
 package nextstep.courses.domain;
 
-import nextstep.session.Session;
+import nextstep.DateDomain;
+import nextstep.session.domain.Session;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -17,39 +18,58 @@ public class Course {
 
     private Long creatorId;
 
-    private LocalDateTime createdAt;
+    private DateDomain dateDomain;
 
-    private LocalDateTime updatedAt;
+
+    public Course(String title, Long term, Long creatorId) {
+        this.title = title;
+        this.term = term;
+        this.creatorId = creatorId;
+        this.dateDomain = new DateDomain();
+    }
 
     public Course(Long id, String title, Long term, Long creatorId) {
         this.id = id;
         this.title = title;
         this.term = term;
         this.creatorId = creatorId;
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();;
+        this.dateDomain = new DateDomain();
+    }
+
+    public Course(Long id, String title, Long term, Long creatorId, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.id = id;
+        this.title = title;
+        this.term = term;
+        this.creatorId = creatorId;
+        this.dateDomain = new DateDomain(createdAt, updatedAt);
     }
 
     public String getTitle() {
         return title;
     }
 
-    public List<Session> getLectures() {
-        return sessions;
-    }
-
     public void addSession(Session lecture) {
         this.sessions.add(lecture);
     }
 
-    @Override
-    public String toString() {
-        return "Course{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", creatorId=" + creatorId +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                '}';
+    public List<Session> getLectures() {
+        return sessions;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Long getTerm() {
+        return term;
+    }
+
+    public DateDomain getDateDomain() {
+        return dateDomain;
+    }
+
+    public Long getCreatorId() {
+        return creatorId;
+    }
+
 }
