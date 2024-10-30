@@ -15,6 +15,14 @@ public class SessionDate {
         this.end = end;
     }
 
+    public LocalDateTime getStart() {
+        return start;
+    }
+
+    public LocalDateTime getEnd() {
+        return end;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o)

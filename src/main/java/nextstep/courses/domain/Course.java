@@ -29,6 +29,10 @@ public class Course {
         this(0L, title, generation, creatorId, createdAt, updatedAt, new Sessions());
     }
 
+    public Course(Long id, String title, int generation, Long creatorId, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this(id, title, generation, creatorId, createdAt, updatedAt, new Sessions());
+    }
+
     public Course(Long id, String title, int generation, Long creatorId, LocalDateTime createdAt, LocalDateTime updatedAt, Sessions sessions) {
         this.id = id;
         this.title = title;
@@ -53,6 +57,10 @@ public class Course {
 
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
+    }
+
+    public int getGeneration() {
+        return generation;
     }
 
     @Override

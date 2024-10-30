@@ -25,9 +25,9 @@ class PaymentTest {
     @Test
     void 강의정보를_검증한다() {
         Payment payment = createPayment(1L, 1L, 3000L);
-        boolean result = payment.verifySession(1L);
+        boolean result = payment.invalidStudent(1L);
 
-        assertThat(result).isTrue();
+        assertThat(result).isFalse();
     }
 
     private Payment createPayment(Long sessionId, Long studentId, Long price) {

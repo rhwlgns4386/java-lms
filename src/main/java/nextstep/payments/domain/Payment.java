@@ -36,7 +36,7 @@ public class Payment {
         return Objects.equals(this.nsUserId, id);
     }
 
-    public boolean verifySession(Long id) {
-        return Objects.equals(this.sessionId, id);
+    public boolean invalidStudent(Long id) {
+        return !Objects.equals(this.sessionId, id);
     }
 }

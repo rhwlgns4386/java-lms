@@ -2,25 +2,36 @@ package nextstep.courses.domain;
 
 import java.util.Objects;
 
-public class ImageMetaInfo {
+public class ImageMetaData {
+    public static final int byteMB = 1;
     private final int byteSize;
     private final Extension extension;
 
-    public ImageMetaInfo(int byteSize, Extension extension) {
-        if (byteSize > 1) {
+    public ImageMetaData(int byteSize, Extension extension) {
+        if (byteSize > byteMB) {
             throw new IllegalArgumentException();
         }
         this.byteSize = byteSize;
         this.extension = extension;
     }
 
+    public int getByteSize() {
+        return byteSize;
+    }
+
+    public Extension getExtension() {
+        return extension;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o)
+        if (this == o) {
             return true;
-        if (!(o instanceof ImageMetaInfo))
+        }
+        if (!(o instanceof ImageMetaData)) {
             return false;
-        ImageMetaInfo that = (ImageMetaInfo)o;
+        }
+        ImageMetaData that = (ImageMetaData)o;
         return byteSize == that.byteSize && Objects.equals(extension, that.extension);
     }
 

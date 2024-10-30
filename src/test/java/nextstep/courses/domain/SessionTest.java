@@ -1,33 +1,56 @@
 package nextstep.courses.domain;
 
-import java.time.LocalDateTime;
+import static org.assertj.core.api.Assertions.*;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import nextstep.payments.domain.Payment;
+import nextstep.users.domain.NsUserTest;
 
 class SessionTest {
 
-    public static FreeSession createFreeSession(SessionStatus status) {
-        SessionDate sessionDate = createSessionDate();
-        SessionImage sessionImage = createSessionImage();
-
-        return new FreeSession(2L, 1L, sessionDate, sessionImage, status, Type.FREE);
+    @DisplayName("강의 상태를 가지고 무료 강의를 생성한다")
+    @Test
+    void createFreeSession() {
+        Session freeSession = SessionTestFixture.createFreeSession(1L, SessionStatus.PREPARE);
+        assertThat(freeSession).isEqualTo(SessionTestFixture.createFreeSession(1L, SessionStatus.PREPARE));
     }
 
-    public static PaidSession createPaidSession(long price, SessionStatus status) {
-        SessionDate sessionDate = createSessionDate();
-        SessionImage sessionImage = createSessionImage();
-
-        return new PaidSession(1L, 1L, sessionDate, sessionImage, status, Type.PAID, new Students(5), price);
+    @DisplayName("가격과 강의 상태를 가지고 유료 강의를 생성한다")
+    @Test
+    void createPaidSession() {
+        Session paidSession = SessionTestFixture.createPaidSession(1L, 3000L, 3, SessionStatus.PREPARE);
+        assertThat(paidSession).isEqualTo(SessionTestFixture.createPaidSession(1L, 3000L, 3, SessionStatus.PREPARE));
     }
 
-    public static SessionImage createSessionImage() {
-        ImageSize imageSize = new ImageSize(300, 200);
-        ImageMetaInfo imageMetaInfo = new ImageMetaInfo(1, Extension.JPG);
-        return new SessionImage(imageSize, imageMetaInfo);
+    @DisplayName("모집중이 아닌 상태라면 학생을 등록하지 못한다")
+    @Test
+    void addStudent() {
+        Session freeSession = SessionTestFixture.createFreeSession(1L, SessionStatus.PREPARE);
+
+        assertThatThrownBy(() -> freeSession.register(NsUserTest.GYEONGJAE))
+            .isInstanceOf(IllegalStateException.class);
     }
 
-    public static SessionDate createSessionDate() {
-        LocalDateTime start = LocalDateTime.of(2024, 10, 10, 10, 10);
-        LocalDateTime end = LocalDateTime.of(2024, 10, 10, 10, 12);
+    @DisplayName("결제금액이 유료강의 수강료와 같으면 수강신청된다")
+    @Test
+    void register() {
+        Payment payment = new Payment("id", 1L, 1L, 3000L);
+        Session paidSession = SessionTestFixture.createPaidSession(1L, 3000L, 3, SessionStatus.REGISTER);
 
-        return new SessionDate(start, end);
+        paidSession.register(payment, NsUserTest.JAVAJIGI);
+
+        assertThat(paidSession.studentSize()).isEqualTo(1);
+    }
+
+    @DisplayName("모집중이 아니면 등록하지 못한다")
+    @Test
+    void register_throw_exception() {
+        Payment payment = new Payment("id", 1L, 1L, 3000L);
+        Session paidSession = SessionTestFixture.createPaidSession(1L, 3000L, 3, SessionStatus.PREPARE);
+
+        assertThatThrownBy(() -> paidSession.register(payment, NsUserTest.JAVAJIGI))
+            .isInstanceOf(IllegalStateException.class);
     }
 }

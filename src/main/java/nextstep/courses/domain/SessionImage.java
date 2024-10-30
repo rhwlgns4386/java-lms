@@ -5,19 +5,29 @@ import java.util.Objects;
 public class SessionImage {
 
     private final ImageSize imageSize;
-    private final ImageMetaInfo metaInfo;
+    private final ImageMetaData metaInfo;
 
-    public SessionImage(ImageSize imageSize, ImageMetaInfo metaInfo) {
+    public SessionImage(ImageSize imageSize, ImageMetaData metaInfo) {
         this.imageSize = imageSize;
         this.metaInfo = metaInfo;
     }
 
+    public ImageSize getImageSize() {
+        return imageSize;
+    }
+
+    public ImageMetaData getMetaInfo() {
+        return metaInfo;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o)
+        if (this == o) {
             return true;
-        if (!(o instanceof SessionImage))
+        }
+        if (!(o instanceof SessionImage)) {
             return false;
+        }
         SessionImage that = (SessionImage)o;
         return Objects.equals(imageSize, that.imageSize) && Objects.equals(metaInfo, that.metaInfo);
     }
