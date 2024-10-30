@@ -91,12 +91,18 @@ public class Question {
         return "Question [id=" + getId() + ", title=" + title + ", contents=" + contents + ", writer=" + writer + "]";
     }
 
-    public void deleteQuestion(NsUser loginUser, long questionId) throws CannotDeleteException {
-        validateIsWriter(loginUser);
-        validateHaveOtherUserAnswer(loginUser);
+    public List<DeleteHistory> deleteQuestion(NsUser loginUser) throws CannotDeleteException {
+        deletable(loginUser);
 
         answers.setAllDelete();
         this.deleted = true;
+
+        return createDeleteHistory();
+    }
+
+    private void deletable(NsUser loginUser) throws CannotDeleteException {
+        validateIsWriter(loginUser);
+        validateHaveOtherUserAnswer(loginUser);
     }
 
     private void validateHaveOtherUserAnswer(NsUser loginUser) throws CannotDeleteException {
@@ -111,12 +117,13 @@ public class Question {
         }
     }
 
-    public List<DeleteHistory> createDeleteHistory() {
+    private List<DeleteHistory> createDeleteHistory() {
         List<DeleteHistory> deleteHistories = new ArrayList<>();
-        deleteHistories.add(new DeleteHistory(ContentType.QUESTION, this.id, this.writer, LocalDateTime.now()));
+        LocalDateTime deleteTimestamp = LocalDateTime.now();
+        deleteHistories.add(new DeleteHistory(ContentType.QUESTION, this.id, this.writer, deleteTimestamp));
 
         for (Answer answer : answers.getAnswers()) {
-            deleteHistories.add(new DeleteHistory(ContentType.ANSWER, answer.getId(), answer.getWriter(), LocalDateTime.now()));
+            deleteHistories.add(new DeleteHistory(ContentType.ANSWER, answer.getId(), answer.getWriter(), deleteTimestamp));
         }
 
         return deleteHistories;
