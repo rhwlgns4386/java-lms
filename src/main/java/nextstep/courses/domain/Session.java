@@ -13,7 +13,7 @@ public class Session {
 
     private PaymentPolicy paymentPolicy;
 
-    private CourseStatus courseStatus;
+    private SessionStatus sessionStatus;
 
     private StudentCapacity studentCapacity;
 
@@ -26,7 +26,7 @@ public class Session {
         this.image = image;
         this.paymentPolicy = paymentPolicy;
         this.studentCapacity = studentCapacity;
-        this.courseStatus = CourseStatus.PENDING;
+        this.sessionStatus = SessionStatus.PENDING;
     }
 
     public static Session createFreeSession(LocalDate startAt, LocalDate endAt, CoverImage image) {
@@ -37,8 +37,8 @@ public class Session {
         return new Session(startAt, endAt, image, new LimitedCapacity(studentCapacity), PaymentPolicy.PAID);
     }
 
-    public CourseStatus getCourseStatus() {
-        return courseStatus;
+    public SessionStatus getCourseStatus() {
+        return sessionStatus;
     }
 
     public int getEnrollStudentCount() {
@@ -46,7 +46,7 @@ public class Session {
     }
 
     public void open() {
-        courseStatus = CourseStatus.OPEN;
+        sessionStatus = SessionStatus.OPEN;
     }
 
     public void register() {

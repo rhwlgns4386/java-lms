@@ -1,6 +1,6 @@
 package nextstep.courses.domain;
 
-public enum CourseStatus {
+public enum SessionStatus {
     PENDING,
     OPEN,
     CLOSED
