@@ -3,6 +3,8 @@ package nextstep.courses.domain;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
 
+import java.util.Objects;
+
 public class Registration {
     private Long id;
     private Long nsUserId;
@@ -30,5 +32,23 @@ public class Registration {
 
     public Long getAmount() {
         return amount;
+    }
+
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Registration)) {
+            return false;
+        }
+
+        Registration that = (Registration) o;
+        return Objects.equals(getId(), that.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getId());
     }
 }

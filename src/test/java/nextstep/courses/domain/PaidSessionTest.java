@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class PaidSessionTest {
     private Image image;
@@ -51,6 +52,9 @@ public class PaidSessionTest {
 
         Assertions.assertThat(paidSession.getSessionStatus()).isEqualTo(SessionStatus.RECRUITING);
         Assertions.assertThat(paidSession.getCapacity().getCurrentCount()).isEqualTo(1);
+        Assertions.assertThat(paidSession.getRegistrations()).hasSize(1);
+        Assertions.assertThat(paidSession.getRegistrations()).hasSameElementsAs(List.of(RegistrationTest.REGISTRATION));
+
     }
 
     @Test
