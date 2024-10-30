@@ -1,7 +1,5 @@
 package nextstep.courses.domain;
 
-import nextstep.payments.domain.Payment;
-
 public abstract class Session {
     private SessionId sessionId;
     private SessionDate sessionDate;
@@ -21,7 +19,7 @@ public abstract class Session {
         return sessionId;
     }
 
-    protected abstract void register(Payment payment);
+    protected abstract void register(Registration registration);
 
     protected void open() {
         updateStatus(SessionStatus.RECRUITING);

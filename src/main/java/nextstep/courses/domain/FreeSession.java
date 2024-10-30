@@ -1,7 +1,5 @@
 package nextstep.courses.domain;
 
-import nextstep.payments.domain.Payment;
-
 public class FreeSession extends Session {
 
     public FreeSession(SessionId sessionId, SessionDate sessionDate, Image image) {
@@ -13,7 +11,7 @@ public class FreeSession extends Session {
     }
 
     @Override
-    protected void register(Payment payment) {
+    protected void register(Registration registration) {
         if (!isAvailableForRegistration()) {
             throw new IllegalStateException("Can't register session");
         }

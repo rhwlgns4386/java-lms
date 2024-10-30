@@ -47,8 +47,7 @@ public class PaidSessionTest {
 
         paidSession.open();
 
-        Payment payment = new Payment("1", sessionId.getId(), NsUserTest.JAVAJIGI.getId(), fee.getPrice());
-        paidSession.register(payment);
+        paidSession.register(RegistrationTest.REGISTRATION);
 
         Assertions.assertThat(paidSession.getSessionStatus()).isEqualTo(SessionStatus.RECRUITING);
         Assertions.assertThat(paidSession.getCapacity().getCurrentCount()).isEqualTo(1);
@@ -64,7 +63,7 @@ public class PaidSessionTest {
 
         Payment payment = new Payment("1", sessionId.getId(), NsUserTest.JAVAJIGI.getId(), fee.getPrice());
 
-        Assertions.assertThatThrownBy(() -> paidSession.register(payment))
+        Assertions.assertThatThrownBy(() -> paidSession.register(RegistrationTest.REGISTRATION))
                 .isInstanceOf(IllegalStateException.class);
     }
 
@@ -76,9 +75,8 @@ public class PaidSessionTest {
 
         PaidSession paidSession = new PaidSession(image, sessionDate, sessionId, sessionCapacity, fee);
         paidSession.open();
-        Payment payment = null;
 
-        Assertions.assertThatThrownBy(() -> paidSession.register(payment))
+        Assertions.assertThatThrownBy(() -> paidSession.register(null))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -91,9 +89,9 @@ public class PaidSessionTest {
         PaidSession paidSession = new PaidSession(image, sessionDate, sessionId, sessionCapacity, fee);
         paidSession.open();
         Payment payment = new Payment("1", sessionId.getId(), NsUserTest.JAVAJIGI.getId(), fee.getPrice() - 1);
-        ;
+        Registration registration = new Registration(1L, NsUserTest.JAVAJIGI, payment);
 
-        Assertions.assertThatThrownBy(() -> paidSession.register(payment))
+        Assertions.assertThatThrownBy(() -> paidSession.register(registration))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -106,9 +104,9 @@ public class PaidSessionTest {
         PaidSession paidSession = new PaidSession(image, sessionDate, sessionId, sessionCapacity, fee);
         paidSession.open();
         Payment payment = new Payment("1", sessionId.getId(), NsUserTest.JAVAJIGI.getId(), fee.getPrice() + 1);
-        ;
+        Registration registration = new Registration(1L, NsUserTest.JAVAJIGI, payment);
 
-        Assertions.assertThatThrownBy(() -> paidSession.register(payment))
+        Assertions.assertThatThrownBy(() -> paidSession.register(registration))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
