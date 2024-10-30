@@ -23,13 +23,10 @@ public class ApplicationDetails {
     }
 
     public void canApply(Long sessionId, Long nsUserId) {
-        ApplicationDetail applicationDetail = applicationDetails.stream()
-                .filter(application -> application.getNsUserId().equals(nsUserId)
-                        && application.getSessionId().equals(sessionId))
-                .findAny().orElse(null);
-        if (applicationDetail == null) {
-            return ;
+        if (applicationDetails.stream()
+                .anyMatch(applicationDetail -> applicationDetail.isPresent(sessionId, nsUserId))) {
+
+            throw new RuntimeException("신청내역이 존재합니다");
         }
-        throw new RuntimeException("신청내역이 존재합니다");
     }
 }

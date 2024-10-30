@@ -3,7 +3,7 @@ package nextstep.sessions.domain;
 import java.time.LocalDateTime;
 
 public class ApplicationDetail {
-    private Long sessionId ;
+    private Long sessionId;
     private Long nsUserId;
     private String paymentId;
     private LocalDateTime createdAt;
@@ -26,17 +26,20 @@ public class ApplicationDetail {
         return new ApplicationDetail(sessionId, nsUserId, paymentId);
     }
 
-
     public Long getSessionId() {
         return sessionId;
     }
 
     public Long getNsUserId() {
         return nsUserId;
-
     }
 
     public String getPaymentId() {
         return paymentId;
+    }
+
+    public boolean isPresent(Long inputSessionId, Long inputNsUserId) {
+        return (this.sessionId.equals(sessionId)
+                && this.nsUserId.equals(inputNsUserId));
     }
 }
