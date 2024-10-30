@@ -14,11 +14,14 @@ public class PaidSession extends DefaultSession {
     }
 
     @Override
-    protected void register(Payment payment) {
-        validateRegisterStatus();
+    protected void validate(Payment payment) {
+        validateSessionStatus();
         validateCapacity();
         validatePayment(payment);
+    }
 
+    @Override
+    protected void doRegister(Payment payment) {
         capacity = capacity.increase();
     }
 

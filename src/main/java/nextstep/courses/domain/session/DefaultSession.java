@@ -14,12 +14,15 @@ public abstract class DefaultSession {
         this.coverImage = coverImage;
     }
 
-    protected abstract void register(Payment payment);
+    public void register(Payment payment) {
+        validate(payment);
+        doRegister(payment);
+    }
 
-    //템플릿의 역할이 조금 애매한 것 같은데요!
-    //이렇게 되면 DefaultSession을 확장한 클래스에서 이 메서드를 사용 안하면 해당 유효성은 빠질수가 있어서 의도하신것과 다르게 동작 하게 될 수도 있을 것 같아요!
-    //register를 public으로 하나 따로 빼고 현재 메서드를 템플릿 메서드로 두면서 유효성 검사는 이 클래스에서 진행하면 어떨까요 ?
-    protected void validateRegisterStatus() {
+    protected abstract void doRegister(Payment payment);
+    protected abstract void validate(Payment payment);
+
+    protected void validateSessionStatus() {
         if(status.isOpen()){
             return;
         }

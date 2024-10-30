@@ -10,8 +10,13 @@ public class FreeSession extends DefaultSession {
     }
 
     @Override
-    protected void register(Payment payment) {
-        validateRegisterStatus();
+    protected void validate(Payment payment) {
+        validateSessionStatus();
+    }
+
+    @Override
+    protected void doRegister(Payment payment) {
+        //무료 세선은 수강신청 제한이 없음
     }
 
     public void register() {

@@ -8,6 +8,12 @@
 ## 온라인 코드 리뷰 과정
 * [텍스트와 이미지로 살펴보는 온라인 코드 리뷰 과정](https://github.com/next-step/nextstep-docs/tree/master/codereview)
 
+# STEP3 TODO
+# STEP3 DONE
+- [x] 2단계 피드백
+  - [x] register안으로 validate이동
+
+---
 # STEP2 TODO
 # STEP2 DONE
 - [x] 수강 신청 기능 요구사항
