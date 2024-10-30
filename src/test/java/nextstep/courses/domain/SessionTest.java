@@ -1,31 +1,33 @@
 package nextstep.courses.domain;
 
-import nextstep.courses.domain.vo.session.CoverImage;
-import nextstep.courses.domain.vo.session.DateRange;
-import nextstep.courses.domain.vo.session.Status;
-import nextstep.courses.domain.vo.session.image.ImageSize;
-import nextstep.courses.domain.vo.session.image.ImageType;
-import nextstep.courses.domain.vo.session.image.ImageWidthHeight;
+import nextstep.courses.domain.session.CoverImage;
+import nextstep.courses.domain.session.DateRange;
+import nextstep.courses.domain.session.Status;
+import nextstep.courses.domain.session.image.ImageFileSize;
+import nextstep.courses.domain.session.image.ImageSize;
+import nextstep.courses.domain.session.image.ImageType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static nextstep.courses.domain.PaidSessionTest.MAX_REGISTER_COUNT;
-import static nextstep.courses.domain.PaidSessionTest.SESSION_AMOUNT;
-import static nextstep.courses.domain.vo.session.CoverImageTest.*;
-import static nextstep.courses.domain.vo.session.DateRangeTest.END;
-import static nextstep.courses.domain.vo.session.DateRangeTest.START;
+import java.time.LocalDateTime;
+
+import static nextstep.courses.domain.FreeSessionTest.FS1;
+import static nextstep.courses.domain.PaidSessionTest.*;
+import static nextstep.courses.domain.session.CoverImageTest.*;
+import static nextstep.courses.domain.session.DateRangeTest.END;
+import static nextstep.courses.domain.session.DateRangeTest.START;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SessionTest {
 
-    public static final FreeSession FREE_SESSION1 = new FreeSession(1L, 1L, new DateRange(START, END), new CoverImage(SIZE, IMAGE_TYPE_TEXT, WIDTH, HEIGHT), Status.PREPARE);
-    public static final PaidSession PAID_SESSION1 = new PaidSession(1L, 1L, new DateRange(START, END), new CoverImage(SIZE, IMAGE_TYPE_TEXT, WIDTH, HEIGHT), Status.PREPARE, MAX_REGISTER_COUNT, SESSION_AMOUNT);
+    public static final FreeSession FREE_SESSION1 = new FreeSession(1L, 1L, CourseTest.C1.getId(), new DateRange(START, END), new CoverImage(SIZE, IMAGE_TYPE_TEXT, WIDTH, HEIGHT), Status.PREPARE, LocalDateTime.now(), LocalDateTime.now());
+    public static final PaidSession PAID_SESSION1 = new PaidSession(1L, 1L, CourseTest.C1.getId(), new DateRange(START, END), new CoverImage(SIZE, IMAGE_TYPE_TEXT, WIDTH, HEIGHT), Status.PREPARE, MAX_REGISTER_COUNT, SESSION_AMOUNT, LocalDateTime.now(), LocalDateTime.now());
 
     private DateRange dateRange;
     private CoverImage coverImage;
-    private ImageSize imageSize;
+    private ImageFileSize imageFileSize;
     private ImageType imageType;
-    private ImageWidthHeight imageWidthHeight;
+    private ImageSize imageSize;
     private CoverImage wrappedCoverImage;
     private Status status;
 
@@ -34,23 +36,22 @@ public class SessionTest {
         dateRange = new DateRange(START, END);
         coverImage = new CoverImage(SIZE, IMAGE_TYPE_TEXT, WIDTH, HEIGHT);
 
-        imageSize = new ImageSize(SIZE);
+        imageFileSize = new ImageFileSize(SIZE);
         imageType = ImageType.toImageType(IMAGE_TYPE_TEXT);
-        imageWidthHeight = new ImageWidthHeight(WIDTH, HEIGHT);
+        imageSize = new ImageSize(WIDTH, HEIGHT);
 
         wrappedCoverImage = new CoverImage(
-                imageSize,
+                imageFileSize,
                 imageType,
-                imageWidthHeight);
+                imageSize);
 
         status = Status.PREPARE;
     }
 
     @Test
     void createFreeSession() {
-
-        FreeSession actual = new FreeSession(1L, 1L, dateRange, coverImage, status);
-        FreeSession expected = new FreeSession(1L, 1L, dateRange, wrappedCoverImage, status);
+        FreeSession actual = new FreeSession(1L, 1L, CourseTest.C1.getId(), dateRange, coverImage, status, LocalDateTime.now(), LocalDateTime.now());
+        FreeSession expected = new FreeSession(1L, 1L, CourseTest.C1.getId(), dateRange, wrappedCoverImage, status, LocalDateTime.now(), LocalDateTime.now());
 
         assertThat(actual).isEqualTo(expected);
     }
@@ -58,15 +59,26 @@ public class SessionTest {
     @Test
     void createPaidSession() {
 
-        PaidSession actual = new PaidSession(1L, 1L, dateRange, coverImage, status,
+        PaidSession actual = new PaidSession(1L, 1L, CourseTest.C1.getId(), dateRange, coverImage, status,
                 MAX_REGISTER_COUNT,
-                SESSION_AMOUNT);
+                SESSION_AMOUNT,
+                LocalDateTime.now(),
+                LocalDateTime.now()
+        );
 
-        PaidSession expected = new PaidSession(1L, 1L, dateRange, wrappedCoverImage, status,
+        PaidSession expected = new PaidSession(1L, 1L, CourseTest.C1.getId(), dateRange, wrappedCoverImage, status,
                 MAX_REGISTER_COUNT,
-                SESSION_AMOUNT);
+                SESSION_AMOUNT,
+                LocalDateTime.now(),
+                LocalDateTime.now());
 
         assertThat(actual).isEqualTo(expected);
+    }
 
+    @Test
+    void toParameters() {
+        Object[] actual = PS1.toParameters();
+        Object[] expected = FS1.toParameters();
+        assertThat(actual).isEqualTo(expected);
     }
 }
