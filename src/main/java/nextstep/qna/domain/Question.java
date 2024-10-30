@@ -1,5 +1,6 @@
 package nextstep.qna.domain;
 
+import nextstep.qna.CannotDeleteException;
 import nextstep.users.domain.NsUser;
 
 import java.time.LocalDateTime;
@@ -9,13 +10,11 @@ import java.util.List;
 public class Question {
     private Long id;
 
-    private String title;
-
-    private String contents;
+    private QuestionBoard questionBoard;
 
     private NsUser writer;
 
-    private List<Answer> answers = new ArrayList<>();
+    private Answers answers;
 
     private boolean deleted = false;
 
@@ -33,8 +32,7 @@ public class Question {
     public Question(Long id, NsUser writer, String title, String contents) {
         this.id = id;
         this.writer = writer;
-        this.title = title;
-        this.contents = contents;
+        this.questionBoard = new QuestionBoard(title, contents);
     }
 
     public Long getId() {
@@ -42,20 +40,15 @@ public class Question {
     }
 
     public String getTitle() {
-        return title;
-    }
-
-    public Question setTitle(String title) {
-        this.title = title;
-        return this;
+        return questionBoard.getTitle();
     }
 
     public String getContents() {
-        return contents;
+        return questionBoard.getContents();
     }
 
-    public Question setContents(String contents) {
-        this.contents = contents;
+    public Question setQuestionBoard(String title, String contents) {
+        this.questionBoard = new QuestionBoard(title, contents);
         return this;
     }
 
@@ -65,6 +58,11 @@ public class Question {
 
     public void addAnswer(Answer answer) {
         answer.toQuestion(this);
+        //List<Answer> newAnswers = new ArrayList<>();
+        //newAnswers.add(answer);
+        if(answers == null) {
+            answers = new Answers(new ArrayList<>());
+        }
         answers.add(answer);
     }
 
@@ -72,21 +70,27 @@ public class Question {
         return writer.equals(loginUser);
     }
 
-    public Question setDeleted(boolean deleted) {
-        this.deleted = deleted;
-        return this;
-    }
-
     public boolean isDeleted() {
         return deleted;
     }
 
     public List<Answer> getAnswers() {
-        return answers;
+        return answers.getAnswers();
+    }
+
+    public void deleteQuestion(NsUser loginUser) throws CannotDeleteException {
+        isOwnerCheck(loginUser);
+        this.deleted = true;
     }
 
     @Override
     public String toString() {
-        return "Question [id=" + getId() + ", title=" + title + ", contents=" + contents + ", writer=" + writer + "]";
+        return "Question [id=" + getId() + ", title=" + questionBoard.getTitle() + ", contents=" + questionBoard.getContents() + ", writer=" + writer + "]";
+    }
+
+    public void isOwnerCheck(NsUser loginUser) throws CannotDeleteException {
+        if (!this.isOwner(loginUser)) {
+            throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
+        }
     }
 }

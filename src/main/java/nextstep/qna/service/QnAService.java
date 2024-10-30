@@ -23,8 +23,9 @@ public class QnAService {
     @Resource(name = "deleteHistoryService")
     private DeleteHistoryService deleteHistoryService;
 
+/*
     @Transactional
-    public void deleteQuestion(NsUser loginUser, long questionId) throws CannotDeleteException {
+    public void deleteQuestionASIS(NsUser loginUser, long questionId) throws CannotDeleteException {
         Question question = questionRepository.findById(questionId).orElseThrow(NotFoundException::new);
         if (!question.isOwner(loginUser)) {
             throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
@@ -45,5 +46,37 @@ public class QnAService {
             deleteHistories.add(new DeleteHistory(ContentType.ANSWER, answer.getId(), answer.getWriter(), LocalDateTime.now()));
         }
         deleteHistoryService.saveAll(deleteHistories);
+    }
+*/
+    @Transactional
+    public void deleteQuestion(NsUser loginUser, long questionId) throws CannotDeleteException {
+        Question question = getQuestion(questionId);
+
+        Answers answers = new Answers(question.getAnswers());
+
+        deleteQuestionAndAnswer(question, answers, loginUser);
+
+        saveDeleteHistory(questionId, question, answers);
+    }
+
+    private void saveDeleteHistory(long questionId, Question question, Answers answers) {
+        DeleteHistorys deleteHistories = getDeleteHistorys(questionId, question, answers);
+
+        deleteHistoryService.saveAll(deleteHistories.getDeleteHistories());
+    }
+
+    private void deleteQuestionAndAnswer(Question question, Answers answers, NsUser loginUser) throws CannotDeleteException {
+        question.deleteQuestion(loginUser);
+        answers.deleteAnswers(answers.getAnswers(), loginUser);
+    }
+
+    private DeleteHistorys getDeleteHistorys(long questionId, Question question, Answers answers) {
+        DeleteHistorys deleteHistories = new DeleteHistorys(new ArrayList<>());
+        deleteHistories.addDeleteHistorys(question, questionId, answers);
+        return deleteHistories;
+    }
+
+    private Question getQuestion(long questionId) {
+        return questionRepository.findById(questionId).orElseThrow(NotFoundException::new);
     }
 }
