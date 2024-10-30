@@ -3,6 +3,7 @@ package nextstep.courses.domain.session;
 import nextstep.courses.domain.enroll.EnrollUserInfo;
 import nextstep.courses.domain.enroll.EnrollUserInfos;
 import nextstep.courses.domain.image.SessionCoverImage;
+import nextstep.courses.domain.strategy.MockPaymentStrategy;
 import nextstep.users.domain.NsUserTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,7 +36,7 @@ public class SessionTest {
 
     @Test
     void 무료_강의_등록_성공_테스트() {
-        freeSession.enroll(NsUserTest.JAVAJIGI, 0L);
+        freeSession.enroll(NsUserTest.JAVAJIGI, 0L, new MockPaymentStrategy());
 
         assertThat(freeSession.getEnrollUserInfos()).isEqualTo(Set.of(new EnrollUserInfo(1L, 1L)));
     }
@@ -43,14 +44,14 @@ public class SessionTest {
 
     @Test
     void 유료_강의_등록_금액_성공_테스트() {
-        paidSession.enroll(NsUserTest.JAVAJIGI, 1000L);
+        paidSession.enroll(NsUserTest.JAVAJIGI, 1000L, new MockPaymentStrategy());
 
         assertThat(paidSession.getEnrollUserInfos()).isEqualTo(Set.of(new EnrollUserInfo(2L, 1L)));
     }
 
     @Test
     void 유료_강의_등록_금액_불일치_실패_테스트() {
-        assertThatThrownBy(() -> paidSession.enroll(NsUserTest.JAVAJIGI, 900L))
+        assertThatThrownBy(() -> paidSession.enroll(NsUserTest.JAVAJIGI, 900L, new MockPaymentStrategy()))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageMatching("수강료와 지불 금액이 일치하지 않습니다.");
     }
@@ -59,7 +60,7 @@ public class SessionTest {
     void 유로_강의_등록_상태_PENDING_실패_테스트() {
         Session errorPaidSession = Session.createSessionOf(2L, 1000L, SessionPriceType.PAID, SessionStatus.PENDING, sessionCoverImage, LocalDateTime.of(2024, 10, 30, 10, 30), LocalDateTime.of(2024, 11, 20, 10, 30), 0);
 
-        assertThatThrownBy(() -> errorPaidSession.enroll(NsUserTest.JAVAJIGI, 0L))
+        assertThatThrownBy(() -> errorPaidSession.enroll(NsUserTest.JAVAJIGI, 0L, new MockPaymentStrategy()))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageMatching("이 강의는 현재 모집중이 아닙니다.");
     }
@@ -68,7 +69,7 @@ public class SessionTest {
     void 유료_강의_등록_사이즈_실패_테스트() {
         Session errorPaidSession = Session.createSessionOf(2L, 1000L, SessionPriceType.PAID, SessionStatus.ENROLLING, sessionCoverImage, LocalDateTime.of(2024, 10, 30, 10, 30), LocalDateTime.of(2024, 11, 20, 10, 30), 0);
 
-        assertThatThrownBy(() -> errorPaidSession.enroll(NsUserTest.JAVAJIGI, 1000L))
+        assertThatThrownBy(() -> errorPaidSession.enroll(NsUserTest.JAVAJIGI, 1000L, new MockPaymentStrategy()))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageMatching("수강 정원이 모두 찼습니다.");
     }

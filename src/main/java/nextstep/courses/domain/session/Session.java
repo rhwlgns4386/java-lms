@@ -3,6 +3,9 @@ package nextstep.courses.domain.session;
 import nextstep.courses.domain.enroll.EnrollUserInfo;
 import nextstep.courses.domain.enroll.EnrollUserInfos;
 import nextstep.courses.domain.image.SessionCoverImage;
+import nextstep.courses.domain.strategy.PaymentStrategy;
+import nextstep.payments.domain.Payment;
+import nextstep.payments.domain.Payments;
 import nextstep.users.domain.NsUser;
 
 import java.time.LocalDateTime;
@@ -18,31 +21,34 @@ public class Session {
     private final SessionStatus sessionStatus;
     private final SessionCoverImage sessionCoverImage;
     private final SessionDate sessionDate;
+    private final Payments payments;
 
-    private Session(Long sessionId, EnrollUserInfos enrollUserInfos, SessionPrice sessionPrice, SessionStatus sessionStatus, SessionCoverImage sessionCoverImage, SessionDate sessionDate) {
+    private Session(Long sessionId, EnrollUserInfos enrollUserInfos, SessionPrice sessionPrice, SessionStatus sessionStatus, SessionCoverImage sessionCoverImage, SessionDate sessionDate, Payments payments) {
         this.sessionId = sessionId;
         this.enrollUserInfos = enrollUserInfos;
         this.sessionPrice = sessionPrice;
         this.sessionStatus = sessionStatus;
         this.sessionCoverImage = sessionCoverImage;
         this.sessionDate = sessionDate;
+        this.payments = payments;
     }
 
     public static Session createSessionOf(Long sessionId, Long price, SessionPriceType sessionPriceType, SessionStatus sessionStatus, SessionCoverImage sessionCoverImage, LocalDateTime startDateTime, LocalDateTime endDateTime, int availableEnrollCount) {
         SessionPrice newSessionPrice = SessionPrice.createSessionPriceOf(sessionPriceType, price);
         SessionDate newSessionDate = new SessionDate(startDateTime, endDateTime);
         EnrollUserInfos newEnrollUserInfos = new EnrollUserInfos(availableEnrollCount);
-
-        return new Session(sessionId, newEnrollUserInfos , newSessionPrice, sessionStatus, sessionCoverImage, newSessionDate);
+        Payments newPayments = new Payments();
+        return new Session(sessionId, newEnrollUserInfos , newSessionPrice, sessionStatus, sessionCoverImage, newSessionDate, newPayments);
     }
 
 
-    public void enroll(NsUser nsUser, Long price) {
+    public void enroll(NsUser nsUser, Long price, PaymentStrategy paymentStrategy) {
         checkSessionStatus();
         sessionPrice.checkPaymentPrice(price);
         enrollUserInfos.checkPaidSessionEnroll(sessionPrice.getSessionPriceType());
         EnrollUserInfo enrollUserInfo = new EnrollUserInfo(sessionId, nsUser.getId());
         enrollUserInfos.add(enrollUserInfo);
+        payments.addPayments(new Payment(paymentStrategy.generate(), sessionId, nsUser.getId(), price));
     }
 
     private void checkSessionStatus() {
