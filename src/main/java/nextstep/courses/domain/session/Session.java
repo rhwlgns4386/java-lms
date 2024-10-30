@@ -1,9 +1,9 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.session;
 
+import nextstep.courses.domain.strategy.PaymentStrategy;
 import nextstep.payments.domain.Payment;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Session {

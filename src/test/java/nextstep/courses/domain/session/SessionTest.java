@@ -1,5 +1,8 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.session;
 
+import nextstep.courses.domain.strategy.FreePaymentStrategy;
+import nextstep.courses.domain.strategy.PaidPaymentStrategy;
+import nextstep.courses.domain.strategy.PaymentStrategy;
 import nextstep.payments.domain.Payment;
 import org.junit.jupiter.api.Test;
 

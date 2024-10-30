@@ -1,5 +1,6 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.strategy;
 
+import nextstep.courses.domain.session.SessionCapacity;
 import nextstep.payments.domain.Payment;
 
 import java.util.Objects;
