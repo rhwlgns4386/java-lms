@@ -1,14 +1,14 @@
 package nextstep.sessions.domain;
 
 public class SessionType {
-    private String typeCd;
+    private SessionTypeEnum sessionType;
     private Long feeAmount;
     private int maxNumberOfUser;
 
     public SessionType(Long feeAmount , int maxNumberOfUser) {
         this.feeAmount = feeAmount;
-        this.typeCd = feeAmount > 0 ?
-                SessionTypeEnum.PAID.getTypeCode() : SessionTypeEnum.FREE.getTypeCode();
+        this.sessionType = feeAmount > 0 ?
+                SessionTypeEnum.PAID : SessionTypeEnum.FREE;
         this.maxNumberOfUser = maxNumberOfUser;
     }
 
@@ -17,7 +17,7 @@ public class SessionType {
     }
 
     public void checkMaxNumber(int numberOfCurrentUser) {
-        if (typeCd.equals(SessionTypeEnum.FREE.getTypeCode())) {
+        if (sessionType == SessionTypeEnum.FREE) {
             return ;
         }
         if (numberOfCurrentUser >= maxNumberOfUser) {
@@ -26,7 +26,7 @@ public class SessionType {
     }
 
     public void validatePaymentAmount(Long payAmount) {
-        if (typeCd.equals(SessionTypeEnum.FREE.getTypeCode())) {
+        if (sessionType == SessionTypeEnum.FREE ) {
             return ;
         }
         if (payAmount.compareTo(feeAmount) != 0) {

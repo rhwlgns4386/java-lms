@@ -1,6 +1,7 @@
 package nextstep.sessions.domain;
 
 public class SessionStatus {
+
     private String status;
 
     public SessionStatus() {
@@ -16,7 +17,7 @@ public class SessionStatus {
     }
 
     public void isValidStatusForApplication() {
-        if (SessionStatusEnum.getEnumByStatus(status).isPeriodForApplication()) {
+        if (SessionStatusEnum.getEnumByStatus(status).isStatusAvailableForApplication()) {
             return;
         }
         throw new RuntimeException("상태 : " + status + "수강이 불가한 상태입니다");

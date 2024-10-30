@@ -9,12 +9,12 @@ public enum SessionStatusEnum {
 
     private String value;
     private String description;
-    private boolean isPeriodForApplication;
+    private boolean isStatusAvailableForApplication;
 
-    SessionStatusEnum(String value, String description, boolean isPeriodForApplication) {
+    SessionStatusEnum(String value, String description, boolean isStatusAvailableForApplication) {
         this.value = value;
         this.description = description;
-        this.isPeriodForApplication = isPeriodForApplication;
+        this.isStatusAvailableForApplication = isStatusAvailableForApplication;
     }
 
     public String getValue() {
@@ -25,9 +25,8 @@ public enum SessionStatusEnum {
         return description;
     }
 
-    public boolean isPeriodForApplication() {
-        System.out.println(isPeriodForApplication);
-        return isPeriodForApplication;
+    public boolean isStatusAvailableForApplication() {
+        return isStatusAvailableForApplication;
     }
 
     public static SessionStatusEnum getEnumByStatus(String status) {
