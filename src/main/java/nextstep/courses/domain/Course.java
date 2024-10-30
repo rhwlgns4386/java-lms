@@ -1,24 +1,23 @@
 package nextstep.courses.domain;
 
 import nextstep.payments.domain.Payment;
+import nextstep.sessions.Session;
+import nextstep.sessions.Sessions;
+import nextstep.users.domain.Student;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 
 public class Course {
-    private Long id;
-
     private final String title;
-
     private final Long creatorId;
-
     private final int cohort;
+    private Long id;
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
 
-    private List<Session> sessions = new ArrayList<>();
+    private Sessions sessions = new Sessions(new ArrayList<>());
 
     public Course(String title, Long creatorId, int cohort) {
         this(0L, title, creatorId, cohort, LocalDateTime.now(), LocalDateTime.now());
@@ -38,7 +37,7 @@ public class Course {
     }
 
     public void addSession(Session session) {
-        sessions.add(session);
+        sessions.addSession(session);
     }
 
     @Override
@@ -54,9 +53,24 @@ public class Course {
     }
 
     public Payment processPayment(Student student, Long amount, Session session) {
-        if (!sessions.contains(session)) {
-            throw new IllegalStateException("해당 코스에 해당하는 강의가 아닙니다.");
-        }
-        return session.register(student, amount);
+        sessions.validateSession(session);
+        session.register(student, amount);
+        return processReceipt(student, amount);
+    }
+
+    private Payment processReceipt(Student student, Long amount) {
+        return new Payment("0", this.id, student.getId(), amount);
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public Long getCreatorId() {
+        return creatorId;
     }
 }

@@ -1,5 +1,7 @@
-package nextstep.courses.domain;
+package nextstep.sessions.domain;
 
+import nextstep.sessions.SessionDetail;
+import nextstep.users.domain.Student;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

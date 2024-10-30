@@ -1,6 +1,6 @@
-package nextstep.courses.domain.image;
+package nextstep.sessions.domain.image;
 
-import nextstep.courses.domain.Image.ImageType;
+import nextstep.sessions.Image.ImageType;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;

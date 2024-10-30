@@ -1,4 +1,6 @@
-package nextstep.courses.domain;
+package nextstep.sessions;
+
+import nextstep.users.domain.Student;
 
 import java.util.ArrayList;
 import java.util.List;

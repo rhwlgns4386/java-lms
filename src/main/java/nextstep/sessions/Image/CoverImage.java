@@ -1,4 +1,4 @@
-    package nextstep.courses.domain.Image;
+    package nextstep.sessions.Image;
 
     public class CoverImage {
         private ImageSize size;

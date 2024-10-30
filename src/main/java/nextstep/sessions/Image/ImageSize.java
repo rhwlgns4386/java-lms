@@ -1,4 +1,4 @@
-package nextstep.courses.domain.Image;
+package nextstep.sessions.Image;
 
 public class ImageSize {
     private static final int MAX_MB_SIZE = 1;

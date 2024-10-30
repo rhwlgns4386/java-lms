@@ -1,5 +1,6 @@
-package nextstep.courses.domain;
+package nextstep.sessions.domain;
 
+import nextstep.sessions.SessionDate;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;

@@ -1,6 +1,6 @@
-package nextstep.courses.domain.image;
+package nextstep.sessions.domain.image;
 
-import nextstep.courses.domain.Image.ImageHeight;
+import nextstep.sessions.Image.ImageHeight;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

@@ -117,17 +117,6 @@ public class NsUser {
         return false;
     }
 
-    private static class GuestNsUser extends NsUser {
-        private GuestNsUser() {
-            super(1L, "writer", "password", "name");
-        }
-
-        @Override
-        public boolean isGuestUser() {
-            return true;
-        }
-    }
-
     @Override
     public String toString() {
         return "NsUser{" +
@@ -138,5 +127,16 @@ public class NsUser {
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';
+    }
+
+    private static class GuestNsUser extends NsUser {
+        private GuestNsUser() {
+            super(1L, "writer", "password", "name");
+        }
+
+        @Override
+        public boolean isGuestUser() {
+            return true;
+        }
     }
 }

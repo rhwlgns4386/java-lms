@@ -1,4 +1,4 @@
-package nextstep.courses.domain;
+package nextstep.sessions;
 
 public enum SessionState {
     READY, OPEN, CLOSE;
