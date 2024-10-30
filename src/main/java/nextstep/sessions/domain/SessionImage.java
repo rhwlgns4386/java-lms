@@ -6,7 +6,7 @@ public class SessionImage {
     private static final int MIN_HEIGHT = 200;
     private static final double ASPECT_RATIO = 3.0 / 2.0;
 
-    private String url;
+    private Long id;
 
     private int size;
 
@@ -16,13 +16,33 @@ public class SessionImage {
 
     private double height;
 
-    public SessionImage(String url, int size, ImageType type, double width, double height) {
+    public SessionImage(Long id, int size, ImageType type, double width, double height) {
         validate(size, width, height);
-        this.url = url;
+        this.id = id;
         this.size = size;
         this.type = type;
         this.width = width;
         this.height = height;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public String getType() {
+        return type.name();
+    }
+
+    public double getWidth() {
+        return width;
+    }
+
+    public double getHeight() {
+        return height;
     }
 
     public void validate(int size, double width, double height) {

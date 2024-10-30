@@ -7,6 +7,10 @@ public class MaximumEnrollment {
         this.value = value;
     }
 
+    public int getValue() {
+        return value;
+    }
+
     public boolean isOver(int count) {
         return value <= count;
     }

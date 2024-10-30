@@ -1,5 +1,7 @@
 package nextstep.sessions.domain;
 
+import java.util.Arrays;
+
 public enum SessionStatus {
 
     PREPARING("준비중"),
@@ -14,5 +16,12 @@ public enum SessionStatus {
 
     public boolean isRecruiting() {
         return this == RECRUITING;
+    }
+
+    public static SessionStatus of(String state) {
+        return Arrays.stream(SessionStatus.values())
+                .filter(sessionStatus -> sessionStatus.name().equals(state))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("해당하는 상태가 없습니다."));
     }
 }
