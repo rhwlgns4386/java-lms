@@ -1,18 +1,18 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.session;
+
+import static org.assertj.core.api.Assertions.*;
+
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.nio.file.Files;
+
+import javax.imageio.ImageIO;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.nio.file.Files;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class CoverImageTest {
 
@@ -27,8 +27,8 @@ class CoverImageTest {
         Files.write(largeFile.toPath(), largeData);
 
         assertThatThrownBy(() -> CoverImage.of(largeFile))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("이미지 크기는 1MB 이하여야 합니다.");
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("이미지 크기는 1MB 이하여야 합니다.");
     }
 
     @Test
@@ -39,8 +39,8 @@ class CoverImageTest {
         ImageIO.write(invalidRatioImage, "png", invalidFile);
 
         assertThatThrownBy(() -> CoverImage.of(invalidFile))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("이미지 너비와 높이의 비율은 3:2여야 합니다.");
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("이미지 너비와 높이의 비율은 3:2여야 합니다.");
     }
 
     @Test
@@ -51,8 +51,8 @@ class CoverImageTest {
         ImageIO.write(invalidRatioImage, "png", invalidFile);
 
         assertThatThrownBy(() -> CoverImage.of(invalidFile))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("이미지 크기가 맞지 않습니다.(너비 300픽셀 이상, 높이 200픽셀 이상)");
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("이미지 크기가 맞지 않습니다.(너비 300픽셀 이상, 높이 200픽셀 이상)");
     }
 
     @Test
@@ -63,8 +63,8 @@ class CoverImageTest {
         ImageIO.write(invalidRatioImage, "png", invalidFile);
 
         assertThatThrownBy(() -> CoverImage.of(invalidFile))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("이미지 크기가 맞지 않습니다.(너비 300픽셀 이상, 높이 200픽셀 이상)");
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("이미지 크기가 맞지 않습니다.(너비 300픽셀 이상, 높이 200픽셀 이상)");
     }
 
     @ParameterizedTest
@@ -76,7 +76,7 @@ class CoverImageTest {
         ImageIO.write(invalidRatioImage, extension, validFile);
 
         assertThat(CoverImage.of(validFile))
-                .isNotNull();
+            .isNotNull();
     }
 
     @Test
@@ -87,7 +87,7 @@ class CoverImageTest {
         ImageIO.write(invalidRatioImage, "bmp", invalidFile);
 
         assertThatThrownBy(() -> CoverImage.of(invalidFile))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("지원하지 않는 확장자 입니다.");
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("지원하지 않는 확장자 입니다.");
     }
 }

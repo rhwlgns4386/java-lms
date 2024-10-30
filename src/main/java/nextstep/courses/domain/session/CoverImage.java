@@ -1,9 +1,11 @@
-package nextstep.courses.domain;
-
-import org.springframework.lang.NonNull;
+package nextstep.courses.domain.session;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+
+import org.springframework.lang.NonNull;
+
+import nextstep.courses.utils.FileUtils;
 
 public class CoverImage {
     private static final int ONE_MEGA_BITE = 1024 * 1024;
@@ -34,7 +36,7 @@ public class CoverImage {
 
     private static void validateImageFile(File file) {
         BufferedImage image = FileUtils.read(file);
-        int width =  image.getWidth();
+        int width = image.getWidth();
         int height = image.getHeight();
         validateImageDimensions(width, height);
         validateImageRatio(width, height);

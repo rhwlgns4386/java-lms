@@ -1,4 +1,4 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.session;
 
 import java.util.Arrays;
 
@@ -7,8 +7,7 @@ public enum ImageType {
     JPG("jpg"),
     JPEG("jpeg"),
     PNG("png"),
-    SVG("svg")
-    ;
+    SVG("svg");
 
     private final String value;
 
@@ -18,8 +17,8 @@ public enum ImageType {
 
     public static ImageType of(String extension) {
         return Arrays.stream(values())
-                .filter(it -> it.value.equalsIgnoreCase(extension))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("지원하지 않는 확장자 입니다."));
+            .filter(it -> it.value.equalsIgnoreCase(extension))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException("지원하지 않는 확장자 입니다."));
     }
 }
