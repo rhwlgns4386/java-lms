@@ -7,14 +7,14 @@ import org.junit.jupiter.api.Test;
 
 public class ImageTest {
     private ImageSize imageSize;
-    private ImageProperty imageProperty;
+    private ImagePixel imagePixel;
     private ImageType imageType;
     private Long imageId;
 
     @BeforeEach
     void init() {
         this.imageSize = new ImageSize(1024);
-        this.imageProperty = new ImageProperty(300L, 200L);
+        this.imagePixel = new ImagePixel(300L, 200L);
         this.imageType = ImageType.JPG;
         this.imageId = 1L;
     }
@@ -22,7 +22,7 @@ public class ImageTest {
     @Test
     @DisplayName("Image class 생성")
     void createImageTest() {
-        Image image = new Image(imageId, imageSize, imageType, imageProperty);
+        Image image = new Image(imageId, imageSize, imageType, imagePixel);
 
         Assertions.assertThat(image).isNotNull();
         Assertions.assertThat(image.getId()).isEqualTo(imageId);
@@ -31,28 +31,28 @@ public class ImageTest {
     @Test
     @DisplayName("Image size 체크")
     void checkImageSizeTest() {
-        Assertions.assertThatThrownBy(() -> new Image(imageId, new ImageSize(1025), imageType, imageProperty))
+        Assertions.assertThatThrownBy(() -> new Image(imageId, new ImageSize(1025), imageType, imagePixel))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     @DisplayName("image min width 체크")
     void checkMinImageWidthTest() {
-        Assertions.assertThatThrownBy(() -> new Image(imageId, imageSize, imageType, new ImageProperty(299L, 200L)))
+        Assertions.assertThatThrownBy(() -> new Image(imageId, imageSize, imageType, new ImagePixel(299L, 200L)))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     @DisplayName("image min height 체크")
     void checkMinImageHeightTest() {
-        Assertions.assertThatThrownBy(() -> new Image(imageId, imageSize, imageType, new ImageProperty(300L, 199L)))
+        Assertions.assertThatThrownBy(() -> new Image(imageId, imageSize, imageType, new ImagePixel(300L, 199L)))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     @DisplayName("Image width,height 비율 체크")
     void checkImageWidthHeightRatioTest() {
-        Assertions.assertThatThrownBy(() -> new Image(imageId, imageSize, imageType, new ImageProperty(299L, 199L)))
+        Assertions.assertThatThrownBy(() -> new Image(imageId, imageSize, imageType, new ImagePixel(299L, 199L)))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 }

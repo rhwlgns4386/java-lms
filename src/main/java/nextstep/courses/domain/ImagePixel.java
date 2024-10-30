@@ -2,7 +2,7 @@ package nextstep.courses.domain;
 
 import java.util.Objects;
 
-public class ImageProperty {
+public class ImagePixel {
     private static final double RATIO = 3.0 / 2.0;
     private static final long MIN_WIDTH = 300;
     private static final long MIN_HEIGHT = 200;
@@ -10,7 +10,7 @@ public class ImageProperty {
     private Long width;
     private Long height;
 
-    public ImageProperty(Long width, Long height) {
+    public ImagePixel(Long width, Long height) {
         if (width < MIN_WIDTH || height < MIN_HEIGHT) {
             throw new IllegalArgumentException("invalid width or height(width must be greater than 300, height must be greater than 200)");
         }
@@ -35,10 +35,10 @@ public class ImageProperty {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof ImageProperty)) {
+        if (!(o instanceof ImagePixel)) {
             return false;
         }
-        ImageProperty that = (ImageProperty) o;
+        ImagePixel that = (ImagePixel) o;
         return Objects.equals(getWidth(), that.getWidth()) && Objects.equals(getHeight(), that.getHeight());
     }
 

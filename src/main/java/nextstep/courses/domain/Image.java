@@ -6,17 +6,17 @@ public class Image {
     private Long id;
     private ImageSize imageSize;
     private ImageType imageType;
-    private ImageProperty imageProperty;
+    private ImagePixel imagePixel;
 
     public Image() {
         this(null, null, null, null);
     }
 
-    public Image(Long id, ImageSize imageSize, ImageType imageType, ImageProperty imageProperty) {
+    public Image(Long id, ImageSize imageSize, ImageType imageType, ImagePixel imagePixel) {
         this.id = id;
         this.imageSize = imageSize;
         this.imageType = imageType;
-        this.imageProperty = imageProperty;
+        this.imagePixel = imagePixel;
     }
 
     public Long getId() {
@@ -31,8 +31,8 @@ public class Image {
         return imageType;
     }
 
-    public ImageProperty getImageProperty() {
-        return imageProperty;
+    public ImagePixel getImageProperty() {
+        return imagePixel;
     }
 
     @Override

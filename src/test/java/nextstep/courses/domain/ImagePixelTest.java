@@ -4,16 +4,16 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-public class ImagePropertyTest {
+public class ImagePixelTest {
     @Test
     @DisplayName("ImageProperty 생성")
     void createImagePropertyTest() {
         Long width = 300L;
         Long height = 200L;
 
-        ImageProperty imageProperty = new ImageProperty(width, height);
+        ImagePixel imagePixel = new ImagePixel(width, height);
 
-        Assertions.assertThat(imageProperty).isNotNull();
+        Assertions.assertThat(imagePixel).isNotNull();
     }
 
     @Test
@@ -22,7 +22,7 @@ public class ImagePropertyTest {
         Long width = 299L;
         Long height = 200L;
 
-        Assertions.assertThatThrownBy(() -> new ImageProperty(width, height))
+        Assertions.assertThatThrownBy(() -> new ImagePixel(width, height))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -32,7 +32,7 @@ public class ImagePropertyTest {
         Long width = 300L;
         Long height = 199L;
 
-        Assertions.assertThatThrownBy(() -> new ImageProperty(width, height))
+        Assertions.assertThatThrownBy(() -> new ImagePixel(width, height))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -42,7 +42,7 @@ public class ImagePropertyTest {
         Long width = 300L;
         Long height = 300L;
 
-        Assertions.assertThatThrownBy(() -> new ImageProperty(width, height))
+        Assertions.assertThatThrownBy(() -> new ImagePixel(width, height))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 }

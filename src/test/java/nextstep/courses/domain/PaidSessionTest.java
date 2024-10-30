@@ -16,7 +16,7 @@ public class PaidSessionTest {
 
     @BeforeEach
     void init() {
-        this.image = new Image(1L, new ImageSize(1024), ImageType.GIF, new ImageProperty(300L, 200L));
+        this.image = new Image(1L, new ImageSize(1024), ImageType.GIF, new ImagePixel(300L, 200L));
 
         LocalDateTime start = LocalDateTime.of(2024, 10, 10, 10, 10);
         LocalDateTime end = LocalDateTime.of(2024, 10, 10, 10, 11);
