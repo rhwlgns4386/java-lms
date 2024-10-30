@@ -40,14 +40,14 @@ public class CourseTest {
     }
 
     @Test
-    void throw_exception_if_try_register_invalid_session_id() {
+    void throw_exception_if_register_invalid_session_id() {
         assertThatIllegalArgumentException()
                 .isThrownBy(() -> course.registerSession(
                         new Payment("test", 3L, NsUserTest.JAVAJIGI.getId(), 10000L)));
     }
 
     @Test
-    void succeed_to_finalize_session_registration() {
+    void succeed_to_register_session() {
         assertThat(course.registerSession(
                 new Payment("paid", PAID_SESSION_ID, NsUserTest.JAVAJIGI.getId(), 10000L))).isTrue();
         assertThat(course.registerSession(
@@ -55,13 +55,13 @@ public class CourseTest {
     }
 
     @Test
-    void throw_exception_if_finalize_register_with_invalid_session_id_payment() {
+    void throw_exception_if_register_with_invalid_session_id_payment() {
         assertThatIllegalArgumentException().isThrownBy(() ->
                 course.registerSession(new Payment("", 3L, NsUserTest.JAVAJIGI.getId(), 10000L)));
     }
 
     @Test
-    void throw_exception_if_finalize_register_with_invalid_session_fee_payment() {
+    void throw_exception_if_register_with_invalid_session_fee_payment() {
         assertThatIllegalStateException().isThrownBy(() ->
                 course.registerSession(new Payment("", 1L, NsUserTest.JAVAJIGI.getId(), 100L)));
     }

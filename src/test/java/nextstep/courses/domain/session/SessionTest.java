@@ -35,7 +35,7 @@ public class SessionTest {
     }
 
     @Test
-    void finalize_register_free_session() {
+    void register_free_session() {
         Session freeSession = SessionBuilderTest.freeSessionBuilder()
                 .sessionState(SessionState.OPEN)
                 .build();
@@ -44,7 +44,7 @@ public class SessionTest {
     }
 
     @Test
-    void finalize_register_paid_session() {
+    void register_paid_session() {
         Session paidSession = SessionBuilderTest.paidSessionBuilder()
                 .sessionState(SessionState.OPEN)
                 .build();
@@ -53,7 +53,7 @@ public class SessionTest {
     }
 
     @Test
-    void fail_to_finalize_register_with_invalid_session_id_payment() {
+    void throw_exception_if_register_with_invalid_session_id_payment() {
         Session paidSession = SessionBuilderTest.paidSessionBuilder()
                 .sessionState(SessionState.OPEN)
                 .build();
@@ -63,7 +63,7 @@ public class SessionTest {
     }
 
     @Test
-    void throw_exception_if_finalize_register_with_invalid_session_fee_payment() {
+    void throw_exception_if_register_with_invalid_session_fee_payment() {
         Session paidSession = SessionBuilderTest.paidSessionBuilder()
                 .sessionState(SessionState.OPEN)
                 .build();
