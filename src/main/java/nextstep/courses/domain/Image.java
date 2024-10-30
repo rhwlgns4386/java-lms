@@ -3,8 +3,6 @@ package nextstep.courses.domain;
 import java.util.Objects;
 
 public class Image {
-    private static final long MAX_SIZE_IN_KB = 1024;
-
     private Long id;
     private ImageSize imageSize;
     private ImageType imageType;
