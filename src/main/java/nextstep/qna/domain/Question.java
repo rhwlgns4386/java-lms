@@ -74,10 +74,18 @@ public class Question {
 
         deleteHistories.addAll(
                 answers.stream()
-                        .map(answer -> answer.delete())
-                        .collect(Collectors.toList())
-        );
+                        .map(answer -> deleteAnswer(loginUser, answer))
+                        .collect(Collectors.toList()));
+
         return deleteHistories;
+    }
+
+    private DeleteHistory deleteAnswer(NsUser loginUser, Answer answer) {
+        try {
+            return answer.delete(loginUser);
+        } catch (CannotDeleteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void markAsDeleted() {
@@ -87,12 +95,6 @@ public class Question {
     private void validateOwnership(NsUser loginUser) throws CannotDeleteException {
         if (!isOwner(loginUser)) {
             throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
-        }
-
-        for (Answer answer : answers) {
-            if (!answer.isOwner(loginUser)) {
-                throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
-            }
         }
     }
 }

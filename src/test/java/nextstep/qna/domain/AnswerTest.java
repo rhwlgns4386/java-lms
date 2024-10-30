@@ -1,5 +1,6 @@
 package nextstep.qna.domain;
 
+import nextstep.qna.CannotDeleteException;
 import nextstep.qna.NotFoundException;
 import nextstep.qna.UnAuthorizedException;
 import nextstep.users.domain.NsUser;
@@ -30,8 +31,8 @@ public class AnswerTest {
 
     @Test
     @DisplayName("답변 삭제 시 deleted 상태가 true로 변경되고, 삭제 이력이 반환된다")
-    void deleteAnswer() {
-        DeleteHistory deleteHistory = answer.delete();
+    void deleteAnswer() throws CannotDeleteException {
+        DeleteHistory deleteHistory = answer.delete(writer);
 
         assertThat(answer.isDeleted()).isTrue();
         assertThat(deleteHistory).isNotNull();
@@ -51,14 +52,14 @@ public class AnswerTest {
     }
 
     @Test
-    @DisplayName("작성자가 null인 경우 UnAuthorizedException이 발생한다")
+    @DisplayName("작성자가 null인 경우 예외가 발생한다")
     void createAnswerWithNullWriter() {
         assertThatThrownBy(() -> new Answer(null, question, "Answer Contents"))
                 .isInstanceOf(UnAuthorizedException.class);
     }
 
     @Test
-    @DisplayName("질문이 null인 경우 NotFoundException이 발생한다")
+    @DisplayName("질문이 null인 경우 예외가 발생한다")
     void createAnswerWithNullQuestion() {
         assertThatThrownBy(() -> new Answer(writer, null, "Answer Contents"))
                 .isInstanceOf(NotFoundException.class);

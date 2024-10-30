@@ -60,7 +60,8 @@ public class QuestionTest {
         question.addAnswer(otherAnswer);
 
         assertThatThrownBy(() -> question.delete(writer))
-                .isInstanceOf(CannotDeleteException.class)
-                .hasMessage("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
+                .isInstanceOf(RuntimeException.class)
+                .hasCauseInstanceOf(CannotDeleteException.class)
+                .hasMessageContaining("다른 사람이 쓴 답변을 삭제할 수 없습니다.");
     }
 }
