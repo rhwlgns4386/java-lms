@@ -2,7 +2,6 @@ package nextstep.courses.domain.course;
 
 import nextstep.courses.domain.session.Session;
 import nextstep.courses.domain.session.SessionBuilderTest;
-import nextstep.courses.dto.SessionPaymentInfo;
 import nextstep.courses.type.SessionState;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUserTest;
@@ -41,38 +40,29 @@ public class CourseTest {
     }
 
     @Test
-    void succeed_to_try_register() {
-        SessionPaymentInfo paidPaymentInfo = course.preCheckForRegister(PAID_SESSION_ID);
-        SessionPaymentInfo freePaymentInfo = course.preCheckForRegister(FREE_SESSION_ID);
-
-        assertThat(paidPaymentInfo.getSessionId()).isEqualTo(PAID_SESSION_ID);
-        assertThat(paidPaymentInfo.getSessionFee()).isEqualTo(10000);
-        assertThat(freePaymentInfo.getSessionId()).isEqualTo(FREE_SESSION_ID);
-        assertThat(freePaymentInfo.getSessionFee()).isEqualTo(0);
-    }
-
-    @Test
     void throw_exception_if_try_register_invalid_session_id() {
-        assertThatIllegalArgumentException().isThrownBy(() -> course.preCheckForRegister(3L));
+        assertThatIllegalArgumentException()
+                .isThrownBy(() -> course.registerSession(
+                        new Payment("test", 3L, NsUserTest.JAVAJIGI.getId(), 10000L)));
     }
 
     @Test
     void succeed_to_finalize_session_registration() {
-        assertThat(course.finalizeRegistration(
+        assertThat(course.registerSession(
                 new Payment("paid", PAID_SESSION_ID, NsUserTest.JAVAJIGI.getId(), 10000L))).isTrue();
-        assertThat(course.finalizeRegistration(
+        assertThat(course.registerSession(
                 new Payment("free", FREE_SESSION_ID, NsUserTest.JAVAJIGI.getId(), 0L))).isTrue();
     }
 
     @Test
     void throw_exception_if_finalize_register_with_invalid_session_id_payment() {
         assertThatIllegalArgumentException().isThrownBy(() ->
-                course.finalizeRegistration(new Payment("", 3L, NsUserTest.JAVAJIGI.getId(), 10000L)));
+                course.registerSession(new Payment("", 3L, NsUserTest.JAVAJIGI.getId(), 10000L)));
     }
 
     @Test
     void throw_exception_if_finalize_register_with_invalid_session_fee_payment() {
         assertThatIllegalStateException().isThrownBy(() ->
-                course.finalizeRegistration(new Payment("", 1L, NsUserTest.JAVAJIGI.getId(), 100L)));
+                course.registerSession(new Payment("", 1L, NsUserTest.JAVAJIGI.getId(), 100L)));
     }
 }

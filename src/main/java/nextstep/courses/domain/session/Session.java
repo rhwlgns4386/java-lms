@@ -1,6 +1,5 @@
 package nextstep.courses.domain.session;
 
-import nextstep.courses.dto.SessionPaymentInfo;
 import nextstep.courses.type.SessionState;
 import nextstep.payments.domain.Payment;
 
@@ -29,13 +28,9 @@ public abstract class Session {
         this.sessionDuration = new SessionDuration(startDate, endDate);
     }
 
-    public final SessionPaymentInfo preCheckForRegister() {
+    public final boolean register(Payment payment) {
         sessionInfo.checkIsOpenSession();
         enrollment.validateAvailability();
-        return sessionInfo.sessionPaymentInfo(id);
-    }
-
-    public boolean finalizeSessionRegistration(Payment payment) {
         if (isValidPayment(payment)) {
             enrollment.register();
             return true;
@@ -47,10 +42,6 @@ public abstract class Session {
 
     public boolean isSameId(Payment payment) {
         return payment.isSameSessionId(id);
-    }
-
-    public boolean isSameId(Long id) {
-        return this.id.equals(id);
     }
 
     @Override

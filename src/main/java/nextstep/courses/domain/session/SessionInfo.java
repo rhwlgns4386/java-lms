@@ -1,6 +1,5 @@
 package nextstep.courses.domain.session;
 
-import nextstep.courses.dto.SessionPaymentInfo;
 import nextstep.courses.type.SessionState;
 import nextstep.payments.domain.Payment;
 
@@ -26,10 +25,6 @@ public class SessionInfo {
         if (!sessionState.canRegister()) {
             throw new IllegalStateException(sessionState.getDesc() + " 상태이기 때문에 강의 신청할 수 없습니다");
         }
-    }
-
-    public SessionPaymentInfo sessionPaymentInfo(Long sessionId) {
-        return new SessionPaymentInfo(sessionId, sessionFee);
     }
 
     public boolean isValidPayment(Payment payment, Long sessionId) {

@@ -1,7 +1,6 @@
 package nextstep.courses.domain.course;
 
 import nextstep.courses.domain.session.Session;
-import nextstep.courses.dto.SessionPaymentInfo;
 import nextstep.payments.domain.Payment;
 
 import java.time.LocalDateTime;
@@ -38,20 +37,12 @@ public class Course {
         return sessions.contains(session);
     }
 
-    public SessionPaymentInfo preCheckForRegister(Long sessionId) {
-        return sessions.stream()
-                .filter(session -> session.isSameId(sessionId))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("해당 강의를 찾을 수 없습니다"))
-                .preCheckForRegister();
-    }
-
-    public boolean finalizeRegistration(Payment payment) {
+    public boolean registerSession(Payment payment) {
         return sessions.stream()
                 .filter(session -> session.isSameId(payment))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("결제 정보에 대한 강의를 찾을 수 없습니다"))
-                .finalizeSessionRegistration(payment);
+                .register(payment);
     }
 
     public String getTitle() {
