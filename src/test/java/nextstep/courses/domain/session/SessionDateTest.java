@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class FreeSessionDateTest {
+public class SessionDateTest {
 
     @Test
     void 날짜_저장_성공_테스트() {

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.*;
 
 
-public class FreeSessionCoverImageTest {
+public class SessionCoverImageTest {
 
     @Test
     void 이미지_타입_제한_성공_테스트_코드() {
