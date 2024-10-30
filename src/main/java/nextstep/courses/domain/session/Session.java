@@ -50,6 +50,9 @@ public class Session {
     }
 
     public void register() {
+        if (sessionStatus != SessionStatus.OPEN) {
+            throw new IllegalArgumentException("모집중 상태의 강의가 아닙니다.");
+        }
         if (!studentCapacity.isApplicable(enrollStudentCount)) {
             throw new IllegalArgumentException("정원을 초과했습니다.");
         }

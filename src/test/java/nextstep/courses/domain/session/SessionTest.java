@@ -39,6 +39,7 @@ class SessionTest {
         LocalDate endAt = LocalDate.of(2024, 12, 1);
         Session session = Session.createPaidSession(startAt, endAt, null, 1);
 
+        session.open();
         session.register();
 
         assertThatThrownBy(() -> session.register())
@@ -48,14 +49,27 @@ class SessionTest {
 
     @Test
     @DisplayName("수강신청 시 수강인원이 증가한다.")
+    void incrementEnrollStudentCountWhenRegisterTest() {
+        LocalDate startAt = LocalDate.of(2024, 1, 1);
+        LocalDate endAt = LocalDate.of(2024, 12, 1);
+        Session session = Session.createFreeSession(startAt, endAt, null);
+
+        session.open();
+        session.register();
+
+        assertThat(session.getEnrollStudentCount()).isOne();
+    }
+
+    @Test
+    @DisplayName("수강신청 시 모집중 상태가 아닐 경우 예외가 발생한다.")
     void resTest() {
         LocalDate startAt = LocalDate.of(2024, 1, 1);
         LocalDate endAt = LocalDate.of(2024, 12, 1);
         Session session = Session.createFreeSession(startAt, endAt, null);
 
-        session.register();
-
-        assertThat(session.getEnrollStudentCount()).isOne();
+        assertThatThrownBy(() -> session.register())
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("모집중 상태의 강의가 아닙니다.");
     }
 
 }
