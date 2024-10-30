@@ -88,3 +88,4 @@
 
 ## Step3. 기능 구현
 - [X] session_image 테이블 생성
+- [X] session_image select, save 구현
