@@ -2,16 +2,18 @@ package nextstep.courses.domain.session;
 
 import java.time.LocalDate;
 
+import nextstep.courses.utils.UUIDGenerator;
+
 public class Session {
-    private Long id;
+    private final String id;
 
-    private LocalDate startAt;
+    private final LocalDate startAt;
 
-    private LocalDate endAt;
+    private final LocalDate endAt;
 
-    private CoverImage image;
+    private final CoverImage image;
 
-    private PaymentPolicy paymentPolicy;
+    private final PaymentPolicy paymentPolicy;
 
     private SessionStatus sessionStatus;
 
@@ -21,6 +23,7 @@ public class Session {
 
     public Session(LocalDate startAt, LocalDate endAt, CoverImage image, StudentCapacity studentCapacity,
         PaymentPolicy paymentPolicy) {
+        this.id = UUIDGenerator.getUUID();
         this.startAt = startAt;
         this.endAt = endAt;
         this.image = image;
