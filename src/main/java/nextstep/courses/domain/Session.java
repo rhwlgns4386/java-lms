@@ -32,4 +32,24 @@ public abstract class Session {
         return students.contains(user.getId());
     }
 
+    public Long getSessionId() {
+        return sessionId;
+    }
+
+    public SessionDate getDate() {
+        return date;
+    }
+
+    public SessionImage getImage() {
+        return image;
+    }
+
+    public SessionStatus getStatus() {
+        return status;
+    }
+
+    public List<Long> getStudents() {
+        return students;
+    }
+
 }

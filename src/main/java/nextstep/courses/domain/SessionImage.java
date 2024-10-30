@@ -1,5 +1,7 @@
 package nextstep.courses.domain;
 
+import java.util.Objects;
+
 public class SessionImage {
     private final long id;
     private final int volume;
@@ -48,5 +50,22 @@ public class SessionImage {
                 ", type=" + type +
                 ", sessionImageSize=" + sessionImageSize +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+        if (object == null || getClass() != object.getClass()) {
+            return false;
+        }
+        SessionImage that = (SessionImage) object;
+        return getId() == that.getId() && getVolume() == that.getVolume() && getType() == that.getType() && Objects.equals(getSessionImageSize(), that.getSessionImageSize());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getVolume(), getType(), getSessionImageSize());
     }
 }
