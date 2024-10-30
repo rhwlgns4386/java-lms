@@ -43,4 +43,17 @@ class SessionTest {
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("정원을 초과했습니다.");
     }
+
+    @Test
+    @DisplayName("수강신청 시 수강인원이 증가한다.")
+    void resTest() {
+        LocalDate startAt = LocalDate.of(2024, 1, 1);
+        LocalDate endAt = LocalDate.of(2024, 12, 1);
+        Session session = Session.createFreeSession(startAt, endAt, null);
+
+        session.register();
+
+        assertThat(session.getEnrollStudentCount()).isOne();
+    }
+
 }

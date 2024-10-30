@@ -30,15 +30,19 @@ public class Session {
     }
 
     public static Session createFreeSession(LocalDate startAt, LocalDate endAt, CoverImage image) {
-        return new Session(startAt, endAt, image, null, PaymentPolicy.FREE);
+        return new Session(startAt, endAt, image, new UnlimitedCapacity(), PaymentPolicy.FREE);
     }
 
     public static Session createPaidSession(LocalDate startAt, LocalDate endAt, CoverImage image, int studentCapacity) {
-        return new Session(startAt, endAt, image, new StudentCapacity(studentCapacity), PaymentPolicy.PAID);
+        return new Session(startAt, endAt, image, new LimitedCapacity(studentCapacity), PaymentPolicy.PAID);
     }
 
     public CourseStatus getCourseStatus() {
         return courseStatus;
+    }
+
+    public int getEnrollStudentCount() {
+        return enrollStudentCount;
     }
 
     public void open() {
