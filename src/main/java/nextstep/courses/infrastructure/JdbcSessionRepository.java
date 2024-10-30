@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 @Repository("sessionRepository")
 public class JdbcSessionRepository implements SessionRepository {
@@ -33,6 +34,12 @@ public class JdbcSessionRepository implements SessionRepository {
             fee = ((PaidSession) session).getSessionFee();
         }
         String sql = "insert into session (session_start_date, session_end_date, status, image_id, session_type, session_fee, max_student) values (? ,? ,? ,? ,? ,? ,?)";
+
+        for (Long userId : session.getStudents()) {
+            String sqlMapping = "insert into session_student (session_id, user_id) values (?, ?)";
+            jdbcTemplate.update(sqlMapping, session.getSessionId(), userId);
+        }
+
         return jdbcTemplate.update(sql, session.getDate().getStartAt(), session.getDate().getEndAt(), session.getStatus().name(), session.getImage().getId(), type, fee, maxStudents);
 
     }
@@ -40,11 +47,19 @@ public class JdbcSessionRepository implements SessionRepository {
     @Override
     public Session findById(Long id) {
         String sql = "select id, session_start_date, session_end_date, status, image_id, session_type, session_fee, max_student from session where id = ?";
+        List<Long> students = getSessionStudents(id);
         RowMapper<Session> rowMapper = (rs, rowNum) -> {
             SessionImage sessionImage = getSessionImage(rs);
-            return getSession(rs, sessionImage);
+
+            return getSession(rs, sessionImage, students);
         };
         return jdbcTemplate.queryForObject(sql, rowMapper, id);
+    }
+
+    private List<Long> getSessionStudents(Long id) {
+        String sql = "select user_id from session_student where id = ?";
+        RowMapper<Long> rowMapper = (rs, rowNum) -> rs.getLong("user_id");
+        return jdbcTemplate.query(sql, rowMapper, id);
     }
 
     private SessionImage getSessionImage(ResultSet rs) throws SQLException {
@@ -52,32 +67,34 @@ public class JdbcSessionRepository implements SessionRepository {
         return sessionImageRepository.findById(imageId);
     }
 
-    private static Session getSession(ResultSet rs, SessionImage sessionImage) throws SQLException {
+    private static Session getSession(ResultSet rs, SessionImage sessionImage, List<Long> students) throws SQLException {
         if (PAID_SESSION.equals(rs.getString("session_type"))) {
-            return getPaidSession(rs, sessionImage);
+            return getPaidSession(rs, sessionImage, students);
         }
-        return getFreeSession(rs, sessionImage);
+        return getFreeSession(rs, sessionImage, students);
     }
 
-    private static PaidSession getPaidSession(ResultSet rs, SessionImage sessionImage) throws SQLException {
+    private static PaidSession getPaidSession(ResultSet rs, SessionImage sessionImage, List<Long> students) throws SQLException {
         return new PaidSession(
                 rs.getLong("id"),
                 rs.getTimestamp("session_start_date"),
                 rs.getTimestamp("session_end_date"),
                 sessionImage,
                 rs.getString("status"),
+                students,
                 rs.getInt("max_student"),
                 rs.getInt("session_fee")
         );
     }
 
-    private static FreeSession getFreeSession(ResultSet rs, SessionImage sessionImage) throws SQLException {
+    private static FreeSession getFreeSession(ResultSet rs, SessionImage sessionImage, List<Long> students) throws SQLException {
         return new FreeSession(
                 rs.getLong("id"),
                 rs.getTimestamp("session_start_date"),
                 rs.getTimestamp("session_end_date"),
                 sessionImage,
-                rs.getString("status")
+                rs.getString("status"),
+                students
         );
     }
 }

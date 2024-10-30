@@ -93,3 +93,4 @@
 - [X] session 테이블 생성
 - [X] session select, save 구현
 - [X] session logger 사용해 출력부 추가
+- [X] session student 연관 테이블 조회 및 객체 생성

@@ -3,7 +3,6 @@ package nextstep.courses.domain;
 import nextstep.payments.domain.Payment;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 
 public class PaidSession extends Session {
@@ -14,8 +13,8 @@ public class PaidSession extends Session {
         this(1L, date, image, status, numOfStudents, maxNumOfStudents, sessionFee);
     }
 
-    public PaidSession(long id, Timestamp sessionStartAt, Timestamp sessionEndAt, SessionImage sessionImage, String status, int maxStudent, int sessionFee) {
-        this(id, new SessionDate(sessionStartAt, sessionEndAt), sessionImage, SessionStatus.valueOf(status), new ArrayList<>(), maxStudent, sessionFee);
+    public PaidSession(long id, Timestamp sessionStartAt, Timestamp sessionEndAt, SessionImage sessionImage, String status, List<Long> numOfStudents, int maxStudent, int sessionFee) {
+        this(id, new SessionDate(sessionStartAt, sessionEndAt), sessionImage, SessionStatus.valueOf(status), numOfStudents, maxStudent, sessionFee);
     }
 
     public PaidSession(Long sessionId, SessionDate date, SessionImage image, SessionStatus status, List<Long> numOfStudents, int maxNumOfStudents, int sessionFee) {
