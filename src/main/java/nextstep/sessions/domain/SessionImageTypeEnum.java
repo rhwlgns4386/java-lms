@@ -1,5 +1,7 @@
 package nextstep.sessions.domain;
 
+import java.util.Arrays;
+
 public enum SessionImageTypeEnum {
     GIF("gif"),
     JPG("jpg"),
@@ -13,4 +15,11 @@ public enum SessionImageTypeEnum {
         this.value = value;
     }
 
+    public String getValue() {
+        return value;
+    }
+
+    public static SessionImageTypeEnum getByValue(String value) {
+        return Arrays.stream(values()).filter(typeEnum->typeEnum.getValue().equals(value)).findFirst().orElseThrow();
+    }
 }

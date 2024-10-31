@@ -11,4 +11,8 @@ public class ImageSize {
         }
         this.size = size;
     }
+
+    public long getSize() {
+        return size;
+    }
 }

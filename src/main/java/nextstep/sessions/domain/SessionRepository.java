@@ -6,6 +6,11 @@ public interface SessionRepository {
 
     Optional<Session> findById(Long id);
 
-    void save(Session session);
+    int save(Session session);
 
+    int modifyStatus(Session session);
+
+    int modifyPeriod(Session session);
+
+    int modifyType(Session session);
 }

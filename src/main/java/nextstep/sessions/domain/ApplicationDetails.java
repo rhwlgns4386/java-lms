@@ -1,6 +1,9 @@
 package nextstep.sessions.domain;
 
+import org.springframework.util.CollectionUtils;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ApplicationDetails {
@@ -19,6 +22,9 @@ public class ApplicationDetails {
     }
 
     public int size() {
+        if (CollectionUtils.isEmpty(applicationDetails)) {
+            return 0;
+        }
         return applicationDetails.size();
     }
 
@@ -29,4 +35,12 @@ public class ApplicationDetails {
             throw new RuntimeException("신청내역이 존재합니다");
         }
     }
+
+    public ApplicationDetail getMatch(long sessionId, Long userId) {
+        return applicationDetails.stream()
+                .filter(applicationDetail -> applicationDetail.isPresent(sessionId, userId))
+                .findFirst()
+                .orElseThrow();
+    }
+
 }

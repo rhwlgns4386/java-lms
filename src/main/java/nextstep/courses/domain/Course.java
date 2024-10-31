@@ -42,6 +42,10 @@ public class Course {
         return creatorId;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }

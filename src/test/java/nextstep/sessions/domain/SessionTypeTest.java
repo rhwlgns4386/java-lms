@@ -1,5 +1,6 @@
 package nextstep.sessions.domain;
 
+import nextstep.payments.domain.Payment;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,14 +18,14 @@ public class SessionTypeTest {
     @Test
     @DisplayName("유료강의_결제금액")
     void check_payAmount() {
-        Assertions.assertThatThrownBy(() -> PAID_SESSION.validatePaymentAmount(Long.valueOf(220000))).isInstanceOf(RuntimeException.class);
+        Assertions.assertThatThrownBy(() -> PAID_SESSION.validatePaymentAmount(new Payment("201", 1L, 1L, Long.valueOf(220000)))).isInstanceOf(RuntimeException.class);
     }
 
 
     @Test
     @DisplayName("무료강의_결제금액")
     void free_session_checkAmount() {
-        Assertions.assertThatCode(() -> FREE_SESSION.validatePaymentAmount(Long.valueOf(0))).doesNotThrowAnyException();
+        Assertions.assertThatCode(() -> FREE_SESSION.validatePaymentAmount(null)).doesNotThrowAnyException();
     }
 
     @Test

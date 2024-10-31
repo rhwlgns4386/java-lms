@@ -2,22 +2,22 @@ package nextstep.sessions.domain;
 
 public class SessionStatus {
 
-    private String status;
+    private SessionStatusEnum status;
 
     public SessionStatus() {
-        this(SessionStatusEnum.PREPARING.getValue());
+        this(SessionStatusEnum.PREPARING);
     }
 
-    public SessionStatus(String status) {
+    public SessionStatus(SessionStatusEnum status) {
         this.status = status;
     }
 
     public String getStatus() {
-        return status;
+        return status.getValue();
     }
 
     public void isValidStatusForApplication() {
-        if (SessionStatusEnum.getEnumByStatus(status).isStatusAvailableForApplication()) {
+        if (status.isStatusAvailableForApplication()) {
             return;
         }
         throw new RuntimeException("상태 : " + status + "수강이 불가한 상태입니다");

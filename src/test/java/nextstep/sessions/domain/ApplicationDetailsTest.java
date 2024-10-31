@@ -18,7 +18,7 @@ public class ApplicationDetailsTest {
     void add() {
         ApplicationDetails details = new ApplicationDetails();
         details.add(ApplicationDetail
-                .ofNewFreeTypeInstance(SESSION_ID, NS_USER_ID));
+                .ofNewInstance(SESSION_ID, NS_USER_ID));
         assertThat(details.size()).isEqualTo(1);
 
     }
@@ -27,7 +27,7 @@ public class ApplicationDetailsTest {
     void canApply() {
         ApplicationDetails details = new ApplicationDetails();
         details.add(ApplicationDetail
-                .ofNewFreeTypeInstance(SESSION_ID, NS_USER_ID));
+                .ofNewInstance(SESSION_ID, NS_USER_ID));
         assertThatThrownBy(() -> details.canApply(SESSION_ID, NS_USER_ID)).isInstanceOf(RuntimeException.class);
     }
 }

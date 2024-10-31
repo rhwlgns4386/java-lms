@@ -6,6 +6,7 @@ public class SessionImage {
     private ImageSize imageSize;
     private SessionImagePixel imagePixel;
     private SessionImageTypeEnum imageType;
+    private Session session ;
 
 
     public SessionImage(String url, ImageSize imageSize , SessionImageTypeEnum imageType, SessionImagePixel sessionImagePixel) {
@@ -25,5 +26,29 @@ public class SessionImage {
         this.imageSize = imageSize;
         this.imageType = imageType;
         this.imagePixel = sessionImagePixel;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public ImageSize getImageSize() {
+        return imageSize;
+    }
+
+    public SessionImagePixel getImagePixel() {
+        return imagePixel;
+    }
+
+    public SessionImageTypeEnum getImageType() {
+        return imageType;
+    }
+
+    public Session getSession() {
+        return session;
+    }
+
+    public void toSession(Session session) {
+        this.session  = session;
     }
 }

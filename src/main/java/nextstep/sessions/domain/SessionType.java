@@ -1,5 +1,7 @@
 package nextstep.sessions.domain;
 
+import nextstep.payments.domain.Payment;
+
 public class SessionType {
     private SessionTypeEnum sessionType;
     private Long feeAmount;
@@ -25,12 +27,29 @@ public class SessionType {
         }
     }
 
-    public void validatePaymentAmount(Long payAmount) {
+    public void validatePaymentAmount(Payment payment) {
         if (sessionType == SessionTypeEnum.FREE ) {
             return ;
         }
-        if (payAmount.compareTo(feeAmount) != 0) {
-            throw new RuntimeException("수강료를 결제내역을 확인하십시오.");
+        if (payment.getAmount().compareTo(feeAmount) != 0) {
+            throw new RuntimeException("결제금액 오류 입니다.");
         }
     }
+
+    public int getMaxNumberOfUser() {
+        return maxNumberOfUser;
+    }
+
+    public Long getFeeAmount() {
+        return feeAmount;
+    }
+
+    public String getTypeCode() {
+        return sessionType.getTypeCode();
+    }
+
+    public boolean isFree() {
+        return sessionType == SessionTypeEnum.FREE;
+    }
+
 }

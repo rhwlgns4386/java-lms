@@ -11,4 +11,12 @@ public class SessionImagePixel {
         this.width = width;
         this.height = height;
     }
+
+    public ImageHeight getHeight() {
+        return height;
+    }
+
+    public ImageWidth getWidth() {
+        return width;
+    }
 }
