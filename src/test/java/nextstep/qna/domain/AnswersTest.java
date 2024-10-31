@@ -7,7 +7,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -38,17 +37,20 @@ public class AnswersTest {
 
     @Test
     @DisplayName("다른 사람이 쓴 답변이 없는 경우 삭제 불가 체크")
-    void isOwnerCheck_CannotDeleteException() {
+    void validateOwnerCheck_CannotDeleteException() {
         Answers answers = new Answers(diffAnswers);
 
         assertThatThrownBy(() -> answers.validateOwnerCheck(NsUserTest.JAVAJIGI)).isInstanceOf(CannotDeleteException.class);
     }
 
     @Test
-    @DisplayName("삭제처리 true 반환")
-    void deleteQuestion(){
-        A1.deleteAnswer();
+    @DisplayName("답변 삭제처리 호출하면 true 반환하고 답변수만큼 이력을 리턴한다.")
+    void deleteAnswers() throws CannotDeleteException {
+        Answers answers = new Answers(sameAnswers);
+        DeleteHistorys deleteHistorys = answers.deleteAnswers(answers.getAnswers(), NsUserTest.JAVAJIGI);
         assertThat(A1.isDeleted()).isTrue();
+        assertThat(deleteHistorys.getDeleteHistories()).hasSize(2);
     }
+
 
 }
