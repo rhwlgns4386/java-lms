@@ -22,17 +22,12 @@ public class Answers {
         return answers.isEmpty();
     }
 
-    public List<DeleteHistory> delete() {
+    public List<DeleteHistory> delete(NsUser nsUser) throws CannotDeleteException {
         List<DeleteHistory> result = new ArrayList<>();
         for (Answer answer : answers) {
-            result.add(answer.delete());
+            result.add(answer.delete(nsUser));
         }
         return result;
     }
 
-    public void validate(NsUser nsUser) throws CannotDeleteException {
-        for (Answer answer : answers) {
-            answer.validate(nsUser);
-        }
-    }
 }
