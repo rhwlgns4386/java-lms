@@ -28,4 +28,16 @@ public abstract class DefaultSession {
         }
         throw new IllegalArgumentException("강의 상태가 모집 중일때만 수강신청이 가능합니다.");
     }
+
+    public CoverImage getCoverImage() {
+        return coverImage;
+    }
+
+    public SessionPeriod getPeriod() {
+        return period;
+    }
+
+    public SessionStatus getStatus() {
+        return status;
+    }
 }

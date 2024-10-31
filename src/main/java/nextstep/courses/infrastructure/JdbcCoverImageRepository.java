@@ -37,6 +37,8 @@ public class JdbcCoverImageRepository implements CoverImageRepository {
         String sql = "select * from cover_image where session_id = ?";
 
         return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> {
+            Long id = rs.getLong("id");
+
             CoverImageFile file = new CoverImageFile(rs.getInt("file_size"));
 
             CoverImageType type = CoverImageType.valueOf(
@@ -48,7 +50,7 @@ public class JdbcCoverImageRepository implements CoverImageRepository {
                     rs.getInt("height")
             );
 
-            return new CoverImage(file, type, size);
+            return new CoverImage(id, file, type, size);
         }, sessionId);
     }
 }

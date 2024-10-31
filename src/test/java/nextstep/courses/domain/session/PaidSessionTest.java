@@ -21,7 +21,7 @@ class PaidSessionTest {
 
     @BeforeEach
     void setUp() {
-        coverImage = new CoverImage(new CoverImageFile(30), CoverImageType.GIF, new CoverImageSize(300, 200));
+        coverImage = new CoverImage(1L, new CoverImageFile(30), CoverImageType.GIF, new CoverImageSize(300, 200));
         sessionPeriod = new SessionPeriod(LocalDate.of(2024, 10, 10), LocalDate.of(2024, 10, 10).plusDays(30));
     }
 

@@ -34,20 +34,15 @@ class CoverImageRepositoryTest {
     @BeforeEach
     void setUp() {
         coverImageRepository = new JdbcCoverImageRepository(jdbcTemplate);
-
-//        jdbcTemplate.update(
-//                "insert into session (id, title, status, created_at) values (?, ?, ?, ?)",
-//                1L, "테스트 세션", "OPEN", LocalDateTime.now()
-//        );
     }
 
     @Test
     void crud() {
         // given
-        CoverImageFile file = new CoverImageFile(1024 * 100);  // 100KB
+        CoverImageFile file = new CoverImageFile(1024 * 100);
         CoverImageType type = CoverImageType.JPG;
         CoverImageSize size = new CoverImageSize(600, 400);
-        CoverImage coverImage = new CoverImage(file, type, size);
+        CoverImage coverImage = new CoverImage(1L, file, type, size);
 
         // when
         int count = coverImageRepository.save(1L, coverImage);
@@ -73,6 +68,5 @@ class CoverImageRepositoryTest {
     @AfterEach
     void tearDown() {
         jdbcTemplate.update("delete from cover_image");
-//        jdbcTemplate.update("delete from session");
     }
 }

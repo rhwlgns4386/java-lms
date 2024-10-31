@@ -32,6 +32,14 @@ public class SessionCapacity {
         return current >= max;
     }
 
+    public int getMax() {
+        return max;
+    }
+
+    public int getCurrent() {
+        return current;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

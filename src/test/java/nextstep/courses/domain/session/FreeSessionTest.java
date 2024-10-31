@@ -19,7 +19,7 @@ class FreeSessionTest {
 
     @BeforeEach
     void setUp() {
-        coverImage = new CoverImage(new CoverImageFile(30), CoverImageType.GIF, new CoverImageSize(300, 200));
+        coverImage = new CoverImage(1L, new CoverImageFile(30), CoverImageType.GIF, new CoverImageSize(300, 200));
     }
 
     @DisplayName("무료강의는 최대 수강 인원 제한이 없다.")

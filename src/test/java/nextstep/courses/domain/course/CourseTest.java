@@ -21,7 +21,7 @@ class CourseTest {
 
     @BeforeEach
     void setUp() {
-        coverImage = new CoverImage(new CoverImageFile(30), CoverImageType.GIF, new CoverImageSize(300, 200));
+        coverImage = new CoverImage(1L, new CoverImageFile(30), CoverImageType.GIF, new CoverImageSize(300, 200));
     }
 
     @DisplayName("정상적인 값으로 과정을 생성할 수 있다.")

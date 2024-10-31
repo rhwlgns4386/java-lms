@@ -28,6 +28,10 @@ public class Money {
         return !this.equals(other);
     }
 
+    public long getAmount() {
+        return amount;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -40,4 +44,5 @@ public class Money {
     public int hashCode() {
         return Objects.hashCode(amount);
     }
+
 }
