@@ -6,7 +6,7 @@ import java.util.List;
 public class PaidSession extends Session {
     private SessionCapacity capacity;
     private Money fee;
-    private List<Registration> registrations;
+    private List<Student> students;
 
     public PaidSession(Long id,
         String title,
@@ -18,7 +18,7 @@ public class PaidSession extends Session {
         super(image, sessionDate, id, title, SessionStatus.PREPARING, SessionType.PAID);
         this.capacity = capacity;
         this.fee = fee;
-        this.registrations = new ArrayList<>();
+        this.students = new ArrayList<>();
     }
 
     public SessionCapacity getCapacity() {
@@ -29,8 +29,8 @@ public class PaidSession extends Session {
         return fee;
     }
 
-    public List<Registration> getRegistrations() {
-        return registrations;
+    public List<Student> getStudents() {
+        return students;
     }
 
     @Override
@@ -46,6 +46,6 @@ public class PaidSession extends Session {
         }
 
         this.capacity.increase();
-        this.registrations.add(registration);
+        this.students.add(Student.of(registration));
     }
 }

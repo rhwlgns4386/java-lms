@@ -8,7 +8,13 @@ public abstract class Session {
     private SessionType sessionType;
     private SessionStatus sessionStatus;
 
-    public Session(Image image, SessionDate sessionDate, Long id, String title, SessionStatus sessionStatus, SessionType sessionType) {
+    public Session(Image image,
+        SessionDate sessionDate,
+        Long id,
+        String title,
+        SessionStatus sessionStatus,
+        SessionType sessionType
+    ) {
         this.image = image;
         this.sessionDate = sessionDate;
         this.id = id;
