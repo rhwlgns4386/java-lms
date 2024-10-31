@@ -79,6 +79,7 @@ public class SessionCoverImage {
         public SessionCoverImage build() {
             return new SessionCoverImage(this);
         }
+
     }
 
 }

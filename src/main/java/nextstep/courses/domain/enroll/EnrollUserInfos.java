@@ -51,8 +51,12 @@ public class EnrollUserInfos {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         EnrollUserInfos that = (EnrollUserInfos) o;
         return Objects.equals(enrollUserInfos, that.enrollUserInfos);
     }
