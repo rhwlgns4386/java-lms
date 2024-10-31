@@ -17,7 +17,7 @@ public class Course {
 
     private LocalDateTime updatedAt;
 
-    private Sessions sessions = new Sessions(new ArrayList<>());
+    private Sessions sessions = new Sessions();
 
     public Course(String title, Long creatorId, int cohort) {
         this(0L, title, creatorId, cohort, LocalDateTime.now(), LocalDateTime.now());

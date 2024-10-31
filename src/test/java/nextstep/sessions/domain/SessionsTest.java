@@ -5,6 +5,7 @@ import nextstep.sessions.Sessions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,8 +20,8 @@ public class SessionsTest {
 
     @BeforeEach
     public void setUp() {
-        session1 = new Session.SessionBuilder(1L, "테스트세션1", "테스트 강의1", null, "2024-01-01", "2024-01-02").build();
-        session2 = new Session.SessionBuilder(2L, "테스트세션2", "테스트 강의2", null, "2024-02-01", "2024-02-02").build();
+        session1 = new Session.SessionBuilder(1L, "테스트세션1", "테스트 강의1", null, LocalDate.parse("2024-01-01").atStartOfDay(), LocalDate.parse("2024-01-02").atStartOfDay()).build();
+        session2 = new Session.SessionBuilder(2L, "테스트세션2", "테스트 강의2", null, LocalDate.parse("2024-01-01").atStartOfDay(), LocalDate.parse("2024-01-02").atStartOfDay()).build();
         sessions = new Sessions(new ArrayList<>(List.of(session1)));
     }
 

@@ -17,12 +17,12 @@ public class StudentTest {
     @BeforeEach
     void setup() {
         student = new Student(1L, "user123", "password", "John Doe", "john@example.com", LocalDateTime.now(), LocalDateTime.now());
-        session1 = new Session.SessionBuilder(1L, "test1", "test", null, "2021-08-01", "2021-08-31")
+        session1 = new Session.SessionBuilder(1L, "test1", "test", null, LocalDateTime.now(), LocalDateTime.now())
                 .isFree(true)
                 .maxStudentCount(100)
                 .sessionFee(100L)
                 .build();
-        session2 = new Session.SessionBuilder(2L, "test1", "test", null, "2021-08-01", "2021-08-31")
+        session2 = new Session.SessionBuilder(2L, "test1", "test", null, LocalDateTime.now(), LocalDateTime.now())
                 .isFree(true)
                 .maxStudentCount(100)
                 .sessionFee(100L)

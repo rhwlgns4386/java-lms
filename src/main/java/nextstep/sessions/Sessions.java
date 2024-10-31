@@ -1,5 +1,6 @@
 package nextstep.sessions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Sessions {
@@ -7,6 +8,10 @@ public class Sessions {
 
     public Sessions(List<Session> sessions) {
         this.sessions = sessions;
+    }
+
+    public Sessions() {
+        this.sessions = new ArrayList<>();
     }
 
     public void addSession(Session session) {

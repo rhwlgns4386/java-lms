@@ -42,8 +42,7 @@ public class SessionDetail {
         return students.size() < maxStudentCount;
     }
 
-    public void registerNewStudent(Student student, Long cost) {
-        checkRegistrationEligibility(cost);
+    public void registerNewStudent(Student student) {
         students.add(student);
     }
 

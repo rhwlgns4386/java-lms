@@ -50,25 +50,34 @@ public class Session {
     }
 
     public void register(Student student, Long amount) {
+        checkRegistrationEligibility(amount);
+        sessionDetail.registerNewStudent(student);
+    }
+
+    private void checkRegistrationEligibility(Long amount) {
         if (!state.isOpen()) {
             throw new IllegalStateException("아직 접수 기간이 아닙니다.");
         }
-        sessionDetail.registerNewStudent(student, amount);
+
+        sessionDetail.checkRegistrationEligibility(amount);
     }
+
+
+
 
     public static class SessionBuilder {
         private final Long id;
         private final String name;
         private final String description;
         private final CoverImage image;
-        private final String startDate;
-        private final String endDate;
+        private final LocalDateTime startDate;
+        private final LocalDateTime endDate;
         private boolean isFree = true;
         private int maxStudentCount = MAX_STUDENT_COUNT;
         private Long sessionFee = 0L;
         private SessionState state;
 
-        public SessionBuilder(Long id, String name, String description, CoverImage image, String startDate, String endDate) {
+        public SessionBuilder(Long id, String name, String description, CoverImage image, LocalDateTime startDate, LocalDateTime endDate) {
             this.id = id;
             this.name = name;
             this.description = description;
