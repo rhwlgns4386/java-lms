@@ -26,6 +26,10 @@ public class DeleteHistory {
         this.createdDate = createdDate;
     }
 
+    public NsUser getDeletedBy(){
+        return this.deletedBy;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
