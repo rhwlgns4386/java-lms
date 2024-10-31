@@ -12,7 +12,8 @@ import static nextstep.courses.domain.session.Session.NOT_ASSIGNED;
 public class SessionBuilder {
 
     private Long id;
-    private int enrollment = NOT_ASSIGNED;
+    private int enrollment;
+    private int maxEnrollment = NOT_ASSIGNED;
     private long sessionFee = NOT_ASSIGNED;
     private SessionState sessionState = SessionState.PREPARING;
     private SessionType sessionType;
@@ -34,6 +35,11 @@ public class SessionBuilder {
 
     public SessionBuilder enrollment(int enrollment) {
         this.enrollment = enrollment;
+        return this;
+    }
+
+    public SessionBuilder maxEnrollment(int maxEnrollment) {
+        this.maxEnrollment = maxEnrollment;
         return this;
     }
 
@@ -79,12 +85,11 @@ public class SessionBuilder {
         validateEmpty(sessionType, "강의 타입이 입력되지 않았습니다");
 
         if (sessionType == SessionType.FREE) {
-            return new FreeSession(getId(), coverImage, sessionState, startDate, endDate);
+            return new FreeSession(getId(), coverImage, sessionState, enrollment, startDate, endDate);
         }
-
-        validateValueAssignment(enrollment, "유료 강의는 수강 인원이 필수 값입니다");
+        validateValueAssignment(maxEnrollment, "유료 강의는 수강 인원이 필수 값입니다");
         validateValueAssignment(sessionFee, "유료 강의는 수강료가 필수 값입니다");
-        return new PaidSession(getId(), coverImage, sessionState, enrollment, sessionFee, startDate, endDate);
+        return new PaidSession(getId(), coverImage, sessionState, maxEnrollment, enrollment, sessionFee, startDate, endDate);
     }
 
     private Long getId() {

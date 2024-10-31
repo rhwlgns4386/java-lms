@@ -37,12 +37,12 @@ public class Course {
         return sessions.contains(session);
     }
 
-    public boolean registerSession(Payment payment) {
+    public Session registerSession(Payment payment) {
         return sessions.stream()
                 .filter(session -> session.isSameId(payment))
+                .peek(session -> session.register(payment))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("결제 정보에 대한 강의를 찾을 수 없습니다"))
-                .register(payment);
+                .orElseThrow(() -> new IllegalArgumentException("결제 정보에 대한 강의를 찾을 수 없습니다"));
     }
 
     public String getTitle() {

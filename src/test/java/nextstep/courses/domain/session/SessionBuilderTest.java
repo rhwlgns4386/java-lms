@@ -35,7 +35,7 @@ public class SessionBuilderTest {
 
     public static SessionBuilder paidSessionBuilder() {
         return SessionBuilder.builder()
-                .enrollment(30)
+                .maxEnrollment(30)
                 .sessionFee(10000)
                 .coverImage("src/test/java/nextstep/courses/domain/session/file/image.png")
                 .sessionType(SessionType.PAID)
@@ -80,7 +80,7 @@ public class SessionBuilderTest {
     }
 
     @Test
-    void throw_exception_if_enrollment_not_assign() {
+    void throw_exception_if_maxEnrollment_not_assign() {
         SessionBuilder builder = SessionBuilder.builder()
                 .sessionFee(10000)
                 .coverImage("src/test/java/nextstep/courses/domain/session/file/image.png")
@@ -94,7 +94,7 @@ public class SessionBuilderTest {
     @Test
     void throw_exception_if_sessionFee_not_assign() {
         SessionBuilder builder = SessionBuilder.builder()
-                .enrollment(30)
+                .maxEnrollment(30)
                 .coverImage("src/test/java/nextstep/courses/domain/session/file/image.png")
                 .sessionType(SessionType.PAID)
                 .startDate(LocalDateTime.now())

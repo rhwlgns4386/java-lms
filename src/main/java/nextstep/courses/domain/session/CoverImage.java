@@ -81,6 +81,14 @@ public class CoverImage {
         return (double) width / height;
     }
 
+    public String getFilePath() {
+        try {
+            return source.getCanonicalPath();
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

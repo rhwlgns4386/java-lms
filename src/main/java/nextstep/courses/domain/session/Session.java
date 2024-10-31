@@ -9,16 +9,31 @@ import java.util.Objects;
 public abstract class Session {
 
     static final int NOT_ASSIGNED = -1;
+    static final int INIT_ENROLLMENT = 0;
 
-    protected Long id;
+    protected final Long id;
     private CoverImage coverImage;
     private SessionState sessionState;
-    protected Enrollment enrollment;
-    protected SessionDuration sessionDuration;
+    protected final Enrollment enrollment;
+    protected final SessionDuration sessionDuration;
 
     protected Session(CoverImage coverImage, int maxEnrollment, SessionState sessionState,
                       LocalDateTime startDate, LocalDateTime endDate) {
-        this((long) NOT_ASSIGNED, coverImage, maxEnrollment, sessionState, startDate, endDate);
+        this((long) NOT_ASSIGNED, coverImage, maxEnrollment, INIT_ENROLLMENT, sessionState, startDate, endDate);
+    }
+
+    protected Session(CoverImage coverImage, int maxEnrollment, int enrollment,
+                      SessionState sessionState, LocalDateTime startDate, LocalDateTime endDate) {
+        this((long) NOT_ASSIGNED, coverImage, maxEnrollment, enrollment, sessionState, startDate, endDate);
+    }
+
+    protected Session(Long id, CoverImage coverImage, int maxEnrollment, int enrollment,
+                      SessionState sessionState, LocalDateTime startDate, LocalDateTime endDate) {
+        this.id = id;
+        this.sessionState = sessionState;
+        this.coverImage = coverImage;
+        this.enrollment = new Enrollment(enrollment, maxEnrollment);
+        this.sessionDuration = new SessionDuration(startDate, endDate);
     }
 
     protected Session(Long id, CoverImage coverImage, int maxEnrollment,
@@ -48,8 +63,42 @@ public abstract class Session {
 
     protected abstract boolean isValidPayment(Payment payment);
 
-    public boolean isSameId(Payment payment) {
+    public final boolean isSameId(Payment payment) {
         return payment.isSameSessionId(id);
+    }
+
+    public final boolean isPersisted() {
+        return !id.equals((long) NOT_ASSIGNED);
+    }
+
+    public abstract long getSessionFee();
+
+    public final Long getId() {
+        return id;
+    }
+
+    public final String getSessionState() {
+        return sessionState.name();
+    }
+
+    public final String getCoverFilePath() {
+        return coverImage.getFilePath();
+    }
+
+    public final int getEnrollment() {
+        return enrollment.getEnrollment();
+    }
+
+    public final int getMaxEnrollment() {
+        return enrollment.getMaxEnrollment();
+    }
+
+    public final LocalDateTime getStartDate() {
+        return sessionDuration.getStartDate();
+    }
+
+    public final LocalDateTime getEndDate() {
+        return sessionDuration.getEndDate();
     }
 
     @Override
