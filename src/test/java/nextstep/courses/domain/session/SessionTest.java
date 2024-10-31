@@ -18,7 +18,7 @@ public class SessionTest {
     @Test
     void throw_exception_if_exceed_max_enrollment() {
         Session session = SessionBuilderTest.paidSessionBuilder()
-                .enrollment(0)
+                .maxEnrollment(0)
                 .sessionState(SessionState.OPEN)
                 .build();
 

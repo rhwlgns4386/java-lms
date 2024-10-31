@@ -49,9 +49,9 @@ public class CourseTest {
     @Test
     void succeed_to_register_session() {
         assertThat(course.registerSession(
-                new Payment("paid", PAID_SESSION_ID, NsUserTest.JAVAJIGI.getId(), 10000L))).isTrue();
+                new Payment("paid", PAID_SESSION_ID, NsUserTest.JAVAJIGI.getId(), 10000L))).isNotNull();
         assertThat(course.registerSession(
-                new Payment("free", FREE_SESSION_ID, NsUserTest.JAVAJIGI.getId(), 0L))).isTrue();
+                new Payment("free", FREE_SESSION_ID, NsUserTest.JAVAJIGI.getId(), 0L))).isNotNull();
     }
 
     @Test

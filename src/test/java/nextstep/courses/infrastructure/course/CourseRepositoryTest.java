@@ -1,8 +1,7 @@
-package nextstep.courses.infrastructure;
+package nextstep.courses.infrastructure.course;
 
 import nextstep.courses.domain.course.Course;
-import nextstep.courses.infrastructure.course.CourseRepository;
-import nextstep.courses.infrastructure.course.JdbcCourseRepository;
+import nextstep.courses.infrastructure.session.JdbcSessionRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -24,7 +23,7 @@ public class CourseRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        courseRepository = new JdbcCourseRepository(jdbcTemplate);
+        courseRepository = new JdbcCourseRepository(jdbcTemplate, new JdbcSessionRepository(jdbcTemplate));
     }
 
     @Test
@@ -32,7 +31,7 @@ public class CourseRepositoryTest {
         Course course = new Course("TDD, 클린 코드 with Java", 1L);
         int count = courseRepository.save(course);
         assertThat(count).isEqualTo(1);
-        Course savedCourse = courseRepository.findById(1L);
+        Course savedCourse = courseRepository.findById(2L);
         assertThat(course.getTitle()).isEqualTo(savedCourse.getTitle());
         LOGGER.debug("Course: {}", savedCourse);
     }
