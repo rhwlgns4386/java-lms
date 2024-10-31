@@ -8,13 +8,14 @@ public class PaidSession extends Session {
     private Money fee;
     private List<Registration> registrations;
 
-    public PaidSession(Image image,
-                       SessionDate sessionDate,
-                       SessionId sessionId,
-                       SessionCapacity capacity,
-                       Money fee
+    public PaidSession(Long id,
+        String title,
+        Image image,
+        SessionDate sessionDate,
+        SessionCapacity capacity,
+        Money fee
     ) {
-        super(image, sessionDate, sessionId, SessionStatus.PREPARING, SessionType.PAID);
+        super(image, sessionDate, id, title, SessionStatus.PREPARING, SessionType.PAID);
         this.capacity = capacity;
         this.fee = fee;
         this.registrations = new ArrayList<>();

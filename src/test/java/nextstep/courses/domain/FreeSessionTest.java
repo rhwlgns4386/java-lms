@@ -10,7 +10,8 @@ import java.time.LocalDateTime;
 public class FreeSessionTest {
     private Image image;
     private SessionDate sessionDate;
-    private SessionId sessionId;
+    private Long id;
+    private String title;
 
     @BeforeEach
     void init() {
@@ -20,35 +21,36 @@ public class FreeSessionTest {
         LocalDateTime end = LocalDateTime.of(2024, 10, 10, 10, 11);
 
         this.sessionDate = new SessionDate(start, end);
-        this.sessionId = SessionId.of(1L, "TDD");
+        this.id = 1L;
+        this.title = "TDD";
     }
 
     @Test
     @DisplayName("FreeSession 생성")
     void createFreeSessionTest() {
-        FreeSession freeSession = new FreeSession(sessionId, sessionDate, image);
+        FreeSession freeSession = new FreeSession(id, title, sessionDate, image);
 
         Assertions.assertThat(freeSession).isNotNull();
-        Assertions.assertThat(freeSession.getSessionId()).isEqualTo(sessionId);
+        Assertions.assertThat(freeSession.getId()).isEqualTo(id);
     }
 
     @Test
     @DisplayName("FreeSession 수강 신청")
     void registerFreeSessionTest() {
-        FreeSession freeSession = new FreeSession(sessionId, sessionDate, image);
+        FreeSession freeSession = new FreeSession(id, title, sessionDate, image);
 
         freeSession.open();
 
         freeSession.register();
 
-        Assertions.assertThat(freeSession.getSessionId()).isEqualTo(sessionId);
+        Assertions.assertThat(freeSession.getId()).isEqualTo(id);
         Assertions.assertThat(freeSession.getSessionStatus()).isEqualTo(SessionStatus.RECRUITING);
     }
 
     @Test
     @DisplayName("FreeSession 수강 신청 - 모집중이 아닌 강좌 신청 체크")
     void checkRegisterNotOpenFreeSessionTest() {
-        FreeSession freeSession = new FreeSession(sessionId, sessionDate, image);
+        FreeSession freeSession = new FreeSession(id, title, sessionDate, image);
 
         Assertions.assertThatThrownBy(() -> freeSession.register())
                 .isInstanceOf(IllegalStateException.class);
@@ -57,7 +59,7 @@ public class FreeSessionTest {
     @Test
     @DisplayName("강의 모집중")
     void openFreeSessionTest() {
-        FreeSession freeSession = new FreeSession(sessionId, sessionDate, image);
+        FreeSession freeSession = new FreeSession(id, title, sessionDate, image);
 
         freeSession.open();
 
@@ -67,7 +69,7 @@ public class FreeSessionTest {
     @Test
     @DisplayName("강의 종료")
     void closeFreeSessionTest() {
-        FreeSession freeSession = new FreeSession(sessionId, sessionDate, image);
+        FreeSession freeSession = new FreeSession(id, title, sessionDate, image);
 
         freeSession.close();
 

@@ -26,14 +26,12 @@ public class CourseTest {
         LocalDateTime end = LocalDateTime.of(2024, 10, 10, 10, 11);
 
         SessionDate sessionDate = new SessionDate(start, end);
-        SessionId sessionId = SessionId.of(1L, "TDD");
-        this.freeSession = new FreeSession(sessionId, sessionDate, image);
+        this.freeSession = new FreeSession(1L, "TDD", sessionDate, image);
 
-        sessionId = SessionId.of(2L, "TDD");
         SessionCapacity sessionCapacity = new SessionCapacity(1);
         Money fee = new Money(200_000L);
 
-        this.paidSession = new PaidSession(image, sessionDate, sessionId, sessionCapacity, fee);
+        this.paidSession = new PaidSession(2L, "TDD", image, sessionDate, sessionCapacity, fee);
     }
 
     @Test

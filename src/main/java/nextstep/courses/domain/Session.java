@@ -1,22 +1,24 @@
 package nextstep.courses.domain;
 
 public abstract class Session {
-    private SessionId sessionId;
+    private Long id;
+    private String title;
     private SessionDate sessionDate;
     private Image image;
     private SessionType sessionType;
     private SessionStatus sessionStatus;
 
-    public Session(Image image, SessionDate sessionDate, SessionId sessionId, SessionStatus sessionStatus, SessionType sessionType) {
+    public Session(Image image, SessionDate sessionDate, Long id, String title, SessionStatus sessionStatus, SessionType sessionType) {
         this.image = image;
         this.sessionDate = sessionDate;
-        this.sessionId = sessionId;
+        this.id = id;
+        this.title = title;
         this.sessionStatus = sessionStatus;
         this.sessionType = sessionType;
     }
 
-    public SessionId getSessionId() {
-        return sessionId;
+    public Long getId() {
+        return id;
     }
 
     protected abstract void register(Registration registration);
@@ -51,11 +53,11 @@ public abstract class Session {
         }
 
         Session session = (Session) o;
-        return getSessionId().equals(session.getSessionId());
+        return id.equals(session.id);
     }
 
     @Override
     public int hashCode() {
-        return getSessionId().hashCode();
+        return id.hashCode();
     }
 }

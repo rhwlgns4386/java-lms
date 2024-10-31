@@ -30,3 +30,5 @@
 * 유료 강의 신청 로직 개발 [X]
 * 강의 상태 변경 로직 개발 [X]
 * 과정에 강의 추가 로직 개발 [X]
+* SessionId class 삭제 [X]
+* Session.register() public으로 변경 []

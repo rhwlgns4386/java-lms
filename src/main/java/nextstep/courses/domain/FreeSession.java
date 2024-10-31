@@ -2,12 +2,13 @@ package nextstep.courses.domain;
 
 public class FreeSession extends Session {
 
-    public FreeSession(SessionId sessionId, SessionDate sessionDate, Image image) {
-        super(image, sessionDate, sessionId, SessionStatus.PREPARING, SessionType.FREE);
-    }
 
-    public SessionId getSessionId() {
-        return super.getSessionId();
+    public FreeSession(Long id,
+        String title,
+        SessionDate sessionDate,
+        Image image
+    ) {
+        super(image, sessionDate, id, title, SessionStatus.PREPARING, SessionType.FREE);
     }
 
     @Override

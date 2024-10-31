@@ -13,7 +13,8 @@ import java.util.List;
 public class PaidSessionTest {
     private Image image;
     private SessionDate sessionDate;
-    private SessionId sessionId;
+    private Long id;
+    private String title;
 
     @BeforeEach
     void init() {
@@ -23,7 +24,8 @@ public class PaidSessionTest {
         LocalDateTime end = LocalDateTime.of(2024, 10, 10, 10, 11);
 
         this.sessionDate = new SessionDate(start, end);
-        this.sessionId = SessionId.of(1L, "TDD");
+        this.id = 1L;
+        this.title = "TDD";
     }
 
     @Test
@@ -32,10 +34,10 @@ public class PaidSessionTest {
         SessionCapacity sessionCapacity = new SessionCapacity(10);
         Money fee = new Money(200_000L);
 
-        PaidSession paidSession = new PaidSession(image, sessionDate, sessionId, sessionCapacity, fee);
+        PaidSession paidSession = new PaidSession(id, title, image, sessionDate, sessionCapacity, fee);
 
         Assertions.assertThat(paidSession).isNotNull();
-        Assertions.assertThat(paidSession.getSessionId()).isEqualTo(sessionId);
+        Assertions.assertThat(paidSession.getId()).isEqualTo(id);
     }
 
     @Test
@@ -44,7 +46,7 @@ public class PaidSessionTest {
         SessionCapacity sessionCapacity = new SessionCapacity(1);
         Money fee = new Money(200_000L);
 
-        PaidSession paidSession = new PaidSession(image, sessionDate, sessionId, sessionCapacity, fee);
+        PaidSession paidSession = new PaidSession(id, title, image, sessionDate, sessionCapacity, fee);
 
         paidSession.open();
 
@@ -63,9 +65,9 @@ public class PaidSessionTest {
         SessionCapacity sessionCapacity = new SessionCapacity(1);
         Money fee = new Money(200_000L);
 
-        PaidSession paidSession = new PaidSession(image, sessionDate, sessionId, sessionCapacity, fee);
+        PaidSession paidSession = new PaidSession(id, title, image, sessionDate, sessionCapacity, fee);
 
-        Payment payment = new Payment("1", sessionId.getId(), NsUserTest.JAVAJIGI.getId(), fee.getPrice());
+        Payment payment = new Payment("1", id, NsUserTest.JAVAJIGI.getId(), fee.getPrice());
 
         Assertions.assertThatThrownBy(() -> paidSession.register(RegistrationTest.REGISTRATION))
                 .isInstanceOf(IllegalStateException.class);
@@ -77,7 +79,7 @@ public class PaidSessionTest {
         SessionCapacity sessionCapacity = new SessionCapacity(1);
         Money fee = new Money(200_000L);
 
-        PaidSession paidSession = new PaidSession(image, sessionDate, sessionId, sessionCapacity, fee);
+        PaidSession paidSession = new PaidSession(id, title, image, sessionDate, sessionCapacity, fee);
         paidSession.open();
 
         Assertions.assertThatThrownBy(() -> paidSession.register(null))
@@ -90,9 +92,9 @@ public class PaidSessionTest {
         SessionCapacity sessionCapacity = new SessionCapacity(1);
         Money fee = new Money(200_000L);
 
-        PaidSession paidSession = new PaidSession(image, sessionDate, sessionId, sessionCapacity, fee);
+        PaidSession paidSession = new PaidSession(id, title, image, sessionDate, sessionCapacity, fee);
         paidSession.open();
-        Payment payment = new Payment("1", sessionId.getId(), NsUserTest.JAVAJIGI.getId(), fee.getPrice() - 1);
+        Payment payment = new Payment("1", id, NsUserTest.JAVAJIGI.getId(), fee.getPrice() - 1);
         Registration registration = new Registration(1L, NsUserTest.JAVAJIGI, payment);
 
         Assertions.assertThatThrownBy(() -> paidSession.register(registration))
@@ -105,9 +107,9 @@ public class PaidSessionTest {
         SessionCapacity sessionCapacity = new SessionCapacity(1);
         Money fee = new Money(200_000L);
 
-        PaidSession paidSession = new PaidSession(image, sessionDate, sessionId, sessionCapacity, fee);
+        PaidSession paidSession = new PaidSession(id, title, image, sessionDate, sessionCapacity, fee);
         paidSession.open();
-        Payment payment = new Payment("1", sessionId.getId(), NsUserTest.JAVAJIGI.getId(), fee.getPrice() + 1);
+        Payment payment = new Payment("1", id, NsUserTest.JAVAJIGI.getId(), fee.getPrice() + 1);
         Registration registration = new Registration(1L, NsUserTest.JAVAJIGI, payment);
 
         Assertions.assertThatThrownBy(() -> paidSession.register(registration))
@@ -120,7 +122,7 @@ public class PaidSessionTest {
         SessionCapacity sessionCapacity = new SessionCapacity(1);
         Money fee = new Money(200_000L);
 
-        PaidSession paidSession = new PaidSession(image, sessionDate, sessionId, sessionCapacity, fee);
+        PaidSession paidSession = new PaidSession(id, title, image, sessionDate, sessionCapacity, fee);
 
         paidSession.open();
 
@@ -133,7 +135,7 @@ public class PaidSessionTest {
         SessionCapacity sessionCapacity = new SessionCapacity(1);
         Money fee = new Money(200_000L);
 
-        PaidSession paidSession = new PaidSession(image, sessionDate, sessionId, sessionCapacity, fee);
+        PaidSession paidSession = new PaidSession(id, title, image, sessionDate, sessionCapacity, fee);
 
         paidSession.close();
 
