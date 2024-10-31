@@ -38,9 +38,8 @@
   * 신청 내역 (application_detail) : 강의 신청 내역 관리 
     - [ ] : 컬럼 : id(일련번호), status_code(강의 신청 상태코드:신청, 승인), session_id(신청강의식별자), user_id(신청자식별자), created_ad(생성일), updated_at(갱신일)  
   * 강의 기본 (ns_session)
-    - [ ] : 컬럼 : id(일련번호), start_date(시작일), end_date(종료일),status_code(상태코드), created_ad(생성일), updated_at(갱신일)
-  * 강의 유형 (session_type)
-    - [ ] : 컬럼 : id(일련번호), session_id(강의식별자), type_code(강의유형코드), maximum_number_of_applicants(최대신청인원), fee_amount(수강료), created_ad(생성일), updated_at(갱신일) 
+    - [ ] : 컬럼 : id(일련번호), start_date(시작일), end_date(종료일),status_code(상태코드),
+            type_code(강의유형코드), maximum_number_of_applicants(최대신청인원), fee_amount(수강료), created_ad(생성일), updated_at(갱신일) 
   * 강의 이미지(session_image)
     - [ ] : 컬럼 : id(일련번호), url(저장주소), image(이미지), session_id(강의식별자), created_ad(생성일), updated_at(갱신일)
 
@@ -53,15 +52,13 @@
   * 강의 저장소 (SessionRepository)
     - [ ] save : 강의 등록 
     - [ ] modifyStatus : 강의 상태 변경 
-    - [ ] modifyPeriod : 강의 기간 변경 
-    - [ ] findById : 강의 조회   
-  * 강의 유형 저장소 (SessionTypeRepository)
-    - [ ] save : 강의 유형 저장 
-    - [ ] findBySession : 강의 유형 조회 
-    - [ ] modify : 강의 유형 저장
+    - [ ] modifyPeriod : 강의 기간 변경
+    - [ ] modifyTypeInfo : 강의 유형정보 변경
+    - [ ] findById : 강의 조회
   * 강의 이미지 저장소(SessionImageRepository)
     - [ ] save : 강의 커버 이미지 등록 
-    - [ ] modify : 강의 이미지 변경 
+    - [ ] modify : 강의 이미지 변경
+    - [ ] findBySession : 강의 이미지 조회 
 * service 기능 (대상외 - 대략 구현)
   - [ ] 강의 등록 (관리자)
   - [ ] 강의 신청 (사용자)
