@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,7 +33,7 @@ public class AnswersTest {
     void isOwnerCheck() throws CannotDeleteException {
         Answers answers = new Answers(sameAnswers);
 
-        answers.isOwnerCheck(NsUserTest.JAVAJIGI);
+        answers.validateOwnerCheck(NsUserTest.JAVAJIGI);
     }
 
     @Test
@@ -40,7 +41,7 @@ public class AnswersTest {
     void isOwnerCheck_CannotDeleteException() {
         Answers answers = new Answers(diffAnswers);
 
-        assertThatThrownBy(() -> answers.isOwnerCheck(NsUserTest.JAVAJIGI)).isInstanceOf(CannotDeleteException.class);
+        assertThatThrownBy(() -> answers.validateOwnerCheck(NsUserTest.JAVAJIGI)).isInstanceOf(CannotDeleteException.class);
     }
 
     @Test
@@ -49,6 +50,5 @@ public class AnswersTest {
         A1.deleteAnswer();
         assertThat(A1.isDeleted()).isTrue();
     }
-
 
 }

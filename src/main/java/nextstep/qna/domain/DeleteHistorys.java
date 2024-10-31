@@ -11,6 +11,11 @@ public class DeleteHistorys {
         this.deleteHistories.addAll(deleteHistories);
     }
 
+    public DeleteHistorys(List<DeleteHistory> questionHistorys, List<DeleteHistory> answerHistorys) {
+        this.deleteHistories.addAll(questionHistorys);
+        this.deleteHistories.addAll(answerHistorys);
+    }
+
     public List<DeleteHistory> getDeleteHistories() {
         return deleteHistories;
     }

@@ -8,9 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 
 @Service("qnaService")
 public class QnAService {
@@ -51,29 +49,20 @@ public class QnAService {
     @Transactional
     public void deleteQuestion(NsUser loginUser, long questionId) throws CannotDeleteException {
         Question question = getQuestion(questionId);
-
-        Answers answers = new Answers(question.getAnswers());
-
-        deleteQuestionAndAnswer(question, answers, loginUser);
-
-        saveDeleteHistory(questionId, question, answers);
+        DeleteHistorys deleteHistorys = question.detleteQuestionAndAnswer(loginUser);
+        saveDeleteHistory(deleteHistorys);
     }
 
-    private void saveDeleteHistory(long questionId, Question question, Answers answers) {
-        DeleteHistorys deleteHistories = getDeleteHistorys(questionId, question, answers);
-
+    private void saveDeleteHistory2(long questionId, Question question, Answers answers) {
+        DeleteHistorys deleteHistories = new DeleteHistorys(new ArrayList<>());
+        deleteHistories.addDeleteHistorys(question, questionId, answers);
         deleteHistoryService.saveAll(deleteHistories.getDeleteHistories());
     }
 
-    private void deleteQuestionAndAnswer(Question question, Answers answers, NsUser loginUser) throws CannotDeleteException {
-        question.deleteQuestion(loginUser);
-        answers.deleteAnswers(answers.getAnswers(), loginUser);
-    }
-
-    private DeleteHistorys getDeleteHistorys(long questionId, Question question, Answers answers) {
-        DeleteHistorys deleteHistories = new DeleteHistorys(new ArrayList<>());
-        deleteHistories.addDeleteHistorys(question, questionId, answers);
-        return deleteHistories;
+    private void saveDeleteHistory(DeleteHistorys deleteHistories) {
+        //DeleteHistorys deleteHistories = new DeleteHistorys(new ArrayList<>());
+        //deleteHistories.addDeleteHistorys(question, questionId, answers);
+        deleteHistoryService.saveAll(deleteHistories.getDeleteHistories());
     }
 
     private Question getQuestion(long questionId) {
