@@ -5,6 +5,9 @@ import nextstep.qna.CoverImageException;
 public class SessionCoverImage {
     private static final long MAX_STORAGE_CAPACITY = 1 * 1024 * 1024;
 
+    private Long id;
+    private Long sessionId;
+
     public SessionCoverImage(long storageCapacity, SessionCoverImagePath imagePath, SessionCoverImageSize imageSize) {
         validate(storageCapacity);
         mapping(imagePath, imageSize);
@@ -19,5 +22,9 @@ public class SessionCoverImage {
     private void mapping(SessionCoverImagePath imagePath, SessionCoverImageSize imageSize) {
         imagePath.mapping(this);
         imageSize.mapping(this);
+    }
+
+    public void save(Long sessionId) {
+        this.sessionId = sessionId;
     }
 }

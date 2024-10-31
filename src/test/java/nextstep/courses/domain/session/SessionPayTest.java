@@ -2,20 +2,20 @@ package nextstep.courses.domain.session;
 
 import nextstep.payments.domain.Payment;
 import nextstep.qna.SessionPayException;
-import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class SessionPaysTest {
+public class SessionPayTest {
 
     @Test
-    void 결제_금액_일치하지_않으면_예외() {
-        Payment payment = new Payment("1", 1L, NsUserTest.JAVAJIGI.getId(), 1000L);
-        SessionPays sessionPays = new SessionPays(2000L);
+    void 강의결제금액이_맞지_않으면_예외() {
+        SessionPay sessionPay = new SessionPay(2000L, SessionPayType.PAID);
+        Payment payment = new Payment("1", 1L, 1L, 3000L);
 
         assertThatThrownBy(
-                () -> sessionPays.addPayments(payment)
+                ()->sessionPay.validatePay(payment)
         ).isInstanceOf(SessionPayException.class);
+
     }
 }

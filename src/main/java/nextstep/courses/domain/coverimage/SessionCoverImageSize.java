@@ -1,5 +1,7 @@
 package nextstep.courses.domain.coverimage;
 
+import nextstep.qna.CoverImageException;
+
 public class SessionCoverImageSize {
     private static final int MIN_WIDTH = 300;
     private static final int MIN_HEIGHT = 200;
@@ -25,17 +27,17 @@ public class SessionCoverImageSize {
 
     private void validateSize(int width, int height) {
         if (width < MIN_WIDTH) {
-            throw new IllegalArgumentException("너비가 " + MIN_WIDTH + "미만 입니다.");
+            throw new CoverImageException("너비가 " + MIN_WIDTH + "미만 입니다.");
         }
 
         if (height < MIN_HEIGHT) {
-            throw new IllegalArgumentException("높이가 " + MIN_HEIGHT + "미만 입니다.");
+            throw new CoverImageException("높이가 " + MIN_HEIGHT + "미만 입니다.");
         }
     }
 
     private void validateRatio(int width, int height) {
         if (!isRatio(width, height)) {
-            throw new IllegalArgumentException("비율이 " + WIDTH_RATIO + " : " + HEIGHT_RATIO + "이 아닙니다");
+            throw new CoverImageException("비율이 " + WIDTH_RATIO + " : " + HEIGHT_RATIO + "이 아닙니다");
         }
     }
 
