@@ -45,7 +45,7 @@ public class PaidSession extends Session {
             throw new IllegalArgumentException("amount must be equal to session fee");
         }
 
-        this.capacity.increase();
         this.students.add(Student.of(registration));
+        this.capacity.updateCurrentCount(this.students.size());
     }
 }

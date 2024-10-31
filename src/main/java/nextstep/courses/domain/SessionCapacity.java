@@ -31,6 +31,13 @@ public class SessionCapacity {
         }
     }
 
+    public void updateCurrentCount(int countOfStudents){
+        this.currentCount = countOfStudents;
+        if (this.currentCount > this.capacity) {
+            throw new IllegalArgumentException("Capacity is full");
+        }
+    }
+
     @Override
     public final boolean equals(Object o) {
         if (this == o) {

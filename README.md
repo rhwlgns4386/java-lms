@@ -32,3 +32,4 @@
 * 과정에 강의 추가 로직 개발 [X]
 * SessionId class 삭제 [X]
 * Student class 생성 [X]
+* PaidSession의 수강 학생수를 이용해서 SessionCapacity의 currentCount 업데이트하도록 로직 수정 [X]
