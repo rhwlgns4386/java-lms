@@ -1,8 +1,5 @@
 package nextstep.courses.domain.enroll;
 
-import nextstep.courses.domain.session.SessionPriceType;
-import nextstep.courses.domain.session.SessionStatus;
-
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -35,6 +32,5 @@ public class EnrollUserInfo {
     public int hashCode() {
         return Objects.hash(sessionId, nsUserId);
     }
-
 
 }

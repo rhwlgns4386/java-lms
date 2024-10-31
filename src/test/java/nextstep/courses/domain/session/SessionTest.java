@@ -5,14 +5,14 @@ import nextstep.courses.domain.enroll.EnrollUserInfos;
 import nextstep.courses.domain.image.SessionCoverImage;
 import nextstep.courses.domain.strategy.MockPaymentStrategy;
 import nextstep.users.domain.NsUserTest;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class SessionTest {
 
@@ -24,13 +24,30 @@ public class SessionTest {
 
     @BeforeEach
     void setUp() {
-        sessionCoverImage = new SessionCoverImage(1L, 150, "leo.png", 300, 200);
+        sessionCoverImage = new SessionCoverImage.SessionCoverImageBuilder(1L).fileName("leo.png").volume(150).width(300).height(200).build();
         EnrollUserInfo enrollUserInfo = new EnrollUserInfo(1L, 1L);
         enrollUserInfos = new EnrollUserInfos(20);
         enrollUserInfos.add(enrollUserInfo);
-        freeSession = Session.createSessionOf(1L, 0L, SessionPriceType.FREE, SessionStatus.ENROLLING, sessionCoverImage, LocalDateTime.of(2024, 10, 30, 10, 30), LocalDateTime.of(2024, 11, 20, 10, 30), 30);
 
-        paidSession = Session.createSessionOf(2L, 1000L, SessionPriceType.PAID, SessionStatus.ENROLLING, sessionCoverImage, LocalDateTime.of(2024, 10, 30, 10, 30), LocalDateTime.of(2024, 11, 20, 10, 30), 30);
+        freeSession = new Session.SessionBuilder(1L)
+                .price(1000L)
+                .sessionPriceType(SessionPriceType.FREE)
+                .sessionStatus(SessionStatus.ENROLLING)
+                .sessionCoverImage(sessionCoverImage)
+                .startDateTime(LocalDateTime.of(2024, 10, 30, 10, 30))
+                .endDateTime(LocalDateTime.of(2024, 11, 20, 10, 30))
+                .availableEnrollCount(30)
+                .build();
+
+        paidSession = new Session.SessionBuilder(2L)
+                .price(1000L)
+                .sessionPriceType(SessionPriceType.PAID)
+                .sessionStatus(SessionStatus.ENROLLING)
+                .sessionCoverImage(sessionCoverImage)
+                .startDateTime(LocalDateTime.of(2024, 10, 30, 10, 30))
+                .endDateTime(LocalDateTime.of(2024, 11, 20, 10, 30))
+                .availableEnrollCount(30)
+                .build();
 
     }
 
@@ -58,7 +75,15 @@ public class SessionTest {
 
     @Test
     void 유로_강의_등록_상태_PENDING_실패_테스트() {
-        Session errorPaidSession = Session.createSessionOf(2L, 1000L, SessionPriceType.PAID, SessionStatus.PENDING, sessionCoverImage, LocalDateTime.of(2024, 10, 30, 10, 30), LocalDateTime.of(2024, 11, 20, 10, 30), 0);
+        Session errorPaidSession = new Session.SessionBuilder(1L)
+                .price(1000L)
+                .sessionPriceType(SessionPriceType.PAID)
+                .sessionStatus(SessionStatus.PENDING)
+                .sessionCoverImage(sessionCoverImage)
+                .startDateTime(LocalDateTime.of(2024, 10, 30, 10, 30))
+                .endDateTime(LocalDateTime.of(2024, 11, 20, 10, 30))
+                .availableEnrollCount(0)
+                .build();
 
         assertThatThrownBy(() -> errorPaidSession.enroll(NsUserTest.JAVAJIGI, 0L, new MockPaymentStrategy()))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -67,7 +92,15 @@ public class SessionTest {
 
     @Test
     void 유료_강의_등록_사이즈_실패_테스트() {
-        Session errorPaidSession = Session.createSessionOf(2L, 1000L, SessionPriceType.PAID, SessionStatus.ENROLLING, sessionCoverImage, LocalDateTime.of(2024, 10, 30, 10, 30), LocalDateTime.of(2024, 11, 20, 10, 30), 0);
+        Session errorPaidSession = new Session.SessionBuilder(1L)
+                .price(1000L)
+                .sessionPriceType(SessionPriceType.PAID)
+                .sessionStatus(SessionStatus.ENROLLING)
+                .sessionCoverImage(sessionCoverImage)
+                .startDateTime(LocalDateTime.of(2024, 10, 30, 10, 30))
+                .endDateTime(LocalDateTime.of(2024, 11, 20, 10, 30))
+                .availableEnrollCount(0)
+                .build();
 
         assertThatThrownBy(() -> errorPaidSession.enroll(NsUserTest.JAVAJIGI, 1000L, new MockPaymentStrategy()))
                 .isInstanceOf(IllegalArgumentException.class)

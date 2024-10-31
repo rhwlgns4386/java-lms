@@ -38,9 +38,16 @@ public class Session {
         SessionDate newSessionDate = new SessionDate(startDateTime, endDateTime);
         EnrollUserInfos newEnrollUserInfos = new EnrollUserInfos(availableEnrollCount);
         Payments newPayments = new Payments();
-        return new Session(sessionId, newEnrollUserInfos , newSessionPrice, sessionStatus, sessionCoverImage, newSessionDate, newPayments);
+        return new Session(sessionId, newEnrollUserInfos, newSessionPrice, sessionStatus, sessionCoverImage, newSessionDate, newPayments);
     }
 
+    private static Session createSessionOf(SessionBuilder sessionBuilder) {
+        SessionPrice newSessionPrice = SessionPrice.createSessionPriceOf(sessionBuilder.sessionPriceType, sessionBuilder.price);
+        SessionDate newSessionDate = new SessionDate(sessionBuilder.startDateTime, sessionBuilder.endDateTime);
+        EnrollUserInfos newEnrollUserInfos = new EnrollUserInfos(sessionBuilder.availableEnrollCount);
+        Payments newPayments = new Payments();
+        return new Session(sessionBuilder.sessionId, newEnrollUserInfos, newSessionPrice, sessionBuilder.sessionStatus, sessionBuilder.sessionCoverImage, newSessionDate, newPayments);
+    }
 
     public void enroll(NsUser nsUser, Long price, PaymentStrategy paymentStrategy) {
         checkSessionStatus();
@@ -52,7 +59,7 @@ public class Session {
     }
 
     private void checkSessionStatus() {
-        if(sessionStatus != SessionStatus.ENROLLING) {
+        if (sessionStatus != SessionStatus.ENROLLING) {
             throw new IllegalArgumentException(SESSION_STATUS_ERROR);
         }
     }
@@ -63,8 +70,12 @@ public class Session {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Session session = (Session) o;
         return Objects.equals(sessionId, session.sessionId);
     }
@@ -73,4 +84,60 @@ public class Session {
     public int hashCode() {
         return Objects.hash(sessionId);
     }
+
+    public static class SessionBuilder {
+        private Long sessionId;
+        private Long price;
+        private SessionPriceType sessionPriceType;
+        private SessionStatus sessionStatus;
+        private SessionCoverImage sessionCoverImage;
+        private LocalDateTime startDateTime;
+        private LocalDateTime endDateTime;
+        private int availableEnrollCount;
+
+        public SessionBuilder(Long sessionId) {
+            this.sessionId = sessionId;
+        }
+
+        public SessionBuilder price(Long price) {
+            this.price = price;
+            return this;
+        }
+
+        public SessionBuilder sessionPriceType(SessionPriceType sessionPriceType) {
+            this.sessionPriceType = sessionPriceType;
+            return this;
+        }
+
+        public SessionBuilder sessionStatus(SessionStatus sessionStatus) {
+            this.sessionStatus = sessionStatus;
+            return this;
+        }
+
+        public SessionBuilder sessionCoverImage(SessionCoverImage sessionCoverImage) {
+            this.sessionCoverImage = sessionCoverImage;
+            return this;
+        }
+
+        public SessionBuilder startDateTime(LocalDateTime startDateTime) {
+            this.startDateTime = startDateTime;
+            return this;
+        }
+
+        public SessionBuilder endDateTime(LocalDateTime endDateTime) {
+            this.endDateTime = endDateTime;
+            return this;
+        }
+
+        public SessionBuilder availableEnrollCount(int availableEnrollCount) {
+            this.availableEnrollCount = availableEnrollCount;
+            return this;
+        }
+
+        public Session build() {
+            return Session.createSessionOf(this);
+        }
+
+    }
+
 }
