@@ -14,7 +14,11 @@ public class EnrolledUserInfos {
         this.infos = new ArrayList<>();
     }
 
-    public List<SessionRegistrationInfo> getUsers() {
+    public EnrolledUserInfos(List<SessionRegistrationInfo> infos) {
+        this.infos = infos;
+    }
+
+    public List<SessionRegistrationInfo> getInfos() {
         return Collections.unmodifiableList(infos);
     }
 

@@ -50,6 +50,7 @@ public class Session {
         this.type = type;
         this.status = status;
         this.course = course;
+        this.enrolledUserInfos = new EnrolledUserInfos();
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -58,24 +59,12 @@ public class Session {
         return id;
     }
 
+    public void setImage(SessionImage image) {
+        this.image = image;
+    }
+
     public Long getImageId() {
         return image.getId();
-    }
-
-    public int getImageSize() {
-        return image.getSize();
-    }
-
-    public String getImageType() {
-        return image.getType();
-    }
-
-    public double getImageWidth() {
-        return image.getWidth();
-    }
-
-    public double getImageHeight() {
-        return image.getHeight();
     }
 
     public LocalDate getStartDate() {
@@ -102,12 +91,20 @@ public class Session {
         return enrolledUserInfos;
     }
 
+    public void setEnrolledUserInfos(EnrolledUserInfos enrolledUserInfos) {
+        this.enrolledUserInfos = enrolledUserInfos;
+    }
+
     public String getStatus() {
         return status.name();
     }
 
     public Long getCourseId() {
         return course.getId();
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -141,6 +138,9 @@ public class Session {
     }
 
     private void validatePayment(Payment payment) {
+        if (type.isFree()) {
+            return;
+        }
         if (!payment.isComplete(type.getTuition())) {
             throw new CannotEnrollException("결제가 완료되지 않았습니다.");
         }

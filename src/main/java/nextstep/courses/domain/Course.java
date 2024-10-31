@@ -28,6 +28,10 @@ public class Course {
         this.updatedAt = updatedAt;
     }
 
+    public Course(Long id) {
+        this.id = id;
+    }
+
     public Long getId() {
         return id;
     }
