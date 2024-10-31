@@ -56,8 +56,7 @@
     - [ ] modifyTypeInfo : 강의 유형정보 변경
     - [ ] findById : 강의 조회
   * 강의 이미지 저장소(SessionImageRepository)
-    - [ ] save : 강의 커버 이미지 등록 
-    - [ ] modify : 강의 이미지 변경
+    - [ ] save : 강의 커버 이미지 등록
     - [ ] findBySession : 강의 이미지 조회 
 * service 기능 (대상외 - 대략 구현)
   - [ ] 강의 등록 (관리자)
