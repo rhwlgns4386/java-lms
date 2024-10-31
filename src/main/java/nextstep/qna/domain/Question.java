@@ -61,17 +61,14 @@ public class Question {
         return deleted;
     }
 
-    public void makeDeleteHistory(List<DeleteHistory> histories) {
-        histories.add(new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now()));
-    }
 
     public List<DeleteHistory> deleted(NsUser loginUser) throws CannotDeleteException {
         validateAuthority(loginUser);
         deleted = true;
 
         List<DeleteHistory> histories = new ArrayList<>();
-        makeDeleteHistory(histories);
-        this.answers.makeAnswersDelete(loginUser, histories);
+        histories.add(new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now()));
+        histories.addAll(this.answers.makeAnswersDelete(loginUser));
 
         return histories;
     }

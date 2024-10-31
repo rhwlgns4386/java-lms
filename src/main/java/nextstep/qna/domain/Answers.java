@@ -22,10 +22,12 @@ public class Answers {
         this.answers.add(answer);
     }
 
-    public void makeAnswersDelete(NsUser loginUser, List<DeleteHistory> deleteHistory) throws CannotDeleteException {
+    public List<DeleteHistory> makeAnswersDelete(NsUser loginUser) throws CannotDeleteException {
+        List<DeleteHistory> deleteHistory = new ArrayList<>();
         for (Answer answer : answers) {
             deleteHistory.add(answer.deleted(loginUser));
         }
+        return deleteHistory;
     }
 
     @Override
