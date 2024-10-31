@@ -30,11 +30,11 @@ public class Answer {
 
     public Answer(Long id, NsUser writer, Question question, String contents) {
         this.id = id;
-        if(writer == null) {
+        if (writer == null) {
             throw new UnAuthorizedException();
         }
 
-        if(question == null) {
+        if (question == null) {
             throw new NotFoundException();
         }
 
@@ -43,37 +43,37 @@ public class Answer {
         this.contents = contents;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public Answer setDeleted(boolean deleted) {
-        this.deleted = deleted;
-        return this;
-    }
-
-    public boolean isDeleted() {
-        return deleted;
-    }
-
     public boolean isOwner(NsUser writer) {
         return this.writer.equals(writer);
+    }
+
+    public DeleteHistory deleteAnswer(NsUser writer) {
+        if (isOwner(writer)) {
+            deleted = true;
+            return new DeleteHistory(ContentType.ANSWER, id, writer, LocalDateTime.now());
+        }
+        return null;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public NsUser getWriter() {
         return writer;
     }
 
-    public String getContents() {
-        return contents;
-    }
-
     public void toQuestion(Question question) {
         this.question = question;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
     }
 
     @Override
     public String toString() {
         return "Answer [id=" + getId() + ", writer=" + writer + ", contents=" + contents + "]";
     }
+
 }
