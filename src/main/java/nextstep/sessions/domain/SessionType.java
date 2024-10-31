@@ -5,7 +5,7 @@ public class SessionType {
     private final MaximumEnrollment maximumEnrollment;
     private final int tuition;
 
-    private SessionType(PriceType type, MaximumEnrollment maximumEnrollment, int tuition) {
+    public SessionType(PriceType type, MaximumEnrollment maximumEnrollment, int tuition) {
         this.type = type;
         this.maximumEnrollment = maximumEnrollment;
         this.tuition = tuition;
@@ -19,12 +19,20 @@ public class SessionType {
         return new SessionType(PriceType.PAID, new MaximumEnrollment(maximumEnrollment), tuition);
     }
 
-    public boolean isFree() {
-        return type == PriceType.FREE;
+    public String getType() {
+        return type.name();
     }
 
     public int getTuition() {
         return tuition;
+    }
+
+    public int getMaximumEnrollment() {
+        return maximumEnrollment.getValue();
+    }
+
+    public boolean isFree() {
+        return type == PriceType.FREE;
     }
 
     public boolean isOverEnrollment(int enrollment) {

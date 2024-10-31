@@ -20,7 +20,21 @@ public class SessionRegistrationInfo {
         this.user = user;
     }
 
+    public SessionRegistrationInfo(NsUser user, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.user = user;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
     public NsUser getUser() {
         return user;
+    }
+
+    public Long getSessionId() {
+        return session.getId();
+    }
+
+    public Long getUserId() {
+        return user.getId();
     }
 }

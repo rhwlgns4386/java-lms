@@ -13,6 +13,14 @@ public class Period {
         this.endDate = endDate;
     }
 
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
     public void validate(LocalDate startDate, LocalDate endDate) {
         if (startDate.isAfter(endDate)) {
             throw new IllegalArgumentException("시작일이 종료일보다 늦을 수 없습니다.");
