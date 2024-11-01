@@ -29,12 +29,11 @@ public class SessionRepositoryTest {
 
     private SessionRepository sessionRepository;
     private SessionImageRepository sessionImageRepository;
-    private SessionStudentRepository sessionStudentRepository;
 
     @BeforeEach
     void setUp() {
         sessionImageRepository = new JdbcSessionImageRepository(jdbcTemplate);
-        sessionStudentRepository = new JdbcSessionStudentRepository(jdbcTemplate);
+        SessionStudentRepository sessionStudentRepository = new JdbcSessionStudentRepository(jdbcTemplate);
         sessionRepository = new JdbcSessionRepository(jdbcTemplate, sessionImageRepository, sessionStudentRepository);
     }
 
