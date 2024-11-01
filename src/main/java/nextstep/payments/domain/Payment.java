@@ -26,4 +26,14 @@ public class Payment {
         this.amount = amount;
         this.createdAt = LocalDateTime.now();
     }
+
+    public void validateSessionFee(int sessionFee) {
+        if (this.amount != sessionFee) {
+            throw new IllegalArgumentException("고객이 결제한 금액과 수강료가 일치하지 않습니다.");
+        }
+    }
+
+    public Long getNsUserId() {
+        return nsUserId;
+    }
 }

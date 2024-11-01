@@ -67,7 +67,7 @@ public class Answer extends BaseEntity {
     }
 
     private void validateAnswer(NsUser loginUser) throws CannotDeleteException {
-        if (loginUser.isSameUser(this.writer)) {
+        if (!loginUser.isSameUser(this.writer)) {
             throw new CannotDeleteException("답변을 삭제할 권한이 없습니다.");
         }
     }

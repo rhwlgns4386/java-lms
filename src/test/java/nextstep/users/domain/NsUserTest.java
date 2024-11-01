@@ -3,16 +3,24 @@ package nextstep.users.domain;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class NsUserTest {
+public class NsUserTest {
 
     @DisplayName("두 NsUser 객체가 동일할 때 true를 반환한다.")
     @Test
     void return_true_when_two_arguments_are_same() {
-        NsUser moon = new NsUser(1L, "moon", "1234", "moonyoonji", "moon@a.com");
-        NsUser zi = new NsUser(1L, "zi", "5678", "moonzi", "moonz@a.com");
+        LocalDateTime createdAt = LocalDateTime.now();
+        NsUser loginMoon = generateNsUserTestFixture(0L, "moon", createdAt);
+        NsUser activeMoon = generateNsUserTestFixture(0L, "moon", createdAt);
 
-        assertTrue(moon.isSameUser(zi));
+        assertTrue(loginMoon.isSameUser(activeMoon));
     }
+
+    public static NsUser generateNsUserTestFixture(Long id, String userId, LocalDateTime createdAt) {
+        return new NsUser(id, userId, "1234", userId, userId, createdAt, null);
+    }
+
 }

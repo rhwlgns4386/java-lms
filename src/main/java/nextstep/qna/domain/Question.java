@@ -69,7 +69,7 @@ public class Question extends BaseEntity {
     }
 
     private void validateWriter(NsUser loginUser) throws CannotDeleteException {
-        if (loginUser.isSameUser(this.writer)) {
+        if (!loginUser.isSameUser(this.writer)) {
             throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
         }
     }

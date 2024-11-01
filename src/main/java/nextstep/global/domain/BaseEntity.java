@@ -12,10 +12,6 @@ public abstract class BaseEntity {
     protected BaseEntity() {
     }
 
-    protected BaseEntity(LocalDateTime createdAt) {
-        this(0L, createdAt);
-    }
-
     protected BaseEntity(Long id, LocalDateTime createdAt) {
         this(id, createdAt, null);
     }
@@ -23,6 +19,6 @@ public abstract class BaseEntity {
     protected BaseEntity(Long id, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.createdAt = createdAt;
-        this.createdAt = updatedAt;
+        this.updatedAt = updatedAt;
     }
 }

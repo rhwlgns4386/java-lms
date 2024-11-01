@@ -1,31 +1,34 @@
 package nextstep.courses.domain;
 
+import nextstep.global.domain.BaseEntity;
+import nextstep.sessions.domain.Session;
+
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Course {
-    private Long id;
-
+public class Course extends BaseEntity {
     private String title;
 
     private Long creatorId;
 
-    private LocalDateTime createdAt;
+    private Integer cohort;
 
-    private LocalDateTime updatedAt;
+    private List<Session> sessions;
 
     public Course() {
     }
 
     public Course(String title, Long creatorId) {
-        this(0L, title, creatorId, LocalDateTime.now(), null);
+        this(0L, title, creatorId, 1, LocalDateTime.now(), null);
     }
 
-    public Course(Long id, String title, Long creatorId, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.id = id;
+    public Course(Long id, String title, Long creatorId, Integer cohort, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        super(id, createdAt, updatedAt);
         this.title = title;
         this.creatorId = creatorId;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        this.cohort = cohort;
+        this.sessions = new ArrayList<>();
     }
 
     public String getTitle() {
@@ -34,6 +37,10 @@ public class Course {
 
     public Long getCreatorId() {
         return creatorId;
+    }
+
+    public Integer getCohort() {
+        return cohort;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -46,6 +53,7 @@ public class Course {
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", creatorId=" + creatorId +
+                ", cohort=" + cohort +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';
