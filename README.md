@@ -97,3 +97,6 @@
 
 ## Step3. 리팩토링
 - [X] SessionStudent Repository 분리
+
+## Step3. 피드백 구현
+- [X] SessionEntity 추가 (디비 접근용)
