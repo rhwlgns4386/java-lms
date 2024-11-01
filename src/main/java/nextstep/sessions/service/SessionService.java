@@ -9,10 +9,7 @@ import nextstep.qna.domain.DeleteHistory;
 import nextstep.qna.domain.Question;
 import nextstep.qna.domain.QuestionRepository;
 import nextstep.qna.service.DeleteHistoryService;
-import nextstep.sessions.domain.ApplicationDetailRepository;
-import nextstep.sessions.domain.Session;
-import nextstep.sessions.domain.SessionImageRepository;
-import nextstep.sessions.domain.SessionRepository;
+import nextstep.sessions.domain.*;
 import nextstep.users.domain.NsUser;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +34,8 @@ public class SessionService {
     public void apply(NsUser loginUser, long sessionId) throws CannotDeleteException {
 
         Session session = sessionRepository.findById(sessionId).orElseThrow(NotFoundException::new);
+        List<ApplicationDetail> applicationDetails = applicationDetailRepository.findBySession(sessionId);
+        session.addApplicationDetails(applicationDetails);
 
         Optional<Payment> payment = payForSession(session);
 

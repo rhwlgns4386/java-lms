@@ -21,6 +21,10 @@ public class ApplicationDetails {
         applicationDetails.add(applicationDetail);
     }
 
+    public void add(List<ApplicationDetail> applicationDetails) {
+        this.applicationDetails.addAll(applicationDetails);
+    }
+
     public int size() {
         if (CollectionUtils.isEmpty(applicationDetails)) {
             return 0;

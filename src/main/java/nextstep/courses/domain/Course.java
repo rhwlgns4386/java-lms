@@ -26,6 +26,10 @@ public class Course {
         this(0L, title, creatorId, LocalDateTime.now(), null);
     }
 
+    public void addSessions(List<Session> sessions) {
+        this.sessions = sessions;
+    }
+
     public Course(Long id, String title, Long creatorId, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.title = title;

@@ -5,6 +5,7 @@ import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class Session {
@@ -94,6 +95,9 @@ public class Session {
         return this.sessionType.getMaxNumberOfUser();
     }
 
+    public void addApplicationDetails(List<ApplicationDetail> applicationDetailList) {
+        this.applicationDetails.add(applicationDetailList);
+    }
 
     public ApplicationDetail getApplicationDetail(Long userId, long sessionId) {
         return applicationDetails.getMatch(sessionId, userId);

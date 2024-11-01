@@ -42,6 +42,8 @@ public class SessionRepositoryTest {
         assertThat(savedSession.getTypeCode()).isEqualTo(SessionTypeEnum.PAID.getTypeCode());
         assertThat(savedSession.getStatusCode()).isEqualTo(SessionStatusEnum.PREPARING.getValue());
 
+        assertThat(savedSession.getCourseId()).isEqualTo(1L);
+
         savedSession.modifyStatus(SessionStatusEnum.RECRUITING);
         sessionRepository.modifyStatus(savedSession);
         Session statusModifiedSession = sessionRepository.findById(1L).orElse(null);
@@ -51,7 +53,6 @@ public class SessionRepositoryTest {
         sessionRepository.modifyPeriod(statusModifiedSession);
         Session periodModifiedSession = sessionRepository.findById(1L).orElse(null);
         assertThat(statusModifiedSession.getStartDate()).isEqualTo("20250201");
-
 
         LOGGER.debug("Session: {}", savedSession);
     }
