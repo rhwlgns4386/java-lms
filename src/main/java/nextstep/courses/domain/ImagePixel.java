@@ -46,4 +46,12 @@ public class ImagePixel {
     public int hashCode() {
         return Objects.hash(getWidth(), getHeight());
     }
+
+    @Override
+    public String toString() {
+        return "ImagePixel{" +
+                "width=" + width +
+                ", height=" + height +
+                '}';
+    }
 }

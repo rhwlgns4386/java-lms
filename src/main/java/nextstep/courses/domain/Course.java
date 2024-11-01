@@ -27,20 +27,21 @@ public class Course {
     }
 
     public Course(Long id, String title, Long creatorId, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.id = id;
-        this.title = title;
-        this.creatorId = creatorId;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        this(id, null, title, creatorId, createdAt, updatedAt);
     }
 
     public Course(Long id, Long order, String title, Long creatorId) {
+        this(id, order, title, creatorId, LocalDateTime.now(), null);
+    }
+
+    public Course(Long id, Long order, String title, Long creatorId, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.order = order;
         this.title = title;
         this.creatorId = creatorId;
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.sessions = new ArrayList<>();
     }
 
     public Long getId() {

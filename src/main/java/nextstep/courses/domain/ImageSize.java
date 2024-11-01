@@ -34,4 +34,11 @@ public class ImageSize {
     public int hashCode() {
         return Objects.hashCode(getSize());
     }
+
+    @Override
+    public String toString() {
+        return "ImageSize{" +
+                "size=" + size +
+                '}';
+    }
 }

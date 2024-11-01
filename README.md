@@ -38,9 +38,10 @@
 * Session 테이블 추가 [X]
 * Image 테이블 추가 [X]
 * Student 테이블 추가 [X]
-* Course 저장 로직 []
-* Session 저장 로직 []
-* Student 저장 로직 []
+* Course crud 로직 [X]
+* Session crud 로직 []
+* Student crud 로직 []
+* Image crud 로직 [X]
 * Session을 Course에 추가 로직 []
 * 수간 신청 로직 []
 
