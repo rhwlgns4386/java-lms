@@ -37,32 +37,6 @@ public class Question {
         this.contents = contents;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public Question setTitle(String title) {
-        this.title = title;
-        return this;
-    }
-
-    public String getContents() {
-        return contents;
-    }
-
-    public Question setContents(String contents) {
-        this.contents = contents;
-        return this;
-    }
-
-    public NsUser getWriter() {
-        return writer;
-    }
-
     public void addAnswer(Answer answer) {
         answer.toQuestion(this);
         answers.add(answer);
@@ -72,21 +46,47 @@ public class Question {
         return writer.equals(loginUser);
     }
 
-    public Question setDeleted(boolean deleted) {
-        this.deleted = deleted;
-        return this;
+    public boolean hasOtherUserAnswer(NsUser loginUser) {
+        return answers.stream()
+                .anyMatch(answer -> !answer.isOwner(loginUser));
     }
 
-    public boolean isDeleted() {
-        return deleted;
+    public List<DeleteHistory> deleteQuestion() {
+        List<DeleteHistory> deleteHistories = new ArrayList<>();
+
+        deleted = true;
+        deleteHistories.add(new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now()));
+
+        deleteAnswers(deleteHistories);
+
+        return deleteHistories;
+    }
+
+    private void deleteAnswers(List<DeleteHistory> deleteHistories) {
+        answers.forEach(answer -> {
+            deleteHistories.add(answer.deleteAnswer(writer));
+        });
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public NsUser getWriter() {
+        return writer;
     }
 
     public List<Answer> getAnswers() {
         return answers;
     }
 
+    public boolean isDeleted() {
+        return deleted;
+    }
+
     @Override
     public String toString() {
         return "Question [id=" + getId() + ", title=" + title + ", contents=" + contents + ", writer=" + writer + "]";
     }
+
 }
