@@ -1,7 +1,6 @@
 package nextstep.courses.infrastructure;
 
 import nextstep.courses.domain.SessionImage;
-import nextstep.courses.domain.SessionImageRepository;
 import nextstep.courses.domain.SessionImageSize;
 import nextstep.courses.domain.SessionImageType;
 import org.junit.jupiter.api.BeforeEach;

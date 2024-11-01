@@ -1,6 +1,9 @@
 package nextstep.courses.infrastructure;
 
-import nextstep.courses.domain.*;
+import nextstep.courses.domain.FreeSession;
+import nextstep.courses.domain.PaidSession;
+import nextstep.courses.domain.Session;
+import nextstep.courses.domain.SessionImage;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -17,10 +20,12 @@ public class JdbcSessionRepository implements SessionRepository {
     public static final int FREE_MAX_STUDENTS = 0;
     private final JdbcOperations jdbcTemplate;
     private final SessionImageRepository sessionImageRepository;
+    private final SessionStudentRepository sessionStudentRepository;
 
-    public JdbcSessionRepository(JdbcOperations jdbcTemplate, SessionImageRepository sessionImageRepository) {
+    public JdbcSessionRepository(JdbcOperations jdbcTemplate, SessionImageRepository sessionImageRepository, SessionStudentRepository sessionStudentRepository) {
         this.jdbcTemplate = jdbcTemplate;
         this.sessionImageRepository = sessionImageRepository;
+        this.sessionStudentRepository = sessionStudentRepository;
     }
 
     @Override
@@ -34,32 +39,19 @@ public class JdbcSessionRepository implements SessionRepository {
             fee = ((PaidSession) session).getSessionFee();
         }
         String sql = "insert into session (session_start_date, session_end_date, status, image_id, session_type, session_fee, max_student) values (? ,? ,? ,? ,? ,? ,?)";
-
-        for (Long userId : session.getStudents()) {
-            String sqlMapping = "insert into session_student (session_id, user_id) values (?, ?)";
-            jdbcTemplate.update(sqlMapping, session.getSessionId(), userId);
-        }
-
+        sessionStudentRepository.save(session.getSessionId(), session.getStudents());
         return jdbcTemplate.update(sql, session.getDate().getStartAt(), session.getDate().getEndAt(), session.getStatus().name(), session.getImage().getId(), type, fee, maxStudents);
-
     }
 
     @Override
     public Session findById(Long id) {
         String sql = "select id, session_start_date, session_end_date, status, image_id, session_type, session_fee, max_student from session where id = ?";
-        List<Long> students = getSessionStudents(id);
+        List<Long> students = sessionStudentRepository.findBySessionId(id);
         RowMapper<Session> rowMapper = (rs, rowNum) -> {
             SessionImage sessionImage = getSessionImage(rs);
-
             return getSession(rs, sessionImage, students);
         };
         return jdbcTemplate.queryForObject(sql, rowMapper, id);
-    }
-
-    private List<Long> getSessionStudents(Long id) {
-        String sql = "select user_id from session_student where id = ?";
-        RowMapper<Long> rowMapper = (rs, rowNum) -> rs.getLong("user_id");
-        return jdbcTemplate.query(sql, rowMapper, id);
     }
 
     private SessionImage getSessionImage(ResultSet rs) throws SQLException {
