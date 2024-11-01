@@ -1,8 +1,6 @@
 package nextstep.courses.service;
 
 import nextstep.courses.entity.SessionEntity;
-import nextstep.courses.infrastructure.course.CourseRepository;
-import nextstep.courses.infrastructure.course.JdbcCourseRepository;
 import nextstep.courses.infrastructure.session.JdbcSessionRepository;
 import nextstep.courses.infrastructure.session.SessionRepository;
 import nextstep.payments.domain.Payment;
