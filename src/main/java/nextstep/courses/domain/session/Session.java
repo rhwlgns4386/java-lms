@@ -8,7 +8,7 @@ import java.util.Objects;
 
 public abstract class Session {
 
-    static final int NOT_ASSIGNED = -1;
+    public static final int NOT_ASSIGNED = -1;
     static final int INIT_ENROLLMENT = 0;
 
     protected final Long id;
@@ -77,8 +77,8 @@ public abstract class Session {
         return id;
     }
 
-    public final String getSessionState() {
-        return sessionState.name();
+    public final SessionState getSessionState() {
+        return sessionState;
     }
 
     public final String getCoverFilePath() {

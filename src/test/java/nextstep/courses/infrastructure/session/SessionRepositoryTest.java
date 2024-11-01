@@ -1,15 +1,14 @@
 package nextstep.courses.infrastructure.session;
 
-import nextstep.courses.domain.session.Session;
-import nextstep.courses.domain.session.SessionBuilderTest;
+import nextstep.courses.entity.SessionEntity;
 import nextstep.courses.type.SessionState;
-import nextstep.payments.domain.Payment;
-import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.jdbc.core.JdbcTemplate;
+
+import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -27,14 +26,26 @@ public class SessionRepositoryTest {
     }
 
     @Test
-    void update() {
-        Session session = SessionBuilderTest.paidSessionBuilder().sessionState(SessionState.OPEN).build();
-        sessionRepository.save(session, 1L);
-        Session foundSession = sessionRepository.findById(3L);
-        foundSession.register(new Payment("test", foundSession.getId(), NsUserTest.JAVAJIGI.getId(), session.getSessionFee()));
-        sessionRepository.save(foundSession, 1L);
+    void updateEntity() {
+        SessionEntity sessionEntity = getSaveEntity();
+        sessionRepository.save(sessionEntity, 1L);
 
-        Session updatedSession = sessionRepository.findById(3L);
-        assertThat(updatedSession.getEnrollment()).isEqualTo(1);
+        SessionEntity updateEntity = getUpdateEntity();
+        sessionRepository.save(updateEntity, 1L);
+
+        SessionEntity updatedSessionEntity = sessionRepository.findById(3L);
+        assertThat(updatedSessionEntity.getEnrollment()).isEqualTo(1);
+    }
+
+    private SessionEntity getSaveEntity() {
+        return new SessionEntity("src/test/java/nextstep/courses/domain/session/file/image.png",
+                SessionState.OPEN, 0, 30,
+                10000, LocalDateTime.now(), LocalDateTime.now());
+    }
+
+    private SessionEntity getUpdateEntity() {
+        return new SessionEntity(3L, "src/test/java/nextstep/courses/domain/session/file/image.png",
+                SessionState.OPEN, 1, 30,
+                10000, LocalDateTime.now(), LocalDateTime.now());
     }
 }
