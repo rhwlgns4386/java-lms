@@ -51,7 +51,8 @@ class SessionTest {
     @Test
     void 수강신청() {
         assertEquals(paidSession.sizeNsUsers(), 0);
-        paidSession.apply(ADD_INFO);
+        Student student = paidSession.apply(ADD_INFO);
         assertEquals(paidSession.sizeNsUsers(), 1);
+        assertEquals(student, new Student(0L, 0L));
     }
 }

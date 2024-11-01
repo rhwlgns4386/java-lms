@@ -21,7 +21,7 @@ public class Session {
 
     private final List<Long> nsUserIds = new ArrayList<>();
 
-    protected Session(Long id, SessionPeriod period, SessionCoverImage coverImage, SessionFeeType feeType, SessionAmount amount, int maxPersonnel, SessionStatus status) {
+    public Session(Long id, SessionPeriod period, SessionCoverImage coverImage, SessionFeeType feeType, SessionAmount amount, int maxPersonnel, SessionStatus status) {
         this.id = id;
         this.period = period;
         this.coverImage = coverImage;
@@ -46,11 +46,12 @@ public class Session {
         return new Session(id, period, coverImage, SessionFeeType.FREE, new SessionAmount(0L), 0, status);
     }
 
-    public void apply(SessionAddInfo addInfo) {
+    public Student apply(SessionAddInfo addInfo) {
         validStatus();
         validAmount(addInfo);
         validMaxPersonnel();
         nsUserIds.add(addInfo.getNsUserId());
+        return new Student(addInfo.getNsUserId(), this.id);
     }
 
     private void validMaxPersonnel() {
@@ -73,6 +74,30 @@ public class Session {
 
     public int sizeNsUsers() {
         return nsUserIds.size();
+    }
+
+    public SessionPeriod getPeriod() {
+        return period;
+    }
+
+    public SessionCoverImage getCoverImage() {
+        return coverImage;
+    }
+
+    public SessionFeeType getFeeType() {
+        return feeType;
+    }
+
+    public SessionAmount getAmount() {
+        return amount;
+    }
+
+    public int getMaxPersonnel() {
+        return maxPersonnel;
+    }
+
+    public SessionStatus getStatus() {
+        return status;
     }
 
     @Override
