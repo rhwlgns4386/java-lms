@@ -1,6 +1,6 @@
 package nextstep.courses.service;
 
-import nextstep.courses.domain.session.Session;
+import nextstep.courses.entity.SessionEntity;
 import nextstep.courses.infrastructure.course.CourseRepository;
 import nextstep.courses.infrastructure.course.JdbcCourseRepository;
 import nextstep.courses.infrastructure.session.JdbcSessionRepository;
@@ -33,10 +33,10 @@ public class CourseServiceTest {
 
     @Test
     void test_register_with_db() {
-        courseService.registerSession(1L,
+        courseService.registerSessionEntity(1L,
                 new Payment("테스트", 1L, NsUserTest.JAVAJIGI.getId(), 0L));
 
-        Session session = sessionRepository.findById(1L);
+        SessionEntity session = sessionRepository.findById(1L);
 
         assertThat(session.getEnrollment()).isEqualTo(1);
     }

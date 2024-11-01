@@ -1,6 +1,7 @@
 package nextstep.courses.infrastructure.course;
 
 import nextstep.courses.domain.course.Course;
+import nextstep.courses.entity.CourseEntity;
 import nextstep.courses.infrastructure.session.SessionRepository;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
@@ -21,26 +22,22 @@ public class JdbcCourseRepository implements CourseRepository {
     }
 
     @Override
-    public int save(Course course) {
+    public int save(CourseEntity course) {
         String sql = "insert into course (title, creator_id, created_at) values(?, ?, ?)";
-        return jdbcTemplate.update(sql, course.getTitle(), course.getCreatorId(), course.getCreatedAt());
+        return jdbcTemplate.update(sql, course.getTitle(), course.getCreatorId(), course.getCreateAt());
     }
 
     @Override
-    public Course findById(Long id) {
+    public CourseEntity findById(Long id) {
         String sql = "select id, title, creator_id, created_at, updated_at from course where id = ?";
-        RowMapper<Course> rowMapper = (rs, rowNum) -> new Course(
+        RowMapper<CourseEntity> rowMapper = (rs, rowNum) -> new CourseEntity(
                 rs.getLong(1),
                 rs.getString(2),
                 rs.getLong(3),
                 toLocalDateTime(rs.getTimestamp(4)),
                 toLocalDateTime(rs.getTimestamp(5)));
 
-        Course course = jdbcTemplate.queryForObject(sql, rowMapper, id);
-        if (course != null) {
-            sessionRepository.findByCourseId(id).forEach(course::add);
-        }
-        return course;
+        return jdbcTemplate.queryForObject(sql, rowMapper, id);
     }
 
     private LocalDateTime toLocalDateTime(Timestamp timestamp) {

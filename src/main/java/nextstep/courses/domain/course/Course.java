@@ -45,6 +45,10 @@ public class Course {
                 .orElseThrow(() -> new IllegalArgumentException("결제 정보에 대한 강의를 찾을 수 없습니다"));
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -55,6 +59,10 @@ public class Course {
 
     public LocalDateTime getCreatedAt() {
         return creationInfo.getCreatedAt();
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return creationInfo.getUpdatedAt();
     }
 
     @Override
