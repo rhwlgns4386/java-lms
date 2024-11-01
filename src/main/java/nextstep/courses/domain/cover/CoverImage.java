@@ -6,6 +6,10 @@ public class CoverImage {
     private final CoverImageType type;
     private final CoverImageSize imageSize;
 
+    public CoverImage(CoverImageFile file, CoverImageType type, CoverImageSize imageSize) {
+        this(null, file, type, imageSize);
+    }
+
     public CoverImage(Long id, CoverImageFile file, CoverImageType coverImageType, CoverImageSize coverImageSize) {
         this.id = id;
         this.file = file;

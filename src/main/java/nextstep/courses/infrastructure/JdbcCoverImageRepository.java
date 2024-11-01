@@ -2,13 +2,9 @@ package nextstep.courses.infrastructure;
 
 import nextstep.courses.domain.CoverImageRepository;
 import nextstep.courses.domain.cover.CoverImage;
-import nextstep.courses.domain.cover.CoverImageFile;
-import nextstep.courses.domain.cover.CoverImageSize;
-import nextstep.courses.domain.cover.CoverImageType;
+import nextstep.courses.domain.cover.CoverImageEntity;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.stereotype.Repository;
-
-import java.time.LocalDateTime;
 
 @Repository("coverImageRepository")
 public class JdbcCoverImageRepository implements CoverImageRepository {
@@ -19,38 +15,33 @@ public class JdbcCoverImageRepository implements CoverImageRepository {
     }
 
     @Override
-    public int save(Long sessionId, CoverImage coverImage) {
-        String sql = "insert into cover_image ( session_id, file_size, image_type, width, height, created_at) values (?, ?, ?, ?, ?, ?)";
+    public int save(CoverImage coverImage) {
+        String sql = "insert into cover_image (file_size, image_type, width, height, created_at) " +
+                "values (?, ?, ?, ?, ?)";  // 값 5개만 받도록 수정
+
+        CoverImageEntity entity = CoverImageEntity.from(coverImage);
 
         return jdbcTemplate.update(sql,
-                sessionId,
-                coverImage.getFile().getSize(),
-                coverImage.getType().name(),
-                coverImage.getImageSize().getWidth(),
-                coverImage.getImageSize().getHeight(),
-                LocalDateTime.now()
+                entity.getFileSize(),
+                entity.getImageType(),
+                entity.getWidth(),
+                entity.getHeight(),
+                entity.getCreatedAt()
         );
     }
 
     @Override
-    public CoverImage findBySessionId(Long sessionId) {
-        String sql = "select * from cover_image where session_id = ?";
+    public CoverImage findById(Long id) {
+        String sql = "select id, file_size, image_type, width, height from cover_image where id = ?";
 
         return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> {
-            Long id = rs.getLong("id");
-
-            CoverImageFile file = new CoverImageFile(rs.getInt("file_size"));
-
-            CoverImageType type = CoverImageType.valueOf(
-                    rs.getString("image_type")
-            );
-
-            CoverImageSize size = new CoverImageSize(
-                    rs.getInt("width"),
-                    rs.getInt("height")
-            );
-
-            return new CoverImage(id, file, type, size);
-        }, sessionId);
+            CoverImageEntity entity = new CoverImageEntity();
+            entity.setId(rs.getLong("id"));
+            entity.setFileSize(rs.getInt("file_size"));
+            entity.setImageType(rs.getString("image_type"));
+            entity.setWidth(rs.getInt("width"));
+            entity.setHeight(rs.getInt("height"));
+            return entity.toDomain();
+        }, id);
     }
 }

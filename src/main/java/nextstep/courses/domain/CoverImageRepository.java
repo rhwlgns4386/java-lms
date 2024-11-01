@@ -3,7 +3,7 @@ package nextstep.courses.domain;
 import nextstep.courses.domain.cover.CoverImage;
 
 public interface CoverImageRepository {
-    int save(Long sessionId, CoverImage coverImage);
+    int save(CoverImage coverImage);
 
-    CoverImage findBySessionId(Long sessionId);
+    CoverImage findById(Long id);
 }

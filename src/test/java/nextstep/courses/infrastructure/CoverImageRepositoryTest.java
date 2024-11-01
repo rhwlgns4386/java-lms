@@ -1,8 +1,6 @@
 package nextstep.courses.infrastructure;
 
-import nextstep.courses.domain.CourseRepository;
 import nextstep.courses.domain.CoverImageRepository;
-import nextstep.courses.domain.course.Course;
 import nextstep.courses.domain.cover.CoverImage;
 import nextstep.courses.domain.cover.CoverImageFile;
 import nextstep.courses.domain.cover.CoverImageSize;
@@ -17,8 +15,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import java.time.LocalDateTime;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -30,38 +26,42 @@ class CoverImageRepositoryTest {
     private JdbcTemplate jdbcTemplate;
 
     private CoverImageRepository coverImageRepository;
+    private CoverImage coverImage;
+    private CoverImageFile file;
+    private CoverImageType type;
+    private CoverImageSize size;
 
     @BeforeEach
     void setUp() {
         coverImageRepository = new JdbcCoverImageRepository(jdbcTemplate);
+         file = new CoverImageFile(1024 * 100);
+         type = CoverImageType.JPG;
+         size = new CoverImageSize(600, 400);
+         coverImage = new CoverImage(file, type, size);
     }
 
     @Test
-    void crud() {
-        // given
-        CoverImageFile file = new CoverImageFile(1024 * 100);
-        CoverImageType type = CoverImageType.JPG;
-        CoverImageSize size = new CoverImageSize(600, 400);
-        CoverImage coverImage = new CoverImage(1L, file, type, size);
+    void save() {
+        int seq = coverImageRepository.save(coverImage);
 
-        // when
-        int count = coverImageRepository.save(1L, coverImage);
-        assertThat(count).isEqualTo(1);
+        assertThat(seq).isEqualTo(1);
+    }
 
-        CoverImage savedCoverImage = coverImageRepository.findBySessionId(1L);
+    @Test
+    void findBy() {
+        int seq = coverImageRepository.save(coverImage);
 
-        // then
-        assertThat(savedCoverImage.getFile().getSize()).isEqualTo(file.getSize());
-        assertThat(savedCoverImage.getType()).isEqualTo(type);
-        assertThat(savedCoverImage.getImageSize().getWidth()).isEqualTo(size.getWidth());
-        assertThat(savedCoverImage.getImageSize().getHeight()).isEqualTo(size.getHeight());
+        CoverImage foundCoverImage = coverImageRepository.findById((long) seq);
 
-        LOGGER.debug("CoverImage: {}", savedCoverImage);
+        assertThat(foundCoverImage.getFile().getSize()).isEqualTo(file.getSize());
+        assertThat(foundCoverImage.getType()).isEqualTo(type);
+        assertThat(foundCoverImage.getImageSize().getWidth()).isEqualTo(size.getWidth());
+        assertThat(foundCoverImage.getImageSize().getHeight()).isEqualTo(size.getHeight());
     }
 
     @Test
     void findByNonExistentSessionId() {
-        assertThatThrownBy(() -> coverImageRepository.findBySessionId(999L))
+        assertThatThrownBy(() -> coverImageRepository.findById(999L))
                 .isInstanceOf(EmptyResultDataAccessException.class);
     }
 
