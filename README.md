@@ -33,3 +33,17 @@
 * SessionId class 삭제 [X]
 * Student class 생성 [X]
 * PaidSession의 수강 학생수를 이용해서 SessionCapacity의 currentCount 업데이트하도록 로직 수정 [X]
+* erd 작성 [X]
+* Course 저장 로직 []
+* Session 저장 로직 []
+* Student 저장 로직 []
+* Session을 Course에 추가 로직 []
+* 수간 신청 로직 []
+
+## ERD
+```mermaid
+erDiagram
+    COURSE ||--o{ SESSION : has
+    SESSION ||--o{ STUDENT : use
+    NS_USER ||--o{ STUDENT : use
+```
