@@ -36,7 +36,7 @@
 * erd 작성 [X]
 * Course 테이블 추가 [X]
 * Session 테이블 추가 [X]
-* Image 테이블 추가 []
+* Image 테이블 추가 [X]
 * Student 테이블 추가 []
 * Course 저장 로직 []
 * Session 저장 로직 []
@@ -45,10 +45,11 @@
 * 수간 신청 로직 []
 
 ## ERD
+
 ```mermaid
 erDiagram
-    COURSE ||--o{ SESSION : has
-    SESSION ||--|| IMAGE : has
-    SESSION ||--o{ STUDENT : use
-    NS_USER ||--o{ STUDENT : use
+    COURSE ||--o{ SESSION: has
+    SESSION ||--|| IMAGE: has
+    SESSION ||--o{ STUDENT: use
+    NS_USER ||--o{ STUDENT: use
 ```
