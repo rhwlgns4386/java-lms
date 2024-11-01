@@ -8,17 +8,39 @@ public class PaidSession extends Session {
     private Money fee;
     private List<Student> students;
 
-    public PaidSession(Long id,
-        String title,
-        Image image,
-        SessionDate sessionDate,
-        SessionCapacity capacity,
-        Money fee
+    public PaidSession(String title,
+                       Image image,
+                       SessionDate sessionDate,
+                       SessionCapacity capacity,
+                       Money fee
     ) {
-        super(image, sessionDate, id, title, SessionStatus.PREPARING, SessionType.PAID);
+        this(image, sessionDate, null, title, SessionStatus.PREPARING, SessionType.PAID, capacity, fee, new ArrayList<>());
+    }
+
+    public PaidSession(Long id,
+                       String title,
+                       Image image,
+                       SessionDate sessionDate,
+                       SessionCapacity capacity,
+                       Money fee
+    ) {
+        this(image, sessionDate, id, title, SessionStatus.PREPARING, SessionType.PAID, capacity, fee, new ArrayList<>());
+    }
+
+    public PaidSession(Image image,
+                       SessionDate sessionDate,
+                       Long id,
+                       String title,
+                       SessionStatus sessionStatus,
+                       SessionType sessionType,
+                       SessionCapacity capacity,
+                       Money fee,
+                       List<Student> students
+    ) {
+        super(image, sessionDate, id, title, sessionStatus, sessionType);
         this.capacity = capacity;
         this.fee = fee;
-        this.students = new ArrayList<>();
+        this.students = students;
     }
 
     public SessionCapacity getCapacity() {

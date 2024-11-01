@@ -6,13 +6,31 @@ import java.util.List;
 public class FreeSession extends Session {
     private List<Student> students;
 
+    public FreeSession(String title,
+                       SessionDate sessionDate,
+                       Image image
+    ) {
+        this(image, sessionDate, null, title, SessionStatus.PREPARING, SessionType.FREE, new ArrayList<>());
+    }
+
     public FreeSession(Long id,
                        String title,
                        SessionDate sessionDate,
                        Image image
     ) {
-        super(image, sessionDate, id, title, SessionStatus.PREPARING, SessionType.FREE);
-        this.students = new ArrayList<>();
+        this(image, sessionDate, id, title, SessionStatus.PREPARING, SessionType.FREE, new ArrayList<>());
+    }
+
+    public FreeSession(Image image,
+                       SessionDate sessionDate,
+                       Long id,
+                       String title,
+                       SessionStatus sessionStatus,
+                       SessionType sessionType,
+                       List<Student> students
+    ) {
+        super(image, sessionDate, id, title, sessionStatus, sessionType);
+        this.students = students;
     }
 
     @Override
@@ -24,4 +42,8 @@ public class FreeSession extends Session {
         this.students.add(Student.of(registration));
     }
 
+
+    public List<Student> getStudents() {
+        return students;
+    }
 }

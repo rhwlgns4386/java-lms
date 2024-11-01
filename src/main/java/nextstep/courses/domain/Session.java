@@ -27,6 +27,23 @@ public abstract class Session {
         return id;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public SessionDate getSessionDate() {
+        return sessionDate;
+    }
+
+    public Image getImage() {
+        return image;
+    }
+
+    public SessionType getSessionType() {
+        return sessionType;
+    }
+
+
     protected abstract void register(Registration registration);
 
     protected void open() {
@@ -45,7 +62,7 @@ public abstract class Session {
         this.sessionStatus = sessionStatus;
     }
 
-    protected SessionStatus getSessionStatus() {
+    public SessionStatus getSessionStatus() {
         return sessionStatus;
     }
 
