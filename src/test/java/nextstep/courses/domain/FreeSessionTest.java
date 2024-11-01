@@ -41,7 +41,7 @@ public class FreeSessionTest {
 
         freeSession.open();
 
-        freeSession.register();
+        freeSession.register(RegistrationTest.REGISTRATION);
 
         Assertions.assertThat(freeSession.getId()).isEqualTo(id);
         Assertions.assertThat(freeSession.getSessionStatus()).isEqualTo(SessionStatus.RECRUITING);
@@ -52,7 +52,7 @@ public class FreeSessionTest {
     void checkRegisterNotOpenFreeSessionTest() {
         FreeSession freeSession = new FreeSession(id, title, sessionDate, image);
 
-        Assertions.assertThatThrownBy(() -> freeSession.register())
+        Assertions.assertThatThrownBy(() -> freeSession.register(RegistrationTest.REGISTRATION))
                 .isInstanceOf(IllegalStateException.class);
     }
 

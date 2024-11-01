@@ -37,7 +37,7 @@
 * Course 테이블 추가 [X]
 * Session 테이블 추가 [X]
 * Image 테이블 추가 [X]
-* Student 테이블 추가 []
+* Student 테이블 추가 [X]
 * Course 저장 로직 []
 * Session 저장 로직 []
 * Student 저장 로직 []

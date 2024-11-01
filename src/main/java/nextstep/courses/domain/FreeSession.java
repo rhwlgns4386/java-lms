@@ -1,14 +1,18 @@
 package nextstep.courses.domain;
 
-public class FreeSession extends Session {
+import java.util.ArrayList;
+import java.util.List;
 
+public class FreeSession extends Session {
+    private List<Student> students;
 
     public FreeSession(Long id,
-        String title,
-        SessionDate sessionDate,
-        Image image
+                       String title,
+                       SessionDate sessionDate,
+                       Image image
     ) {
         super(image, sessionDate, id, title, SessionStatus.PREPARING, SessionType.FREE);
+        this.students = new ArrayList<>();
     }
 
     @Override
@@ -16,11 +20,8 @@ public class FreeSession extends Session {
         if (!isAvailableForRegistration()) {
             throw new IllegalStateException("Can't register session");
         }
-    }
 
-    public void register() {
-        register(null);
+        this.students.add(Student.of(registration));
     }
-
 
 }

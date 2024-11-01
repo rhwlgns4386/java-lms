@@ -9,11 +9,11 @@ public abstract class Session {
     private SessionStatus sessionStatus;
 
     public Session(Image image,
-        SessionDate sessionDate,
-        Long id,
-        String title,
-        SessionStatus sessionStatus,
-        SessionType sessionType
+                   SessionDate sessionDate,
+                   Long id,
+                   String title,
+                   SessionStatus sessionStatus,
+                   SessionType sessionType
     ) {
         this.image = image;
         this.sessionDate = sessionDate;
