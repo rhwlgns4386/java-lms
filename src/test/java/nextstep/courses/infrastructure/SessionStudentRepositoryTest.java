@@ -2,6 +2,8 @@ package nextstep.courses.infrastructure;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.jdbc.core.JdbcOperations;
@@ -13,9 +15,11 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 @JdbcTest
 public class SessionStudentRepositoryTest {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SessionStudentRepositoryTest.class);
 
     @Autowired
     private JdbcOperations jdbcTemplate;
+
     private SessionStudentRepository sessionStudentRepository;
 
     @BeforeEach
@@ -33,5 +37,6 @@ public class SessionStudentRepositoryTest {
                 () -> assertThat(count).isEqualTo(2),
                 () -> assertThat(findUserIds).isEqualTo(userIds)
         );
+        LOGGER.info("Students: {}", findUserIds);
     }
 }

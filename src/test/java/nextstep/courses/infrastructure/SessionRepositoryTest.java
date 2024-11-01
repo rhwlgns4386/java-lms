@@ -13,7 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.JdbcOperations;
 
 import java.util.List;
 
@@ -25,7 +25,7 @@ public class SessionRepositoryTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(SessionRepositoryTest.class);
 
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private JdbcOperations jdbcTemplate;
 
     private SessionRepository sessionRepository;
     private SessionImageRepository sessionImageRepository;
