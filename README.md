@@ -35,7 +35,8 @@
 * PaidSession의 수강 학생수를 이용해서 SessionCapacity의 currentCount 업데이트하도록 로직 수정 [X]
 * erd 작성 [X]
 * Course 테이블 추가 [X]
-* Session 테이블 추가 []
+* Session 테이블 추가 [X]
+* Image 테이블 추가 []
 * Student 테이블 추가 []
 * Course 저장 로직 []
 * Session 저장 로직 []
@@ -47,6 +48,7 @@
 ```mermaid
 erDiagram
     COURSE ||--o{ SESSION : has
+    SESSION ||--|| IMAGE : has
     SESSION ||--o{ STUDENT : use
     NS_USER ||--o{ STUDENT : use
 ```
