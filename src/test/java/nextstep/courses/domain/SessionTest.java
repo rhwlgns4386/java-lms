@@ -1,9 +1,10 @@
 package nextstep.courses.domain;
 
-import nextstep.courses.domain.SessionImage.ImageCapacity;
-import nextstep.courses.domain.SessionImage.ImageSize;
-import nextstep.courses.domain.SessionImage.ImageType;
-import nextstep.courses.domain.SessionImage.SessionImage;
+import nextstep.courses.Exception.CustomException;
+import nextstep.courses.domain.sessionimage.ImageCapacity;
+import nextstep.courses.domain.sessionimage.ImageSize;
+import nextstep.courses.domain.sessionimage.ImageType;
+import nextstep.courses.domain.sessionimage.SessionImage;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +13,9 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class SessionTest {
     public static final int IMAGE_CAPACITY = 1;
@@ -26,6 +29,7 @@ public class SessionTest {
     ImageSize imageSize;
     ImageType imageType;
     SessionImage sessionImage;
+
     @BeforeEach
     public void setUp() {
 
@@ -43,8 +47,8 @@ public class SessionTest {
 
     @Test
     public void 무료강의_최대_수강인원제한없음_테스트() {
-        Premium premium = new Premium(false, 0);
-        Session session = new Session(premium, 0, SessionState.START, sessionDate,sessionImage);
+        PricingType pricingType = new PricingType(false, 0);
+        Session session = new Session(pricingType, 0, SessionState.START, sessionDate,sessionImage);
         assertDoesNotThrow(() -> {
             session.requestSession(matchPayment);
         });
@@ -52,35 +56,33 @@ public class SessionTest {
 
     @Test
     public void 유료강의_최대_수강인원제한_테스트() {
-        Premium premium = new Premium(true, 0);
-        Session session = new Session(premium, 0, SessionState.START, sessionDate, sessionImage);
-        assertThatIllegalArgumentException().isThrownBy(() -> {
+        PricingType pricingType = new PricingType(true, 300);
+        Session session = new Session(pricingType, 0, SessionState.START, sessionDate, sessionImage);
+        assertThatThrownBy(() -> {
             session.requestSession(matchPayment);
-        });
+        }).isInstanceOf(CustomException.class);
     }
 
     @Test
-    public void 무료강의_강의금액불일치_성공테스트() {
-        Premium premium = new Premium(false, 10000);
-        Session session = new Session(premium, 1, SessionState.START, sessionDate, sessionImage);
-        assertDoesNotThrow(() -> {
-            session.requestSession(unMatchPayment);
-        });
+    public void 무료강의_강의금액0원_실패테스트() {
+        assertThatThrownBy(() -> {
+            new PricingType(false, 1);
+        }).isInstanceOf(CustomException.class);
     }
 
     @Test
     public void 유료강의_강의금액불일치_테스트() {
-        Premium premium = new Premium(true, 10000);
-        Session session = new Session(premium, 1, SessionState.START, sessionDate, sessionImage);
-        assertThatIllegalArgumentException().isThrownBy(() -> {
+        PricingType pricingType = new PricingType(true, 10000);
+        Session session = new Session(pricingType, 1, SessionState.START, sessionDate, sessionImage);
+        assertThatThrownBy(() -> {
             session.requestSession(unMatchPayment);
-        });
+        }).isInstanceOf(CustomException.class);
     }
 
     @Test
     public void 유료강의_강의금액일치_테스트() {
-        Premium premium = new Premium(true, 10000);
-        Session session = new Session(premium, 1, SessionState.START, sessionDate, sessionImage);
+        PricingType pricingType = new PricingType(true, 10000);
+        Session session = new Session(pricingType, 1, SessionState.START, sessionDate, sessionImage);
         assertDoesNotThrow(() -> {
             session.requestSession(matchPayment);
         });
@@ -88,17 +90,17 @@ public class SessionTest {
 
     @Test
     public void 강의신청은_강의상태아닐때_실패테스트() {
-        Premium premium = new Premium(true, 10000);
-        Session session = new Session(premium, 1, SessionState.READY, sessionDate, sessionImage);
-        assertThatIllegalArgumentException().isThrownBy(() -> {
+        PricingType pricingType = new PricingType(true, 10000);
+        Session session = new Session(pricingType, 1, SessionState.READY, sessionDate, sessionImage);
+        assertThatThrownBy(() -> {
             session.requestSession(matchPayment);
-        });
+        }).isInstanceOf(CustomException.class);
     }
 
     @Test
     public void 강의신청_모집상태_성공테스트() {
-        Premium premium = new Premium(true, 10000);
-        Session session = new Session(premium, 1, SessionState.START, sessionDate, sessionImage);
+        PricingType pricingType = new PricingType(true, 10000);
+        Session session = new Session(pricingType, 1, SessionState.START, sessionDate, sessionImage);
         assertDoesNotThrow(() -> {
             session.requestSession(matchPayment);
         });

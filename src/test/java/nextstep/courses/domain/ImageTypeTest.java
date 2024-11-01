@@ -1,16 +1,15 @@
 package nextstep.courses.domain;
 
-import nextstep.courses.domain.SessionImage.ImageCapacity;
-import nextstep.courses.domain.SessionImage.ImageSize;
-import nextstep.courses.domain.SessionImage.ImageType;
-import nextstep.courses.domain.SessionImage.SessionImage;
+import nextstep.courses.Exception.CustomException;
+import nextstep.courses.domain.sessionimage.ImageCapacity;
+import nextstep.courses.domain.sessionimage.ImageSize;
+import nextstep.courses.domain.sessionimage.ImageType;
+import nextstep.courses.domain.sessionimage.SessionImage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 public class ImageTypeTest {
@@ -44,8 +43,8 @@ public class ImageTypeTest {
     @Test
     public void 이미지타입_오입력_실패_테스트() {
         String IMAGE_TYPE = "git";
-        assertThatIllegalArgumentException().isThrownBy(() -> {
+        assertThatThrownBy(() -> {
             imageType = ImageType.validateType(IMAGE_TYPE);
-        });
+        }).isInstanceOf(CustomException.class);
     }
 }

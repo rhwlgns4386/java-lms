@@ -1,4 +1,6 @@
-package nextstep.courses.domain.SessionImage;
+package nextstep.courses.domain.sessionimage;
+
+import nextstep.courses.Exception.CustomException;
 
 import java.util.Arrays;
 
@@ -14,6 +16,6 @@ public enum ImageType {
     public static ImageType validateType(String imageType) {
         return Arrays.stream(values()).filter(type -> type.name().equals(imageType))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("이미지 타입이 올바르지 않습니다."));
+                .orElseThrow(() -> CustomException.INVALID_IMAGE_TYPE );
     }
 }

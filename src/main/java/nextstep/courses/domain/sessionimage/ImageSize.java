@@ -1,4 +1,6 @@
-package nextstep.courses.domain.SessionImage;
+package nextstep.courses.domain.sessionimage;
+
+import nextstep.courses.Exception.CustomException;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -19,12 +21,12 @@ public class ImageSize {
 
     private void validateSize(int width, int height) {
         if (width < MINIMUM_WIDTH || height < MINIMUM_HEIGHT) {
-            throw new IllegalArgumentException("이미지 사이즈 오류입니다.");
+            throw CustomException.IMAGE_SIZE_ERROR;
         }
 
         if (new BigDecimal((double) width / height)
                 .setScale(FIRST_DECIMAL_PLACE, RoundingMode.FLOOR).doubleValue() != EXPECTED_SIZE_PERCENT) {
-            throw new IllegalArgumentException("이미지 비율 오류");
+            throw CustomException.IMAGE_PERCENT_ERROR;
         }
     }
 }

@@ -1,12 +1,16 @@
 package nextstep.courses.domain;
 
 public enum SessionState {
-    READY, START, END;
+    READY("READY"), START("START"), END("END");
 
-    public static boolean isRequestSession(SessionState sessionState) {
-        if (READY.equals(sessionState) || END.equals(sessionState)) {
-            return false;
-        }
-        return START.equals(sessionState);
+
+    public String state;
+
+    SessionState(String state) {
+        this.state = state;
+    }
+
+    public boolean isRequestSession() {
+        return START.state.equals(this.state);
     }
 }

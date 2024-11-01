@@ -1,48 +1,48 @@
 package nextstep.courses.domain;
 
-import nextstep.courses.domain.SessionImage.SessionImage;
+import nextstep.courses.Exception.CustomException;
+import nextstep.courses.domain.sessionimage.SessionImage;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Session {
-    private Students students;
-    private Premium premium;
-    private SessionState sessionState;
-    private SessionImage sessionImage;
-
+    private List<NsUser> students;
+    private PricingType pricingType;
+    private SessionState state;
+    private SessionImage image;
     private int maxStudentCount;
-    private SessionDate sessionDate;
+    private SessionDate date;
 
-
-
-
-    public Session(Premium premium, int maxStudentCount, SessionState sessionState, SessionDate sessionDate
-            ,SessionImage sessionImage) {
-        this.premium = premium;
-        this.students = new Students();
+    public Session(PricingType pricingType, int maxStudentCount, SessionState state, SessionDate date
+            , SessionImage image) {
+        this.pricingType = pricingType;
+        this.students = new ArrayList<>();
         this.maxStudentCount = maxStudentCount;
-        this.sessionState = sessionState;
-        this.sessionDate = sessionDate;
-        this.sessionImage = sessionImage;
+        this.state = state;
+        this.date = date;
+        this.image = image;
 
     }
 
     public void requestSession(Payment payment) {
         validate();
         validateSessionState();
-        premium.validateAmount(payment);
-        students.addStudent(payment.payingUser());
+        pricingType.validateAmount(payment);
+        students.add(payment.payingUser());
     }
 
     public void validate() {
-        if (premium.isPremium() && students.studentCount() >= maxStudentCount) {
-            throw new IllegalArgumentException("수강인원 초과");
+        if (pricingType.isPremium() && students.size() >= maxStudentCount) {
+            throw CustomException.MAX_STUDENTS_OVER;
         }
     }
 
     private void validateSessionState() {
-        if (!SessionState.isRequestSession(this.sessionState)) {
-            throw new IllegalArgumentException("강의신청 기간이 아닙니다.");
+        if (!state.isRequestSession()) {
+            throw  CustomException.INVALID_SESSION_STATE;
         }
 
     }
