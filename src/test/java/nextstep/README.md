@@ -3,6 +3,19 @@
 
 ## TODO
 
+- [ ] 서비스 구현
+
+### DB - Session
+- [ ] 저장
+- [ ] 찾기
+
+### DB - SessionCoverImage
+- [ ] 저장
+- [ ] 찾기
+
+### DB - SessionStudent
+- [ ] 저장
+- [ ] 찾기
 
 ## DONE
 

@@ -1,12 +1,11 @@
 package nextstep.courses.domain.session;
 
-import nextstep.qna.SessionException;
+import nextstep.courses.SessionException;
 
 import java.time.LocalDateTime;
 
 public class SessionPeriod {
 
-    private Long id;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
 

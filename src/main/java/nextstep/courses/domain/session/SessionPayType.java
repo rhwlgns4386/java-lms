@@ -1,6 +1,6 @@
 package nextstep.courses.domain.session;
 
-import nextstep.qna.SessionException;
+import nextstep.courses.SessionException;
 
 import java.util.Arrays;
 

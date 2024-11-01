@@ -1,7 +1,7 @@
 package nextstep.courses.domain.session;
 
 import nextstep.payments.domain.Payment;
-import nextstep.qna.SessionPayException;
+import nextstep.courses.SessionPayException;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

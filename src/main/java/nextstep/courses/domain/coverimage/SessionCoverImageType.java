@@ -1,6 +1,6 @@
 package nextstep.courses.domain.coverimage;
 
-import nextstep.qna.CoverImageException;
+import nextstep.courses.CoverImageException;
 
 import java.util.Arrays;
 

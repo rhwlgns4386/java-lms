@@ -1,6 +1,6 @@
 package nextstep.courses.domain.session;
 
-import nextstep.qna.SessionException;
+import nextstep.courses.SessionException;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

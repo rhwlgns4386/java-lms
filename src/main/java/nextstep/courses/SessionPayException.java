@@ -1,4 +1,4 @@
-package nextstep.qna;
+package nextstep.courses;
 
 public class SessionPayException extends RuntimeException {
 

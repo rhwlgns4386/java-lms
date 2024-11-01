@@ -2,7 +2,7 @@ package nextstep.courses.domain.session;
 
 import nextstep.courses.domain.coverimage.SessionCoverImageTest;
 import nextstep.payments.domain.Payment;
-import nextstep.qna.SessionException;
+import nextstep.courses.SessionException;
 import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +18,7 @@ public class SessionTest {
         LocalDateTime startDate = LocalDateTime.of(2024, 10, 28, 0, 0);
         LocalDateTime endDate = LocalDateTime.of(2024, 10, 30, 23, 59);
 
-        Session session = Session.createFree(SessionCoverImageTest.IMAGE, new SessionPay(0L, SessionPayType.FREE), new SessionPeriod(startDate, endDate));
+        Session session = Session.createFree(1L, SessionCoverImageTest.IMAGE, new SessionPay(0L, SessionPayType.FREE), new SessionPeriod(startDate, endDate));
 
 
         assertThatThrownBy(
@@ -35,7 +35,7 @@ public class SessionTest {
 
         SessionPay sessionPay = new SessionPay(3000L, SessionPayType.PAID);
 
-        Session session = Session.createPaid(SessionCoverImageTest.IMAGE, sessionPay, sessionPeriod, 1);
+        Session session = Session.createPaid(1L, SessionCoverImageTest.IMAGE, sessionPay, sessionPeriod, 1);
         session.recruiting();
 
         session.registration(NsUserTest.JAVAJIGI, payment);

@@ -1,6 +1,6 @@
 package nextstep.courses.domain.coverimage;
 
-import nextstep.qna.CoverImageException;
+import nextstep.courses.CoverImageException;
 
 import java.util.UUID;
 import java.util.regex.Pattern;
@@ -10,8 +10,6 @@ public class SessionCoverImagePath {
     private static final String INVALID_CHARACTERS_REGEX = "[<>:\"/\\|?*]";
     private static final String DOT_CHAR = ".";
 
-    private Long id;
-    private SessionCoverImage sessionCoverImage;
     private String storeFileName;
     private String originalFileName;
 
@@ -46,10 +44,6 @@ public class SessionCoverImagePath {
             return false;
         }
         return true;
-    }
-
-    public void mapping(SessionCoverImage sessionCoverImage) {
-        this.sessionCoverImage = sessionCoverImage;
     }
 
 }

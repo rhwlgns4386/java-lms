@@ -1,12 +1,11 @@
 package nextstep.courses.domain.session;
 
 import nextstep.payments.domain.Payment;
-import nextstep.qna.SessionPayException;
+import nextstep.courses.SessionPayException;
 
 public class SessionPay {
-    private Long id;
-    private Long sessionPay;
 
+    private Long sessionPay;
     private SessionPayType sessionPayType;
 
     public SessionPay(Long sessionPay, SessionPayType sessionPayType){

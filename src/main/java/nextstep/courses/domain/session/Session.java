@@ -2,21 +2,20 @@ package nextstep.courses.domain.session;
 
 import nextstep.courses.domain.coverimage.SessionCoverImage;
 import nextstep.payments.domain.Payment;
-import nextstep.qna.SessionException;
+import nextstep.courses.SessionException;
 import nextstep.users.domain.NsUser;
-
-import java.time.LocalDateTime;
 
 public class Session {
 
     private Long id;
+    private Long courseId;
     private SessionPeriod period;
     private SessionPay sessionPay;
     private SessionStatus status;
     private SessionCoverImage coverImage;
     private SessionStudents students;
 
-    public Session(SessionCoverImage image, SessionPay sessionPay, SessionPeriod sessionPeriod, int maximumNumberPeople) {
+    public Session(Long courseId, SessionCoverImage image, SessionPay sessionPay, SessionPeriod sessionPeriod, int maximumNumberPeople) {
         this.status = SessionStatus.READY;
         this.coverImage = image;
         this.sessionPay = sessionPay;
@@ -24,12 +23,12 @@ public class Session {
         this.students = new SessionStudents(maximumNumberPeople);
     }
 
-    public static Session createFree(SessionCoverImage image, SessionPay sessionPay, SessionPeriod sessionPeriod) {
-        return new Session(image, sessionPay, sessionPeriod, 0);
+    public static Session createFree(Long courseId, SessionCoverImage image, SessionPay sessionPay, SessionPeriod sessionPeriod) {
+        return new Session(courseId, image, sessionPay, sessionPeriod, 0);
     }
 
-    public static Session createPaid(SessionCoverImage image, SessionPay sessionPay, SessionPeriod sessionPeriod, int maximumNumberPeople) {
-        return new Session(image, sessionPay, sessionPeriod, maximumNumberPeople);
+    public static Session createPaid(Long courseId, SessionCoverImage image, SessionPay sessionPay, SessionPeriod sessionPeriod, int maximumNumberPeople) {
+        return new Session(courseId, image, sessionPay, sessionPeriod, maximumNumberPeople);
     }
 
     public void recruiting() {
@@ -42,7 +41,7 @@ public class Session {
 
     public void registration(NsUser nsUser, Payment payment) {
         validate();
-        students.registration(nsUser);
+        students.registration(id, nsUser);
         sessionPay.validatePay(payment);
     }
 

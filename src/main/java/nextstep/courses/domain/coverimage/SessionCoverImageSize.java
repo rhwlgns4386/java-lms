@@ -1,6 +1,6 @@
 package nextstep.courses.domain.coverimage;
 
-import nextstep.qna.CoverImageException;
+import nextstep.courses.CoverImageException;
 
 public class SessionCoverImageSize {
     private static final int MIN_WIDTH = 300;
@@ -10,7 +10,6 @@ public class SessionCoverImageSize {
     private static final double HEIGHT_RATIO = 2.0;
 
     private Long id;
-    private SessionCoverImage sessionCoverImage;
     private final int width;
     private final int height;
 
@@ -50,7 +49,4 @@ public class SessionCoverImageSize {
         return Math.abs(targetAspectRatio - currentAspectRation) < 0.01;
     }
 
-    public void mapping(SessionCoverImage sessionCoverImage) {
-        this.sessionCoverImage = sessionCoverImage;
-    }
 }

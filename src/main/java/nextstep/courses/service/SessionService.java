@@ -1,6 +1,7 @@
 package nextstep.courses.service;
 
 
+import nextstep.courses.domain.CourseRepository;
 import nextstep.courses.domain.coverimage.SessionCoverImage;
 import nextstep.courses.domain.coverimage.SessionCoverImagePath;
 import nextstep.courses.domain.coverimage.SessionCoverImageSize;
@@ -15,11 +16,14 @@ import nextstep.users.domain.NsUser;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
+
 @Service("sessionService")
 public class SessionService {
 
     @Transactional
     public void saveSession(SessionDto dto) {
+
         MultipartFile multipartFile = dto.getMultipartFile();
 
         SessionCoverImage sessionCoverImage = new SessionCoverImage(
@@ -29,6 +33,7 @@ public class SessionService {
         );
 
         Session session = new Session(
+                dto.getCourseId(),
                 sessionCoverImage,
                 new SessionPay(dto.getSessionPay(), SessionPayType.search(dto.getPayType())),
                 new SessionPeriod(dto.getStartDate(), dto.getEndDate()),
