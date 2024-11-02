@@ -1,6 +1,6 @@
 package nextstep.sessions.domain;
 
-public class SessionImage {
+public class CoverImage {
     private static final double MAX_SIZE = 1024 * 1024;
     private static final int MIN_WIDTH = 300;
     private static final int MIN_HEIGHT = 200;
@@ -16,7 +16,7 @@ public class SessionImage {
 
     private double height;
 
-    public SessionImage(Long id, int size, ImageType type, double width, double height) {
+    public CoverImage(Long id, int size, ImageType type, double width, double height) {
         validate(size, width, height);
         this.id = id;
         this.size = size;
@@ -25,7 +25,7 @@ public class SessionImage {
         this.height = height;
     }
 
-    public SessionImage(Long id) {
+    public CoverImage(Long id) {
         this.id = id;
     }
 

@@ -5,8 +5,8 @@ import java.util.Arrays;
 public enum SessionStatus {
 
     PREPARING("준비중"),
-    RECRUITING("모집중"),
-    ENDING("종료");
+    ONGOING("진행중"),
+    END("종료");
 
     private String state;
 
@@ -14,8 +14,8 @@ public enum SessionStatus {
         this.state = state;
     }
 
-    public boolean isRecruiting() {
-        return this == RECRUITING;
+    public boolean isEnd() {
+        return this == END;
     }
 
     public static SessionStatus of(String state) {

@@ -1,6 +1,11 @@
 package nextstep.sessions.domain;
 
+import java.util.List;
+
 public interface SessionImageRepository {
-    SessionImage save(SessionImage image);
-    SessionImage findById(Long imageId);
+    CoverImage save(CoverImage image);
+    CoverImage saveWithSessionId(CoverImage image, Long sessionId);
+    CoverImage findById(Long imageId);
+    List<CoverImage> findAllBySessionId(Long sessionId);
+
 }

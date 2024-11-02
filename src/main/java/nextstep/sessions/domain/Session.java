@@ -9,11 +9,12 @@ import nextstep.users.domain.NsUser;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class Session {
     private Long id;
 
-    private SessionImage image;
+    private CoverImages images;
 
     private Period period;
 
@@ -23,34 +24,48 @@ public class Session {
 
     private SessionStatus status;
 
+    private RecruitmentStatus recruitmentStatus;
+
     private Course course;
 
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
 
-    public Session() {
+    public Session(Long id) {
+        this.id = id;
     }
 
-    public Session(Long id, SessionImage image, Period period, SessionType type) {
-        this.id = id;
-        this.image = image;
-        this.period = period;
-        this.type = type;
-        this.enrolledUserInfos = new EnrolledUserInfos();
-        this.status = SessionStatus.PREPARING;
-        this.createdAt = LocalDateTime.now();
+    public Session(Long id, Period period, SessionType type) {
+        this(id, null, period, type, new EnrolledUserInfos(), SessionStatus.PREPARING
+                , RecruitmentStatus.NOT_RECRUITING, null, LocalDateTime.now(), null);
     }
 
-    public Session(Long id, SessionImage image, Period period, SessionType type
-            , SessionStatus status, Course course, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Session(Long id, CoverImages images, Period period, SessionType type, Course course) {
+        this(id, images, period, type, new EnrolledUserInfos(), SessionStatus.PREPARING
+                , RecruitmentStatus.NOT_RECRUITING, course, LocalDateTime.now(), null);
+    }
+
+    public Session(Long id, Period period, SessionType type
+            , SessionStatus status, RecruitmentStatus recruitmentStatus, Course course, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this(id, null, period, type, new EnrolledUserInfos(), status , recruitmentStatus, course, createdAt, updatedAt);
+    }
+
+    public Session(Long id, CoverImages images, Period period, SessionType type
+            , SessionStatus status, RecruitmentStatus recruitmentStatus, Course course, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this(id, images, period, type, new EnrolledUserInfos(), status , recruitmentStatus, course, createdAt, updatedAt);
+    }
+
+    public Session(Long id, CoverImages images, Period period, SessionType type, EnrolledUserInfos enrolledUserInfos
+            , SessionStatus status, RecruitmentStatus recruitmentStatus, Course course, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
-        this.image = image;
+        this.images = images;
         this.period = period;
         this.type = type;
+        this.enrolledUserInfos = enrolledUserInfos;
         this.status = status;
+        this.recruitmentStatus = recruitmentStatus;
         this.course = course;
-        this.enrolledUserInfos = new EnrolledUserInfos();
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -59,12 +74,8 @@ public class Session {
         return id;
     }
 
-    public void setImage(SessionImage image) {
-        this.image = image;
-    }
-
-    public Long getImageId() {
-        return image.getId();
+    public List<CoverImage> getImages() {
+        return images.getImages();
     }
 
     public LocalDate getStartDate() {
@@ -99,6 +110,10 @@ public class Session {
         return status.name();
     }
 
+    public String getRecruitmentStatus() {
+        return recruitmentStatus.name();
+    }
+
     public Long getCourseId() {
         return course.getId();
     }
@@ -119,20 +134,27 @@ public class Session {
         return enrolledUserInfos.size();
     }
 
-    public void enroll(NsUser user, Payment payment) {
+    public Long getCreatorId() {
+        return course.getCreatorId();
+    }
+
+    public SessionRegistrationInfo enroll(NsUser user, Payment payment) {
         validateEnrollment(user);
         validatePayment(payment);
-        enrolledUserInfos.add(new SessionRegistrationInfo(this, user));
+        SessionRegistrationInfo info = new SessionRegistrationInfo(this, user);
+        enrolledUserInfos.add(info);
+        return info;
     }
 
     private void validateEnrollment(NsUser user) {
-        if (!status.isRecruiting()) {
+        if (!recruitmentStatus.isRecruiting() && !status.isEnd()) {
             throw new CannotEnrollException("모집중인 강의가 아닙니다.");
         }
         if (enrolledUserInfos.isAlreadyEnrolled(user)) {
             throw new CannotEnrollException("이미 수강 중인 사용자입니다.");
         }
-        if (type.isOverEnrollment(enrolledUserInfos.size())) {
+
+        if (type.isOverEnrollment(enrolledUserInfos.getCountOfApproved())) {
             throw new CannotEnrollException("수강 인원이 초과되었습니다.");
         }
     }
@@ -147,9 +169,9 @@ public class Session {
     }
 
     public void updateToRecruiting() {
-        if (status != SessionStatus.PREPARING) {
-            throw new IllegalArgumentException("모집중인 강의가 아닙니다.");
+        if (recruitmentStatus.isRecruiting()) {
+            throw new IllegalArgumentException("이미 모집중인 강의입니다.");
         }
-        status = SessionStatus.RECRUITING;
+        recruitmentStatus = RecruitmentStatus.RECRUITING;
     }
 }
