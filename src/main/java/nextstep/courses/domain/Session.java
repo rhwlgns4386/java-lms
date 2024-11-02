@@ -1,0 +1,71 @@
+package nextstep.courses.domain;
+
+import nextstep.courses.CannotRegisteSessionException;
+import nextstep.users.domain.NsUser;
+
+import java.time.LocalDateTime;
+import java.util.Collections;
+
+public class Session {
+    //구성이 필요한 관계는 이렇게
+    private SessionInfo sessionInfo;
+
+    private SessionImage sessionImage;
+
+    private long salePrice;
+
+    private StateCode stateCode;//이넘이니까 클래스로 받아도되네
+
+    private Students students;
+
+    private boolean isPaid;
+
+    public Session() {
+    }
+
+    public Session(String title, LocalDateTime applyStartDate, LocalDateTime applyEndDate,
+                   long salePrice, StateCode stateCode, int createId,
+                   int fileSize, String type, int width, int height, String fileName, boolean isPaid) {
+        this(title, applyStartDate, applyEndDate, salePrice, stateCode, createId,
+                fileSize, type, width, height, fileName, new Students(Collections.emptyList()), isPaid);
+    }
+
+    public Session(String title, LocalDateTime applyStartDate, LocalDateTime applyEndDate,
+                   long salePrice, StateCode stateCode, int createId,
+                   int fileSize, String type, int width, int height, String fileName, Students students, boolean isPaid) {
+        this.sessionInfo = new SessionInfo(title, applyStartDate, applyEndDate, createId);
+        this.stateCode = stateCode;
+        this.salePrice = salePrice;
+        this.sessionImage = new SessionImage(fileSize, type, width, height, fileName);
+        this.students = students;
+        this.isPaid = isPaid;
+    }
+
+    public long getSalePrice() {
+        return salePrice;
+    }
+
+    public StateCode getStateCode() {
+        return stateCode;
+    }
+
+    public int getStudentsSize() {
+        return students.getSize();
+    }
+
+    public void validateOrderSessionStatus() {
+        stateCode.validateOrderSessionStatus();
+    }
+
+    public void updateStudent(NsUser student) {
+        students.updateStudent(student);
+    }
+
+    public boolean isDuplicateStudent(NsUser student) {
+        return students.isDuplicateStudent(student);
+    }
+
+    public void orderSession(RequestOrderParam param) throws CannotRegisteSessionException {
+        this.orderSession(param);
+    }
+}

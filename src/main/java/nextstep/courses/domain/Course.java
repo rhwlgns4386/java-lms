@@ -3,7 +3,7 @@ package nextstep.courses.domain;
 import java.time.LocalDateTime;
 
 public class Course {
-    private Long id;
+    private Long id; //1기2기3기
 
     private String title;
 
@@ -12,6 +12,8 @@ public class Course {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
+    private Sessions sessions;
 
     public Course() {
     }
