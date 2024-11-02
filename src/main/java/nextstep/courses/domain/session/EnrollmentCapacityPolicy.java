@@ -1,7 +1,7 @@
 package nextstep.courses.domain.session;
 
 @FunctionalInterface
-public interface StudentCapacity {
+public interface EnrollmentCapacityPolicy {
 
     boolean isApplicable(int enrollStudentCount);
 

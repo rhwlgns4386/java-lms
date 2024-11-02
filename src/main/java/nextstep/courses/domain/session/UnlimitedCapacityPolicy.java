@@ -1,6 +1,6 @@
 package nextstep.courses.domain.session;
 
-public class UnlimitedCapacity implements StudentCapacity {
+public class UnlimitedCapacityPolicy implements EnrollmentCapacityPolicy {
 
     @Override
     public boolean isApplicable(int count) {
