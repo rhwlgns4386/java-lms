@@ -1,12 +1,9 @@
-package nextstep.courses.domain.session;
+package nextstep.session.domain;
 
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import nextstep.session.domain.CoverImage;
-import nextstep.session.domain.ImageFile;
 
 class CoverImageTest {
     private static final int ONE_MEGA_BITE = 1024 * 1024;
