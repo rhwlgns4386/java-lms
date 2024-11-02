@@ -1,10 +1,6 @@
 package nextstep.courses.infrastructure;
 
-import nextstep.courses.domain.FreeSession;
-import nextstep.courses.domain.PaidSession;
-import nextstep.courses.domain.Session;
-import nextstep.courses.domain.SessionImage;
-import nextstep.courses.domain.SessionStatus;
+import nextstep.courses.domain.*;
 import nextstep.fixture.SessionDateCreator;
 import nextstep.fixture.SessionImageCreator;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,7 +36,7 @@ public class SessionRepositoryTest {
     @Test
     void crud_free() {
         SessionImage sessionImage = SessionImageCreator.standard();
-        Session freeSession = new FreeSession(SessionDateCreator.standard(), sessionImage, SessionStatus.RECRUITING, List.of(1L));
+        Session freeSession = new FreeSession(SessionDateCreator.standard(), sessionImage, RecruitingStatus.RECRUITING, List.of(1L));
         int count = sessionRepository.save(freeSession);
         sessionImageRepository.save(sessionImage);
         Session savedSession = sessionRepository.findById(1L);
@@ -49,7 +45,7 @@ public class SessionRepositoryTest {
                 () -> assertThat(freeSession.getSessionId()).isEqualTo(savedSession.getSessionId()),
                 () -> assertThat(freeSession.getDate()).isEqualTo(savedSession.getDate()),
                 () -> assertThat(freeSession.getImage()).isEqualTo(savedSession.getImage()),
-                () -> assertThat(freeSession.getStatus()).isEqualTo(savedSession.getStatus()),
+                () -> assertThat(freeSession.getRecruitingStatus()).isEqualTo(savedSession.getRecruitingStatus()),
                 () -> assertThat(freeSession.getStudents()).isEqualTo(savedSession.getStudents())
         );
         LOGGER.debug("Session: {}", savedSession);
@@ -58,7 +54,7 @@ public class SessionRepositoryTest {
     @Test
     void crud_paid() {
         SessionImage sessionImage = SessionImageCreator.standard();
-        PaidSession paidSession = new PaidSession(SessionDateCreator.standard(), sessionImage, SessionStatus.RECRUITING, List.of(1L), 80, 24000);
+        PaidSession paidSession = new PaidSession(SessionDateCreator.standard(), sessionImage, RecruitingStatus.RECRUITING, List.of(1L), 80, 24000);
         int count = sessionRepository.save(paidSession);
         sessionImageRepository.save(sessionImage);
         PaidSession savedSession = (PaidSession) sessionRepository.findById(1L);
@@ -67,7 +63,7 @@ public class SessionRepositoryTest {
                 () -> assertThat(paidSession.getSessionId()).isEqualTo(savedSession.getSessionId()),
                 () -> assertThat(paidSession.getDate()).isEqualTo(savedSession.getDate()),
                 () -> assertThat(paidSession.getImage()).isEqualTo(savedSession.getImage()),
-                () -> assertThat(paidSession.getStatus()).isEqualTo(savedSession.getStatus()),
+                () -> assertThat(paidSession.getRecruitingStatus()).isEqualTo(savedSession.getRecruitingStatus()),
                 () -> assertThat(paidSession.getSessionFee()).isEqualTo(savedSession.getSessionFee()),
                 () -> assertThat(paidSession.getMaxNumOfStudents()).isEqualTo(savedSession.getMaxNumOfStudents()),
                 () -> assertThat(paidSession.getStudents()).isEqualTo(savedSession.getStudents())

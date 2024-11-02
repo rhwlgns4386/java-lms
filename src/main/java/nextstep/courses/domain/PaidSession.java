@@ -9,16 +9,25 @@ public class PaidSession extends Session {
     private final int maxNumOfStudents;
     private final int sessionFee;
 
-    public PaidSession(SessionDate date, SessionImage image, SessionStatus status, List<Long> numOfStudents, int maxNumOfStudents, int sessionFee) {
+    public PaidSession(SessionDate date, SessionImage image, RecruitingStatus status, List<Long> numOfStudents, int maxNumOfStudents, int sessionFee) {
         this(1L, date, image, status, numOfStudents, maxNumOfStudents, sessionFee);
     }
 
     public PaidSession(long id, Timestamp sessionStartAt, Timestamp sessionEndAt, SessionImage sessionImage, String status, List<Long> numOfStudents, int maxStudent, int sessionFee) {
-        this(id, new SessionDate(sessionStartAt, sessionEndAt), sessionImage, SessionStatus.valueOf(status), numOfStudents, maxStudent, sessionFee);
+        this(id, new SessionDate(sessionStartAt, sessionEndAt), sessionImage, RecruitingStatus.valueOf(status), numOfStudents, maxStudent, sessionFee);
     }
 
-    public PaidSession(Long sessionId, SessionDate date, SessionImage image, SessionStatus status, List<Long> numOfStudents, int maxNumOfStudents, int sessionFee) {
+    public PaidSession(Long sessionId, SessionDate date, SessionImage image, RecruitingStatus status, List<Long> numOfStudents, int maxNumOfStudents, int sessionFee) {
         super(sessionId, date, image, status, numOfStudents);
+        if (maxNumOfStudents < students.size()) {
+            throw new IllegalArgumentException("수강 정원이 초과됐습니다.");
+        }
+        this.maxNumOfStudents = maxNumOfStudents;
+        this.sessionFee = sessionFee;
+    }
+
+    public PaidSession(Long sessionId, SessionDate date, SessionImage image, RecruitingStatus recruitingStatus, ProgressStatus progressStatus, List<Long> numOfStudents, int maxNumOfStudents, int sessionFee) {
+        super(sessionId, date, image, recruitingStatus, progressStatus, numOfStudents);
         if (maxNumOfStudents < students.size()) {
             throw new IllegalArgumentException("수강 정원이 초과됐습니다.");
         }

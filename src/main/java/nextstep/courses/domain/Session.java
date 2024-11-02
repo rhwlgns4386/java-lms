@@ -10,19 +10,29 @@ public abstract class Session {
     protected final Long sessionId;
     protected final SessionDate date;
     protected final SessionImage image;
-    protected final SessionStatus status;
+    protected final RecruitingStatus recruitingStatus;
+    protected ProgressStatus progressStatus;
     protected List<Long> students;
 
-    public Session(Long sessionId, SessionDate date, SessionImage image, SessionStatus status, List<Long> numOfStudents) {
+    public Session(Long sessionId, SessionDate date, SessionImage image, RecruitingStatus recruitingStatus, List<Long> numOfStudents) {
         this.sessionId = sessionId;
         this.date = date;
         this.image = image;
-        this.status = status;
+        this.recruitingStatus = recruitingStatus;
         this.students = numOfStudents;
     }
 
+    public Session(Long sessionId, SessionDate date, SessionImage image, RecruitingStatus recruitingStatus, ProgressStatus progressStatus, List<Long> students) {
+        this.sessionId = sessionId;
+        this.date = date;
+        this.image = image;
+        this.recruitingStatus = recruitingStatus;
+        this.progressStatus = progressStatus;
+        this.students = students;
+    }
+
     public void enroll(Payment payment) {
-        if (!status.canEnroll()) {
+        if (!recruitingStatus.canEnroll()) {
             throw new IllegalStateException("강의가 모집 상태가 아닙니다.");
         }
         this.students.add(payment.getNsUserId());
@@ -44,8 +54,8 @@ public abstract class Session {
         return image;
     }
 
-    public SessionStatus getStatus() {
-        return status;
+    public RecruitingStatus getRecruitingStatus() {
+        return recruitingStatus;
     }
 
     public List<Long> getStudents() {

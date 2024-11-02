@@ -7,16 +7,20 @@ import java.util.List;
 
 public class FreeSession extends Session {
 
-    public FreeSession(SessionDate date, SessionImage image, SessionStatus status, List<Long> numOfStudents) {
+    public FreeSession(SessionDate date, SessionImage image, RecruitingStatus status, List<Long> numOfStudents) {
         this(1L, date, image, status, numOfStudents);
     }
 
     public FreeSession(long id, Timestamp sessionStartAt, Timestamp sessionEndAt, SessionImage sessionImage, String status, List<Long> numOfStudents) {
-        this(id, new SessionDate(sessionStartAt, sessionEndAt), sessionImage, SessionStatus.valueOf(status), numOfStudents);
+        this(id, new SessionDate(sessionStartAt, sessionEndAt), sessionImage, RecruitingStatus.valueOf(status), numOfStudents);
     }
 
-    public FreeSession(Long sessionId, SessionDate date, SessionImage image, SessionStatus status, List<Long> numOfStudents) {
+    public FreeSession(Long sessionId, SessionDate date, SessionImage image, RecruitingStatus status, List<Long> numOfStudents) {
         super(sessionId, date, image, status, numOfStudents);
+    }
+
+    public FreeSession(Long sessionId, SessionDate date, SessionImage image, RecruitingStatus recruitingStatus, ProgressStatus progressStatus, List<Long> numOfStudents) {
+        super(sessionId, date, image, recruitingStatus, progressStatus, numOfStudents);
     }
 
     @Override
@@ -33,7 +37,7 @@ public class FreeSession extends Session {
                 "sessionId=" + sessionId +
                 ", date=" + date +
                 ", image=" + image +
-                ", status=" + status +
+                ", status=" + recruitingStatus +
                 ", students=" + students +
                 '}';
     }

@@ -46,7 +46,7 @@ public class SessionEntity {
         entity.id = session.getSessionId();
         entity.sessionStartAt = Timestamp.valueOf(session.getDate().getStartAt());
         entity.sessionEndAt = Timestamp.valueOf(session.getDate().getEndAt());
-        entity.status = session.getStatus().name();
+        entity.status = session.getRecruitingStatus().name();
         entity.imageId = session.getImage().getId();
         return entity;
     }
