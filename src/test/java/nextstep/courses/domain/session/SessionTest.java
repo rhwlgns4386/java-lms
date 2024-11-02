@@ -1,8 +1,7 @@
 package nextstep.courses.domain.session;
 
-import nextstep.courses.domain.coverimage.SessionCoverImageTest;
-import nextstep.payments.domain.Payment;
 import nextstep.courses.SessionException;
+import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.Test;
 

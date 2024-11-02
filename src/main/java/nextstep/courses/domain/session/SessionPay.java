@@ -1,7 +1,7 @@
 package nextstep.courses.domain.session;
 
-import nextstep.payments.domain.Payment;
 import nextstep.courses.SessionPayException;
+import nextstep.payments.domain.Payment;
 
 public class SessionPay {
 

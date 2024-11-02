@@ -3,21 +3,23 @@ package nextstep.courses.service;
 
 import nextstep.courses.domain.SessionCoverImageRepository;
 import nextstep.courses.domain.SessionRepository;
+import nextstep.courses.domain.SessionStudentRepository;
 import nextstep.courses.domain.coverimage.SessionCoverImage;
 import nextstep.courses.domain.coverimage.SessionCoverImagePath;
 import nextstep.courses.domain.coverimage.SessionCoverImageSize;
 import nextstep.courses.domain.session.Session;
 import nextstep.courses.domain.session.SessionPayType;
 import nextstep.courses.domain.session.SessionPeriod;
+import nextstep.courses.domain.session.SessionStudent;
 import nextstep.courses.dto.MultipartFile;
 import nextstep.courses.dto.SessionDto;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service("sessionService")
 public class SessionService {
@@ -27,6 +29,9 @@ public class SessionService {
 
     @Resource(name = "sessionCoverImageRepository")
     private SessionCoverImageRepository sessionCoverImageRepository;
+
+    @Resource(name = "sessionStudentRepository")
+    private SessionStudentRepository sessionStudentRepository;
 
     @Transactional
     public void saveSession(SessionDto dto) {
@@ -58,7 +63,15 @@ public class SessionService {
 
     @Transactional
     public void registration(NsUser nsUser, Payment payment) {
-        // 다음 과제 시
+        Long sessionId = payment.getSessionId();
+
+        Session session = sessionRepository.findById(sessionId);
+        List<SessionStudent> students = sessionStudentRepository.findBySessionId(payment.getSessionId());
+        session.mapping(students);
+
+        SessionStudent registration = session.registration(nsUser, payment);
+
+        sessionStudentRepository.save(registration);
     }
 
 

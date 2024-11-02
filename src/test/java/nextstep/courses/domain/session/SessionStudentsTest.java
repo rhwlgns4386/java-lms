@@ -4,6 +4,8 @@ import nextstep.courses.SessionException;
 import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -14,6 +16,12 @@ public class SessionStudentsTest {
 
         SessionStudents sessionStudents = new SessionStudents(20);
         sessionStudents.registration(1L, NsUserTest.JAVAJIGI);
+
+        sessionStudents.mapping(
+                Arrays.asList(
+                        new SessionStudent(1L, 1L)
+                )
+        );
 
         assertThatThrownBy(
                 () -> sessionStudents.registration(1L, NsUserTest.JAVAJIGI)
@@ -31,8 +39,13 @@ public class SessionStudentsTest {
     @Test
     void 최대_수강_인원_판별_true() {
         SessionStudents sessionStudents = new SessionStudents(2);
-        sessionStudents.registration(1L, NsUserTest.JAVAJIGI);
-        sessionStudents.registration(1L, NsUserTest.SANJIGI);
+
+        sessionStudents.mapping(
+                Arrays.asList(
+                        new SessionStudent(1L, 1L),
+                        new SessionStudent(1L, 2L)
+                )
+        );
 
         assertThat(sessionStudents.isExceeds()).isTrue();
     }

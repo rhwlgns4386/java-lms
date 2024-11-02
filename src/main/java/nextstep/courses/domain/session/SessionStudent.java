@@ -8,11 +8,15 @@ public class SessionStudent {
     private Long sessionId;
     private Long userId;
 
-    public SessionStudent(Long sessionId, Long userId){
+    public SessionStudent(Long sessionId, Long userId) {
+        this(0L, sessionId, userId);
+    }
+
+    public SessionStudent(Long id, Long sessionId, Long userId) {
+        this.id = id;
         this.sessionId = sessionId;
         this.userId = userId;
     }
-
 
     public Long getSessionId() {
         return sessionId;

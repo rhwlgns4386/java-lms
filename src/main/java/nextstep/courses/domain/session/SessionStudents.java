@@ -16,10 +16,11 @@ public class SessionStudents {
         this.maximumNumberPeople = maximumNumberPeople;
     }
 
-    public void registration(Long sessionId, NsUser nsUser) {
+    public SessionStudent registration(Long sessionId, NsUser nsUser) {
         SessionStudent sessionStudent = new SessionStudent(sessionId, nsUser.getId());
         validate(sessionStudent);
-        this.students.add(sessionStudent);
+        students.add(sessionStudent);
+        return sessionStudent;
     }
 
     public boolean isExceeds() {
@@ -35,7 +36,12 @@ public class SessionStudents {
             throw new SessionException("이미 수강신청을 했습니다.");
         }
     }
+
     public int getMaximumNumberPeople() {
         return maximumNumberPeople;
+    }
+
+    public void mapping(List<SessionStudent> sessionStudents) {
+        this.students = sessionStudents;
     }
 }

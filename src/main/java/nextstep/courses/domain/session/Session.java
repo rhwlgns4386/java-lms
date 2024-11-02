@@ -1,9 +1,10 @@
 package nextstep.courses.domain.session;
 
-import nextstep.courses.domain.coverimage.SessionCoverImage;
-import nextstep.payments.domain.Payment;
 import nextstep.courses.SessionException;
+import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
+
+import java.util.List;
 
 public class Session {
     private Long id;
@@ -42,10 +43,14 @@ public class Session {
         this.status = SessionStatus.FINISH;
     }
 
-    public void registration(NsUser nsUser, Payment payment) {
+    public SessionStudent registration(NsUser nsUser, Payment payment) {
         validate();
-        students.registration(id, nsUser);
         sessionPay.validatePay(payment);
+        return students.registration(id, nsUser);
+    }
+
+    public void mapping(List<SessionStudent> sessionStudents) {
+        this.students.mapping(sessionStudents);
     }
 
     private void validate() {

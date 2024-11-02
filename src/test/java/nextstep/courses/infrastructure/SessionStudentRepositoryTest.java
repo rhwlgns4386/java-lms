@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import java.util.Optional;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -29,22 +29,18 @@ public class SessionStudentRepositoryTest {
     }
 
     @Test
-    void 조회시_없음(){
-        Optional<SessionStudent> optionalSessionStudent = sessionStudentRepository.findBySessionIdAndNsUserId(2L, 3L);
-
-        assertThat(optionalSessionStudent.isEmpty()).isTrue();
-    }
-
-    @Test
-    void 저장후_조회(){
-        SessionStudent sessionStudent = new SessionStudent(1L,1L);
+    void 저장() {
+        SessionStudent sessionStudent = new SessionStudent(1L, 4L);
         int count = sessionStudentRepository.save(sessionStudent);
 
         assertThat(count).isEqualTo(1);
+    }
 
-        Optional<SessionStudent> optionalSessionStudent = sessionStudentRepository.findBySessionIdAndNsUserId(1L, 1L);
+    @Test
+    void 리스트_조회() {
+        List<SessionStudent> students = sessionStudentRepository.findBySessionId(1L);
 
-        assertThat(optionalSessionStudent.isPresent()).isTrue();
+        assertThat(students).hasSize(3);
     }
 
 }

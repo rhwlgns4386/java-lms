@@ -1,6 +1,5 @@
 package nextstep.courses.infrastructure;
 
-import nextstep.courses.domain.Course;
 import nextstep.courses.domain.SessionCoverImageRepository;
 import nextstep.courses.domain.coverimage.SessionCoverImage;
 import nextstep.courses.domain.coverimage.SessionCoverImagePath;

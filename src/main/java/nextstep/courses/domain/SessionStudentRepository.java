@@ -2,11 +2,11 @@ package nextstep.courses.domain;
 
 import nextstep.courses.domain.session.SessionStudent;
 
-import java.util.Optional;
+import java.util.List;
 
 public interface SessionStudentRepository {
 
-    Optional<SessionStudent> findBySessionIdAndNsUserId(Long sessionId, Long nsUserId);
-
     int save(SessionStudent sessionStudent);
+
+    List<SessionStudent> findBySessionId(Long sessionId);
 }
