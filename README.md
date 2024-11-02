@@ -128,3 +128,4 @@
 - [X] session select할 때, session_session_image 테이블 같이 조회
 - [X] entity에 toDomainNew 메소드 추가 (기존거 병행)
 - [X] paidSessionBuilder 생성 및 테스트 수정
+- [X] 강의,학생 매핑 테이블에 상태 추가
