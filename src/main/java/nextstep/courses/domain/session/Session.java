@@ -12,23 +12,22 @@ public class Session {
     private SessionPeriod period;
     private SessionPay sessionPay;
     private SessionStatus status;
-    private SessionCoverImage coverImage;
     private SessionStudents students;
 
-    public Session(Long courseId, SessionCoverImage image, SessionPay sessionPay, SessionPeriod sessionPeriod, int maximumNumberPeople) {
+    public Session(Long courseId, SessionPay sessionPay, SessionPeriod sessionPeriod, int maximumNumberPeople) {
         this.status = SessionStatus.READY;
-        this.coverImage = image;
+
         this.sessionPay = sessionPay;
         this.period = sessionPeriod;
         this.students = new SessionStudents(maximumNumberPeople);
     }
 
-    public static Session createFree(Long courseId, SessionCoverImage image, SessionPay sessionPay, SessionPeriod sessionPeriod) {
-        return new Session(courseId, image, sessionPay, sessionPeriod, 0);
+    public static Session createFree(Long courseId, SessionPay sessionPay, SessionPeriod sessionPeriod) {
+        return new Session(courseId, sessionPay, sessionPeriod, 0);
     }
 
-    public static Session createPaid(Long courseId, SessionCoverImage image, SessionPay sessionPay, SessionPeriod sessionPeriod, int maximumNumberPeople) {
-        return new Session(courseId, image, sessionPay, sessionPeriod, maximumNumberPeople);
+    public static Session createPaid(Long courseId, SessionPay sessionPay, SessionPeriod sessionPeriod, int maximumNumberPeople) {
+        return new Session(courseId, sessionPay, sessionPeriod, maximumNumberPeople);
     }
 
     public void recruiting() {
@@ -52,4 +51,27 @@ public class Session {
         }
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public Long getCourseId() {
+        return courseId;
+    }
+
+    public SessionPeriod getPeriod() {
+        return period;
+    }
+
+    public SessionPay getSessionPay() {
+        return sessionPay;
+    }
+
+    public SessionStatus getStatus() {
+        return status;
+    }
+
+    public SessionStudents getStudents() {
+        return students;
+    }
 }

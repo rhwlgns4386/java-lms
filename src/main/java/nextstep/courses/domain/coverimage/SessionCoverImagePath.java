@@ -13,30 +13,35 @@ public class SessionCoverImagePath {
     private String storeFileName;
     private String originalFileName;
 
-    public SessionCoverImagePath(String rootDir, String originalFileName) {
-        validateFileName(originalFileName);
+    public SessionCoverImagePath(String originalFileName, String storeFileName) {
         this.originalFileName = originalFileName;
-        this.storeFileName = createStoreFileName(rootDir, originalFileName);
+        this.storeFileName = storeFileName;
     }
 
-    private String createStoreFileName(String rootDir, String originalFileName) {
+    public static SessionCoverImagePath create(String rootDir, String originalFileName) {
+        validateFileName(originalFileName);
+        return new SessionCoverImagePath(originalFileName, createStoreFileName(rootDir, originalFileName));
+    }
+
+
+    private static String createStoreFileName(String rootDir, String originalFileName) {
         SessionCoverImageType fileType = extractExt(originalFileName);
         String uuid = UUID.randomUUID().toString();
         return rootDir + uuid + DOT_CHAR + fileType.getExtension();
     }
 
-    private SessionCoverImageType extractExt(String originalFileName) {
+    private static SessionCoverImageType extractExt(String originalFileName) {
         int position = originalFileName.lastIndexOf(DOT_CHAR);
         return SessionCoverImageType.search(originalFileName.substring(position + 1));
     }
 
-    private void validateFileName(String fileName) {
+    private static void validateFileName(String fileName) {
         if (!isValidFileName(fileName)) {
             throw new CoverImageException("유효하지 않는 파일 명입니다");
         }
     }
 
-    private boolean isValidFileName(String fileName) {
+    private static boolean isValidFileName(String fileName) {
         if (fileName == null || fileName.trim().isEmpty()) {
             return false;
         }
@@ -46,4 +51,11 @@ public class SessionCoverImagePath {
         return true;
     }
 
+    public String getStoreFileName() {
+        return storeFileName;
+    }
+
+    public String getOriginalFileName() {
+        return originalFileName;
+    }
 }

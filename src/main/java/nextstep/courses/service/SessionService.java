@@ -26,19 +26,22 @@ public class SessionService {
 
         MultipartFile multipartFile = dto.getMultipartFile();
 
+        Session session = new Session(
+                dto.getCourseId(),
+
+                new SessionPay(dto.getSessionPay(), SessionPayType.search(dto.getPayType())),
+                new SessionPeriod(dto.getStartDate(), dto.getEndDate()),
+                dto.getMaximumNumberPeople()
+        );
+
         SessionCoverImage sessionCoverImage = new SessionCoverImage(
+                session.getId(),
                 multipartFile.getSize(),
                 new SessionCoverImagePath("/", multipartFile.getOriginalFileName()),
                 new SessionCoverImageSize(multipartFile.getWidth(), multipartFile.getHeight())
         );
 
-        Session session = new Session(
-                dto.getCourseId(),
-                sessionCoverImage,
-                new SessionPay(dto.getSessionPay(), SessionPayType.search(dto.getPayType())),
-                new SessionPeriod(dto.getStartDate(), dto.getEndDate()),
-                dto.getMaximumNumberPeople()
-        );
+
 
     }
 

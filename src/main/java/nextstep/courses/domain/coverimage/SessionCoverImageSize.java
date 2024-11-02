@@ -9,7 +9,6 @@ public class SessionCoverImageSize {
     private static final double WIDTH_RATIO = 3.0;
     private static final double HEIGHT_RATIO = 2.0;
 
-    private Long id;
     private final int width;
     private final int height;
 
@@ -49,4 +48,11 @@ public class SessionCoverImageSize {
         return Math.abs(targetAspectRatio - currentAspectRation) < 0.01;
     }
 
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
 }
