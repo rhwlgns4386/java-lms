@@ -127,3 +127,4 @@
 - [X] FreeSession Builder 추가
 - [X] session select할 때, session_session_image 테이블 같이 조회
 - [X] entity에 toDomainNew 메소드 추가 (기존거 병행)
+- [X] paidSessionBuilder 생성 및 테스트 수정

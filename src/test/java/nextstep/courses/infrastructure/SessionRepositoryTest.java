@@ -4,7 +4,7 @@ import nextstep.courses.domain.PaidSession;
 import nextstep.courses.domain.Session;
 import nextstep.courses.domain.SessionImage;
 import nextstep.fixture.FreeSessionBuilder;
-import nextstep.fixture.PaidSessionCreator;
+import nextstep.fixture.PaidSessionBuilder;
 import nextstep.fixture.SessionImageCreator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -69,16 +69,26 @@ public class SessionRepositoryTest {
 
     @Test
     void crud_paid() {
-        SessionImage sessionImage = SessionImageCreator.standard();
-        PaidSession paidSession = PaidSessionCreator.status(RECRUITING, PROGRESSING);
+        SessionImage sessionImage1 = SessionImageCreator.id(1L);
+        SessionImage sessionImage2 = SessionImageCreator.id(2L);
+        sessionImageRepository.save(sessionImage1);
+        sessionImageRepository.save(sessionImage2);
+        PaidSession paidSession = new PaidSessionBuilder()
+                .withId(1L)
+                .withImages(List.of(sessionImage1, sessionImage2))
+                .withRecruitingStatus(RECRUITING)
+                .withProgressingStatus(PROGRESSING)
+                .build();
         int count = sessionRepository.saveNew(paidSession);
-        sessionImageRepository.save(sessionImage);
+        sessionImageRepository.save(sessionImage1);
+        sessionImageRepository.save(sessionImage2);
+        sessionSessionImageRepository.save(paidSession.getSessionId(), List.of(1L, 2L));
         PaidSession savedSession = (PaidSession) sessionRepository.findByIdNew(1L);
         assertAll(
                 () -> assertThat(count).isEqualTo(1),
                 () -> assertThat(paidSession.getSessionId()).isEqualTo(savedSession.getSessionId()),
                 () -> assertThat(paidSession.getDate()).isEqualTo(savedSession.getDate()),
-                () -> assertThat(paidSession.getImage()).isEqualTo(savedSession.getImage()),
+                () -> assertThat(paidSession.getImages()).isEqualTo(savedSession.getImages()),
                 () -> assertThat(paidSession.getRecruitingStatus()).isEqualTo(savedSession.getRecruitingStatus()),
                 () -> assertThat(paidSession.getProgressStatus()).isEqualTo(savedSession.getProgressStatus()),
                 () -> assertThat(paidSession.getSessionFee()).isEqualTo(savedSession.getSessionFee()),
