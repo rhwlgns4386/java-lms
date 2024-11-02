@@ -9,7 +9,8 @@ public abstract class Session {
 
     protected final Long sessionId;
     protected final SessionDate date;
-    protected final SessionImage image;
+    protected SessionImage image;
+    protected List<SessionImage> images;
     protected final RecruitingStatus recruitingStatus;
     protected ProgressStatus progressStatus;
     protected List<Long> students;
@@ -26,6 +27,15 @@ public abstract class Session {
         this.sessionId = sessionId;
         this.date = date;
         this.image = image;
+        this.recruitingStatus = recruitingStatus;
+        this.progressStatus = progressStatus;
+        this.students = students;
+    }
+
+    public Session(Long sessionId, SessionDate date, List<SessionImage> images, RecruitingStatus recruitingStatus, ProgressStatus progressStatus, List<Long> students) {
+        this.sessionId = sessionId;
+        this.date = date;
+        this.images = images;
         this.recruitingStatus = recruitingStatus;
         this.progressStatus = progressStatus;
         this.students = students;

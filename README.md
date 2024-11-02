@@ -123,3 +123,4 @@
   - 사용하지 않을 경우 삭제 예정
 - [X] 세션 이미지 매핑 테이블 추가 (session_session_image)
 - [X] 세션 이미지 select, save 구현
+- [X] session 객체 생성자에 List<SessionImage> 추가

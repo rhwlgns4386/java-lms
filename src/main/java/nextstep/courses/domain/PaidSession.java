@@ -31,6 +31,15 @@ public class PaidSession extends Session {
         this.sessionFee = sessionFee;
     }
 
+    public PaidSession(Long sessionId, SessionDate date, List<SessionImage> images, RecruitingStatus recruitingStatus, ProgressStatus progressStatus, List<Long> numOfStudents, int maxNumOfStudents, int sessionFee) {
+        super(sessionId, date, images, recruitingStatus, progressStatus, numOfStudents);
+        if (maxNumOfStudents < students.size()) {
+            throw new IllegalArgumentException("수강 정원이 초과됐습니다.");
+        }
+        this.maxNumOfStudents = maxNumOfStudents;
+        this.sessionFee = sessionFee;
+    }
+
     @Override
     public void enroll(Payment payment) {
         if (maxNumOfStudents <= students.size()) {
