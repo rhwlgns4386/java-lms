@@ -35,7 +35,7 @@ public class SessionEntity {
         this.maxStudent = maxStudent;
     }
 
-    public static SessionEntity toEntity(Session session) {
+    public static SessionEntity from(Session session) {
         SessionEntity entity = new SessionEntity();
         if (session instanceof PaidSession) {
             PaidSession paidSession = (PaidSession) session;

@@ -102,3 +102,4 @@
 - [X] SessionEntity 추가 (디비 접근용)
 - [X] CourseSession select, save 구현
 - [X] Course에서 포함되어있는 Session 같이 조회 
+- [X] Entity 내부 메소드 이름 from으로 변경 (엔티티에서 호출하므로)
