@@ -3,9 +3,12 @@ package nextstep.courses.domain.session;
 import static org.assertj.core.api.Assertions.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import nextstep.users.domain.NsUserTest;
 
 class SessionTest {
     @Test
@@ -35,14 +38,17 @@ class SessionTest {
     @Test
     @DisplayName("유료강의 수강신청 시 인원이 초과된 경우 예외가 발생한다.")
     void throwExceptionWhenOverCapacity() {
-        LocalDate startAt = LocalDate.of(2024, 1, 1);
-        LocalDate endAt = LocalDate.of(2024, 12, 1);
-        Session session = Session.createPaidSession(startAt, endAt, null, 1);
+        Session session = Session.createPaidSession(
+            LocalDate.of(2024, 1, 1),
+            LocalDate.of(2024, 12, 1),
+            null,
+            1);
+        Enrollment enrollment = new Enrollment(1L, session, NsUserTest.JAVAJIGI, LocalDateTime.now());
 
         session.open();
-        session.register();
+        session.register(enrollment);
 
-        assertThatThrownBy(() -> session.register())
+        assertThatThrownBy(() -> session.register(enrollment))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("정원을 초과했습니다.");
     }
@@ -50,24 +56,30 @@ class SessionTest {
     @Test
     @DisplayName("수강신청 시 수강인원이 증가한다.")
     void incrementEnrollStudentCountWhenRegisterTest() {
-        LocalDate startAt = LocalDate.of(2024, 1, 1);
-        LocalDate endAt = LocalDate.of(2024, 12, 1);
-        Session session = Session.createFreeSession(startAt, endAt, null);
+        Session session = Session.createPaidSession(
+            LocalDate.of(2024, 1, 1),
+            LocalDate.of(2024, 12, 1),
+            null,
+            1);
+        Enrollment enrollment = new Enrollment(1L, session, NsUserTest.JAVAJIGI, LocalDateTime.now());
 
         session.open();
-        session.register();
+        session.register(enrollment);
 
-        assertThat(session.getEnrollStudentCount()).isOne();
+        assertThat(session.getEnrolledUserCount()).isOne();
     }
 
     @Test
     @DisplayName("수강신청 시 모집중 상태가 아닐 경우 예외가 발생한다.")
     void resTest() {
-        LocalDate startAt = LocalDate.of(2024, 1, 1);
-        LocalDate endAt = LocalDate.of(2024, 12, 1);
-        Session session = Session.createFreeSession(startAt, endAt, null);
+        Session session = Session.createPaidSession(
+            LocalDate.of(2024, 1, 1),
+            LocalDate.of(2024, 12, 1),
+            null,
+            1);
+        Enrollment enrollment = new Enrollment(1L, session, NsUserTest.JAVAJIGI, LocalDateTime.now());
 
-        assertThatThrownBy(() -> session.register())
+        assertThatThrownBy(() -> session.register(enrollment))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("모집중 상태의 강의가 아닙니다.");
     }

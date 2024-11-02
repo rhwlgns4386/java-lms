@@ -1,6 +1,8 @@
 package nextstep.courses.domain.session;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 import nextstep.courses.utils.UUIDGenerator;
 
@@ -10,9 +12,9 @@ public class Session {
     private final LocalDate endAt;
     private final CoverImage image;
     private final PaymentPolicy paymentPolicy;
+    private final Set<Enrollment> enrollments = new HashSet<>();
     private final EnrollmentCapacityPolicy enrollmentCapacityPolicy;
     private SessionStatus sessionStatus;
-    private int enrollStudentCount;
 
     public Session(LocalDate startAt, LocalDate endAt, CoverImage image,
         EnrollmentCapacityPolicy enrollmentCapacityPolicy, PaymentPolicy paymentPolicy) {
@@ -37,21 +39,25 @@ public class Session {
         return sessionStatus;
     }
 
-    public int getEnrollStudentCount() {
-        return enrollStudentCount;
+    public int getEnrolledUserCount() {
+        return enrollments.size();
     }
 
     public void open() {
         sessionStatus = SessionStatus.OPEN;
     }
 
-    public void register() {
+    public void register(Enrollment enrollment) {
+        validateRegister();
+        enrollments.add(enrollment);
+    }
+
+    private void validateRegister() {
         if (sessionStatus != SessionStatus.OPEN) {
             throw new IllegalArgumentException("모집중 상태의 강의가 아닙니다.");
         }
-        if (!enrollmentCapacityPolicy.isApplicable(enrollStudentCount)) {
+        if (!enrollmentCapacityPolicy.isApplicable(getEnrolledUserCount())) {
             throw new IllegalArgumentException("정원을 초과했습니다.");
         }
-        enrollStudentCount++;
     }
 }
