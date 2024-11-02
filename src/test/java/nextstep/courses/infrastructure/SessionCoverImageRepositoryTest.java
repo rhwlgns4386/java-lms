@@ -41,7 +41,5 @@ public class SessionCoverImageRepositoryTest {
 
         SessionCoverImage savedCoverImage = sessionCoverImageRepository.findById(1L);
         assertThat(savedCoverImage.getSessionCoverImageSize().getWidth()).isEqualTo(300);
-
-
     }
 }

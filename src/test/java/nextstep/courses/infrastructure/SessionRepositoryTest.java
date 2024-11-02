@@ -1,9 +1,7 @@
 package nextstep.courses.infrastructure;
 
-import nextstep.courses.domain.SessionCoverImageRepository;
 import nextstep.courses.domain.SessionRepository;
 import nextstep.courses.domain.session.Session;
-import nextstep.courses.domain.session.SessionPay;
 import nextstep.courses.domain.session.SessionPeriod;
 import nextstep.courses.domain.session.SessionStatus;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,16 +39,15 @@ public class SessionRepositoryTest {
         SessionPeriod period = new SessionPeriod(startDate, endDate);
         Session session = Session.createPaid(1L, 2000L, period, 20);
 
+        Long sessionId = sessionRepository.save(session);
 
-        int count = sessionRepository.save(session);
-        assertThat(count).isEqualTo(1);
-
+        System.out.println(session.getId());
+        assertThat(sessionId).isEqualTo(2L);
 
         Session saved = sessionRepository.findById(2L);
 
         assertThat(saved.getSessionPay().getSessionPay()).isEqualTo(2000L);
         assertThat(saved.getStatus()).isEqualTo(SessionStatus.READY);
-
 
     }
 }

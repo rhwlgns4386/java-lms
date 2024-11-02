@@ -35,7 +35,7 @@ public class JdbcSessionCoverImageRepository implements SessionCoverImageReposit
 
         StringBuilder sb = new StringBuilder();
         sb.append("select ");
-        sb.append(" id, session_id, original_file_name, stored_file_name, width, height ");
+        sb.append("id, session_id, original_file_name, stored_file_name, width, height ");
         sb.append("from session_cover_image ");
         sb.append("where id = ?");
         RowMapper<SessionCoverImage> rowMapper = (rs, rowNum) -> new SessionCoverImage(

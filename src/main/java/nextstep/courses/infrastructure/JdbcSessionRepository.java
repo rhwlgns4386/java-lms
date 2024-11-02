@@ -7,8 +7,11 @@ import nextstep.courses.domain.session.SessionPeriod;
 import nextstep.courses.domain.session.SessionStudents;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
 import java.sql.SQLOutput;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -22,7 +25,7 @@ public class JdbcSessionRepository implements SessionRepository {
     }
 
     @Override
-    public int save(Session session) {
+    public Long save(Session session) {
         StringBuilder sb = new StringBuilder();
 
         sb.append("insert into course_session");
@@ -30,14 +33,25 @@ public class JdbcSessionRepository implements SessionRepository {
         sb.append("values");
         sb.append(" (?, ?, ?, ?, ?, ?, ?);");
 
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
         SessionPay sessionPay = session.getSessionPay();
         SessionStudents students = session.getStudents();
         SessionPeriod period = session.getPeriod();
 
-        return jdbcTemplate.update(sb.toString(),
-                session.getCourseId(), session.getStatus().toString(), students.getMaximumNumberPeople(),
-                sessionPay.getSessionPay(), sessionPay.getSessionPayType().toString(),
-                period.getStartDate(), period.getEndDate());
+        jdbcTemplate.update(connect -> {
+            PreparedStatement ps = connect.prepareStatement(sb.toString(), new String[]{"id"});
+            ps.setLong(1, session.getCourseId());
+            ps.setString(2, session.getStatus().toString());
+            ps.setInt(3, students.getMaximumNumberPeople());
+            ps.setLong(4, sessionPay.getSessionPay());
+            ps.setString(5, sessionPay.getSessionPayType().toString());
+            ps.setTimestamp(6, toTimeStamp(period.getStartDate()));
+            ps.setTimestamp(7, toTimeStamp(period.getEndDate()));
+            return ps;
+        }, keyHolder);
+
+        return keyHolder.getKey().longValue();
     }
 
     @Override
@@ -74,5 +88,13 @@ public class JdbcSessionRepository implements SessionRepository {
             return null;
         }
         return timestamp.toLocalDateTime();
+    }
+
+    private Timestamp toTimeStamp(LocalDateTime localDateTime) {
+        if (localDateTime == null) {
+            return null;
+        }
+
+        return Timestamp.valueOf(localDateTime);
     }
 }
