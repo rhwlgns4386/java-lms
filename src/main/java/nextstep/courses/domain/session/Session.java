@@ -1,6 +1,9 @@
 package nextstep.courses.domain.session;
 
 import nextstep.courses.domain.image.Image;
+import nextstep.courses.domain.student.Student;
+
+import java.util.List;
 
 public abstract class Session {
     private Long id;
@@ -9,13 +12,15 @@ public abstract class Session {
     private Image image;
     private SessionType sessionType;
     private SessionStatus sessionStatus;
+    private List<Student> students;
 
     public Session(Image image,
                    SessionDate sessionDate,
                    Long id,
                    String title,
                    SessionStatus sessionStatus,
-                   SessionType sessionType
+                   SessionType sessionType,
+                   List<Student> students
     ) {
         this.image = image;
         this.sessionDate = sessionDate;
@@ -23,6 +28,7 @@ public abstract class Session {
         this.title = title;
         this.sessionStatus = sessionStatus;
         this.sessionType = sessionType;
+        this.students = students;
     }
 
     public Long getId() {
@@ -45,6 +51,13 @@ public abstract class Session {
         return sessionType;
     }
 
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void addStudent(Student student) {
+        this.students.add(student);
+    }
 
     public abstract void register(Registration registration);
 

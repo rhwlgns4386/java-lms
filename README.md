@@ -43,6 +43,7 @@
 * Student crud 로직 [X]
 * Image crud 로직 [X]
 * Session 생성 서비스 로직 [X]
+* Session 수강신청 서비스 로직 [X]
 
 ## ERD
 

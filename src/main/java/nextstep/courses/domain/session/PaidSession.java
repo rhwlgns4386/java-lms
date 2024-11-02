@@ -9,7 +9,6 @@ import java.util.List;
 public class PaidSession extends Session {
     private SessionCapacity capacity;
     private Money fee;
-    private List<Student> students;
 
     public PaidSession(String title,
                        Image image,
@@ -40,10 +39,9 @@ public class PaidSession extends Session {
                        Money fee,
                        List<Student> students
     ) {
-        super(image, sessionDate, id, title, sessionStatus, sessionType);
+        super(image, sessionDate, id, title, sessionStatus, sessionType, students);
         this.capacity = capacity;
         this.fee = fee;
-        this.students = students;
     }
 
     public SessionCapacity getCapacity() {
@@ -52,10 +50,6 @@ public class PaidSession extends Session {
 
     public Money getFee() {
         return fee;
-    }
-
-    public List<Student> getStudents() {
-        return students;
     }
 
     @Override
@@ -70,7 +64,7 @@ public class PaidSession extends Session {
             throw new IllegalArgumentException("amount must be equal to session fee");
         }
 
-        this.students.add(Student.of(registration));
-        this.capacity.checkCapacity(this.students.size());
+        addStudent(Student.of(registration));
+        this.capacity.checkCapacity(getStudents().size());
     }
 }

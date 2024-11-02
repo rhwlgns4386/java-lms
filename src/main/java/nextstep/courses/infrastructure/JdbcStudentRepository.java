@@ -32,6 +32,21 @@ public class JdbcStudentRepository implements StudentRepository {
     }
 
     @Override
+    public int[] saveAll(List<Student> students, Long sessionId) {
+        String sql = "insert into student (ns_user_id, session_id, amount) values(:nsUserId,:sessionId,:amount)";
+        MapSqlParameterSource[] batch = students.stream()
+                .map(student -> {
+                    MapSqlParameterSource param = new MapSqlParameterSource();
+                    param.addValue("nsUserId", student.getNsUserId());
+                    param.addValue("sessionId", sessionId);
+                    param.addValue("amount", student.getAmount());
+                    return param;
+                })
+                .toArray(MapSqlParameterSource[]::new);
+        return namedParameterJdbcTemplate.batchUpdate(sql, batch);
+    }
+
+    @Override
     public Student findById(Long nsUserId, Long sessionId) {
         String sql = "select ns_user_id, amount from student where ns_user_id = :nsUserId and session_id = :sessionId";
         MapSqlParameterSource param = new MapSqlParameterSource();

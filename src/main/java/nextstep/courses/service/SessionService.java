@@ -2,9 +2,10 @@ package nextstep.courses.service;
 
 import nextstep.courses.domain.image.Image;
 import nextstep.courses.domain.image.ImageRepository;
-import nextstep.courses.domain.session.Session;
-import nextstep.courses.domain.session.SessionRepository;
+import nextstep.courses.domain.session.*;
 import nextstep.courses.domain.student.StudentRepository;
+import nextstep.payments.domain.Payment;
+import nextstep.users.domain.NsUser;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,4 +27,29 @@ public class SessionService {
 
         return saveSessionId;
     }
+
+    @Transactional
+    public Session register(Long sessionId, NsUser nsUser, Payment payment) {
+        Session session = sessionRepository.findById(sessionId);
+
+        Registration registration = Registration.of(sessionId, nsUser, payment);
+
+        if (session.getSessionType().equals(SessionType.FREE)) {
+            registerFreeSession((FreeSession) session, registration);
+            return session;
+        }
+        registerPaidSession((PaidSession) session, registration);
+        return session;
+    }
+
+    private void registerPaidSession(PaidSession session, Registration registration) {
+        session.register(registration);
+        studentRepository.saveAll(session.getStudents(), session.getId());
+    }
+
+    private void registerFreeSession(FreeSession session, Registration registration) {
+        session.register(registration);
+        studentRepository.saveAll(session.getStudents(), session.getId());
+    }
+
 }

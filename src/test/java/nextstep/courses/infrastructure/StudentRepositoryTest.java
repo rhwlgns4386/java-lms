@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -58,5 +59,16 @@ public class StudentRepositoryTest {
 
         List<Student> students = studentRepository.findAllBySessionId(sessionId);
         assertThat(students).hasSize(2);
+    }
+
+    @Test
+    void saveAll() {
+        Long sessionId = 1L;
+        Long amount = 100_000L;
+        Student student1 = new Student(amount, NsUserTest.SANJIGI.getId());
+        Student student2 = new Student(amount, NsUserTest.JAVAJIGI.getId());
+        List<Student> students = Arrays.asList(student1, student2);
+        int[] saved = studentRepository.saveAll(students, sessionId);
+        assertThat(saved.length).isEqualTo(2);
     }
 }

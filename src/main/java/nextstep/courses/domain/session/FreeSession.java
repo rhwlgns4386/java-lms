@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FreeSession extends Session {
-    private List<Student> students;
 
     public FreeSession(String title,
                        SessionDate sessionDate,
@@ -32,8 +31,7 @@ public class FreeSession extends Session {
                        SessionType sessionType,
                        List<Student> students
     ) {
-        super(image, sessionDate, id, title, sessionStatus, sessionType);
-        this.students = students;
+        super(image, sessionDate, id, title, sessionStatus, sessionType, students);
     }
 
     @Override
@@ -42,11 +40,7 @@ public class FreeSession extends Session {
             throw new IllegalStateException("Can't register session");
         }
 
-        this.students.add(Student.of(registration));
+        addStudent(Student.of(registration));
     }
 
-
-    public List<Student> getStudents() {
-        return students;
-    }
 }
