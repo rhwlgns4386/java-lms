@@ -12,6 +12,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static nextstep.courses.domain.EnrollStatus.APPROVED;
+
 @Repository("sessionRepository")
 public class JdbcSessionRepository implements SessionRepository {
     private final JdbcOperations jdbcTemplate;
@@ -63,7 +65,7 @@ public class JdbcSessionRepository implements SessionRepository {
     @Override
     public Session findByIdNew(Long id) {
         String sql = "select id, session_start_date, session_end_date, status, recruiting_status, progress_status, image_id, session_type, max_student, session_fee from session where id = ?";
-        List<Long> students = sessionStudentRepository.findBySessionId(id);
+        List<Long> students = sessionStudentRepository.findBySessionIdAndStatus(id, APPROVED);
         RowMapper<Session> rowMapper = (rs, rowNum) -> {
             List<SessionImage> sessionImages = getSessionImages(id);
             return new SessionEntity(rs.getLong("id"),
