@@ -12,7 +12,6 @@ public class PaymentService {
         this.paymentRepository = paymentRepository;
     }
 
-
     public void save(Payment payment) {
         paymentRepository.save(payment);
     }

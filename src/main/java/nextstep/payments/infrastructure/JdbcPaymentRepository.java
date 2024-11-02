@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 public class JdbcPaymentRepository implements PaymentRepository {
 
     private final JdbcTemplate jdbcTemplate;
+    private static final String INSERT_SQL = "INSERT INTO payments (id, session_id, ns_user_id, amount, created_at) VALUES (?, ?, ?, ?, ?)";
 
     public JdbcPaymentRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -16,7 +17,6 @@ public class JdbcPaymentRepository implements PaymentRepository {
 
     @Override
     public void save(Payment payment) {
-        String sql = "INSERT INTO payments (id, session_id, ns_user_id, amount, created_at) VALUES (?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql, payment.getId(), payment.getSessionId(), payment.getStudentId(), payment.getAmount(), payment.getCreatedAt());
+        jdbcTemplate.update(INSERT_SQL, payment.getId(), payment.getSessionId(), payment.getStudentId(), payment.getAmount(), payment.getCreatedAt());
     }
 }
