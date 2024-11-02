@@ -59,7 +59,6 @@ public class Capacity {
         return new ArrayList<>(currentStudentIds);
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

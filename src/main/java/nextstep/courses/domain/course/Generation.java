@@ -17,10 +17,6 @@ public class Generation {
         this.generation = generation;
     }
 
-    public int getGeneration() {
-        return generation;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

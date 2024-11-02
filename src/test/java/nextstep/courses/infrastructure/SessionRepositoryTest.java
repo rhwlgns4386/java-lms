@@ -1,8 +1,8 @@
 package nextstep.courses.infrastructure;
 
-import nextstep.courses.domain.CoverImageRepository;
-import nextstep.courses.domain.SessionRegistrationRepository;
-import nextstep.courses.domain.SessionRepository;
+import nextstep.courses.domain.cover.CoverImageRepository;
+import nextstep.courses.domain.session.SessionRegistrationRepository;
+import nextstep.courses.domain.session.SessionRepository;
 import nextstep.courses.domain.cover.CoverImage;
 import nextstep.courses.domain.cover.CoverImageFile;
 import nextstep.courses.domain.cover.CoverImageSize;
@@ -52,7 +52,7 @@ class SessionRepositoryTest {
         );
 
         jdbcTemplate.update(
-                "insert into cover_image (id, file_size, image_type, width, height, created_at) values (?, ?, ?, ?, ?, ?)",
+                "INSERT INTO cover_image (id, file_size, image_type, width, height, created_at) VALUES (?, ?, ?, ?, ?, ?)",
                 coverImageId,
                 coverImage.getFile().getSize(),
                 coverImage.getType().name(),
@@ -102,8 +102,8 @@ class SessionRepositoryTest {
 
     @AfterEach
     void tearDown() {
-        jdbcTemplate.update("delete from session_registration");
-        jdbcTemplate.update("delete from session");
-        jdbcTemplate.update("delete from cover_image");
+        jdbcTemplate.update("DELETE FROM session_registration");
+        jdbcTemplate.update("DELETE FROM session");
+        jdbcTemplate.update("DELETE FROM cover_image");
     }
 }

@@ -1,6 +1,6 @@
 package nextstep.courses.infrastructure;
 
-import nextstep.courses.domain.CoverImageRepository;
+import nextstep.courses.domain.cover.CoverImageRepository;
 import nextstep.courses.domain.cover.CoverImage;
 import nextstep.courses.domain.cover.CoverImageEntity;
 import org.springframework.jdbc.core.JdbcOperations;

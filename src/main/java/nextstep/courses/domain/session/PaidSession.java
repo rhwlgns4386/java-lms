@@ -6,9 +6,10 @@ import nextstep.users.domain.NsUser;
 
 public class PaidSession extends DefaultSession {
 
-    public PaidSession( Status status, Period period, CoverImage coverImage, Money courseFee, Capacity capacity) {
+    public PaidSession(Status status, Period period, CoverImage coverImage, Money courseFee, Capacity capacity) {
         this(0L, status, period, coverImage, courseFee, capacity);
     }
+
     public PaidSession(Long id, Status status, Period period, CoverImage coverImage, Money courseFee, Capacity capacity) {
         super(id, status, period, coverImage, courseFee, capacity);
     }
@@ -39,9 +40,4 @@ public class PaidSession extends DefaultSession {
             throw new IllegalArgumentException("결제 금액이 수강료와 일치하지 않습니다");
         }
     }
-
-    public Money getCourseFee() {
-        return courseFee;
-    }
-
 }

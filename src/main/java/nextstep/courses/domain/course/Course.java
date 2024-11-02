@@ -32,12 +32,8 @@ public class Course {
         this.baseTime = baseTime;
     }
 
-    public void addSession(DefaultSession session) {
-        sessions.add(session);
-    }
-
-    public List<DefaultSession> getSessions() {
-        return sessions;
+    public Long getId() {
+        return courseMetadata.getId();
     }
 
     public String getCourseTitle() {

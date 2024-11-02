@@ -1,19 +1,13 @@
 package nextstep.courses.infrastructure;
 
-import nextstep.courses.domain.SessionRegistrationRepository;
-import nextstep.courses.domain.SessionRepository;
-import nextstep.courses.domain.session.DefaultSession;
-import nextstep.courses.domain.session.FreeSession;
-import nextstep.courses.domain.session.PaidSession;
+import nextstep.courses.domain.session.SessionRegistrationRepository;
 import nextstep.courses.domain.session.SessionRegistrationEntity;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Repository("sessionRegistrationRepository")

@@ -1,6 +1,4 @@
-package nextstep.courses.domain;
-
-import nextstep.courses.domain.cover.CoverImage;
+package nextstep.courses.domain.cover;
 
 public interface CoverImageRepository {
     int save(CoverImage coverImage);

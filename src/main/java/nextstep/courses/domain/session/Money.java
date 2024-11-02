@@ -32,10 +32,6 @@ public class Money {
         return amount;
     }
 
-    public boolean isNotFree(){
-        return getAmount() > ZERO;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

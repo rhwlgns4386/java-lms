@@ -1,6 +1,6 @@
 package nextstep.courses.infrastructure;
 
-import nextstep.courses.domain.CoverImageRepository;
+import nextstep.courses.domain.cover.CoverImageRepository;
 import nextstep.courses.domain.cover.CoverImage;
 import nextstep.courses.domain.cover.CoverImageFile;
 import nextstep.courses.domain.cover.CoverImageSize;
@@ -67,6 +67,6 @@ class CoverImageRepositoryTest {
 
     @AfterEach
     void tearDown() {
-        jdbcTemplate.update("delete from cover_image");
+        jdbcTemplate.update("DELETE FROM cover_image");
     }
 }

@@ -1,8 +1,6 @@
 package nextstep.courses.domain.session;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class SessionRegistrationEntity {
     private final Long sessionId;
@@ -13,13 +11,6 @@ public class SessionRegistrationEntity {
         this.sessionId = sessionId;
         this.userId = userId;
         this.registeredAt = registeredAt;
-    }
-
-    public static List<SessionRegistrationEntity> fromSession(DefaultSession session) {
-        return session.getRegisteredStudentIds()
-                .stream()
-                .map(userId -> new SessionRegistrationEntity(session.getId(), userId, LocalDateTime.now()))
-                .collect(Collectors.toList());
     }
 
     public Long getSessionId() {

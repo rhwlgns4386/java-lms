@@ -10,7 +10,11 @@ public class FreeSession extends DefaultSession {
         this(0L, status, period, coverImage, new Money(0), new Capacity(Integer.MAX_VALUE));
     }
 
-    public FreeSession(Long id, Status status, Period period, CoverImage coverImage, Money courseFee, Capacity capacity) {
+    public FreeSession(Long id, Status status, Period period, CoverImage coverImage, Capacity capacity) {
+        this(id, status, period, coverImage, new Money(0), capacity);
+    }
+
+    private FreeSession(Long id, Status status, Period period, CoverImage coverImage, Money courseFee, Capacity capacity) {
         super(id, status, period, coverImage, courseFee, capacity);
     }
 

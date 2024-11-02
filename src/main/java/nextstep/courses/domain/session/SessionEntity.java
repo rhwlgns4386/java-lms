@@ -60,7 +60,7 @@ public class SessionEntity {
         );
     }
 
-    public PaidSession toPaidSessionDomain(CoverImage coverImage) {
+    public PaidSession toPaidSession(CoverImage coverImage) {
         Status sessionStatus = Status.from(status);
         Period period = new Period(startDate, endDate);
         Set<Long> userIds = new HashSet<>(registeredUserIds);
@@ -76,7 +76,7 @@ public class SessionEntity {
         );
     }
 
-    public FreeSession toFreeSessionDomain(CoverImage coverImage) {
+    public FreeSession toFreeSession(CoverImage coverImage) {
         Status sessionStatus = Status.from(status);
         Period period = new Period(startDate, endDate);
         Set<Long> userIds = new HashSet<>(registeredUserIds);
@@ -87,7 +87,6 @@ public class SessionEntity {
                 sessionStatus,
                 period,
                 coverImage,
-                new Money(0L),
                 capacity
         );
     }

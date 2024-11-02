@@ -1,8 +1,8 @@
 package nextstep.courses.infrastructure;
 
-import nextstep.courses.domain.CoverImageRepository;
-import nextstep.courses.domain.SessionRegistrationRepository;
-import nextstep.courses.domain.SessionRepository;
+import nextstep.courses.domain.cover.CoverImageRepository;
+import nextstep.courses.domain.session.SessionRegistrationRepository;
+import nextstep.courses.domain.session.SessionRepository;
 import nextstep.courses.domain.cover.CoverImage;
 import nextstep.courses.domain.session.*;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -133,9 +133,9 @@ public class JdbcSessionRepository implements SessionRepository {
             CoverImage coverImage = coverImageRepository.findById(entity.getCoverImageId());
 
             if (SessionType.PAID.getCode().equals(entity.getSessionType())) {
-                return entity.toPaidSessionDomain(coverImage);
+                return entity.toPaidSession(coverImage);
             }
-            return entity.toFreeSessionDomain(coverImage);
+            return entity.toFreeSession(coverImage);
 
         } catch (EmptyResultDataAccessException e) {
             throw new IllegalArgumentException("세션을 찾을 수 없습니다." + id);

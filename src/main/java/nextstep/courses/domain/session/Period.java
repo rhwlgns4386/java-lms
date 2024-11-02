@@ -7,7 +7,7 @@ public class Period {
     private final LocalDate endDate;
 
     public Period(LocalDate startDate, LocalDate endDate) {
-        if(startDate.isAfter(endDate)) {
+        if (startDate.isAfter(endDate)) {
             throw new IllegalArgumentException("강의 시작일은 종료일보다 빠를 수 없습니다.");
         }
 
