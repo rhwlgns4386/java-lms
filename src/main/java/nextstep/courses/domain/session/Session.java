@@ -1,4 +1,6 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.session;
+
+import nextstep.courses.domain.image.Image;
 
 public abstract class Session {
     private Long id;
@@ -44,13 +46,13 @@ public abstract class Session {
     }
 
 
-    protected abstract void register(Registration registration);
+    public abstract void register(Registration registration);
 
-    protected void open() {
+    public void open() {
         updateStatus(SessionStatus.RECRUITING);
     }
 
-    protected void close() {
+    public void close() {
         updateStatus(SessionStatus.CLOSE);
     }
 

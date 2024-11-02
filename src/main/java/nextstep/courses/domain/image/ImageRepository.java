@@ -1,4 +1,4 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.image;
 
 public interface ImageRepository {
     int save(Image image, Long sessionId);

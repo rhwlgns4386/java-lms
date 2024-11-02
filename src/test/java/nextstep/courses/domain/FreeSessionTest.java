@@ -1,5 +1,12 @@
 package nextstep.courses.domain;
 
+import nextstep.courses.domain.image.Image;
+import nextstep.courses.domain.image.ImagePixel;
+import nextstep.courses.domain.image.ImageSize;
+import nextstep.courses.domain.image.ImageType;
+import nextstep.courses.domain.session.FreeSession;
+import nextstep.courses.domain.session.SessionDate;
+import nextstep.courses.domain.session.SessionStatus;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

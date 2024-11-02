@@ -1,4 +1,4 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.session;
 
 public interface SessionRepository {
     int save(Session session, Long courseId);

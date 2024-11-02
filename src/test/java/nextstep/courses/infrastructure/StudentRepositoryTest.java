@@ -1,7 +1,7 @@
 package nextstep.courses.infrastructure;
 
-import nextstep.courses.domain.Student;
-import nextstep.courses.domain.StudentRepository;
+import nextstep.courses.domain.student.Student;
+import nextstep.courses.domain.student.StudentRepository;
 import nextstep.users.domain.NsUser;
 import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.BeforeEach;

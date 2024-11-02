@@ -1,4 +1,6 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.student;
+
+import nextstep.courses.domain.session.Registration;
 
 public class Student {
     private Long nsUserId;
@@ -9,7 +11,7 @@ public class Student {
         this.nsUserId = nsUserId;
     }
 
-    public static Student of(Registration registration){
+    public static Student of(Registration registration) {
         return new Student(registration.getAmount(), registration.getNsUserId());
     }
 

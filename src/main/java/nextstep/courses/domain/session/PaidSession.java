@@ -1,4 +1,7 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.session;
+
+import nextstep.courses.domain.image.Image;
+import nextstep.courses.domain.student.Student;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +59,7 @@ public class PaidSession extends Session {
     }
 
     @Override
-    protected void register(Registration registration) {
+    public void register(Registration registration) {
         if (!isAvailableForRegistration()) {
             throw new IllegalStateException("Can't register session");
         }

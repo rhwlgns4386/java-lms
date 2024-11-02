@@ -1,4 +1,4 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.session;
 
 public class SessionCapacity {
     private int capacity;
@@ -31,7 +31,7 @@ public class SessionCapacity {
         }
     }
 
-    public void updateCurrentCount(int countOfStudents){
+    public void updateCurrentCount(int countOfStudents) {
         this.currentCount = countOfStudents;
         if (this.currentCount > this.capacity) {
             throw new IllegalArgumentException("Capacity is full");
