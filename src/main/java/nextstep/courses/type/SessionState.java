@@ -1,7 +1,7 @@
 package nextstep.courses.type;
 
 public enum SessionState {
-    PREPARING("강의 준비중"), OPEN("강의 모집중"), END("강의 종료");
+    PREPARING("강의 준비중"), PROGRESS("강의 진행중"), END("강의 종료");
 
     private final String desc;
 
@@ -10,7 +10,7 @@ public enum SessionState {
     }
 
     public boolean canRegister() {
-        return this == SessionState.OPEN;
+        return !this.equals(SessionState.END);
     }
 
     public String getDesc() {

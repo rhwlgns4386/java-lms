@@ -34,7 +34,7 @@ public class CourseEntity {
         return new Course(id, title, creatorId, createAt, updatedAt);
     }
 
-    public static CourseEntity toEntity(Course course) {
+    public static CourseEntity from(Course course) {
         return new CourseEntity(course.getId(), course.getTitle(), course.getCreatorId(),
                 course.getCreatedAt(), course.getUpdatedAt());
     }

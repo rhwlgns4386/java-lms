@@ -29,6 +29,6 @@ public class CourseService {
                 .toDomain();
         sessionRepository.findByCourseId(foundCourse.getId()).forEach(entity -> foundCourse.add(entity.toDomain()));
         Session registeredSession = foundCourse.registerSession(payment);
-        sessionRepository.save(SessionEntity.toEntity(registeredSession), courseId);
+        sessionRepository.save(SessionEntity.from(registeredSession), courseId);
     }
 }

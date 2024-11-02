@@ -22,6 +22,6 @@ public class SessionService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 강의를 찾을 수 없습니다"))
                 .toDomain();
         foundSession.register(payment);
-        sessionRepository.save(SessionEntity.toEntity(foundSession), Session.NOT_ASSIGNED);
+        sessionRepository.save(SessionEntity.from(foundSession), Session.NOT_ASSIGNED);
     }
 }
