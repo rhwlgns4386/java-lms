@@ -1,8 +1,9 @@
 package nextstep.courses.infrastructure;
 
 import nextstep.courses.domain.image.*;
-import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -23,27 +24,38 @@ public class JdbcImageRepository implements ImageRepository {
         return new Image(imageId, imageSize, type, imagePixel);
     };
 
-    private JdbcOperations jdbcTemplate;
+    private NamedParameterJdbcOperations namedParameterJdbcTemplate;
 
-    public JdbcImageRepository(JdbcOperations jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public JdbcImageRepository(NamedParameterJdbcOperations namedParameterJdbcTemplate) {
+        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
     @Override
     public int save(Image image, Long sessionId) {
-        String sql = "insert into image (session_id, size, image_type, width, height, created_at) values(?, ?, ?, ?, ?, ?)";
-        return jdbcTemplate.update(sql, sessionId, image.getImageSize().getSize(), image.getImageType().name(), image.getImagePixel().getWidth(), image.getImagePixel().getHeight(), LocalDateTime.now());
+        String sql = "insert into image (session_id, size, image_type, width, height, created_at) values(:sessionId, :size, :imageType, :width, :height, :createdAt)";
+        MapSqlParameterSource param = new MapSqlParameterSource();
+        param.addValue("sessionId", sessionId);
+        param.addValue("size", image.getImageSize().getSize());
+        param.addValue("imageType", image.getImageType().name());
+        param.addValue("width", image.getImagePixel().getWidth());
+        param.addValue("height", image.getImagePixel().getHeight());
+        param.addValue("createdAt", LocalDateTime.now());
+        return namedParameterJdbcTemplate.update(sql, param);
     }
 
     @Override
     public Image findById(long id) {
-        String sql = "select id, size, image_type, width, height from image where id = ?";
-        return jdbcTemplate.queryForObject(sql, IMAGE_ROW_MAPPER, id);
+        String sql = "select id, size, image_type, width, height from image where id = :id";
+        MapSqlParameterSource param = new MapSqlParameterSource();
+        param.addValue("id", id);
+        return namedParameterJdbcTemplate.queryForObject(sql, param, IMAGE_ROW_MAPPER);
     }
 
     @Override
     public Image findBySessionId(long sessionId) {
-        String sql = "select id, size, image_type, width, height from image where session_id = ?";
-        return jdbcTemplate.queryForObject(sql, IMAGE_ROW_MAPPER, sessionId);
+        String sql = "select id, size, image_type, width, height from image where session_id = :sessionId";
+        MapSqlParameterSource param = new MapSqlParameterSource();
+        param.addValue("sessionId", sessionId);
+        return namedParameterJdbcTemplate.queryForObject(sql, param, IMAGE_ROW_MAPPER);
     }
 }
