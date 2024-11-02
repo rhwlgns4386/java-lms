@@ -8,6 +8,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository("studentRepository")
 public class JdbcStudentRepository implements StudentRepository {
+    private static final RowMapper<Student> STUDENT_ROW_MAPPER = (rs, rowNum) -> new Student(
+            rs.getLong(2),
+            rs.getLong(1)
+    );
     private JdbcOperations jdbcTemplate;
 
     public JdbcStudentRepository(JdbcOperations jdbcTemplate) {
@@ -23,10 +27,6 @@ public class JdbcStudentRepository implements StudentRepository {
     @Override
     public Student findById(Long nsUserId, Long sessionId) {
         String sql = "select ns_user_id, amount from student where ns_user_id = ? and session_id = ?";
-        RowMapper<Student> rowMapper = (rs, rowNum) -> new Student(
-                rs.getLong(2),
-                rs.getLong(1)
-        );
-        return jdbcTemplate.queryForObject(sql, rowMapper, nsUserId, sessionId);
+        return jdbcTemplate.queryForObject(sql, STUDENT_ROW_MAPPER, nsUserId, sessionId);
     }
 }

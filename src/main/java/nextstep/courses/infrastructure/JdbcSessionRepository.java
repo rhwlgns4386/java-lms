@@ -11,6 +11,22 @@ import java.util.ArrayList;
 
 @Repository("sessionRepository")
 public class JdbcSessionRepository implements SessionRepository {
+    private static final RowMapper<Session> COURSE_ROW_MAPPER = (rs, rowNum) -> {
+        long sessionId = rs.getLong(1);
+        String title = rs.getString(2);
+        Timestamp startAt = rs.getTimestamp(3);
+        Timestamp endAt = rs.getTimestamp(4);
+        SessionDate date = new SessionDate(startAt.toLocalDateTime(), endAt.toLocalDateTime());
+        SessionType type = SessionType.of(rs.getString(5));
+        SessionStatus status = SessionStatus.valueOf(rs.getString(6));
+        if (type.equals(SessionType.FREE)) {
+            return new FreeSession(null, date, sessionId, title, status, type, new ArrayList<>());
+        }
+
+        SessionCapacity capacity = new SessionCapacity(rs.getInt(7));
+        Money money = new Money(rs.getLong(8));
+        return new PaidSession(null, date, sessionId, title, status, type, capacity, money, new ArrayList<>());
+    };
     private JdbcOperations jdbcTemplate;
 
     public JdbcSessionRepository(JdbcOperations jdbcTemplate) {
@@ -33,22 +49,6 @@ public class JdbcSessionRepository implements SessionRepository {
     @Override
     public Session findById(Long id) {
         String sql = "select id, title, start_at, end_at, session_type, session_status, capacity, price from session where id = ?";
-        RowMapper<Session> rowMapper = (rs, rowNum) -> {
-            long sessionId = rs.getLong(1);
-            String title = rs.getString(2);
-            Timestamp startAt = rs.getTimestamp(3);
-            Timestamp endAt = rs.getTimestamp(4);
-            SessionDate date = new SessionDate(startAt.toLocalDateTime(), endAt.toLocalDateTime());
-            SessionType type = SessionType.of(rs.getString(5));
-            SessionStatus status = SessionStatus.valueOf(rs.getString(6));
-            if (type.equals(SessionType.FREE)) {
-                return new FreeSession(null, date, sessionId, title, status, type, new ArrayList<>());
-            }
-
-            SessionCapacity capacity = new SessionCapacity(rs.getInt(7));
-            Money money = new Money(rs.getLong(8));
-            return new PaidSession(null, date, sessionId, title, status, type, capacity, money, new ArrayList<>());
-        };
-        return jdbcTemplate.queryForObject(sql, rowMapper, id);
+        return jdbcTemplate.queryForObject(sql, COURSE_ROW_MAPPER, id);
     }
 }

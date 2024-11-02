@@ -9,6 +9,20 @@ import java.time.LocalDateTime;
 
 @Repository("imageRepository")
 public class JdbcImageRepository implements ImageRepository {
+    private static final RowMapper<Image> IMAGE_ROW_MAPPER = (rs, rowNum) -> {
+        long imageId = rs.getLong(1);
+        long size = rs.getLong(2);
+        String imageType = rs.getString(3);
+        int width = rs.getInt(4);
+        int height = rs.getInt(5);
+
+        ImageSize imageSize = new ImageSize(size);
+        ImageType type = ImageType.of(imageType);
+        ImagePixel imagePixel = new ImagePixel(width, height);
+
+        return new Image(imageId, imageSize, type, imagePixel);
+    };
+
     private JdbcOperations jdbcTemplate;
 
     public JdbcImageRepository(JdbcOperations jdbcTemplate) {
@@ -24,19 +38,6 @@ public class JdbcImageRepository implements ImageRepository {
     @Override
     public Image findById(long id) {
         String sql = "select id, size, image_type, width, height from image where id = ?";
-        RowMapper<Image> rowMapper = (rs, rowNum) -> {
-            long imageId = rs.getLong(1);
-            long size = rs.getLong(2);
-            String imageType = rs.getString(3);
-            int width = rs.getInt(4);
-            int height = rs.getInt(5);
-
-            ImageSize imageSize = new ImageSize(size);
-            ImageType type = ImageType.of(imageType);
-            ImagePixel imagePixel = new ImagePixel(width, height);
-
-            return new Image(imageId, imageSize, type, imagePixel);
-        };
-        return jdbcTemplate.queryForObject(sql, rowMapper, id);
+        return jdbcTemplate.queryForObject(sql, IMAGE_ROW_MAPPER, id);
     }
 }
