@@ -40,12 +40,12 @@ public class SessionRepositoryTest {
         String title = "TDD";
 
         PaidSession paidSession = new PaidSession(title, image, sessionDate, new SessionCapacity(10), new Money(200_000L));
-        int count = sessionRepository.save(paidSession, courseId);
-        Assertions.assertThat(count).isEqualTo(1);
+        long id1 = sessionRepository.save(paidSession, courseId);
+        Assertions.assertThat(id1).isEqualTo(1);
 
         FreeSession freeSession = new FreeSession(title, sessionDate, image);
-        count = sessionRepository.save(freeSession, courseId);
-        Assertions.assertThat(count).isEqualTo(1);
+        long id2 = sessionRepository.save(freeSession, courseId);
+        Assertions.assertThat(id2).isEqualTo(2);
 
         Session savePaidSession = sessionRepository.findById(1L);
         Assertions.assertThat(savePaidSession.getSessionType()).isEqualTo(SessionType.PAID);

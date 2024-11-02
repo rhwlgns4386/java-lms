@@ -4,11 +4,13 @@ import nextstep.courses.domain.session.*;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Objects;
 
 @Repository("sessionRepository")
 public class JdbcSessionRepository implements SessionRepository {
@@ -36,10 +38,19 @@ public class JdbcSessionRepository implements SessionRepository {
     }
 
     @Override
-    public int save(Session session, Long courseId) {
+    public long save(Session session, Long courseId) {
         String sql = "insert into session (course_id, title, start_at, end_at, session_type, session_status, capacity, price,  created_at) " +
                 "values(:courseId, :title, :startAt, :endAt, :sessionType, :sessionStatus, :capacity, :price, :createdAt)";
 
+        MapSqlParameterSource param = getParam(courseId, session);
+        GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+
+        namedParameterJdbcTemplate.update(sql, param, keyHolder);
+
+        return Objects.requireNonNull(keyHolder.getKey()).longValue();
+    }
+
+    private MapSqlParameterSource getParam(Long courseId, Session session) {
         MapSqlParameterSource param = new MapSqlParameterSource();
         param.addValue("courseId", courseId);
         param.addValue("title", session.getTitle());
@@ -52,12 +63,13 @@ public class JdbcSessionRepository implements SessionRepository {
         if (session instanceof FreeSession) {
             param.addValue("capacity", null);
             param.addValue("price", null);
-            return namedParameterJdbcTemplate.update(sql, param);
+            return param;
         }
+
         PaidSession paidSession = (PaidSession) session;
         param.addValue("capacity", paidSession.getCapacity().getCapacity());
         param.addValue("price", paidSession.getFee().getPrice());
-        return namedParameterJdbcTemplate.update(sql, param);
+        return param;
     }
 
     @Override
