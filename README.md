@@ -129,3 +129,4 @@
 - [X] entity에 toDomainNew 메소드 추가 (기존거 병행)
 - [X] paidSessionBuilder 생성 및 테스트 수정
 - [X] 강의,학생 매핑 테이블에 상태 추가
+- [X] 상태값 추가한 select, save 기능 추가
