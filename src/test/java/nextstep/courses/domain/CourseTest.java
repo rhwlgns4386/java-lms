@@ -26,7 +26,7 @@ public class CourseTest {
 
     @BeforeEach
     void init() {
-        Image image = new Image(1L, new ImageSize(1024), ImageType.GIF, new ImagePixel(300L, 200L));
+        Image image = new Image(1L, new ImageSize(1024), ImageType.GIF, new ImagePixel(300, 200));
 
         LocalDateTime start = LocalDateTime.of(2024, 10, 10, 10, 10);
         LocalDateTime end = LocalDateTime.of(2024, 10, 10, 10, 11);

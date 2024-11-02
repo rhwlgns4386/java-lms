@@ -28,7 +28,7 @@ public class ImageRepositoryTest {
     @Test
     void crud() {
         ImageSize imageSize = new ImageSize(500);
-        ImagePixel imagePixel = new ImagePixel(300L, 200L);
+        ImagePixel imagePixel = new ImagePixel(300, 200);
         Image image = new Image(imageSize, ImageType.JPG, imagePixel);
         int count = imageRepository.save(image, 1L);
         assertThat(count).isEqualTo(1);

@@ -28,8 +28,8 @@ public class JdbcImageRepository implements ImageRepository {
             long imageId = rs.getLong(1);
             long size = rs.getLong(2);
             String imageType = rs.getString(3);
-            long width = rs.getLong(4);
-            long height = rs.getLong(5);
+            int width = rs.getInt(4);
+            int height = rs.getInt(5);
 
             ImageSize imageSize = new ImageSize(size);
             ImageType type = ImageType.of(imageType);
