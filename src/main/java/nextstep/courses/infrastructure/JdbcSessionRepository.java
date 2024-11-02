@@ -32,6 +32,14 @@ public class JdbcSessionRepository implements SessionRepository {
     }
 
     @Override
+    public int saveNew(Session session) {
+        SessionEntity entity = SessionEntity.from(session);
+        String sql = "insert into session (session_start_date, session_end_date, status, recruiting_status, progress_status, image_id, session_type, max_student, session_fee) values (? ,? ,? ,? ,? ,? ,?, ?, ?)";
+        sessionStudentRepository.save(session.getSessionId(), session.getStudents());
+        return jdbcTemplate.update(sql, entity.getSessionStartAt(), entity.getSessionEndAt(), entity.getStatus(), entity.getRecruitingStatus(), entity.getProgressStatus(), entity.getImageId(), entity.getSessionType(), entity.getSessionFee(), entity.getMaxStudent());
+    }
+
+    @Override
     public Session findById(Long id) {
         String sql = "select id, session_start_date, session_end_date, status, image_id, session_type, max_student, session_fee from session where id = ?";
         List<Long> students = sessionStudentRepository.findBySessionId(id);
@@ -41,6 +49,26 @@ public class JdbcSessionRepository implements SessionRepository {
                     rs.getTimestamp("session_start_date"),
                     rs.getTimestamp("session_end_date"),
                     rs.getString("status"),
+                    rs.getString("session_type"),
+                    rs.getInt("max_student"),
+                    rs.getInt("session_fee"))
+                    .toDomain(sessionImage, students);
+        };
+        return jdbcTemplate.queryForObject(sql, rowMapper, id);
+    }
+
+    @Override
+    public Session findByIdNew(Long id) {
+        String sql = "select id, session_start_date, session_end_date, status, recruiting_status, progress_status, image_id, session_type, max_student, session_fee from session where id = ?";
+        List<Long> students = sessionStudentRepository.findBySessionId(id);
+        RowMapper<Session> rowMapper = (rs, rowNum) -> {
+            SessionImage sessionImage = getSessionImage(rs);
+            return new SessionEntity(rs.getLong("id"),
+                    rs.getTimestamp("session_start_date"),
+                    rs.getTimestamp("session_end_date"),
+                    rs.getString("status"),
+                    rs.getString("recruiting_status"),
+                    rs.getString("progress_status"),
                     rs.getString("session_type"),
                     rs.getInt("max_student"),
                     rs.getInt("session_fee"))

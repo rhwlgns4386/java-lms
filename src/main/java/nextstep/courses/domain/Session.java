@@ -58,8 +58,11 @@ public abstract class Session {
         return recruitingStatus;
     }
 
+    public ProgressStatus getProgressStatus() {
+        return progressStatus;
+    }
+
     public List<Long> getStudents() {
         return students;
     }
-
 }

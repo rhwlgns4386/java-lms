@@ -116,3 +116,8 @@
 - [X] 강의 진행상태, 모집상태 구분 
   - [X] 컴파일 에러 적게끔 기존 상태를 모집 상태로 변경, 신규 진행상태 추가
   - [X] Session, PaidSession, FreeSession에 생성자 별도로 추가 (기존 에러 방지)
+- [X] 데이터베이스 컬럼 추가 (progress_status, recruiting_status)
+  - 기존 status 컬럼에 있던 값은 recruiting_status에 업데이트했다고 가정
+  - 디비가 비어있을 경우 entity에서 예외처리
+- [X] saveNew, findByIdNew 메소드 추가해서 스트랭글러 패턴 적용
+  - 사용하지 않을 경우 삭제 예정

@@ -9,12 +9,8 @@ public class PaidSession extends Session {
     private final int maxNumOfStudents;
     private final int sessionFee;
 
-    public PaidSession(SessionDate date, SessionImage image, RecruitingStatus status, List<Long> numOfStudents, int maxNumOfStudents, int sessionFee) {
-        this(1L, date, image, status, numOfStudents, maxNumOfStudents, sessionFee);
-    }
-
-    public PaidSession(long id, Timestamp sessionStartAt, Timestamp sessionEndAt, SessionImage sessionImage, String status, List<Long> numOfStudents, int maxStudent, int sessionFee) {
-        this(id, new SessionDate(sessionStartAt, sessionEndAt), sessionImage, RecruitingStatus.valueOf(status), numOfStudents, maxStudent, sessionFee);
+    public PaidSession(long id, Timestamp sessionStartAt, Timestamp sessionEndAt, SessionImage sessionImage, RecruitingStatus recruitingStatus, ProgressStatus progressStatus, List<Long> numOfStudents, int maxStudent, int sessionFee) {
+        this(id, new SessionDate(sessionStartAt, sessionEndAt), sessionImage, recruitingStatus, progressStatus, numOfStudents, maxStudent, sessionFee);
     }
 
     public PaidSession(Long sessionId, SessionDate date, SessionImage image, RecruitingStatus status, List<Long> numOfStudents, int maxNumOfStudents, int sessionFee) {
@@ -52,5 +48,19 @@ public class PaidSession extends Session {
 
     public int getSessionFee() {
         return sessionFee;
+    }
+
+    @Override
+    public String toString() {
+        return "PaidSession{" +
+                "maxNumOfStudents=" + maxNumOfStudents +
+                ", sessionFee=" + sessionFee +
+                ", sessionId=" + sessionId +
+                ", date=" + date +
+                ", image=" + image +
+                ", recruitingStatus=" + recruitingStatus +
+                ", progressStatus=" + progressStatus +
+                ", students=" + students +
+                '}';
     }
 }

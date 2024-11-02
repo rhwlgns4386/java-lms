@@ -7,12 +7,8 @@ import java.util.List;
 
 public class FreeSession extends Session {
 
-    public FreeSession(SessionDate date, SessionImage image, RecruitingStatus status, List<Long> numOfStudents) {
-        this(1L, date, image, status, numOfStudents);
-    }
-
-    public FreeSession(long id, Timestamp sessionStartAt, Timestamp sessionEndAt, SessionImage sessionImage, String status, List<Long> numOfStudents) {
-        this(id, new SessionDate(sessionStartAt, sessionEndAt), sessionImage, RecruitingStatus.valueOf(status), numOfStudents);
+    public FreeSession(long id, Timestamp sessionStartAt, Timestamp sessionEndAt, SessionImage sessionImage, RecruitingStatus recruitingStatus, ProgressStatus progressStatus, List<Long> numOfStudents) {
+        this(id, new SessionDate(sessionStartAt, sessionEndAt), sessionImage, recruitingStatus, progressStatus, numOfStudents);
     }
 
     public FreeSession(Long sessionId, SessionDate date, SessionImage image, RecruitingStatus status, List<Long> numOfStudents) {
@@ -37,7 +33,8 @@ public class FreeSession extends Session {
                 "sessionId=" + sessionId +
                 ", date=" + date +
                 ", image=" + image +
-                ", status=" + recruitingStatus +
+                ", recruitingStatus=" + recruitingStatus +
+                ", progressStatus=" + progressStatus +
                 ", students=" + students +
                 '}';
     }
