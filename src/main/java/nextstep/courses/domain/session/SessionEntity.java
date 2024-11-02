@@ -1,14 +1,11 @@
 package nextstep.courses.domain.session;
 
 import nextstep.courses.domain.cover.CoverImage;
-import nextstep.users.domain.NsUser;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class SessionEntity {
     private final Long id;
@@ -63,14 +60,11 @@ public class SessionEntity {
         );
     }
 
-    private PaidSession toPaidSessionDomain(CoverImage coverImage, Map<Long, NsUser> userMap) {
-        Status sessionStatus = Status.valueOf(status);
+    public PaidSession toPaidSessionDomain(CoverImage coverImage) {
+        Status sessionStatus = Status.from(status);
         Period period = new Period(startDate, endDate);
-
-        Set<NsUser> registeredUsers = registeredUserIds.stream()
-                .map(userMap::get)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toSet());
+        Set<Long> userIds = new HashSet<>(registeredUserIds);
+        Capacity capacity = new Capacity(userIds, maxStudents);
 
         return new PaidSession(
                 id,
@@ -78,18 +72,15 @@ public class SessionEntity {
                 period,
                 coverImage,
                 new Money(courseFee),
-                new Capacity(registeredUsers, maxStudents)
+                capacity
         );
     }
 
-    private FreeSession toFreeSessionDomain(CoverImage coverImage, Map<Long, NsUser> userMap) {
-        Status sessionStatus = Status.valueOf(status);
+    public FreeSession toFreeSessionDomain(CoverImage coverImage) {
+        Status sessionStatus = Status.from(status);
         Period period = new Period(startDate, endDate);
-
-        Set<NsUser> registeredUsers = registeredUserIds.stream()
-                .map(userMap::get)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toSet());
+        Set<Long> userIds = new HashSet<>(registeredUserIds);
+        Capacity capacity = new Capacity(userIds, Integer.MAX_VALUE);
 
         return new FreeSession(
                 id,
@@ -97,7 +88,7 @@ public class SessionEntity {
                 period,
                 coverImage,
                 new Money(0L),
-                new Capacity(registeredUsers, Integer.MAX_VALUE)
+                capacity
         );
     }
 

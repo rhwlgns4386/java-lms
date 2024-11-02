@@ -5,7 +5,6 @@ import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public abstract class DefaultSession {
     protected final Long id;
@@ -44,13 +43,14 @@ public abstract class DefaultSession {
         return id;
     }
 
+    public Status getStatus() {
+        return status;
+    }
+
     public CoverImage getCoverImage() {
         return coverImage;
     }
 
-    public List<NsUser> getRegisterdStudents() {
-        return capacity.getRegisteredStudents();
-    }
     public List<Long> getRegisteredStudentIds() {
         return capacity.getRegisteredStudentIds();
     }

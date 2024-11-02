@@ -2,23 +2,19 @@ package nextstep.courses.domain.session;
 
 import nextstep.users.domain.NsUser;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
 
 public class Capacity {
     private final int maxStudents;
-    private Set<NsUser> currentStudents;
+    private Set<Long> currentStudentIds;
 
     public Capacity(int maxStudents) {
         this(new HashSet<>(), maxStudents);
     }
 
-    public Capacity(Set<NsUser> registeredUsers, int maxStudents) {
+    public Capacity(Set<Long> registeredUserIds, int maxStudents) {
         validateMaxStudents(maxStudents);
-        this.currentStudents = new HashSet<>(registeredUsers);
+        this.currentStudentIds = new HashSet<>(registeredUserIds);
         this.maxStudents = maxStudents;
     }
 
@@ -30,9 +26,9 @@ public class Capacity {
 
     public Capacity register(NsUser user) {
         validateRegistration(user);
-        Set<NsUser> newRegisteredUsers = new HashSet<>(currentStudents);
-        newRegisteredUsers.add(user);
-        return new Capacity(newRegisteredUsers, maxStudents);
+        Set<Long> newRegisteredUserIds = new HashSet<>(currentStudentIds);
+        newRegisteredUserIds.add(user.getId());
+        return new Capacity(newRegisteredUserIds, maxStudents);
     }
 
     private void validateRegistration(NsUser user) {
@@ -48,26 +44,19 @@ public class Capacity {
     }
 
     public boolean isFull() {
-        return currentStudents.size() >= maxStudents;
+        return currentStudentIds.size() >= maxStudents;
     }
 
     public boolean isAlreadyRegistered(NsUser user) {
-        return currentStudents.contains(user);
+        return currentStudentIds.contains(user.getId());
     }
 
     public int getMaxStudentsSize() {
         return maxStudents;
     }
 
-    public List<NsUser> getRegisteredStudents() {
-        return currentStudents.stream()
-                .collect(Collectors.toUnmodifiableList());
-    }
-
     public List<Long> getRegisteredStudentIds() {
-        return currentStudents.stream()
-                .map(NsUser::getId)
-                .collect(Collectors.toList());
+        return new ArrayList<>(currentStudentIds);
     }
 
 
@@ -76,11 +65,11 @@ public class Capacity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Capacity that = (Capacity) o;
-        return maxStudents == that.maxStudents && Objects.equals(currentStudents, that.currentStudents);
+        return maxStudents == that.maxStudents && Objects.equals(currentStudentIds, that.currentStudentIds);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(maxStudents, currentStudents);
+        return Objects.hash(maxStudents, currentStudentIds);
     }
 }

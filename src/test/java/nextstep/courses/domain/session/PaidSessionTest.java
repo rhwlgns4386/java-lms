@@ -37,8 +37,8 @@ class PaidSessionTest {
 
         course.register(NsUserTest.GREEN, payment);
 
-        assertThat(course.getRegisterdStudents())
-                .isEqualTo(List.of(NsUserTest.GREEN));
+        assertThat(course.getRegisteredStudentIds())
+                .isEqualTo(List.of(NsUserTest.GREEN.getId()));
     }
 
     @DisplayName("OPEN 상태가 아닌 강의는 수강신청을 할 수 없다.")
