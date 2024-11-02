@@ -1,5 +1,6 @@
 package nextstep.courses.domain.session;
 
+import nextstep.courses.type.RecruitState;
 import nextstep.courses.type.SessionState;
 import nextstep.payments.domain.Payment;
 
@@ -13,7 +14,7 @@ public abstract class Session {
 
     protected final Long id;
     private CoverImage coverImage;
-    private SessionState sessionState;
+    private SessionStatus sessionStatus;
     protected final Enrollment enrollment;
     protected final SessionDuration sessionDuration;
 
@@ -22,26 +23,34 @@ public abstract class Session {
         this((long) NOT_ASSIGNED, coverImage, maxEnrollment, INIT_ENROLLMENT, sessionState, startDate, endDate);
     }
 
+    protected Session(CoverImage coverImage, int maxEnrollment, SessionState sessionState, RecruitState recruitState,
+                      LocalDateTime startDate, LocalDateTime endDate) {
+        this((long) NOT_ASSIGNED, coverImage, maxEnrollment, INIT_ENROLLMENT,
+                sessionState, recruitState, startDate, endDate);
+    }
+
     protected Session(CoverImage coverImage, int maxEnrollment, int enrollment,
                       SessionState sessionState, LocalDateTime startDate, LocalDateTime endDate) {
         this((long) NOT_ASSIGNED, coverImage, maxEnrollment, enrollment, sessionState, startDate, endDate);
     }
 
-    protected Session(Long id, CoverImage coverImage, int maxEnrollment, int enrollment,
-                      SessionState sessionState, LocalDateTime startDate, LocalDateTime endDate) {
-        this.id = id;
-        this.sessionState = sessionState;
-        this.coverImage = coverImage;
-        this.enrollment = new Enrollment(enrollment, maxEnrollment);
-        this.sessionDuration = new SessionDuration(startDate, endDate);
+    protected Session(CoverImage coverImage, int maxEnrollment, int enrollment, SessionState sessionState,
+                      RecruitState recruitState, LocalDateTime startDate, LocalDateTime endDate) {
+        this((long) NOT_ASSIGNED, coverImage, maxEnrollment, enrollment, sessionState, recruitState, startDate, endDate);
     }
 
-    protected Session(Long id, CoverImage coverImage, int maxEnrollment,
+    protected Session(Long id, CoverImage coverImage, int maxEnrollment, int enrollment,
                       SessionState sessionState, LocalDateTime startDate, LocalDateTime endDate) {
+        this(id, coverImage, maxEnrollment, enrollment, sessionState, RecruitState.NOT_RECRUIT, startDate, endDate);
+    }
+
+    protected Session(Long id, CoverImage coverImage, int maxEnrollment, int enrollment,
+                      SessionState sessionState, RecruitState recruitState,
+                      LocalDateTime startDate, LocalDateTime endDate) {
         this.id = id;
-        this.sessionState = sessionState;
+        this.sessionStatus = new SessionStatus(sessionState, recruitState);
         this.coverImage = coverImage;
-        this.enrollment = new Enrollment(maxEnrollment);
+        this.enrollment = new Enrollment(enrollment, maxEnrollment);
         this.sessionDuration = new SessionDuration(startDate, endDate);
     }
 
@@ -56,8 +65,8 @@ public abstract class Session {
     }
 
     private void validateSessionState() {
-        if (!sessionState.canRegister()) {
-            throw new IllegalStateException(sessionState.getDesc() + " 상태이기 때문에 강의 신청할 수 없습니다");
+        if (!sessionStatus.canRegister()) {
+            throw new IllegalStateException("모집 중 상태가 아니기 때문에 강의 신청할 수 없습니다");
         }
     }
 
@@ -78,7 +87,11 @@ public abstract class Session {
     }
 
     public final SessionState getSessionState() {
-        return sessionState;
+        return sessionStatus.getSessionState();
+    }
+
+    public final RecruitState getRecruitState() {
+        return sessionStatus.getRecruitState();
     }
 
     public final String getCoverFilePath() {

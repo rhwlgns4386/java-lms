@@ -2,6 +2,7 @@ package nextstep.courses.domain.course;
 
 import nextstep.courses.domain.session.Session;
 import nextstep.courses.domain.session.SessionBuilderTest;
+import nextstep.courses.type.RecruitState;
 import nextstep.courses.type.SessionState;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUserTest;
@@ -25,9 +26,9 @@ public class CourseTest {
     void init() {
         course = new Course("테스트 기수", NsUserTest.JAVAJIGI.getId());
         paidSession = SessionBuilderTest.paidSessionBuilder()
-                .id(PAID_SESSION_ID).sessionState(SessionState.OPEN).build();
+                .id(PAID_SESSION_ID).sessionState(SessionState.OPEN).recruitState(RecruitState.RECRUIT).build();
         freeSession = SessionBuilderTest.freeSessionBuilder()
-                .id(FREE_SESSION_ID).sessionState(SessionState.OPEN).build();
+                .id(FREE_SESSION_ID).sessionState(SessionState.OPEN).recruitState(RecruitState.RECRUIT).build();
 
         course.add(paidSession);
         course.add(freeSession);

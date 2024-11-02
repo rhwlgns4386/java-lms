@@ -1,5 +1,6 @@
 package nextstep.courses.domain.session;
 
+import nextstep.courses.type.RecruitState;
 import nextstep.courses.type.SessionState;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUserTest;
@@ -38,6 +39,7 @@ public class SessionTest {
     void register_free_session() {
         Session freeSession = SessionBuilderTest.freeSessionBuilder()
                 .sessionState(SessionState.OPEN)
+                .recruitState(RecruitState.RECRUIT)
                 .build();
 
         assertThat(freeSession.register(freePayment)).isTrue();
@@ -47,6 +49,7 @@ public class SessionTest {
     void register_paid_session() {
         Session paidSession = SessionBuilderTest.paidSessionBuilder()
                 .sessionState(SessionState.OPEN)
+                .recruitState(RecruitState.RECRUIT)
                 .build();
 
         assertThat(paidSession.register(paidPayment)).isTrue();
