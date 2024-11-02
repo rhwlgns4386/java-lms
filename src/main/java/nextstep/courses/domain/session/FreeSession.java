@@ -34,6 +34,10 @@ public class FreeSession extends Session {
         super(image, sessionDate, id, title, sessionStatus, sessionType, students);
     }
 
+    public static FreeSession of(FreeSession session, Image image, List<Student> students) {
+        return new FreeSession(image, session.getSessionDate(), session.getId(), session.getTitle(), session.getSessionStatus(), session.getSessionType(), students);
+    }
+
     @Override
     public void register(Registration registration) {
         if (!isAvailableForRegistration()) {
