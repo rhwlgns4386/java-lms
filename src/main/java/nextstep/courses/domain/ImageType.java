@@ -11,7 +11,7 @@ public enum ImageType {
 
     public static ImageType of(String name) {
         return Arrays.stream(values())
-                .filter(it -> it.name().equals(name))
+                .filter(it -> it.name().equalsIgnoreCase(name))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Invalid image type: " + name));
     }
