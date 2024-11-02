@@ -1,17 +1,20 @@
 package nextstep.courses.domain;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Course {
+    private static final AtomicInteger count = new AtomicInteger(1);
+
     private Long id;
-
+    private int classNumber;
     private String title;
-
     private Long creatorId;
-
     private LocalDateTime createdAt;
-
     private LocalDateTime updatedAt;
+    private List<Session> sessionList;
 
     public Course() {
     }
@@ -26,6 +29,8 @@ public class Course {
         this.creatorId = creatorId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        sessionList = new ArrayList<>();
+        classNumber = count.incrementAndGet();
     }
 
     public String getTitle() {
