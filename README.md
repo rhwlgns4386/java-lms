@@ -132,3 +132,6 @@
 - [X] 상태값 추가한 select, save 기능 추가
 - [X] 강의 조회 시 승인된 사람만 수강생으로 조회
 - [X] 강의 학생 매핑 테이블 update 기능 구현
+- [X] session 에 applyStudents 추가,  approve, cancel 메소드 구현
+- [X] 데이터 베이스 저장 시, approve, apply 구분해서 저장
+- [X] 데이터 베이스 조회 시, approve, apply 구분해서 조회

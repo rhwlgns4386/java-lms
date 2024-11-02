@@ -51,6 +51,7 @@ public class SessionRepositoryTest {
                 .withImages(List.of(sessionImage1, sessionImage2))
                 .withRecruitingStatus(RECRUITING)
                 .withProgressingStatus(PROGRESSING)
+                .withApplyStudents(List.of(1L))
                 .build();
         int count = sessionRepository.saveNew(freeSession);
         sessionSessionImageRepository.save(freeSession.getSessionId(), List.of(1L, 2L));
@@ -78,6 +79,7 @@ public class SessionRepositoryTest {
                 .withImages(List.of(sessionImage1, sessionImage2))
                 .withRecruitingStatus(RECRUITING)
                 .withProgressingStatus(PROGRESSING)
+                .withApplyStudents(List.of(2L))
                 .build();
         int count = sessionRepository.saveNew(paidSession);
         sessionImageRepository.save(sessionImage1);
@@ -93,7 +95,8 @@ public class SessionRepositoryTest {
                 () -> assertThat(paidSession.getProgressStatus()).isEqualTo(savedSession.getProgressStatus()),
                 () -> assertThat(paidSession.getSessionFee()).isEqualTo(savedSession.getSessionFee()),
                 () -> assertThat(paidSession.getMaxNumOfStudents()).isEqualTo(savedSession.getMaxNumOfStudents()),
-                () -> assertThat(paidSession.getStudents()).isEqualTo(savedSession.getStudents())
+                () -> assertThat(paidSession.getStudents()).isEqualTo(savedSession.getStudents()),
+                () -> assertThat(paidSession.getApplyStudents()).isEqualTo(savedSession.getApplyStudents())
         );
         LOGGER.debug("Session: {}", savedSession);
     }

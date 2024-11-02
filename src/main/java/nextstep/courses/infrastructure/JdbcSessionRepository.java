@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static nextstep.courses.domain.EnrollStatus.APPLY;
 import static nextstep.courses.domain.EnrollStatus.APPROVED;
 
 @Repository("sessionRepository")
@@ -40,7 +41,7 @@ public class JdbcSessionRepository implements SessionRepository {
     public int saveNew(Session session) {
         SessionEntity entity = SessionEntity.from(session);
         String sql = "insert into session (session_start_date, session_end_date, status, recruiting_status, progress_status, image_id, session_type, max_student, session_fee) values (? ,? ,? ,? ,? ,? ,?, ?, ?)";
-        sessionStudentRepository.save(session.getSessionId(), session.getStudents());
+        sessionStudentRepository.saveNew(session.getSessionId(), session.getStudents(), session.getApplyStudents());
         return jdbcTemplate.update(sql, entity.getSessionStartAt(), entity.getSessionEndAt(), entity.getStatus(), entity.getRecruitingStatus(), entity.getProgressStatus(), entity.getImageId(), entity.getSessionType(), entity.getSessionFee(), entity.getMaxStudent());
     }
 
@@ -65,7 +66,8 @@ public class JdbcSessionRepository implements SessionRepository {
     @Override
     public Session findByIdNew(Long id) {
         String sql = "select id, session_start_date, session_end_date, status, recruiting_status, progress_status, image_id, session_type, max_student, session_fee from session where id = ?";
-        List<Long> students = sessionStudentRepository.findBySessionIdAndStatus(id, APPROVED);
+        List<Long> approvedStudents = sessionStudentRepository.findBySessionIdAndStatus(id, APPROVED);
+        List<Long> applyStudents = sessionStudentRepository.findBySessionIdAndStatus(id, APPLY);
         RowMapper<Session> rowMapper = (rs, rowNum) -> {
             List<SessionImage> sessionImages = getSessionImages(id);
             return new SessionEntity(rs.getLong("id"),
@@ -77,7 +79,7 @@ public class JdbcSessionRepository implements SessionRepository {
                     rs.getString("session_type"),
                     rs.getInt("max_student"),
                     rs.getInt("session_fee"))
-                    .toDomainNew(sessionImages, students);
+                    .toDomainNew(sessionImages, approvedStudents, applyStudents);
         };
         return jdbcTemplate.queryForObject(sql, rowMapper, id);
     }

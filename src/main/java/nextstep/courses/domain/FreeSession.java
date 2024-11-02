@@ -11,8 +11,8 @@ public class FreeSession extends Session {
         this(id, new SessionDate(sessionStartAt, sessionEndAt), sessionImage, recruitingStatus, progressStatus, numOfStudents);
     }
 
-    public FreeSession(long id, Timestamp sessionStartAt, Timestamp sessionEndAt, List<SessionImage> sessionImages, RecruitingStatus recruitingStatus, ProgressStatus progressStatus, List<Long> numOfStudents) {
-        this(id, new SessionDate(sessionStartAt, sessionEndAt), sessionImages, recruitingStatus, progressStatus, numOfStudents);
+    public FreeSession(long id, Timestamp sessionStartAt, Timestamp sessionEndAt, List<SessionImage> sessionImages, RecruitingStatus recruitingStatus, ProgressStatus progressStatus, List<Long> approvedStudents, List<Long> applyStudents) {
+        this(id, new SessionDate(sessionStartAt, sessionEndAt), sessionImages, recruitingStatus, progressStatus, approvedStudents, applyStudents);
     }
 
     public FreeSession(Long sessionId, SessionDate date, SessionImage image, RecruitingStatus status, List<Long> numOfStudents) {
@@ -21,10 +21,6 @@ public class FreeSession extends Session {
 
     public FreeSession(Long sessionId, SessionDate date, SessionImage image, RecruitingStatus recruitingStatus, ProgressStatus progressStatus, List<Long> numOfStudents) {
         super(sessionId, date, image, recruitingStatus, progressStatus, numOfStudents);
-    }
-
-    public FreeSession(Long sessionId, SessionDate date, List<SessionImage> images, RecruitingStatus recruitingStatus, ProgressStatus progressStatus, List<Long> numOfStudents) {
-        super(sessionId, date, images, recruitingStatus, progressStatus, numOfStudents);
     }
 
     public FreeSession(Long sessionId, SessionDate date, List<SessionImage> images, RecruitingStatus recruitingStatus, ProgressStatus progressStatus, List<Long> numOfStudents, List<Long> applyStudents) {

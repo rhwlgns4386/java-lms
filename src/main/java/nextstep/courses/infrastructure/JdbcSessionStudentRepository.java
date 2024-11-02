@@ -63,6 +63,18 @@ public class JdbcSessionStudentRepository implements SessionStudentRepository {
     }
 
     @Override
+    public int saveNew(Long sessionId, List<Long> approvedStudents, List<Long> applyStudents) {
+        int count = 0;
+        if (!approvedStudents.isEmpty()) {
+            count += saveNew(sessionId, approvedStudents, EnrollStatus.APPROVED);
+        }
+        if (!applyStudents.isEmpty()) {
+            count += saveNew(sessionId, applyStudents, EnrollStatus.APPLY);
+        }
+        return count;
+    }
+
+    @Override
     public List<Long> findBySessionId(Long sessionId) {
         String sql = "select user_id from session_student where session_id = ?";
         RowMapper<Long> rowMapper = (rs, rowNum) -> rs.getLong("user_id");
