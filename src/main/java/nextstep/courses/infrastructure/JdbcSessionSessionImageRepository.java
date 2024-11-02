@@ -25,7 +25,7 @@ public class JdbcSessionSessionImageRepository implements SessionSessionImageRep
         BatchPreparedStatementSetter statementSetter = new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
-                Long imageId = imageIds.get(0);
+                Long imageId = imageIds.get(i);
                 ps.setLong(1, sessionId);
                 ps.setLong(2, imageId);
             }
