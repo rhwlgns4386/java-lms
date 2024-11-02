@@ -6,19 +6,12 @@ import nextstep.courses.utils.UUIDGenerator;
 
 public class Session {
     private final String id;
-
     private final LocalDate startAt;
-
     private final LocalDate endAt;
-
     private final CoverImage image;
-
     private final PaymentPolicy paymentPolicy;
-
+    private final StudentCapacity studentCapacity;
     private SessionStatus sessionStatus;
-
-    private StudentCapacity studentCapacity;
-
     private int enrollStudentCount;
 
     public Session(LocalDate startAt, LocalDate endAt, CoverImage image, StudentCapacity studentCapacity,
