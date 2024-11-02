@@ -1,4 +1,4 @@
-package nextstep.courses.domain.session;
+package nextstep.session.domain;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -27,6 +27,10 @@ public class Session {
         this.sessionStatus = SessionStatus.PENDING;
     }
 
+    public String getId() {
+        return id;
+    }
+
     public static Session createFreeSession(LocalDate startAt, LocalDate endAt, CoverImage image) {
         return new Session(startAt, endAt, image, 0L, new FreeSessionPolicy());
     }
@@ -48,7 +52,7 @@ public class Session {
         sessionStatus = SessionStatus.OPEN;
     }
 
-    public void register(Enrollment enrollment) {
+    public void enroll(Enrollment enrollment) {
         validateRegister(enrollment);
         enrollments.add(enrollment);
     }
@@ -58,5 +62,9 @@ public class Session {
             throw new IllegalArgumentException("모집중 상태의 강의가 아닙니다.");
         }
         sessionPolicy.validatePolicy(getEnrolledUserCount(), enrollment.getPaymentAmount());
+    }
+
+    public boolean isFree() {
+        return sessionPolicy.getSessionPaymentType() == SessionPaymentType.FREE;
     }
 }

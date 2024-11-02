@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import nextstep.courses.domain.course.Course;
-import nextstep.courses.domain.course.CourseRepository;
+import nextstep.courses.domain.Course;
+import nextstep.courses.domain.CourseRepository;
 
 @JdbcTest
 class CourseRepositoryTest {

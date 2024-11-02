@@ -7,8 +7,8 @@ import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import nextstep.courses.domain.course.Course;
-import nextstep.courses.domain.course.CourseRepository;
+import nextstep.courses.domain.Course;
+import nextstep.courses.domain.CourseRepository;
 
 @Repository("courseRepository")
 public class JdbcCourseRepository implements CourseRepository {

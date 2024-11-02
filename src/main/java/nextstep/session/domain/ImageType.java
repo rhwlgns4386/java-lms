@@ -1,4 +1,4 @@
-package nextstep.courses.domain.session;
+package nextstep.session.domain;
 
 import java.util.Arrays;
 

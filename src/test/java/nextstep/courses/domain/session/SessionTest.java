@@ -3,11 +3,14 @@ package nextstep.courses.domain.session;
 import static org.assertj.core.api.Assertions.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import nextstep.payments.domain.Payment;
+import nextstep.session.domain.Enrollment;
+import nextstep.session.domain.Session;
+import nextstep.session.domain.SessionStatus;
 import nextstep.users.domain.NsUserTest;
 
 class SessionTest {
@@ -44,13 +47,13 @@ class SessionTest {
             null,
             1,
             10_000L);
-        Enrollment enrollment = new Enrollment(1L, session, NsUserTest.JAVAJIGI, LocalDateTime.now(),
-            10_000L);
+        Payment payment = new Payment(session.getId(), NsUserTest.JAVAJIGI.getId(), 10_000L);
+        Enrollment enrollment = new Enrollment(session, NsUserTest.JAVAJIGI, payment);
 
         session.open();
-        session.register(enrollment);
+        session.enroll(enrollment);
 
-        assertThatThrownBy(() -> session.register(enrollment))
+        assertThatThrownBy(() -> session.enroll(enrollment))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("정원을 초과했습니다.");
     }
@@ -63,29 +66,29 @@ class SessionTest {
             LocalDate.of(2024, 12, 1),
             null,
             1, 10_000L);
-        Enrollment enrollment = new Enrollment(1L, session, NsUserTest.JAVAJIGI, LocalDateTime.now(),
-            2_000L);
+        Payment payment = new Payment(session.getId(), NsUserTest.JAVAJIGI.getId(), 2_000L);
+        Enrollment enrollment = new Enrollment(session, NsUserTest.JAVAJIGI, payment);
 
         session.open();
 
-        assertThatThrownBy(() -> session.register(enrollment))
+        assertThatThrownBy(() -> session.enroll(enrollment))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("결제금액이 수강료와 일치하지 않습니다.");
     }
 
     @Test
     @DisplayName("수강신청 시 수강인원이 증가한다.")
-    void incrementEnrollStudentCountWhenRegisterTest() {
+    void incrementEnrollStudentCountWhenEnrollTest() {
         Session session = Session.createPaidSession(
             LocalDate.of(2024, 1, 1),
             LocalDate.of(2024, 12, 1),
             null,
             1, 10_000L);
-        Enrollment enrollment = new Enrollment(1L, session, NsUserTest.JAVAJIGI, LocalDateTime.now(),
-            10_000L);
+        Payment payment = new Payment(session.getId(), NsUserTest.JAVAJIGI.getId(), 10_000L);
+        Enrollment enrollment = new Enrollment(session, NsUserTest.JAVAJIGI, payment);
 
         session.open();
-        session.register(enrollment);
+        session.enroll(enrollment);
 
         assertThat(session.getEnrolledUserCount()).isOne();
     }
@@ -98,10 +101,10 @@ class SessionTest {
             LocalDate.of(2024, 12, 1),
             null,
             1, 10_000L);
-        Enrollment enrollment = new Enrollment(1L, session, NsUserTest.JAVAJIGI, LocalDateTime.now(),
-            10_000L);
+        Payment payment = new Payment(session.getId(), NsUserTest.JAVAJIGI.getId(), 10_000L);
+        Enrollment enrollment = new Enrollment(session, NsUserTest.JAVAJIGI, payment);
 
-        assertThatThrownBy(() -> session.register(enrollment))
+        assertThatThrownBy(() -> session.enroll(enrollment))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("모집중 상태의 강의가 아닙니다.");
     }
