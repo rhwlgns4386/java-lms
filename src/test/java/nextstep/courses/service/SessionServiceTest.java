@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.jdbc.core.JdbcOperations;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 
 @JdbcTest
 public class SessionServiceTest {
@@ -29,11 +30,29 @@ public class SessionServiceTest {
     }
 
     @Test
-    void test_register_with_db() {
-        sessionService.register(1L,
-                new Payment("테스트", 1L, NsUserTest.JAVAJIGI.getId(), 0L));
+    void throw_exception_if_register_not_recruit_session() {
+        assertThatIllegalStateException().isThrownBy(() -> sessionService.register(1L,
+                new Payment("테스트", 1L, NsUserTest.JAVAJIGI.getId(), 0L)));
+    }
 
-        SessionEntity session = sessionRepository.findById(1L);
+    @Test
+    void throw_exception_if_register_not_invalid_session_id() {
+        assertThatIllegalStateException().isThrownBy(() -> sessionService.register(2L,
+                new Payment("테스트", 1L, NsUserTest.JAVAJIGI.getId(), 10000L)));
+    }
+
+    @Test
+    void throw_exception_if_register_invalid_session_fee() {
+        assertThatIllegalStateException().isThrownBy(() -> sessionService.register(2L,
+                new Payment("테스트", 2L, NsUserTest.JAVAJIGI.getId(), 0L)));
+    }
+
+    @Test
+    void test_register_with_db() {
+        sessionService.register(2L,
+                new Payment("테스트", 2L, NsUserTest.JAVAJIGI.getId(), 10000L));
+
+        SessionEntity session = sessionRepository.findById(2L);
 
         assertThat(session.getEnrollment()).isEqualTo(1);
     }

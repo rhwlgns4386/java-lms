@@ -1,12 +1,14 @@
 package nextstep.courses.infrastructure.session;
 
 import nextstep.courses.entity.SessionEntity;
+import nextstep.courses.type.RecruitState;
 import nextstep.courses.type.SessionState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
@@ -26,6 +28,7 @@ public class SessionRepositoryTest {
     }
 
     @Test
+    @Transactional
     void updateEntity() {
         SessionEntity sessionEntity = getSaveEntity();
         sessionRepository.save(sessionEntity, 1L);
@@ -38,14 +41,18 @@ public class SessionRepositoryTest {
     }
 
     private SessionEntity getSaveEntity() {
+        return getEntity(RecruitState.RECRUIT);
+    }
+
+    private SessionEntity getEntity(RecruitState recruitState) {
         return new SessionEntity("src/test/java/nextstep/courses/domain/session/file/image.png",
-                SessionState.OPEN, 0, 30,
+                SessionState.PROGRESS, recruitState, 0, 30,
                 10000, LocalDateTime.now(), LocalDateTime.now());
     }
 
     private SessionEntity getUpdateEntity() {
         return new SessionEntity(3L, "src/test/java/nextstep/courses/domain/session/file/image.png",
-                SessionState.OPEN, 1, 30,
+                SessionState.PROGRESS, RecruitState.RECRUIT, 1, 30,
                 10000, LocalDateTime.now(), LocalDateTime.now());
     }
 }

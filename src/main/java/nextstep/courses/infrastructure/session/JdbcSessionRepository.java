@@ -3,6 +3,7 @@ package nextstep.courses.infrastructure.session;
 import nextstep.courses.domain.session.Session;
 import nextstep.courses.domain.session.SessionBuilder;
 import nextstep.courses.entity.SessionEntity;
+import nextstep.courses.type.RecruitState;
 import nextstep.courses.type.SessionState;
 import nextstep.courses.type.SessionType;
 import org.springframework.jdbc.core.JdbcOperations;
@@ -30,7 +31,7 @@ public class JdbcSessionRepository implements SessionRepository {
     @Override
     public SessionEntity findById(Long sessionId) {
         String sql = "select "
-                + "id, session_state, cover_file_path, session_fee, enrollment, max_enrollment, start_date, end_date "
+                + "id, session_state, recruit_state, cover_file_path, session_fee, enrollment, max_enrollment, start_date, end_date "
                 + "from session "
                 + "where id = ?";
 
@@ -47,10 +48,12 @@ public class JdbcSessionRepository implements SessionRepository {
 
     private int insert(SessionEntity session, long courseId) {
         String sql = "insert into session "
-                + "(course_id, session_state, cover_file_path, session_fee, max_enrollment, start_date, end_date) "
-                + "values(?, ?, ?, ?, ?, ?, ?)";
-        return jdbcTemplate.update(sql, courseId, session.getSessionState().name(), session.getCoverFilePath(),
-                session.getSessionFee(), session.getMaxEnrollment(), session.getStartDate(), session.getEndDate());
+                + "(course_id, session_state, recruit_state, cover_file_path, session_fee, max_enrollment, start_date, end_date) "
+                + "values(?, ?, ?, ?, ?, ?, ?, ?)";
+
+        return jdbcTemplate.update(sql, courseId, session.getSessionState().name(), session.getRecruitState().name(),
+                session.getCoverFilePath(), session.getSessionFee(), session.getMaxEnrollment(),
+                session.getStartDate(), session.getEndDate());
     }
 
     private int update(SessionEntity session) {
@@ -61,7 +64,7 @@ public class JdbcSessionRepository implements SessionRepository {
     @Override
     public List<SessionEntity> findByCourseId(long courseId) {
         String sql = "select "
-                + "id, session_state, cover_file_path, session_fee, enrollment, max_enrollment, start_date, end_date "
+                + "id, session_state, recruit_state, cover_file_path, session_fee, enrollment, max_enrollment, start_date, end_date "
                 + "from session "
                 + "where course_id = ?";
         return jdbcTemplate.query(sql, SESSION_ENTITY_ROW_MAPPER, courseId);
@@ -75,6 +78,7 @@ public class JdbcSessionRepository implements SessionRepository {
                     rs.getLong("id"),
                     rs.getString("cover_file_path"),
                     SessionState.valueOf(rs.getString("session_state")),
+                    RecruitState.valueOf(rs.getString("recruit_state")),
                     rs.getInt("enrollment"),
                     rs.getInt("max_enrollment"),
                     rs.getLong("session_fee"),
