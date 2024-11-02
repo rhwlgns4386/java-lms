@@ -124,3 +124,6 @@
 - [X] 세션 이미지 매핑 테이블 추가 (session_session_image)
 - [X] 세션 이미지 select, save 구현
 - [X] session 객체 생성자에 List<SessionImage> 추가
+- [X] FreeSession Builder 추가
+- [X] session select할 때, session_session_image 테이블 같이 조회
+- [X] entity에 toDomainNew 메소드 추가 (기존거 병행)

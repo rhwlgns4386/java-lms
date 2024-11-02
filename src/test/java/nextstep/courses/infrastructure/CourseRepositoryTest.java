@@ -30,7 +30,8 @@ public class CourseRepositoryTest {
         CourseSessionRepository courseSessionRepository = new JdbcCourseSessionRepository(jdbcTemplate);
         SessionImageRepository sessionImageRepository = new JdbcSessionImageRepository(jdbcTemplate);
         SessionStudentRepository sessionStudentRepository = new JdbcSessionStudentRepository(jdbcTemplate);
-        SessionRepository sessionRepository = new JdbcSessionRepository(jdbcTemplate, sessionImageRepository, sessionStudentRepository);
+        SessionSessionImageRepository sessionSessionImageRepository = new JdbcSessionSessionImageRepository(jdbcTemplate);
+        SessionRepository sessionRepository = new JdbcSessionRepository(jdbcTemplate, sessionImageRepository, sessionStudentRepository, sessionSessionImageRepository);
         courseRepository = new JdbcCourseRepository(jdbcTemplate, courseSessionRepository, sessionRepository);
     }
 

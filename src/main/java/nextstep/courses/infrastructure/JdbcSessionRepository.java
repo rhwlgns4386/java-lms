@@ -10,17 +10,20 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository("sessionRepository")
 public class JdbcSessionRepository implements SessionRepository {
     private final JdbcOperations jdbcTemplate;
     private final SessionImageRepository sessionImageRepository;
     private final SessionStudentRepository sessionStudentRepository;
+    private final SessionSessionImageRepository sessionSessionImageRepository;
 
-    public JdbcSessionRepository(JdbcOperations jdbcTemplate, SessionImageRepository sessionImageRepository, SessionStudentRepository sessionStudentRepository) {
+    public JdbcSessionRepository(JdbcOperations jdbcTemplate, SessionImageRepository sessionImageRepository, SessionStudentRepository sessionStudentRepository, SessionSessionImageRepository sessionSessionImageRepository) {
         this.jdbcTemplate = jdbcTemplate;
         this.sessionImageRepository = sessionImageRepository;
         this.sessionStudentRepository = sessionStudentRepository;
+        this.sessionSessionImageRepository = sessionSessionImageRepository;
     }
 
     @Override
@@ -62,7 +65,7 @@ public class JdbcSessionRepository implements SessionRepository {
         String sql = "select id, session_start_date, session_end_date, status, recruiting_status, progress_status, image_id, session_type, max_student, session_fee from session where id = ?";
         List<Long> students = sessionStudentRepository.findBySessionId(id);
         RowMapper<Session> rowMapper = (rs, rowNum) -> {
-            SessionImage sessionImage = getSessionImage(rs);
+            List<SessionImage> sessionImages = getSessionImages(id);
             return new SessionEntity(rs.getLong("id"),
                     rs.getTimestamp("session_start_date"),
                     rs.getTimestamp("session_end_date"),
@@ -72,7 +75,7 @@ public class JdbcSessionRepository implements SessionRepository {
                     rs.getString("session_type"),
                     rs.getInt("max_student"),
                     rs.getInt("session_fee"))
-                    .toDomain(sessionImage, students);
+                    .toDomainNew(sessionImages, students);
         };
         return jdbcTemplate.queryForObject(sql, rowMapper, id);
     }
@@ -80,6 +83,13 @@ public class JdbcSessionRepository implements SessionRepository {
     private SessionImage getSessionImage(ResultSet rs) throws SQLException {
         Long imageId = rs.getLong("image_id");
         return sessionImageRepository.findById(imageId);
+    }
+
+    private List<SessionImage> getSessionImages(Long sessionId) {
+        List<Long> imageIds = sessionSessionImageRepository.findBySessionId(sessionId);
+        return imageIds.stream()
+                .map(sessionImageRepository::findById)
+                .collect(Collectors.toList());
     }
 
 }

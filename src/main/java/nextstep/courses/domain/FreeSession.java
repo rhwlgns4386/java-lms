@@ -11,6 +11,10 @@ public class FreeSession extends Session {
         this(id, new SessionDate(sessionStartAt, sessionEndAt), sessionImage, recruitingStatus, progressStatus, numOfStudents);
     }
 
+    public FreeSession(long id, Timestamp sessionStartAt, Timestamp sessionEndAt, List<SessionImage> sessionImages, RecruitingStatus recruitingStatus, ProgressStatus progressStatus, List<Long> numOfStudents) {
+        this(id, new SessionDate(sessionStartAt, sessionEndAt), sessionImages, recruitingStatus, progressStatus, numOfStudents);
+    }
+
     public FreeSession(Long sessionId, SessionDate date, SessionImage image, RecruitingStatus status, List<Long> numOfStudents) {
         super(sessionId, date, image, status, numOfStudents);
     }

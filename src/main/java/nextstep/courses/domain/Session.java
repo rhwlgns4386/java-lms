@@ -3,15 +3,16 @@ package nextstep.courses.domain;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
 
+import java.util.Collections;
 import java.util.List;
 
 public abstract class Session {
 
-    protected final Long sessionId;
-    protected final SessionDate date;
+    protected Long sessionId;
+    protected SessionDate date;
     protected SessionImage image;
     protected List<SessionImage> images;
-    protected final RecruitingStatus recruitingStatus;
+    protected RecruitingStatus recruitingStatus;
     protected ProgressStatus progressStatus;
     protected List<Long> students;
 
@@ -73,6 +74,10 @@ public abstract class Session {
     }
 
     public List<Long> getStudents() {
-        return students;
+        return Collections.unmodifiableList(students);
+    }
+
+    public List<SessionImage> getImages() {
+        return Collections.unmodifiableList(images);
     }
 }

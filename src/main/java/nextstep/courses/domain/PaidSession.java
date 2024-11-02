@@ -13,6 +13,10 @@ public class PaidSession extends Session {
         this(id, new SessionDate(sessionStartAt, sessionEndAt), sessionImage, recruitingStatus, progressStatus, numOfStudents, maxStudent, sessionFee);
     }
 
+    public PaidSession(long id, Timestamp sessionStartAt, Timestamp sessionEndAt, List<SessionImage> sessionImages, RecruitingStatus recruitingStatus, ProgressStatus progressStatus, List<Long> numOfStudents, int maxStudent, int sessionFee) {
+        this(id, new SessionDate(sessionStartAt, sessionEndAt), sessionImages, recruitingStatus, progressStatus, numOfStudents, maxStudent, sessionFee);
+    }
+
     public PaidSession(Long sessionId, SessionDate date, SessionImage image, RecruitingStatus status, List<Long> numOfStudents, int maxNumOfStudents, int sessionFee) {
         super(sessionId, date, image, status, numOfStudents);
         if (maxNumOfStudents < students.size()) {

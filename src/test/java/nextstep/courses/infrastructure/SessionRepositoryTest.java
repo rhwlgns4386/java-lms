@@ -3,7 +3,7 @@ package nextstep.courses.infrastructure;
 import nextstep.courses.domain.PaidSession;
 import nextstep.courses.domain.Session;
 import nextstep.courses.domain.SessionImage;
-import nextstep.fixture.FreeSessionCreator;
+import nextstep.fixture.FreeSessionBuilder;
 import nextstep.fixture.PaidSessionCreator;
 import nextstep.fixture.SessionImageCreator;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.jdbc.core.JdbcOperations;
+
+import java.util.List;
 
 import static nextstep.courses.domain.ProgressStatus.PROGRESSING;
 import static nextstep.courses.domain.RecruitingStatus.RECRUITING;
@@ -28,26 +30,36 @@ public class SessionRepositoryTest {
 
     private SessionRepository sessionRepository;
     private SessionImageRepository sessionImageRepository;
+    private SessionSessionImageRepository sessionSessionImageRepository;
 
     @BeforeEach
     void setUp() {
         sessionImageRepository = new JdbcSessionImageRepository(jdbcTemplate);
         SessionStudentRepository sessionStudentRepository = new JdbcSessionStudentRepository(jdbcTemplate);
-        sessionRepository = new JdbcSessionRepository(jdbcTemplate, sessionImageRepository, sessionStudentRepository);
+        sessionSessionImageRepository = new JdbcSessionSessionImageRepository(jdbcTemplate);
+        sessionRepository = new JdbcSessionRepository(jdbcTemplate, sessionImageRepository, sessionStudentRepository, sessionSessionImageRepository);
     }
 
     @Test
     void crud_free() {
-        SessionImage sessionImage = SessionImageCreator.standard();
-        Session freeSession = FreeSessionCreator.status(RECRUITING, PROGRESSING);
+        SessionImage sessionImage1 = SessionImageCreator.id(1L);
+        SessionImage sessionImage2 = SessionImageCreator.id(2L);
+        sessionImageRepository.save(sessionImage1);
+        sessionImageRepository.save(sessionImage2);
+        Session freeSession = new FreeSessionBuilder()
+                .withId(1L)
+                .withImages(List.of(sessionImage1, sessionImage2))
+                .withRecruitingStatus(RECRUITING)
+                .withProgressingStatus(PROGRESSING)
+                .build();
         int count = sessionRepository.saveNew(freeSession);
-        sessionImageRepository.save(sessionImage);
+        sessionSessionImageRepository.save(freeSession.getSessionId(), List.of(1L, 2L));
         Session savedSession = sessionRepository.findByIdNew(1L);
         assertAll(
                 () -> assertThat(count).isEqualTo(1),
                 () -> assertThat(freeSession.getSessionId()).isEqualTo(savedSession.getSessionId()),
                 () -> assertThat(freeSession.getDate()).isEqualTo(savedSession.getDate()),
-                () -> assertThat(freeSession.getImage()).isEqualTo(savedSession.getImage()),
+                () -> assertThat(freeSession.getImages()).isEqualTo(savedSession.getImages()),
                 () -> assertThat(freeSession.getRecruitingStatus()).isEqualTo(savedSession.getRecruitingStatus()),
                 () -> assertThat(freeSession.getProgressStatus()).isEqualTo(savedSession.getProgressStatus()),
                 () -> assertThat(freeSession.getStudents()).isEqualTo(savedSession.getStudents())
