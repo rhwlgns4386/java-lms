@@ -44,7 +44,7 @@ public class SessionStudentRepositoryTest {
 
     @Test
     @DisplayName("상태값을 추가해서 저장, 조회 기능 추가")
-    void crud_new() {
+    void crudNew() {
         long sessionId = 1L;
         List<Long> userIds = List.of(1L, 2L);
         int count = sessionStudentRepository.saveNew(sessionId, userIds, APPLY);
