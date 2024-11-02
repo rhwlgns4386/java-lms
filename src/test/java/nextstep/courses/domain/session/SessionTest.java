@@ -17,7 +17,7 @@ class SessionTest {
         LocalDate startAt = LocalDate.of(2024, 1, 1);
         LocalDate endAt = LocalDate.of(2024, 12, 1);
         Session freeSession = Session.createFreeSession(startAt, endAt, null);
-        Session paidSession = Session.createPaidSession(startAt, endAt, null, 1);
+        Session paidSession = Session.createPaidSession(startAt, endAt, null, 1, 10_000L);
 
         assertThat(freeSession.getCourseStatus()).isEqualTo(SessionStatus.PENDING);
         assertThat(paidSession.getCourseStatus()).isEqualTo(SessionStatus.PENDING);
@@ -42,8 +42,10 @@ class SessionTest {
             LocalDate.of(2024, 1, 1),
             LocalDate.of(2024, 12, 1),
             null,
-            1);
-        Enrollment enrollment = new Enrollment(1L, session, NsUserTest.JAVAJIGI, LocalDateTime.now());
+            1,
+            10_000L);
+        Enrollment enrollment = new Enrollment(1L, session, NsUserTest.JAVAJIGI, LocalDateTime.now(),
+            10_000L);
 
         session.open();
         session.register(enrollment);
@@ -54,14 +56,33 @@ class SessionTest {
     }
 
     @Test
+    @DisplayName("유료강의 수강신청 시 수강료와 결제금액이 일치하지 않는 경우 예외가 발생한다.")
+    void throwExceptionWhenSessionFeeDoesNotMatchPaymentAmount() {
+        Session session = Session.createPaidSession(
+            LocalDate.of(2024, 1, 1),
+            LocalDate.of(2024, 12, 1),
+            null,
+            1, 10_000L);
+        Enrollment enrollment = new Enrollment(1L, session, NsUserTest.JAVAJIGI, LocalDateTime.now(),
+            2_000L);
+
+        session.open();
+
+        assertThatThrownBy(() -> session.register(enrollment))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("결제금액이 수강료와 일치하지 않습니다.");
+    }
+
+    @Test
     @DisplayName("수강신청 시 수강인원이 증가한다.")
     void incrementEnrollStudentCountWhenRegisterTest() {
         Session session = Session.createPaidSession(
             LocalDate.of(2024, 1, 1),
             LocalDate.of(2024, 12, 1),
             null,
-            1);
-        Enrollment enrollment = new Enrollment(1L, session, NsUserTest.JAVAJIGI, LocalDateTime.now());
+            1, 10_000L);
+        Enrollment enrollment = new Enrollment(1L, session, NsUserTest.JAVAJIGI, LocalDateTime.now(),
+            10_000L);
 
         session.open();
         session.register(enrollment);
@@ -76,8 +97,9 @@ class SessionTest {
             LocalDate.of(2024, 1, 1),
             LocalDate.of(2024, 12, 1),
             null,
-            1);
-        Enrollment enrollment = new Enrollment(1L, session, NsUserTest.JAVAJIGI, LocalDateTime.now());
+            1, 10_000L);
+        Enrollment enrollment = new Enrollment(1L, session, NsUserTest.JAVAJIGI, LocalDateTime.now(),
+            10_000L);
 
         assertThatThrownBy(() -> session.register(enrollment))
             .isInstanceOf(IllegalArgumentException.class)
