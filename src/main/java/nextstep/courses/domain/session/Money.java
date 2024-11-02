@@ -5,7 +5,7 @@ import nextstep.payments.domain.Payment;
 import java.util.Objects;
 
 public class Money {
-    private static final int EMPTY = 0;
+    private static final int ZERO = 0;
     private final long amount;
 
     public Money(Payment payment) {
@@ -17,8 +17,8 @@ public class Money {
     }
 
     public Money(long amount) {
-        if (amount < EMPTY) {
-            throw new IllegalArgumentException("금액은 " + EMPTY + "보다 작을 수 없습니다.");
+        if (amount < ZERO) {
+            throw new IllegalArgumentException("금액은 " + ZERO + "보다 작을 수 없습니다.");
         }
 
         this.amount = amount;
@@ -30,6 +30,10 @@ public class Money {
 
     public long getAmount() {
         return amount;
+    }
+
+    public boolean isNotFree(){
+        return getAmount() > ZERO;
     }
 
     @Override
