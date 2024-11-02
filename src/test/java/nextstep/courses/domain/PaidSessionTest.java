@@ -59,7 +59,6 @@ public class PaidSessionTest {
         paidSession.register(RegistrationTest.REGISTRATION);
 
         Assertions.assertThat(paidSession.getSessionStatus()).isEqualTo(SessionStatus.RECRUITING);
-        Assertions.assertThat(paidSession.getCapacity().getCurrentCount()).isEqualTo(1);
         Assertions.assertThat(paidSession.getStudents()).hasSize(1);
         Assertions.assertThat(paidSession.getStudents()).hasSameElementsAs(List.of(Student.of(RegistrationTest.REGISTRATION)));
 

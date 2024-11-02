@@ -19,20 +19,20 @@ public class JdbcSessionRepository implements SessionRepository {
 
     @Override
     public int save(Session session, Long courseId) {
-        String sql = "insert into session (course_id, title, start_at, end_at, session_type, session_status, capacity, current_count, price,  created_at) " +
-                "values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "insert into session (course_id, title, start_at, end_at, session_type, session_status, capacity, price,  created_at) " +
+                "values(?, ?, ?, ?, ?, ?, ?, ?, ?)";
         if (session instanceof FreeSession) {
             FreeSession freeSession = (FreeSession) session;
-            return jdbcTemplate.update(sql, courseId, freeSession.getTitle(), freeSession.getSessionDate().getStart(), freeSession.getSessionDate().getEnd(), freeSession.getSessionType().name(), freeSession.getSessionStatus().name(), null, null, null, LocalDateTime.now());
+            return jdbcTemplate.update(sql, courseId, freeSession.getTitle(), freeSession.getSessionDate().getStart(), freeSession.getSessionDate().getEnd(), freeSession.getSessionType().name(), freeSession.getSessionStatus().name(), null, null, LocalDateTime.now());
         }
 
         PaidSession paidSession = (PaidSession) session;
-        return jdbcTemplate.update(sql, courseId, paidSession.getTitle(), paidSession.getSessionDate().getStart(), paidSession.getSessionDate().getEnd(), paidSession.getSessionType().name(), paidSession.getSessionStatus().name(), paidSession.getCapacity().getCapacity(), paidSession.getCapacity().getCurrentCount(), paidSession.getFee().getPrice(), LocalDateTime.now());
+        return jdbcTemplate.update(sql, courseId, paidSession.getTitle(), paidSession.getSessionDate().getStart(), paidSession.getSessionDate().getEnd(), paidSession.getSessionType().name(), paidSession.getSessionStatus().name(), paidSession.getCapacity().getCapacity(), paidSession.getFee().getPrice(), LocalDateTime.now());
     }
 
     @Override
     public Session findById(Long id) {
-        String sql = "select id, title, start_at, end_at, session_type, session_status, capacity, current_count, price from session where id = ?";
+        String sql = "select id, title, start_at, end_at, session_type, session_status, capacity, price from session where id = ?";
         RowMapper<Session> rowMapper = (rs, rowNum) -> {
             long sessionId = rs.getLong(1);
             String title = rs.getString(2);
@@ -45,8 +45,8 @@ public class JdbcSessionRepository implements SessionRepository {
                 return new FreeSession(null, date, sessionId, title, status, type, new ArrayList<>());
             }
 
-            SessionCapacity capacity = new SessionCapacity(rs.getInt(7), rs.getInt(8));
-            Money money = new Money(rs.getLong(9));
+            SessionCapacity capacity = new SessionCapacity(rs.getInt(7));
+            Money money = new Money(rs.getLong(8));
             return new PaidSession(null, date, sessionId, title, status, type, capacity, money, new ArrayList<>());
         };
         return jdbcTemplate.queryForObject(sql, rowMapper, id);

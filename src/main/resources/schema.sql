@@ -19,7 +19,6 @@ create table session
     session_type   varchar(100) not null,
     session_status varchar(100) not null,
     capacity       integer,
-    current_count  integer,
     price          bigint,
     created_at     timestamp    not null,
     updated_at     timestamp,

@@ -71,6 +71,6 @@ public class PaidSession extends Session {
         }
 
         this.students.add(Student.of(registration));
-        this.capacity.updateCurrentCount(this.students.size());
+        this.capacity.checkCapacity(this.students.size());
     }
 }

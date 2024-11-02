@@ -24,25 +24,4 @@ public class SessionCapacityTest {
         Assertions.assertThatThrownBy(() -> new SessionCapacity(capacity))
                 .isInstanceOf(IllegalArgumentException.class);
     }
-
-    @Test
-    @DisplayName("수강행 추가")
-    void addCurrentCountTest() {
-        SessionCapacity sessionCapacity = new SessionCapacity(10);
-        sessionCapacity.increase();
-
-        SessionCapacity expectedSessionCapacity = new SessionCapacity(10, 1);
-        Assertions.assertThat(sessionCapacity).isEqualTo(expectedSessionCapacity);
-    }
-
-    @Test
-    @DisplayName("수강생 초과 체크")
-    void checkOverCurrentCountTest() {
-        SessionCapacity sessionCapacity = new SessionCapacity(1);
-
-        sessionCapacity.increase();
-
-        Assertions.assertThatThrownBy(sessionCapacity::increase)
-                .isInstanceOf(IllegalArgumentException.class);
-    }
 }
