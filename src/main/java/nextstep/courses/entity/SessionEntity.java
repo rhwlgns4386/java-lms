@@ -58,7 +58,9 @@ public class SessionEntity {
         entity.sessionEndAt = Timestamp.valueOf(session.getDate().getEndAt());
         entity.recruitingStatus = session.getRecruitingStatus().name();
         entity.progressStatus = session.getProgressStatus().name();
-        entity.imageId = session.getImage().getId();
+        if (session.getImage() != null) {
+            entity.imageId = session.getImage().getId();
+        }
         return entity;
     }
 
@@ -73,6 +75,19 @@ public class SessionEntity {
             return new PaidSession(id, sessionStartAt, sessionEndAt, sessionImage, RecruitingStatus.valueOf(recruitingStatus), ProgressStatus.valueOf(progressStatus), sessionStudents, maxStudent, sessionFee);
         }
         return new FreeSession(id, sessionStartAt, sessionEndAt, sessionImage, RecruitingStatus.valueOf(recruitingStatus), ProgressStatus.valueOf(progressStatus), sessionStudents);
+    }
+
+    public Session toDomainNew(List<SessionImage> sessionImages, List<Long> sessionStudents) {
+        if (!StringUtils.hasText(recruitingStatus)) {
+            recruitingStatus = NON_RECRUITING.name();
+        }
+        if (!StringUtils.hasText(progressStatus)) {
+            progressStatus = PREPARING.name();
+        }
+        if (sessionType.equals(PAID_SESSION)) {
+            return new PaidSession(id, sessionStartAt, sessionEndAt, sessionImages, RecruitingStatus.valueOf(recruitingStatus), ProgressStatus.valueOf(progressStatus), sessionStudents, maxStudent, sessionFee);
+        }
+        return new FreeSession(id, sessionStartAt, sessionEndAt, sessionImages, RecruitingStatus.valueOf(recruitingStatus), ProgressStatus.valueOf(progressStatus), sessionStudents);
     }
 
     public Long getId() {
