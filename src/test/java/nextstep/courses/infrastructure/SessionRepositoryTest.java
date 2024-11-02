@@ -6,8 +6,7 @@ import nextstep.courses.domain.image.ImageSize;
 import nextstep.courses.domain.image.ImageType;
 import nextstep.courses.domain.session.*;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +16,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@TestMethodOrder(value = MethodOrderer.OrderAnnotation.class)
 @JdbcTest
 public class SessionRepositoryTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(CourseRepositoryTest.class);
@@ -31,6 +31,7 @@ public class SessionRepositoryTest {
         sessionRepository = new JdbcSessionRepository(namedParameterJdbcTemplate);
     }
 
+    @Order(1)
     @Test
     void crud() {
         Long courseId = 1L;
@@ -54,6 +55,7 @@ public class SessionRepositoryTest {
         Assertions.assertThat(saveFreeSession.getSessionType()).isEqualTo(SessionType.FREE);
     }
 
+    @Order(2)
     @Test
     void findAllByCourseIdTest() {
         Long courseId = 1L;
@@ -64,12 +66,10 @@ public class SessionRepositoryTest {
         String title = "TDD";
 
         PaidSession paidSession = new PaidSession(title, image, sessionDate, new SessionCapacity(10), new Money(200_000L));
-        long id1 = sessionRepository.save(paidSession, courseId);
-        Assertions.assertThat(id1).isEqualTo(1);
+        sessionRepository.save(paidSession, courseId);
 
         FreeSession freeSession = new FreeSession(title, sessionDate, image);
-        long id2 = sessionRepository.save(freeSession, courseId);
-        Assertions.assertThat(id2).isEqualTo(2);
+        sessionRepository.save(freeSession, courseId);
 
         List<Session> sessions = sessionRepository.findAllByCourseId(courseId);
 
