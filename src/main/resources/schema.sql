@@ -64,6 +64,8 @@ create table session
     session_start_date timestamp,
     session_end_date   timestamp,
     status             varchar(20),
+    progress_status    varchar(20),
+    recruiting_status    varchar(20),
     image_id           bigint,
     session_type       varchar(20),
     session_fee        int,
