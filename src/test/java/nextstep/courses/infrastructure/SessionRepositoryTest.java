@@ -15,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @JdbcTest
 public class SessionRepositoryTest {
@@ -53,4 +54,25 @@ public class SessionRepositoryTest {
         Assertions.assertThat(saveFreeSession.getSessionType()).isEqualTo(SessionType.FREE);
     }
 
+    @Test
+    void findAllByCourseIdTest() {
+        Long courseId = 1L;
+        Image image = new Image(1L, new ImageSize(1024), ImageType.GIF, new ImagePixel(300, 200));
+        LocalDateTime start = LocalDateTime.of(2024, 10, 10, 10, 10);
+        LocalDateTime end = LocalDateTime.of(2024, 10, 10, 10, 11);
+        SessionDate sessionDate = new SessionDate(start, end);
+        String title = "TDD";
+
+        PaidSession paidSession = new PaidSession(title, image, sessionDate, new SessionCapacity(10), new Money(200_000L));
+        long id1 = sessionRepository.save(paidSession, courseId);
+        Assertions.assertThat(id1).isEqualTo(1);
+
+        FreeSession freeSession = new FreeSession(title, sessionDate, image);
+        long id2 = sessionRepository.save(freeSession, courseId);
+        Assertions.assertThat(id2).isEqualTo(2);
+
+        List<Session> sessions = sessionRepository.findAllByCourseId(courseId);
+
+        Assertions.assertThat(sessions).hasSize(2);
+    }
 }

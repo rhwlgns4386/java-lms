@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service("courseService")
 public class CourseService {
@@ -21,5 +22,13 @@ public class CourseService {
         sessionService.create(courseId, session, session.getImage());
 
         return courseId;
+    }
+
+    @Transactional(readOnly = true)
+    public Course findById(long courseId) {
+        Course course = courseRepository.findById(courseId);
+        List<Session> sessions = sessionService.findAllByCourseId(course.getId());
+
+        return Course.of(course, sessions);
     }
 }

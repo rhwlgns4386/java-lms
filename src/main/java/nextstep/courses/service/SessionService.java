@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service("sessionService")
 public class SessionService {
@@ -28,10 +29,26 @@ public class SessionService {
         Image image = imageRepository.findBySessionId(sessionId);
         List<Student> students = studentRepository.findAllBySessionId(sessionId);
 
+        return getSession(session, image, students);
+    }
+
+    private static Session getSession(Session session, Image image, List<Student> students) {
         if (session.getSessionType().equals(SessionType.FREE)) {
             return FreeSession.of((FreeSession) session, image, students);
         }
         return PaidSession.of((PaidSession) session, image, students);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Session> findAllByCourseId(long courseId) {
+        return sessionRepository.findAllByCourseId(courseId).stream()
+                .map(it -> {
+                    Image image = imageRepository.findBySessionId(it.getId());
+                    List<Student> students = studentRepository.findAllBySessionId(it.getId());
+
+                    return getSession(it, image, students);
+                })
+                .collect(Collectors.toList());
     }
 
     @Transactional

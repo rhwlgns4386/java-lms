@@ -9,6 +9,7 @@ import nextstep.courses.domain.image.ImageType;
 import nextstep.courses.domain.session.FreeSession;
 import nextstep.courses.domain.session.SessionDate;
 import nextstep.users.domain.NsUserTest;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,8 +18,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class CourseServiceTest {
@@ -47,5 +50,19 @@ public class CourseServiceTest {
 
         verify(courseRepository).save(course);
         verify(sessionService).create(courseId, freeSession, freeSession.getImage());
+    }
+
+    @Test
+    void findByCourseIdTest() {
+        Course course = new Course(1L, 1L, "TDD, 클린 코드 with Java", NsUserTest.SANJIGI.getId());
+
+        when(courseRepository.findById(course.getId())).thenReturn(course);
+        when(sessionService.findAllByCourseId(course.getId())).thenReturn(List.of(freeSession));
+
+        Course foundCourse = courseService.findById(course.getId());
+
+        Assertions.assertThat(foundCourse).isNotNull();
+        Assertions.assertThat(foundCourse.getId()).isEqualTo(course.getId());
+        Assertions.assertThat(foundCourse.getSessions()).hasSameElementsAs(List.of(freeSession));
     }
 }

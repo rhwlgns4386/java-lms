@@ -61,6 +61,7 @@ public class SessionServiceTest {
         verify(imageRepository).save(session.getImage(), sessionId);
     }
 
+
     @Test
     void registerTest() {
         Long sessionId = 2L;

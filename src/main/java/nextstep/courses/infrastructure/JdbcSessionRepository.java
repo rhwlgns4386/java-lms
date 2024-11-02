@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Repository("sessionRepository")
@@ -78,5 +79,13 @@ public class JdbcSessionRepository implements SessionRepository {
         MapSqlParameterSource param = new MapSqlParameterSource();
         param.addValue("id", id);
         return namedParameterJdbcTemplate.queryForObject(sql, param, COURSE_ROW_MAPPER);
+    }
+
+    @Override
+    public List<Session> findAllByCourseId(Long courseId) {
+        String sql = "select id, title, start_at, end_at, session_type, session_status, capacity, price from session where course_id = :courseId";
+        MapSqlParameterSource param = new MapSqlParameterSource();
+        param.addValue("courseId", courseId);
+        return namedParameterJdbcTemplate.query(sql, param, COURSE_ROW_MAPPER);
     }
 }

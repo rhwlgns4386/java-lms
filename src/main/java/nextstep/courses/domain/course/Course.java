@@ -37,13 +37,21 @@ public class Course {
     }
 
     public Course(Long id, Long order, String title, Long creatorId, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this(id, order, title, creatorId, createdAt, updatedAt, new ArrayList<>());
+    }
+
+    public Course(Long id, Long order, String title, Long creatorId, LocalDateTime createdAt, LocalDateTime updatedAt, List<Session> sessions) {
         this.id = id;
         this.order = order;
         this.title = title;
         this.creatorId = creatorId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.sessions = new ArrayList<>();
+        this.sessions = sessions;
+    }
+
+    public static Course of(Course course, List<Session> sessions) {
+        return new Course(course.getId(), course.getOrder(), course.getTitle(), course.getCreatorId(), course.getCreatedAt(), course.getUpdatedAt(), sessions);
     }
 
     public Long getId() {
@@ -64,6 +72,10 @@ public class Course {
 
     public Long getOrder() {
         return order;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
     public List<Session> getSessions() {
