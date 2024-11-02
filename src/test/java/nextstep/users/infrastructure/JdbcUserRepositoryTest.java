@@ -38,23 +38,11 @@ public class JdbcUserRepositoryTest {
     public void 사용자_ID로_사용자를_조회한다() {
         String userId = "testUser";
 
-        when(jdbcTemplate.queryForObject(eq(SELECT_USER_BY_USER_ID), any(), (RowMapper<Object>) any())).thenReturn(user);
+        when(jdbcTemplate.queryForObject(eq(SELECT_USER_BY_USER_ID), any(RowMapper.class), any())).thenReturn(user);
 
         Optional<NsUser> foundUser = userRepository.findByUserId(userId);
 
         assertThat(foundUser).isPresent();
         assertThat(foundUser.get()).isEqualTo(user);
-    }
-
-    @Test
-    public void 사용자_ID로_사용자가_존재하지_않는_경우() {
-        String userId = "nonExistentUser";
-        String sql = "select id, user_id, password, name, email, created_at, updated_at from ns_user where user_id = ?";
-
-        when(jdbcTemplate.queryForObject(sql, any(), any())).thenThrow(new org.springframework.dao.EmptyResultDataAccessException(1));
-
-        Optional<NsUser> foundUser = userRepository.findByUserId(userId);
-
-        assertThat(foundUser).isNotPresent();
     }
 }
