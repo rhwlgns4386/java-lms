@@ -18,7 +18,7 @@ public class SessionTest {
     @Test
     void throw_exception_if_exceed_max_enrollment() {
         Session session = SessionBuilderTest.paidSessionBuilder()
-                .enrollment(0)
+                .maxEnrollment(0)
                 .sessionState(SessionState.OPEN)
                 .build();
 
@@ -27,15 +27,15 @@ public class SessionTest {
 
     @Test
     void throw_exception_if_session_is_not_open() {
-        Session paidSession = SessionBuilderTest.paidSessionBuilder().build();
-        Session freeSession = SessionBuilderTest.freeSessionBuilder().build();
+        Session paidSession = SessionBuilderTest.paidSessionBuilder().sessionState(SessionState.PREPARING).build();
+        Session freeSession = SessionBuilderTest.freeSessionBuilder().sessionState(SessionState.END).build();
 
         assertThatIllegalStateException().isThrownBy(() -> paidSession.register(paidPayment));
         assertThatIllegalStateException().isThrownBy(() -> freeSession.register(freePayment));
     }
 
     @Test
-    void finalize_register_free_session() {
+    void register_free_session() {
         Session freeSession = SessionBuilderTest.freeSessionBuilder()
                 .sessionState(SessionState.OPEN)
                 .build();
@@ -44,7 +44,7 @@ public class SessionTest {
     }
 
     @Test
-    void finalize_register_paid_session() {
+    void register_paid_session() {
         Session paidSession = SessionBuilderTest.paidSessionBuilder()
                 .sessionState(SessionState.OPEN)
                 .build();
@@ -53,7 +53,7 @@ public class SessionTest {
     }
 
     @Test
-    void fail_to_finalize_register_with_invalid_session_id_payment() {
+    void throw_exception_if_register_with_invalid_session_id_payment() {
         Session paidSession = SessionBuilderTest.paidSessionBuilder()
                 .sessionState(SessionState.OPEN)
                 .build();
@@ -63,7 +63,7 @@ public class SessionTest {
     }
 
     @Test
-    void throw_exception_if_finalize_register_with_invalid_session_fee_payment() {
+    void throw_exception_if_register_with_invalid_session_fee_payment() {
         Session paidSession = SessionBuilderTest.paidSessionBuilder()
                 .sessionState(SessionState.OPEN)
                 .build();

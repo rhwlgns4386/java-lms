@@ -8,7 +8,12 @@ public class Enrollment {
     private final int maxEnrollment;
 
     public Enrollment(int maxEnrollment) {
+        this(0, maxEnrollment);
+    }
+
+    public Enrollment(int enrollment, int maxEnrollment) {
         this.maxEnrollment = maxEnrollment;
+        this.enrollment = enrollment;
     }
 
     public void validateAvailability() {
@@ -24,5 +29,13 @@ public class Enrollment {
     public void register() {
         validateAvailability();
         enrollment++;
+    }
+
+    public int getEnrollment() {
+        return enrollment;
+    }
+
+    public int getMaxEnrollment() {
+        return maxEnrollment;
     }
 }
