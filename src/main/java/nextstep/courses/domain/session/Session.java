@@ -76,10 +76,6 @@ public abstract class Session {
         return payment.isSameSessionId(id);
     }
 
-    public final boolean isPersisted() {
-        return !id.equals((long) NOT_ASSIGNED);
-    }
-
     public abstract long getSessionFee();
 
     public final Long getId() {

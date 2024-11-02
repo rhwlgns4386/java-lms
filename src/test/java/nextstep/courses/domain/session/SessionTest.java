@@ -20,7 +20,7 @@ public class SessionTest {
     void throw_exception_if_exceed_max_enrollment() {
         Session session = SessionBuilderTest.paidSessionBuilder()
                 .maxEnrollment(0)
-                .sessionState(SessionState.OPEN)
+                .sessionState(SessionState.PROGRESS)
                 .build();
 
         assertThatIllegalStateException().isThrownBy(() -> session.register(paidPayment));
@@ -38,7 +38,7 @@ public class SessionTest {
     @Test
     void register_free_session() {
         Session freeSession = SessionBuilderTest.freeSessionBuilder()
-                .sessionState(SessionState.OPEN)
+                .sessionState(SessionState.PROGRESS)
                 .recruitState(RecruitState.RECRUIT)
                 .build();
 
@@ -48,7 +48,7 @@ public class SessionTest {
     @Test
     void register_paid_session() {
         Session paidSession = SessionBuilderTest.paidSessionBuilder()
-                .sessionState(SessionState.OPEN)
+                .sessionState(SessionState.PROGRESS)
                 .recruitState(RecruitState.RECRUIT)
                 .build();
 
@@ -58,7 +58,7 @@ public class SessionTest {
     @Test
     void throw_exception_if_register_with_invalid_session_id_payment() {
         Session paidSession = SessionBuilderTest.paidSessionBuilder()
-                .sessionState(SessionState.OPEN)
+                .sessionState(SessionState.PROGRESS)
                 .build();
 
         assertThatIllegalStateException().isThrownBy(() -> paidSession.register(
@@ -68,7 +68,7 @@ public class SessionTest {
     @Test
     void throw_exception_if_register_with_invalid_session_fee_payment() {
         Session paidSession = SessionBuilderTest.paidSessionBuilder()
-                .sessionState(SessionState.OPEN)
+                .sessionState(SessionState.PROGRESS)
                 .build();
 
         assertThatIllegalStateException().isThrownBy(() -> paidSession.register(

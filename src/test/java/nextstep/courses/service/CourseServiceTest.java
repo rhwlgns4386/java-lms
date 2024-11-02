@@ -34,9 +34,9 @@ public class CourseServiceTest {
     @Test
     void test_register_with_db() {
         courseService.registerSessionEntity(1L,
-                new Payment("테스트", 1L, NsUserTest.JAVAJIGI.getId(), 0L));
+                new Payment("테스트", 2L, NsUserTest.JAVAJIGI.getId(), 10000L));
 
-        SessionEntity session = sessionRepository.findById(1L);
+        SessionEntity session = sessionRepository.findById(2L);
 
         assertThat(session.getEnrollment()).isEqualTo(1);
     }

@@ -11,8 +11,8 @@ public class SessionStatusTest {
 
     @Test
     void can_register_session_if_recruit() {
-        SessionStatus progressAndRecruit = new SessionStatus(SessionState.OPEN, RecruitState.RECRUIT);
-        SessionStatus prepareAndRecruit = new SessionStatus(SessionState.OPEN, RecruitState.RECRUIT);
+        SessionStatus progressAndRecruit = new SessionStatus(SessionState.PROGRESS, RecruitState.RECRUIT);
+        SessionStatus prepareAndRecruit = new SessionStatus(SessionState.PROGRESS, RecruitState.RECRUIT);
 
         assertThat(prepareAndRecruit.canRegister()).isTrue();
         assertThat(progressAndRecruit.canRegister()).isTrue();
@@ -20,7 +20,7 @@ public class SessionStatusTest {
 
     @Test
     void cannot_register_session_if_not_recruit() {
-        SessionStatus progressAndNotRecruit = new SessionStatus(SessionState.OPEN, RecruitState.NOT_RECRUIT);
+        SessionStatus progressAndNotRecruit = new SessionStatus(SessionState.PROGRESS, RecruitState.NOT_RECRUIT);
         SessionStatus prepareAndNotRecruit = new SessionStatus(SessionState.PREPARING, RecruitState.NOT_RECRUIT);
 
         assertThat(progressAndNotRecruit.canRegister()).isFalse();

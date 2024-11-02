@@ -26,9 +26,9 @@ public class CourseTest {
     void init() {
         course = new Course("테스트 기수", NsUserTest.JAVAJIGI.getId());
         paidSession = SessionBuilderTest.paidSessionBuilder()
-                .id(PAID_SESSION_ID).sessionState(SessionState.OPEN).recruitState(RecruitState.RECRUIT).build();
+                .id(PAID_SESSION_ID).sessionState(SessionState.PROGRESS).recruitState(RecruitState.RECRUIT).build();
         freeSession = SessionBuilderTest.freeSessionBuilder()
-                .id(FREE_SESSION_ID).sessionState(SessionState.OPEN).recruitState(RecruitState.RECRUIT).build();
+                .id(FREE_SESSION_ID).sessionState(SessionState.PROGRESS).recruitState(RecruitState.RECRUIT).build();
 
         course.add(paidSession);
         course.add(freeSession);
