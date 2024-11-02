@@ -1,6 +1,9 @@
 package nextstep.fixture;
 
-import nextstep.courses.domain.*;
+import nextstep.courses.domain.FreeSession;
+import nextstep.courses.domain.ProgressStatus;
+import nextstep.courses.domain.RecruitingStatus;
+import nextstep.courses.domain.SessionImage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +13,7 @@ public class FreeSessionBuilder {
     private RecruitingStatus recruitingStatus;
     private ProgressStatus progressStatus;
     private List<SessionImage> images;
+    private List<Long> applyStudents;
 
     public FreeSessionBuilder withId(Long id) {
         this.id = id;
@@ -31,7 +35,13 @@ public class FreeSessionBuilder {
         return this;
     }
 
+    public FreeSessionBuilder withApplyStudents(List<Long> applyStudents) {
+        this.applyStudents = new ArrayList<>(applyStudents);
+        return this;
+    }
+
+
     public FreeSession build() {
-        return new FreeSession(id, SessionDateCreator.standard(), images, recruitingStatus, progressStatus, new ArrayList<>());
+        return new FreeSession(id, SessionDateCreator.standard(), images, recruitingStatus, progressStatus, new ArrayList<>(), applyStudents);
     }
 }

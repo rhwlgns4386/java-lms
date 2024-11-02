@@ -27,6 +27,10 @@ public class FreeSession extends Session {
         super(sessionId, date, images, recruitingStatus, progressStatus, numOfStudents);
     }
 
+    public FreeSession(Long sessionId, SessionDate date, List<SessionImage> images, RecruitingStatus recruitingStatus, ProgressStatus progressStatus, List<Long> numOfStudents, List<Long> applyStudents) {
+        super(sessionId, date, images, recruitingStatus, progressStatus, numOfStudents, applyStudents);
+    }
+
     @Override
     public void enroll(Payment payment) {
         if (!payment.isFree()) {

@@ -15,6 +15,7 @@ public abstract class Session {
     protected RecruitingStatus recruitingStatus;
     protected ProgressStatus progressStatus;
     protected List<Long> students;
+    protected List<Long> applyStudents;
 
     public Session(Long sessionId, SessionDate date, SessionImage image, RecruitingStatus recruitingStatus, List<Long> numOfStudents) {
         this.sessionId = sessionId;
@@ -42,11 +43,47 @@ public abstract class Session {
         this.students = students;
     }
 
+    public Session(Long sessionId, SessionDate date, List<SessionImage> images, RecruitingStatus recruitingStatus, ProgressStatus progressStatus, List<Long> students, List<Long> applyStudents) {
+        this.sessionId = sessionId;
+        this.date = date;
+        this.images = images;
+        this.recruitingStatus = recruitingStatus;
+        this.progressStatus = progressStatus;
+        this.students = students;
+        this.applyStudents = applyStudents;
+    }
+
+    public Session(Long sessionId, SessionDate date, SessionImage image, List<SessionImage> images, RecruitingStatus recruitingStatus, ProgressStatus progressStatus, List<Long> students, List<Long> applyStudents) {
+        this.sessionId = sessionId;
+        this.date = date;
+        this.image = image;
+        this.images = images;
+        this.recruitingStatus = recruitingStatus;
+        this.progressStatus = progressStatus;
+        this.students = students;
+        this.applyStudents = applyStudents;
+    }
+
     public void enroll(Payment payment) {
         if (!recruitingStatus.canEnroll()) {
             throw new IllegalStateException("강의가 모집 상태가 아닙니다.");
         }
-        this.students.add(payment.getNsUserId());
+        this.applyStudents.add(payment.getNsUserId());
+    }
+
+    public void approve(Long id) {
+        if (!applyStudents.contains(id)) {
+            throw new IllegalArgumentException("수강신청을 하지 않았습니다.");
+        }
+        applyStudents.remove(id);
+        students.add(id);
+    }
+
+    public void cancel(Long id) {
+        if (!applyStudents.contains(id)) {
+            throw new IllegalArgumentException("수강신청을 하지 않았습니다.");
+        }
+        applyStudents.remove(id);
     }
 
     public boolean isContainUser(NsUser user) {
@@ -79,5 +116,9 @@ public abstract class Session {
 
     public List<SessionImage> getImages() {
         return Collections.unmodifiableList(images);
+    }
+
+    public List<Long> getApplyStudents() {
+        return applyStudents;
     }
 }
