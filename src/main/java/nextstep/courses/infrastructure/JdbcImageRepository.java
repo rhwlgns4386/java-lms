@@ -40,4 +40,10 @@ public class JdbcImageRepository implements ImageRepository {
         String sql = "select id, size, image_type, width, height from image where id = ?";
         return jdbcTemplate.queryForObject(sql, IMAGE_ROW_MAPPER, id);
     }
+
+    @Override
+    public Image findBySessionId(long sessionId) {
+        String sql = "select id, size, image_type, width, height from image where session_id = ?";
+        return jdbcTemplate.queryForObject(sql, IMAGE_ROW_MAPPER, sessionId);
+    }
 }

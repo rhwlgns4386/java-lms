@@ -38,4 +38,18 @@ public class ImageRepositoryTest {
         assertThat(image.getImageSize()).isEqualTo(saveImage.getImageSize());
         LOGGER.debug("Image: {}", saveImage);
     }
+
+    @Test
+    void findBySessionId() {
+        ImageSize imageSize = new ImageSize(500);
+        ImagePixel imagePixel = new ImagePixel(300, 200);
+        Image image = new Image(imageSize, ImageType.JPG, imagePixel);
+        int count = imageRepository.save(image, 1L);
+        assertThat(count).isEqualTo(1);
+
+        Image saveImage = imageRepository.findBySessionId(1L);
+        assertThat(image.getImagePixel()).isEqualTo(saveImage.getImagePixel());
+        assertThat(image.getImageType()).isEqualTo(saveImage.getImageType());
+        assertThat(image.getImageSize()).isEqualTo(saveImage.getImageSize());
+    }
 }

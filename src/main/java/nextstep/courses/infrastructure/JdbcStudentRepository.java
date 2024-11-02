@@ -6,6 +6,8 @@ import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository("studentRepository")
 public class JdbcStudentRepository implements StudentRepository {
     private static final RowMapper<Student> STUDENT_ROW_MAPPER = (rs, rowNum) -> new Student(
@@ -28,5 +30,11 @@ public class JdbcStudentRepository implements StudentRepository {
     public Student findById(Long nsUserId, Long sessionId) {
         String sql = "select ns_user_id, amount from student where ns_user_id = ? and session_id = ?";
         return jdbcTemplate.queryForObject(sql, STUDENT_ROW_MAPPER, nsUserId, sessionId);
+    }
+
+    @Override
+    public List<Student> findAllBySessionId(Long sessionId) {
+        String sql = "select ns_user_id, amount from student where session_id = ?";
+        return jdbcTemplate.query(sql, STUDENT_ROW_MAPPER, sessionId);
     }
 }

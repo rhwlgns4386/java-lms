@@ -41,7 +41,6 @@ public class JdbcSessionRepository implements SessionRepository {
             FreeSession freeSession = (FreeSession) session;
             return jdbcTemplate.update(sql, courseId, freeSession.getTitle(), freeSession.getSessionDate().getStart(), freeSession.getSessionDate().getEnd(), freeSession.getSessionType().name(), freeSession.getSessionStatus().name(), null, null, LocalDateTime.now());
         }
-
         PaidSession paidSession = (PaidSession) session;
         return jdbcTemplate.update(sql, courseId, paidSession.getTitle(), paidSession.getSessionDate().getStart(), paidSession.getSessionDate().getEnd(), paidSession.getSessionType().name(), paidSession.getSessionStatus().name(), paidSession.getCapacity().getCapacity(), paidSession.getFee().getPrice(), LocalDateTime.now());
     }

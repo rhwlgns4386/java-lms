@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @JdbcTest
@@ -41,5 +43,20 @@ public class StudentRepositoryTest {
         Student saveStudent = studentRepository.findById(sanjigi.getId(), sessionId);
         assertThat(saveStudent.getNsUserId()).isEqualTo(sanjigi.getId());
         assertThat(saveStudent.getAmount()).isEqualTo(amount);
+    }
+
+    @Test
+    void findBySessionId() {
+        Long sessionId = 1L;
+        Long amount = 100_000L;
+
+        Student student = new Student(amount, NsUserTest.SANJIGI.getId());
+        studentRepository.save(student, sessionId);
+
+        Student student2 = new Student(amount, NsUserTest.JAVAJIGI.getId());
+        studentRepository.save(student2, sessionId);
+
+        List<Student> students = studentRepository.findAllBySessionId(sessionId);
+        assertThat(students).hasSize(2);
     }
 }
