@@ -73,3 +73,32 @@
 - [X] Payment 내 지불한 금액 확인 메소드 추가 
 - [X] PaidSession 내 지불한 금액 확인 validation 추가
 - [X] FreeSession 내 지불한 금액 확인 validation 추가
+- [X] 무료강의인 경우 isFree로 결제 정보의 책임을 Payment로 이동
+- [X] Payment Fixture 분리
+- [X] PaidSession Fixture 분리
+- [X] FreeSession Fixture 분리
+- [X] Course Fixture 분리
+- [X] SessionDate Fixture 분리
+- [X] SessionImageType Fixture 분리
+- [X] SessionImage Fixture 분리
+
+## Step3. 요구사항
+* 도메인과 DB 테이블 매핑
+* CRUD 구현
+
+## Step3. 기능 구현
+- [X] session_image 테이블 생성
+- [X] session_image select, save 구현
+- [X] session_image logger 사용해 출력부 추가
+- [X] session 테이블 생성
+- [X] session select, save 구현
+- [X] session logger 사용해 출력부 추가
+- [X] session student 연관 테이블 조회 및 객체 생성
+
+## Step3. 리팩토링
+- [X] SessionStudent Repository 분리
+
+## Step3. 피드백 구현
+- [X] SessionEntity 추가 (디비 접근용)
+- [X] CourseSession select, save 구현
+- [X] Course에서 포함되어있는 Session 같이 조회 
