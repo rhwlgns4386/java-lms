@@ -11,7 +11,7 @@ import org.springframework.jdbc.core.JdbcOperations;
 
 import java.util.List;
 
-import static nextstep.courses.domain.EnrollStatus.APPLY;
+import static nextstep.courses.domain.EnrollStatus.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -51,6 +51,38 @@ public class SessionStudentRepositoryTest {
         List<Long> findUserIds = sessionStudentRepository.findBySessionIdAndStatus(sessionId, APPLY);
         assertAll(
                 () -> assertThat(count).isEqualTo(2),
+                () -> assertThat(findUserIds).isEqualTo(userIds)
+        );
+        LOGGER.info("Students: {}", findUserIds);
+    }
+
+    @Test
+    @DisplayName("수강자의 상태 변경 (승인)")
+    void 수강자_상태_변경_승인() {
+        long sessionId = 1L;
+        List<Long> userIds = List.of(1L, 2L);
+        int count = sessionStudentRepository.saveNew(sessionId, userIds, APPLY);
+        int updateCount = sessionStudentRepository.update(sessionId, userIds, APPROVED);
+        List<Long> findUserIds = sessionStudentRepository.findBySessionIdAndStatus(sessionId, APPROVED);
+        assertAll(
+                () -> assertThat(count).isEqualTo(2),
+                () -> assertThat(updateCount).isEqualTo(2),
+                () -> assertThat(findUserIds).isEqualTo(userIds)
+        );
+        LOGGER.info("Students: {}", findUserIds);
+    }
+
+    @Test
+    @DisplayName("수강자의 상태 변경 (취소)")
+    void 수강자_상태_변경_취소() {
+        long sessionId = 1L;
+        List<Long> userIds = List.of(1L, 2L);
+        int count = sessionStudentRepository.saveNew(sessionId, userIds, APPLY);
+        int updateCount = sessionStudentRepository.update(sessionId, userIds, CANCELED);
+        List<Long> findUserIds = sessionStudentRepository.findBySessionIdAndStatus(sessionId, CANCELED);
+        assertAll(
+                () -> assertThat(count).isEqualTo(2),
+                () -> assertThat(updateCount).isEqualTo(2),
                 () -> assertThat(findUserIds).isEqualTo(userIds)
         );
         LOGGER.info("Students: {}", findUserIds);

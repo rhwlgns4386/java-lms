@@ -9,4 +9,5 @@ public interface SessionStudentRepository {
     int saveNew(Long sessionId, List<Long> userId, EnrollStatus status);
     List<Long> findBySessionId(Long sessionId);
     List<Long> findBySessionIdAndStatus(Long sessionId, EnrollStatus status);
+    int update(Long sessionId, List<Long> userId, EnrollStatus status);
 }

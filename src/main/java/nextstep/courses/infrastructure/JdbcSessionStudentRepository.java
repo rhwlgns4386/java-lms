@@ -75,4 +75,26 @@ public class JdbcSessionStudentRepository implements SessionStudentRepository {
         RowMapper<Long> rowMapper = (rs, rowNum) -> rs.getLong("user_id");
         return jdbcTemplate.query(sql, rowMapper, sessionId, status.name());
     }
+
+    @Override
+    public int update(Long sessionId, List<Long> userIds, EnrollStatus status) {
+        String sql = "update session_student set status = ? where session_id = ? and user_id = ?";
+        BatchPreparedStatementSetter statementSetter = new BatchPreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+                Long userId = userIds.get(i);
+                ps.setString(1, status.name());
+                ps.setLong(2, sessionId);
+                ps.setLong(3, userId);
+            }
+
+            @Override
+            public int getBatchSize() {
+                return userIds.size();
+            }
+        };
+
+        return Arrays.stream(jdbcTemplate.batchUpdate(sql, statementSetter))
+                .sum();
+    }
 }
