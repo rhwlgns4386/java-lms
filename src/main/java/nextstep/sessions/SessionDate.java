@@ -7,14 +7,20 @@ public class SessionDate {
     private final LocalDateTime startDate;
     private final LocalDateTime endDate;
 
-    public SessionDate(String startDate, String endDate) {
-        this(LocalDate.parse(startDate).atStartOfDay(), LocalDate.parse(endDate).atStartOfDay());
-    }
-
     public SessionDate(LocalDateTime startDate, LocalDateTime endDate) {
         validateSessionDate(startDate, endDate);
         this.startDate = startDate;
         this.endDate = endDate;
+    }
+
+    public static SessionDate of(String startDate, String endDate) {
+        LocalDateTime startDateTime = LocalDate.parse(startDate).atStartOfDay();
+        LocalDateTime endDateTime = LocalDate.parse(endDate).atStartOfDay();
+        return new SessionDate(startDateTime, endDateTime);
+    }
+
+    public static SessionDate of(LocalDateTime startDate, LocalDateTime endDate) {
+        return new SessionDate(startDate, endDate);
     }
 
     private void validateSessionDate(LocalDateTime startDate, LocalDateTime endDate) {

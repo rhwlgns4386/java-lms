@@ -13,7 +13,7 @@ public class Course {
     private final Long creatorId;
     private final int cohort;
     private Long id;
-    private LocalDateTime createdAt;
+    private final LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
 
@@ -40,26 +40,9 @@ public class Course {
         sessions.addSession(session);
     }
 
-    @Override
-    public String toString() {
-        return "Course{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", creatorId=" + creatorId +
-                ", cohort=" + cohort +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                '}';
-    }
-
     public Payment processPayment(Student student, Long amount, Session session) {
-        sessions.validateSession(session);
-        session.register(student, amount);
-        return processReceipt(student, amount);
-    }
-
-    private Payment processReceipt(Student student, Long amount) {
-        return new Payment("0", this.id, student.getId(), amount);
+        registerStudentInSession(student, session, amount);
+        return processReceipt(student, session, amount);
     }
 
     public String getTitle() {
@@ -72,5 +55,51 @@ public class Course {
 
     public Long getCreatorId() {
         return creatorId;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Sessions getSessions() {
+        return new Sessions(sessions.clone());
+    }
+
+    public boolean contains(Session session) {
+        return sessions.contains(session);
+    }
+    public int getSessionSize() {
+        return sessions.size();
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Course course = (Course) o;
+        return id.equals(course.id);
+    }
+
+    public int hashCode() {
+        return id.hashCode();
+    }
+    @Override
+    public String toString() {
+        return "Course{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", creatorId=" + creatorId +
+                ", cohort=" + cohort +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
+    }
+
+    private void registerStudentInSession(Student student, Session session, Long amount) {
+        sessions.validateSession(session);
+        session.register(student, amount);
+    }
+
+    private Payment processReceipt(Student student, Session session, Long amount) {
+        return new Payment("0", this.id, session.getId(), student.getId(), amount);
     }
 }

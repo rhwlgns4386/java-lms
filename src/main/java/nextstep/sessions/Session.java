@@ -7,11 +7,13 @@ import java.time.LocalDateTime;
 
 public class Session {
     private static final int MAX_STUDENT_COUNT = 999;
+    private static final boolean DEFAULT_IS_FREE = true;
+    private static final Long DEFAULT_SESSION_FEE = 0L;
     private final Long id;
     private final String name;
     private final String description;
     private final CoverImage image;
-    private final SessionState state;
+    private SessionState state;
     private final SessionDetail sessionDetail;
     private final SessionDate sessionDate;
 
@@ -50,11 +52,11 @@ public class Session {
     }
 
     public void register(Student student, Long amount) {
-        checkRegistrationEligibility(amount);
+        validateRegistrationEligibility(amount);
         sessionDetail.registerNewStudent(student);
     }
 
-    private void checkRegistrationEligibility(Long amount) {
+    private void validateRegistrationEligibility(Long amount) {
         if (!state.isOpen()) {
             throw new IllegalStateException("아직 접수 기간이 아닙니다.");
         }
@@ -62,8 +64,17 @@ public class Session {
         sessionDetail.checkRegistrationEligibility(amount);
     }
 
+    public void setClose() {
+        this.state = SessionState.CLOSE;
+    }
 
+    public void setReady() {
+        this.state = SessionState.READY;
+    }
 
+    public void setOpen() {
+        this.state = SessionState.OPEN;
+    }
 
     public static class SessionBuilder {
         private final Long id;
@@ -72,9 +83,9 @@ public class Session {
         private final CoverImage image;
         private final LocalDateTime startDate;
         private final LocalDateTime endDate;
-        private boolean isFree = true;
+        private boolean isFree = DEFAULT_IS_FREE;
         private int maxStudentCount = MAX_STUDENT_COUNT;
-        private Long sessionFee = 0L;
+        private Long sessionFee = DEFAULT_SESSION_FEE;
         private SessionState state;
 
         public SessionBuilder(Long id, String name, String description, CoverImage image, LocalDateTime startDate, LocalDateTime endDate) {

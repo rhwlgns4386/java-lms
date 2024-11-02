@@ -3,6 +3,7 @@ package nextstep.sessions;
 import nextstep.users.domain.Student;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class SessionDetail {
@@ -17,14 +18,11 @@ public class SessionDetail {
         validateStudentCount(maxStudentCount);
         this.isFree = isFree;
         this.maxStudentCount = maxStudentCount;
-        this.sessionFee = sessionFee;
+        this.sessionFee = sessionFee != null ? sessionFee : 0L;
     }
 
     public SessionDetail(boolean isFree, int maxStudentCount) {
-        validateStudentCount(maxStudentCount);
-        this.isFree = isFree;
-        this.maxStudentCount = maxStudentCount;
-        this.sessionFee = 0L;
+        this(isFree, maxStudentCount, 0L);
     }
 
     private void validateStudentCount(int maxStudentCount) {
@@ -32,7 +30,6 @@ public class SessionDetail {
             throw new IllegalArgumentException("학생 수는 최소 " + MIN_STUDENT_COUNT + "명 이상, " + MAX_STUDENT_COUNT + "명 이하여야 합니다.");
         }
     }
-
 
     public boolean isSameAmount(Long amount) {
         return amount.equals(this.sessionFee);
