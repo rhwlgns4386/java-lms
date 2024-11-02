@@ -2,7 +2,6 @@ package nextstep.courses.infrastructure;
 
 import nextstep.courses.domain.student.Student;
 import nextstep.courses.domain.student.StudentRepository;
-import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
@@ -16,12 +15,9 @@ public class JdbcStudentRepository implements StudentRepository {
             rs.getLong(2),
             rs.getLong(1)
     );
-    private JdbcOperations jdbcTemplate;
     private NamedParameterJdbcOperations namedParameterJdbcTemplate;
 
-    public JdbcStudentRepository(JdbcOperations jdbcTemplate,
-                                 NamedParameterJdbcOperations namedParameterJdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public JdbcStudentRepository(NamedParameterJdbcOperations namedParameterJdbcTemplate) {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 

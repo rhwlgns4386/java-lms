@@ -1,8 +1,9 @@
 package nextstep.courses.infrastructure;
 
 import nextstep.courses.domain.session.*;
-import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
@@ -27,27 +28,43 @@ public class JdbcSessionRepository implements SessionRepository {
         Money money = new Money(rs.getLong(8));
         return new PaidSession(null, date, sessionId, title, status, type, capacity, money, new ArrayList<>());
     };
-    private JdbcOperations jdbcTemplate;
 
-    public JdbcSessionRepository(JdbcOperations jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    private NamedParameterJdbcOperations namedParameterJdbcTemplate;
+
+    public JdbcSessionRepository(NamedParameterJdbcOperations namedParameterJdbcTemplate) {
+        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
     @Override
     public int save(Session session, Long courseId) {
         String sql = "insert into session (course_id, title, start_at, end_at, session_type, session_status, capacity, price,  created_at) " +
-                "values(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "values(:courseId, :title, :startAt, :endAt, :sessionType, :sessionStatus, :capacity, :price, :createdAt)";
+
+        MapSqlParameterSource param = new MapSqlParameterSource();
+        param.addValue("courseId", courseId);
+        param.addValue("title", session.getTitle());
+        param.addValue("startAt", session.getSessionDate().getStart());
+        param.addValue("endAt", session.getSessionDate().getEnd());
+        param.addValue("sessionType", session.getSessionType().name());
+        param.addValue("sessionStatus", session.getSessionStatus().name());
+        param.addValue("createdAt", LocalDateTime.now());
+
         if (session instanceof FreeSession) {
-            FreeSession freeSession = (FreeSession) session;
-            return jdbcTemplate.update(sql, courseId, freeSession.getTitle(), freeSession.getSessionDate().getStart(), freeSession.getSessionDate().getEnd(), freeSession.getSessionType().name(), freeSession.getSessionStatus().name(), null, null, LocalDateTime.now());
+            param.addValue("capacity", null);
+            param.addValue("price", null);
+            return namedParameterJdbcTemplate.update(sql, param);
         }
         PaidSession paidSession = (PaidSession) session;
-        return jdbcTemplate.update(sql, courseId, paidSession.getTitle(), paidSession.getSessionDate().getStart(), paidSession.getSessionDate().getEnd(), paidSession.getSessionType().name(), paidSession.getSessionStatus().name(), paidSession.getCapacity().getCapacity(), paidSession.getFee().getPrice(), LocalDateTime.now());
+        param.addValue("capacity", paidSession.getCapacity().getCapacity());
+        param.addValue("price", paidSession.getFee().getPrice());
+        return namedParameterJdbcTemplate.update(sql, param);
     }
 
     @Override
     public Session findById(Long id) {
-        String sql = "select id, title, start_at, end_at, session_type, session_status, capacity, price from session where id = ?";
-        return jdbcTemplate.queryForObject(sql, COURSE_ROW_MAPPER, id);
+        String sql = "select id, title, start_at, end_at, session_type, session_status, capacity, price from session where id = :id";
+        MapSqlParameterSource param = new MapSqlParameterSource();
+        param.addValue("id", id);
+        return namedParameterJdbcTemplate.queryForObject(sql, param, COURSE_ROW_MAPPER);
     }
 }
