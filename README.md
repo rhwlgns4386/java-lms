@@ -45,6 +45,8 @@
 * Session 생성 서비스 로직 [X]
 * Session 수강신청 서비스 로직 [X]
 * Session 조회 서비스 로직 [X]
+* Course 생성 서비스 로직 [X]
+* Course 조회 서비스 로직 []
 
 ## ERD
 
