@@ -24,9 +24,9 @@ VALUES (2, 2, 'runtime 에 reflect 발동 주체 객체가 뭔지 알 방법이 
         CURRENT_TIMESTAMP(), false);
 
 
-INSERT INTO course(title, creator_id, created_at)
-VALUES ('test', 1, CURRENT_TIMESTAMP());
+INSERT INTO course(id, title, creator_id, created_at)
+VALUES (1, 'test', 1, CURRENT_TIMESTAMP());
 
 INSERT INTO course_session (course_id, session_status, maximum_number_people, session_pay, session_pay_type,
                             start_date, end_date)
-VALUES (1, 'READY', 20, 2000, 'PAID', '2024-11-02 12:00:00','2024-11-03 12:00:00');
+VALUES (1, 'READY', 20, 2000, 'PAID', '2024-11-02 12:00:00', '2024-11-03 12:00:00');

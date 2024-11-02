@@ -14,7 +14,7 @@ public class SessionPayTest {
         Payment payment = new Payment("1", 1L, 1L, 3000L);
 
         assertThatThrownBy(
-                ()->sessionPay.validatePay(payment)
+                () -> sessionPay.validatePay(payment)
         ).isInstanceOf(SessionPayException.class);
 
     }

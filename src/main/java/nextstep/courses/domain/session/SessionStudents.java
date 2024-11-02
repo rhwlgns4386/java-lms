@@ -35,6 +35,7 @@ public class SessionStudents {
             throw new SessionException("이미 수강신청을 했습니다.");
         }
     }
-
-
+    public int getMaximumNumberPeople() {
+        return maximumNumberPeople;
+    }
 }

@@ -18,7 +18,7 @@ public class SessionTest {
         LocalDateTime startDate = LocalDateTime.of(2024, 10, 28, 0, 0);
         LocalDateTime endDate = LocalDateTime.of(2024, 10, 30, 23, 59);
 
-        Session session = Session.createFree(1L, new SessionPay(0L, SessionPayType.FREE), new SessionPeriod(startDate, endDate));
+        Session session = Session.createFree(1L, new SessionPeriod(startDate, endDate));
 
 
         assertThatThrownBy(
@@ -33,9 +33,7 @@ public class SessionTest {
         LocalDateTime endDate = LocalDateTime.of(2024, 10, 30, 23, 59);
         SessionPeriod sessionPeriod = new SessionPeriod(startDate, endDate);
 
-        SessionPay sessionPay = new SessionPay(3000L, SessionPayType.PAID);
-
-        Session session = Session.createPaid(1L, sessionPay, sessionPeriod, 1);
+        Session session = Session.createPaid(1L, 3000L, sessionPeriod, 1);
         session.recruiting();
 
         session.registration(NsUserTest.JAVAJIGI, payment);

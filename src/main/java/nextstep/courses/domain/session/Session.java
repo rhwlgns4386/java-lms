@@ -6,7 +6,6 @@ import nextstep.courses.SessionException;
 import nextstep.users.domain.NsUser;
 
 public class Session {
-
     private Long id;
     private Long courseId;
     private SessionPeriod period;
@@ -14,20 +13,25 @@ public class Session {
     private SessionStatus status;
     private SessionStudents students;
 
-    public Session(Long courseId, SessionPay sessionPay, SessionPeriod sessionPeriod, int maximumNumberPeople) {
-        this.status = SessionStatus.READY;
+    public Session(Long id, Long courseId, String status, SessionPay sessionPay, SessionPeriod sessionPeriod, int maximumNumberPeople) {
+        this(id, courseId, SessionStatus.search(status), sessionPay, sessionPeriod, maximumNumberPeople);
+    }
 
+    public Session(Long id, Long courseId, SessionStatus status, SessionPay sessionPay, SessionPeriod sessionPeriod, int maximumNumberPeople) {
+        this.id = id;
+        this.status = status;
+        this.courseId = courseId;
         this.sessionPay = sessionPay;
         this.period = sessionPeriod;
         this.students = new SessionStudents(maximumNumberPeople);
     }
 
-    public static Session createFree(Long courseId, SessionPay sessionPay, SessionPeriod sessionPeriod) {
-        return new Session(courseId, sessionPay, sessionPeriod, 0);
+    public static Session createFree(Long courseId, SessionPeriod sessionPeriod) {
+        return new Session(0L, courseId, SessionStatus.READY, new SessionPay(0L, SessionPayType.PAID), sessionPeriod, 0);
     }
 
-    public static Session createPaid(Long courseId, SessionPay sessionPay, SessionPeriod sessionPeriod, int maximumNumberPeople) {
-        return new Session(courseId, sessionPay, sessionPeriod, maximumNumberPeople);
+    public static Session createPaid(Long courseId, Long payAmount, SessionPeriod sessionPeriod, int maximumNumberPeople) {
+        return new Session(0L, courseId, SessionStatus.READY, new SessionPay(payAmount, SessionPayType.PAID), sessionPeriod, maximumNumberPeople);
     }
 
     public void recruiting() {

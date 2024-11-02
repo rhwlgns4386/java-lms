@@ -10,7 +10,7 @@ public class SessionPayTypeTest {
 
     @Test
     void 문자열로_열거_타입_찾기() {
-        SessionPayType paid = SessionPayType.search("free");
+        SessionPayType paid = SessionPayType.search("FREE");
 
         assertThat(paid).isEqualTo(SessionPayType.FREE);
     }

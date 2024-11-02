@@ -49,10 +49,4 @@ public class JdbcSessionCoverImageRepository implements SessionCoverImageReposit
         return jdbcTemplate.queryForObject(sb.toString(), rowMapper, id);
     }
 
-    private LocalDateTime toLocalDateTime(Timestamp timestamp) {
-        if (timestamp == null) {
-            return null;
-        }
-        return timestamp.toLocalDateTime();
-    }
 }
