@@ -1,7 +1,5 @@
 package nextstep.courses.domain;
 
-import nextstep.courses.CannotRegisteSessionException;
-
 public enum StateCode {
     READY(10),
     RECRUITING(20),

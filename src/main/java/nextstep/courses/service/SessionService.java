@@ -1,13 +1,13 @@
 package nextstep.courses.service;
 
-import nextstep.courses.CannotRegisteSessionException;
-import nextstep.courses.domain.RequestOrderParam;
+import nextstep.courses.exception.CannotRegisteSessionException;
+import nextstep.courses.request.RequestOrderParam;
 import nextstep.courses.domain.Session;
-import nextstep.courses.domain.SessionFactory;
+import nextstep.courses.factory.SessionFactory;
 import nextstep.courses.domain.SessionImage;
 import nextstep.courses.domain.SessionInfo;
 import nextstep.courses.domain.SessionType;
-import nextstep.courses.domain.Sessions;
+import nextstep.courses.collection.Sessions;
 import nextstep.courses.domain.StateCode;
 import nextstep.courses.infrastructure.SessionRepository;
 import nextstep.payments.domain.Payment;

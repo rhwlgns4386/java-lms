@@ -1,6 +1,8 @@
 package nextstep.courses.domain;
 
-import nextstep.courses.CannotRegisteSessionException;
+import nextstep.courses.exception.CannotRegisteSessionException;
+import nextstep.courses.request.RequestOrderParam;
+import nextstep.courses.collection.Students;
 import nextstep.users.domain.NsUser;
 
 import java.time.LocalDateTime;
