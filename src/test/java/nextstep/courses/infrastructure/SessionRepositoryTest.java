@@ -54,10 +54,10 @@ class SessionRepositoryTest {
         jdbcTemplate.update(
                 "INSERT INTO cover_image (id, file_size, image_type, width, height, created_at) VALUES (?, ?, ?, ?, ?, ?)",
                 coverImageId,
-                coverImage.getFile().getSize(),
-                coverImage.getType().name(),
-                coverImage.getImageSize().getWidth(),
-                coverImage.getImageSize().getHeight(),
+                coverImage.getFileSize(),
+                coverImage.getType(),
+                coverImage.getImageWidth(),
+                coverImage.getImageHeight(),
                 LocalDateTime.now()
         );
     }

@@ -21,15 +21,22 @@ public class CoverImage {
         return id;
     }
 
-    public CoverImageFile getFile() {
-        return file;
+    public int getFileSize() {
+        return file.getSize();
     }
 
     public CoverImageType getType() {
         return type;
     }
+    public String getTypeName() {
+        return type.getCode();
+    }
 
-    public CoverImageSize getImageSize() {
-        return imageSize;
+    public int getImageWidth() {
+        return imageSize.getWidth();
+    }
+
+    public int getImageHeight() {
+        return imageSize.getHeight();
     }
 }

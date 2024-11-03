@@ -1,15 +1,9 @@
 package nextstep.courses.infrastructure;
 
-import nextstep.courses.domain.cover.CoverImageRepository;
-import nextstep.courses.domain.cover.CoverImage;
-import nextstep.courses.domain.cover.CoverImageFile;
-import nextstep.courses.domain.cover.CoverImageSize;
-import nextstep.courses.domain.cover.CoverImageType;
+import nextstep.courses.domain.cover.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -20,7 +14,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @JdbcTest
 class CoverImageRepositoryTest {
-    private static final Logger LOGGER = LoggerFactory.getLogger(CoverImageRepositoryTest.class);
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -34,29 +27,28 @@ class CoverImageRepositoryTest {
     @BeforeEach
     void setUp() {
         coverImageRepository = new JdbcCoverImageRepository(jdbcTemplate);
-         file = new CoverImageFile(1024 * 100);
-         type = CoverImageType.JPG;
-         size = new CoverImageSize(600, 400);
-         coverImage = new CoverImage(file, type, size);
+        file = new CoverImageFile(1024 * 100);
+        type = CoverImageType.JPG;
+        size = new CoverImageSize(600, 400);
+        coverImage = new CoverImage(file, type, size);
     }
 
     @Test
     void save() {
-        int seq = coverImageRepository.save(coverImage);
+        Long seq = coverImageRepository.save(coverImage);
 
-        assertThat(seq).isEqualTo(1);
+        assertThat(seq).isNotNull();
     }
 
     @Test
     void findBy() {
-        int seq = coverImageRepository.save(coverImage);
+        Long seq = coverImageRepository.save(coverImage);
 
-        CoverImage foundCoverImage = coverImageRepository.findById((long) seq);
+        CoverImage foundCoverImage = coverImageRepository.findById(seq);
 
-        assertThat(foundCoverImage.getFile().getSize()).isEqualTo(file.getSize());
-        assertThat(foundCoverImage.getType()).isEqualTo(type);
-        assertThat(foundCoverImage.getImageSize().getWidth()).isEqualTo(size.getWidth());
-        assertThat(foundCoverImage.getImageSize().getHeight()).isEqualTo(size.getHeight());
+        assertThat(foundCoverImage)
+                .extracting("file.size", "type", "imageSize.width", "imageSize.height")
+                .containsExactly(file.getSize(), type, size.getWidth(), size.getHeight());
     }
 
     @Test
