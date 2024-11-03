@@ -30,13 +30,6 @@ public class SessionEntity {
     private final LocalDateTime startDate;
     private final LocalDateTime endDate;
 
-    public SessionEntity(Long id, String coverFilePath, List<String> coverFilePaths, SessionState sessionState,
-                         RecruitState recruitState, int enrollment, int maxEnrollment,
-                         long sessionFee, Timestamp startDate, Timestamp endDate) {
-        this(id, coverFilePath, coverFilePaths, sessionState, recruitState, enrollment, maxEnrollment,
-                sessionFee, toLocalDateTime(startDate), toLocalDateTime(endDate));
-    }
-
     public SessionEntity(Long id, String coverFilePath, SessionState sessionState, RecruitState recruitState,
                          int enrollment, int maxEnrollment, long sessionFee, Timestamp startDate, Timestamp endDate) {
         this(id, coverFilePath, null, sessionState, recruitState, enrollment, maxEnrollment,
@@ -47,17 +40,6 @@ public class SessionEntity {
                          RecruitState recruitState, int enrollment, int maxEnrollment, long sessionFee,
                          LocalDateTime startDate, LocalDateTime endDate) {
         this(null, coverFilePath, coverFilePaths, sessionState, recruitState, enrollment, maxEnrollment, sessionFee, startDate, endDate);
-    }
-
-    public SessionEntity(String coverFilePath, SessionState sessionState, RecruitState recruitState, int enrollment,
-                         int maxEnrollment, long sessionFee, LocalDateTime startDate, LocalDateTime endDate) {
-        this(null, coverFilePath, null, sessionState, recruitState, enrollment, maxEnrollment, sessionFee, startDate, endDate);
-    }
-
-    public SessionEntity(Long id, String coverFilePath, SessionState sessionState, RecruitState recruitState,
-                         int enrollment, int maxEnrollment, long sessionFee, LocalDateTime startDate, LocalDateTime endDate) {
-        this(id, coverFilePath, null, sessionState, recruitState, enrollment, maxEnrollment, sessionFee,
-                startDate, endDate);
     }
 
     public SessionEntity(Long id, String coverFilePath, List<String> coverFilePaths, SessionState sessionState,

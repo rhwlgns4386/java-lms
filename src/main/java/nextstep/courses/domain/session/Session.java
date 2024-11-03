@@ -23,46 +23,14 @@ public abstract class Session {
     protected final Enrollment enrollment;
     protected final SessionDuration sessionDuration;
 
-    protected Session(CoverImage coverImage, int maxEnrollment, SessionState sessionState,
-                      LocalDateTime startDate, LocalDateTime endDate) {
-        this((long) NOT_ASSIGNED, coverImage, maxEnrollment, INIT_ENROLLMENT, sessionState, startDate, endDate);
-    }
-
-    protected Session(CoverImage coverImage, int maxEnrollment, SessionState sessionState, RecruitState recruitState,
-                      LocalDateTime startDate, LocalDateTime endDate) {
-        this((long) NOT_ASSIGNED, coverImage, maxEnrollment, INIT_ENROLLMENT,
-                sessionState, recruitState, startDate, endDate);
-    }
-
-    protected Session(CoverImage coverImage, int maxEnrollment, int enrollment,
-                      SessionState sessionState, LocalDateTime startDate, LocalDateTime endDate) {
-        this((long) NOT_ASSIGNED, coverImage, maxEnrollment, enrollment, sessionState, startDate, endDate);
-    }
-
-    protected Session(CoverImage coverImage, int maxEnrollment, int enrollment, SessionState sessionState,
+    protected Session(Long id, CoverImage coverImage, int maxEnrollment, int enrollment, SessionState sessionState,
                       RecruitState recruitState, LocalDateTime startDate, LocalDateTime endDate) {
-        this((long) NOT_ASSIGNED, coverImage, maxEnrollment, enrollment, sessionState, recruitState, startDate, endDate);
-    }
-
-    protected Session(Long id, CoverImage coverImage, int maxEnrollment, int enrollment,
-                      SessionState sessionState, LocalDateTime startDate, LocalDateTime endDate) {
-        this(id, coverImage, maxEnrollment, enrollment, sessionState, RecruitState.NOT_RECRUIT, startDate, endDate);
-    }
-
-    protected Session(Long id, CoverImage coverImage, int maxEnrollment, int enrollment,
-                      SessionState sessionState, RecruitState recruitState,
-                      LocalDateTime startDate, LocalDateTime endDate) {
-        this.id = id;
-        this.sessionStatus = new SessionStatus(sessionState, recruitState);
-        this.coverImage = coverImage;
-        this.coverImages = CoverImages.of(coverImage);
-        this.enrollment = new Enrollment(enrollment, maxEnrollment);
-        this.sessionDuration = new SessionDuration(startDate, endDate);
+        this(id, coverImage, CoverImages.of(coverImage), maxEnrollment, enrollment, sessionState, recruitState,
+                startDate, endDate);
     }
 
     protected Session(Long id, CoverImage coverImage, CoverImages coverImages, int maxEnrollment, int enrollment,
-                      SessionState sessionState, RecruitState recruitState,
-                      LocalDateTime startDate, LocalDateTime endDate) {
+                      SessionState sessionState, RecruitState recruitState, LocalDateTime startDate, LocalDateTime endDate) {
         this.id = id;
         this.sessionStatus = new SessionStatus(sessionState, recruitState);
         this.coverImage = coverImage;
