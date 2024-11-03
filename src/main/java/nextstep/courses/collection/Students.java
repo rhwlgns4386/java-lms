@@ -30,4 +30,8 @@ public class Students {
         }
         return false;
     }
+
+    public NsUser getStudentIdx(int idx) {
+        return students.get(idx);
+    }
 }
