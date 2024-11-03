@@ -2,9 +2,11 @@ package nextstep.courses.domain.session;
 
 import nextstep.courses.domain.cover.CoverImage;
 import nextstep.courses.domain.cover.CoverImages;
+import nextstep.courses.domain.enrollment.Enrollment;
 import nextstep.courses.type.RecruitState;
 import nextstep.courses.type.SessionState;
 import nextstep.payments.domain.Payment;
+import nextstep.users.domain.NsUser;
 
 import java.io.File;
 import java.time.LocalDateTime;
@@ -14,7 +16,6 @@ import java.util.Objects;
 public abstract class Session {
 
     public static final int NOT_ASSIGNED = -1;
-    static final int INIT_ENROLLMENT = 0;
 
     protected final Long id;
     private CoverImage coverImage;
@@ -35,15 +36,14 @@ public abstract class Session {
         this.sessionStatus = new SessionStatus(sessionState, recruitState);
         this.coverImage = coverImage;
         this.coverImages = coverImages;
-        this.enrollment = new Enrollment(enrollment, maxEnrollment);
+        this.enrollment = new Enrollment(maxEnrollment);
         this.sessionDuration = new SessionDuration(startDate, endDate);
     }
 
-    public final boolean register(Payment payment) {
+    public final boolean apply(NsUser student, Payment payment) {
         validateSessionState();
-        enrollment.validateAvailability();
         if (isValidPayment(payment)) {
-            enrollment.register();
+            enrollment.apply(student);
             return true;
         }
         throw new IllegalStateException("결제 내역(금액 등)과 강의 수강 조건이 일치하지 않습니다");
@@ -55,10 +55,26 @@ public abstract class Session {
         }
     }
 
+    public final boolean register(NsUser student) {
+        enrollment.register(student);
+        return true;
+    }
+
     protected abstract boolean isValidPayment(Payment payment);
 
-    public final boolean isSameId(Payment payment) {
-        return payment.isSameSessionId(id);
+    public boolean reject(NsUser student) {
+        enrollment.reject(student);
+        return true;
+    }
+
+    public final boolean register(Payment payment) {
+        validateSessionState();
+        enrollment.validateAvailability();
+        if (isValidPayment(payment)) {
+            enrollment.register();
+            return true;
+        }
+        throw new IllegalStateException("결제 내역(금액 등)과 강의 수강 조건이 일치하지 않습니다");
     }
 
     public final void addCoverImage(String coverFilePath) {
