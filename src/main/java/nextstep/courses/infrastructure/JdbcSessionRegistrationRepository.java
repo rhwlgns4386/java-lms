@@ -1,14 +1,11 @@
 package nextstep.courses.infrastructure;
 
 import nextstep.courses.domain.session.SessionRegistrationRepository;
-import nextstep.courses.domain.session.SessionRegistrationEntity;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Repository("sessionRegistrationRepository")
 public class JdbcSessionRegistrationRepository implements SessionRegistrationRepository {
@@ -20,29 +17,20 @@ public class JdbcSessionRegistrationRepository implements SessionRegistrationRep
     }
 
     @Override
-    public void saveRegistrations(List<SessionRegistrationEntity> registrations) {
-        if (registrations.isEmpty()) {
-            return;
-        }
+    public void saveRegistrations(Long sessionId, List<Long> userIds) {
+        String sql = "INSERT INTO session_registration (session_id, user_id, registered_at) VALUES (?, ?, ?)";
 
-        String sql = "INSERT INTO session_registration (session_id, user_id, registered_at) " +
-                "VALUES (?, ?, ?)";
-
-        List<Object[]> batchArgs = registrations.stream()
-                .map(reg -> new Object[]{
-                        reg.getSessionId(),
-                        reg.getUserId(),
-                        Timestamp.valueOf(reg.getRegisteredAt())
-                })
-                .collect(Collectors.toList());
-
-        jdbcTemplate.batchUpdate(sql, batchArgs);
+        jdbcTemplate.batchUpdate(sql, userIds, userIds.size(),
+                (ps, argument) -> {
+                    ps.setLong(1, sessionId);
+                    ps.setLong(2, argument);
+                    ps.setTimestamp(3, Timestamp.valueOf(java.time.LocalDateTime.now()));
+                });
     }
 
     @Override
     public List<Long> findRegisteredUserIds(Long sessionId) {
         String sql = "SELECT user_id FROM session_registration WHERE session_id = ?";
-
-        return new ArrayList<>(jdbcTemplate.queryForList(sql, Long.class, sessionId));
+        return jdbcTemplate.queryForList(sql, Long.class, sessionId);
     }
 }

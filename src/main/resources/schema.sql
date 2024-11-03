@@ -75,8 +75,7 @@ create table session
     session_type   varchar(10) not null,
     course_fee     bigint,
     max_students   int,
-    primary key (id),
-    foreign key (cover_image_id) references cover_image (id)
+    primary key (id)
 );
 
 create table session_registration
@@ -84,16 +83,12 @@ create table session_registration
     session_id    bigint    not null,
     user_id       bigint    not null,
     registered_at timestamp not null,
-    primary key (session_id, user_id),
-    foreign key (session_id) references session (id),
-    foreign key (user_id) references ns_user (id)
+    primary key (session_id, user_id)
 );
 
 CREATE TABLE course_session
 (
     course_id  BIGINT NOT NULL,
     session_id BIGINT NOT NULL,
-    PRIMARY KEY (course_id, session_id),
-    FOREIGN KEY (course_id) REFERENCES course (id),
-    FOREIGN KEY (session_id) REFERENCES session (id)
+    PRIMARY KEY (course_id, session_id)
 );

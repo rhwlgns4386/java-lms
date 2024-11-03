@@ -1,60 +1,60 @@
 package nextstep.courses.infrastructure;
 
-import nextstep.courses.domain.session.SessionRegistrationEntity;
+import nextstep.courses.domain.cover.CoverImage;
+import nextstep.courses.domain.cover.CoverImageFile;
+import nextstep.courses.domain.cover.CoverImageSize;
+import nextstep.courses.domain.cover.CoverImageType;
+import nextstep.courses.domain.session.*;
+import nextstep.users.domain.NsUser;
 import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @JdbcTest
 class SessionRegistrationRepositoryTest {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
-    private JdbcSessionRegistrationRepository sessionRegistrationRepository;
+
+    private SessionRegistrationRepository sessionRegistration;
+    private FreeSession freeSession;
     private Long sessionId;
-    private Long userId;
 
     @BeforeEach
     void setUp() {
-        sessionRegistrationRepository = new JdbcSessionRegistrationRepository(jdbcTemplate);
-
-        userId = 4L;
-        jdbcTemplate.update("INSERT INTO ns_user (id, user_id, password, name, email, created_at) VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)",
-                userId, "green_user", "password123", "Green", "green@example.com");
-
-        jdbcTemplate.update("INSERT INTO cover_image (file_size, image_type, width, height, created_at) VALUES (102400, 'JPG', 600, 400, CURRENT_TIMESTAMP)");
+        sessionRegistration = new JdbcSessionRegistrationRepository(jdbcTemplate);
 
         sessionId = 1L;
-        jdbcTemplate.update("INSERT INTO session (id, status, start_date, end_date, cover_image_id, session_type) VALUES (?, 'OPEN', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, 'FREE')", sessionId);
+
+        CoverImage coverImage = new CoverImage(1L, new CoverImageFile(102400), CoverImageType.JPG, new CoverImageSize(600, 400));
+        Period period = new Period(LocalDate.of(2024, 10, 10), LocalDate.of(2024, 10, 19));
+        Capacity capacity = new Capacity(10);
+
+        freeSession = new FreeSession(sessionId, Status.OPEN, period, coverImage, capacity);
     }
 
     @DisplayName("세션의 수강 신청 정보를 조회할 수 있다.")
     @Test
     void saveRegistrations() {
         // given
-        List<SessionRegistrationEntity> registrations = List.of(
-                new SessionRegistrationEntity(sessionId, userId, LocalDateTime.of(2024, 10, 10, 11, 0))
-        );
-        sessionRegistrationRepository.saveRegistrations(registrations);
+        freeSession.register(NsUserTest.GREEN);
+        sessionRegistration.saveRegistrations(sessionId, freeSession.getRegisteredStudentIds());
 
         // when
-        List<Long> savedUserIds = sessionRegistrationRepository.findRegisteredUserIds(sessionId);
+        List<Long> savedUserIds = sessionRegistration.findRegisteredUserIds(sessionId);
 
         // then
-        assertThat(savedUserIds).containsExactly(userId);
+        assertThat(savedUserIds).containsExactly(NsUserTest.GREEN.getId());
     }
 
     @AfterEach
