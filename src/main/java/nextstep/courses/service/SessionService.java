@@ -13,11 +13,13 @@ import nextstep.courses.infrastructure.SessionRepository;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
 
-import javax.annotation.Resource;
-
 public class SessionService {
-    @Resource(name = "sessionRepository")
-    private SessionRepository sessionRepository;
+
+    private final SessionRepository sessionRepository;
+
+    public SessionService(SessionRepository sessionRepository) {
+        this.sessionRepository = sessionRepository;
+    }
 
     public void registerPaidSession(SessionInfo sessionInfo, SessionImage sessionImage, long salePrice, StateCode stateCode, int studentMaxCount, SessionType sessionType) {
 
