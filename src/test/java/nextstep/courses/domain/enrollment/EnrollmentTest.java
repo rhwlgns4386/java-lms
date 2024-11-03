@@ -1,6 +1,5 @@
 package nextstep.courses.domain.enrollment;
 
-import nextstep.courses.entity.StudentEntity;
 import nextstep.users.domain.NsUser;
 import org.junit.jupiter.api.Test;
 

@@ -1,6 +1,5 @@
 package nextstep.courses.infrastructure.student;
 
-import nextstep.courses.entity.CoverImageEntity;
 import nextstep.courses.entity.StudentEntity;
 import nextstep.courses.infrastructure.enrollment.JdbcStudentRepository;
 import nextstep.courses.infrastructure.enrollment.StudentRepository;
