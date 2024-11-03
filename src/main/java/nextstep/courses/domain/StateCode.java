@@ -1,5 +1,7 @@
 package nextstep.courses.domain;
 
+import java.util.Arrays;
+
 public enum StateCode {
     READY(10),
     RECRUITING(20),
@@ -9,6 +11,13 @@ public enum StateCode {
 
     StateCode(final int statusCode) {
         this.statusCode = statusCode;
+    }
+
+    public static StateCode fromCode(long statusCode) {
+        return Arrays.stream(StateCode.values())
+                .filter(value -> value.getStatusCode() == statusCode)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 상태 코드입니다: " + statusCode));
     }
 
     public int getStatusCode() {
