@@ -12,15 +12,18 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 
 public class SessionTest {
+    public final static SessionInfo SESSION_INFO = new SessionInfo("제목1", LocalDateTime.now(), LocalDateTime.now().plus(10, ChronoUnit.HALF_DAYS), "createorId");
+    public final static SessionImage SESSION_IMAGE = new SessionImage(200, "png", 600, 400, "imageFileName");
+    public final static SessionInfo MAX_STUDENT_INFO = new SessionInfo("2명모집", LocalDateTime.now(), LocalDateTime.now().plus(20, ChronoUnit.HALF_DAYS), "createorId");
 
     public final static Session SESSION_REDAY = new Session("제목1", LocalDateTime.now(), LocalDateTime.now().plus(10, ChronoUnit.HALF_DAYS),
-            0, StateCode.READY, 1, 100, "jpg", 300, 200, "imageFileName1", true);
+            0, StateCode.READY, "createorId", 100, "jpg", 300, 200, "imageFileName1", SessionType.PAID);
 
     public final static Session SESSION_RECRUITING = new Session("제목2", LocalDateTime.now(), LocalDateTime.now().plus(20, ChronoUnit.HALF_DAYS),
-            0, StateCode.RECRUITING, 2, 200, "png", 600, 400, "imageFileName2", true);
+            0, StateCode.RECRUITING, "createorId", 200, "png", 600, 400, "imageFileName2", SessionType.PAID);
 
     public final static Session SESSION_END = new Session("제목3", LocalDateTime.now(), LocalDateTime.now().plus(30, ChronoUnit.HALF_DAYS),
-            0, StateCode.END, 3, 300, "png", 1200, 800, "imageFileName3", true);
+            0, StateCode.END, "createorId", 300, "png", 1200, 800, "imageFileName3", SessionType.PAID);
 
 
     @Test

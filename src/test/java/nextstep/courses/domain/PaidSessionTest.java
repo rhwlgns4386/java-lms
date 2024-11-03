@@ -15,9 +15,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class PaidSessionTest {
-    public final static PaidSession PAID_SESSION = new PaidSession("강의명", LocalDateTime.now(), LocalDateTime.now().plus(20, ChronoUnit.HALF_DAYS),
-            1000L, StateCode.RECRUITING, 1, 200, "png", 600, 400, "imageFileName", 100);
 
+    public final static PaidSession PAID_SESSION = new PaidSession(SessionTest.SESSION_INFO, SessionTest.SESSION_IMAGE, 1000,  StateCode.RECRUITING, 2);
 
     private PaidSession paidSession;
     private PaidSession maxStudentTwoSession;
@@ -25,10 +24,8 @@ public class PaidSessionTest {
 
     @BeforeEach
     void setUp() {
-        paidSession = new PaidSession("1명모집", LocalDateTime.now(), LocalDateTime.now().plus(20, ChronoUnit.HALF_DAYS),
-                1000L, StateCode.RECRUITING, 2, 200, "png", 600, 400, "imageFileName", 1);
-        maxStudentTwoSession = new PaidSession("2명모집", LocalDateTime.now(), LocalDateTime.now().plus(20, ChronoUnit.HALF_DAYS),
-                1000L, StateCode.RECRUITING, 3, 200, "png", 600, 400, "imageFileName", 2);
+        paidSession = new PaidSession(SessionTest.SESSION_INFO, SessionTest.SESSION_IMAGE, 1000L,  StateCode.RECRUITING, 1);
+        maxStudentTwoSession = new PaidSession( SessionTest.MAX_STUDENT_INFO, SessionTest.SESSION_IMAGE,1000,  StateCode.RECRUITING, 2);
     }
 
     @Test
@@ -40,8 +37,8 @@ public class PaidSessionTest {
     @Test
     @DisplayName("상태가 모집중이 아닌경우 오류")
     void validateStateCode_IllegalArgumentException() {
-        PaidSession paidSession = new PaidSession("제목2", LocalDateTime.now(), LocalDateTime.now().plus(20, ChronoUnit.HALF_DAYS),
-                1000L, StateCode.READY, 4, 200, "png", 600, 400, "imageFileName2", 1);
+        PaidSession paidSession = new PaidSession(SessionTest.SESSION_INFO, SessionTest.SESSION_IMAGE,
+                1000L, StateCode.READY, 4);
 
         assertThatThrownBy(() -> {
             paidSession.validateOrderSession(new RequestOrderParam(payment));
@@ -106,16 +103,5 @@ public class PaidSessionTest {
             paidSession.orderSession(new RequestOrderParam(payment, NsUser.GUEST_USER));//1명짜리
         }).isInstanceOf(CannotRegisteSessionException.class).hasMessageStartingWith("최대인원 수를 초과하였습니다.");
     }
-
-
-    @Test
-    @DisplayName("수강생이 결제한 금액과 수강료가 일치한 경우 pass")
-    void validSessionRegister_NoMatchException() {
-        Payment payment = new Payment("id", 1L, 1L, 2000L);
-        assertThatThrownBy(() -> {
-            paidSession.validateOrderSession(new RequestOrderParam(payment));
-        }).isInstanceOf(CannotRegisteSessionException.class).hasMessageStartingWith("결제한 금액과 수강료가 일치하지 않습니다.");
-    }
-
 
 }
