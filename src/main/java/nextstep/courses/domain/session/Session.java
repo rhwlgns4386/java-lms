@@ -3,6 +3,7 @@ package nextstep.courses.domain.session;
 import nextstep.courses.domain.cover.CoverImage;
 import nextstep.courses.domain.cover.CoverImages;
 import nextstep.courses.domain.enrollment.Enrollment;
+import nextstep.courses.domain.enrollment.Student;
 import nextstep.courses.type.RecruitState;
 import nextstep.courses.type.SessionState;
 import nextstep.payments.domain.Payment;
@@ -36,14 +37,25 @@ public abstract class Session {
         this.sessionStatus = new SessionStatus(sessionState, recruitState);
         this.coverImage = coverImage;
         this.coverImages = coverImages;
-        this.enrollment = new Enrollment(maxEnrollment);
+        this.enrollment = new Enrollment(enrollment, maxEnrollment);
         this.sessionDuration = new SessionDuration(startDate, endDate);
     }
 
-    public final boolean apply(NsUser student, Payment payment) {
+    protected Session(Long id, CoverImage coverImage, CoverImages coverImages, int maxEnrollment,
+                      int enrollment, SessionState sessionState, RecruitState recruitState, LocalDateTime startDate,
+                      LocalDateTime endDate, List<Student> students) {
+        this.id = id;
+        this.sessionStatus = new SessionStatus(sessionState, recruitState);
+        this.coverImage = coverImage;
+        this.coverImages = coverImages;
+        this.enrollment = new Enrollment(enrollment, maxEnrollment, students);
+        this.sessionDuration = new SessionDuration(startDate, endDate);
+    }
+
+    public final boolean apply(Student user, Payment payment) {
         validateSessionState();
         if (isValidPayment(payment)) {
-            enrollment.apply(student);
+            enrollment.apply(user);
             return true;
         }
         throw new IllegalStateException("결제 내역(금액 등)과 강의 수강 조건이 일치하지 않습니다");
@@ -55,16 +67,14 @@ public abstract class Session {
         }
     }
 
-    public final boolean register(NsUser student) {
-        enrollment.register(student);
-        return true;
+    public final Student register(NsUser user) {
+        return enrollment.register(user);
     }
 
     protected abstract boolean isValidPayment(Payment payment);
 
-    public boolean reject(NsUser student) {
-        enrollment.reject(student);
-        return true;
+    public Student reject(NsUser student) {
+        return enrollment.reject(student);
     }
 
     public final boolean register(Payment payment) {

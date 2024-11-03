@@ -2,6 +2,7 @@ package nextstep.courses.infrastructure.session;
 
 import nextstep.courses.entity.CoverImageEntity;
 import nextstep.courses.entity.SessionEntity;
+import nextstep.courses.entity.StudentEntity;
 import nextstep.courses.infrastructure.cover.CoverImageRepository;
 import nextstep.courses.type.RecruitState;
 import nextstep.courses.type.SessionState;
@@ -64,7 +65,7 @@ public class JdbcSessionRepository implements SessionRepository {
                 + "values(?, ?, ?, ?, ?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        int result = jdbcTemplate.update(connection -> select(connection, sql, courseId, session), keyHolder);
+        int result = jdbcTemplate.update(connection -> insert(connection, sql, courseId, session), keyHolder);
 
         long sessionId = Optional.ofNullable(keyHolder.getKey())
                 .orElseThrow(() -> new IllegalStateException("강의 저장 실패"))
@@ -76,8 +77,8 @@ public class JdbcSessionRepository implements SessionRepository {
         return result;
     }
 
-    private PreparedStatement select(Connection connection, String sql,
-                                            Long courseId, SessionEntity sessionEntity) throws SQLException {
+    private PreparedStatement insert(Connection connection, String sql,
+                                     Long courseId, SessionEntity sessionEntity) throws SQLException {
             PreparedStatement ps = connection.prepareStatement(sql, new String[] {"id"});
             int i = 1;
             ps.setLong(i++, courseId);

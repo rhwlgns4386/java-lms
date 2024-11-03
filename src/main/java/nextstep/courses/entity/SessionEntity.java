@@ -29,6 +29,7 @@ public class SessionEntity {
     private final long sessionFee;
     private final LocalDateTime startDate;
     private final LocalDateTime endDate;
+    private final List<StudentEntity> studentEntities = new ArrayList<>();
 
     public SessionEntity(Long id, String coverFilePath, SessionState sessionState, RecruitState recruitState,
                          int enrollment, int maxEnrollment, long sessionFee, Timestamp startDate, Timestamp endDate) {
@@ -39,7 +40,8 @@ public class SessionEntity {
     public SessionEntity(String coverFilePath, List<String> coverFilePaths, SessionState sessionState,
                          RecruitState recruitState, int enrollment, int maxEnrollment, long sessionFee,
                          LocalDateTime startDate, LocalDateTime endDate) {
-        this(null, coverFilePath, coverFilePaths, sessionState, recruitState, enrollment, maxEnrollment, sessionFee, startDate, endDate);
+        this(null, coverFilePath, coverFilePaths, sessionState, recruitState, enrollment, maxEnrollment,
+                sessionFee, startDate, endDate);
     }
 
     public SessionEntity(Long id, String coverFilePath, List<String> coverFilePaths, SessionState sessionState,
@@ -82,6 +84,7 @@ public class SessionEntity {
                 .coverImages(coverImageEntities.stream().map(CoverImageEntity::toDomain).collect(Collectors.toList()))
                 .enrollment(enrollment)
                 .maxEnrollment(maxEnrollment)
+                .students(studentEntities.stream().map(StudentEntity::toDomain).collect(Collectors.toList()))
                 .startDate(startDate)
                 .endDate(endDate);
 
@@ -97,6 +100,10 @@ public class SessionEntity {
 
     public final boolean isPersisted() {
         return id != null && !id.equals((long) NOT_ASSIGNED);
+    }
+
+    public void addStudentEntities(List<StudentEntity> studentEntities) {
+        this.studentEntities.addAll(studentEntities);
     }
 
     @Override

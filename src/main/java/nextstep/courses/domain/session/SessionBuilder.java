@@ -2,6 +2,7 @@ package nextstep.courses.domain.session;
 
 import nextstep.courses.domain.cover.CoverImage;
 import nextstep.courses.domain.cover.CoverImages;
+import nextstep.courses.domain.enrollment.Student;
 import nextstep.courses.type.RecruitState;
 import nextstep.courses.type.SessionState;
 import nextstep.courses.type.SessionType;
@@ -28,9 +29,10 @@ public class SessionBuilder {
     private RecruitState recruitState = RecruitState.NOT_RECRUIT;
     private SessionType sessionType;
     private CoverImage coverImage;
-    private Set<CoverImage> coverImages = new HashSet<>();
+    private final Set<CoverImage> coverImages = new HashSet<>();
     private LocalDateTime startDate;
     private LocalDateTime endDate;
+    private List<Student> students = new ArrayList<>();
 
     private SessionBuilder() {
     }
@@ -120,6 +122,11 @@ public class SessionBuilder {
         return this;
     }
 
+    public SessionBuilder students(List<Student> students) {
+        this.students = students;
+        return this;
+    }
+
     public Session build() {
         if (coverImages.isEmpty()) {
             throw new IllegalArgumentException("강의 커버가 입력되지 않았습니다");
@@ -129,13 +136,13 @@ public class SessionBuilder {
         validateEmpty(sessionType, "강의 타입이 입력되지 않았습니다");
 
         if (sessionType == SessionType.FREE) {
-            return new FreeSession(getId(), getCoverImage(), toCoverImages(), sessionState,
-                    recruitState, enrollment, startDate, endDate);
+            return new FreeSession(getId(), getCoverImage(), toCoverImages(), sessionState, recruitState,
+                    enrollment, startDate, endDate, students);
         }
         validateValueAssignment(maxEnrollment, "유료 강의는 수강 인원이 필수 값입니다");
         validateValueAssignment(sessionFee, "유료 강의는 수강료가 필수 값입니다");
         return new PaidSession(getId(), getCoverImage(), toCoverImages(), sessionState, recruitState,
-                maxEnrollment, enrollment, sessionFee, startDate, endDate);
+                maxEnrollment, enrollment, sessionFee, startDate, endDate, students);
     }
 
     private Long getId() {

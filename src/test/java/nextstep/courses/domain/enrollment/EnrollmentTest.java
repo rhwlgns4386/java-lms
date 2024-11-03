@@ -1,5 +1,6 @@
 package nextstep.courses.domain.enrollment;
 
+import nextstep.courses.entity.StudentEntity;
 import nextstep.users.domain.NsUser;
 import org.junit.jupiter.api.Test;
 
@@ -15,11 +16,12 @@ public class EnrollmentTest {
 
     @Test
     void throw_exception_if_apply_duplicate_student() {
-        Enrollment enrollment = new Enrollment(Enrollment.INFINITE_ENROLLMENT);
-        enrollment.apply(getNsUser(1L, String.valueOf(1)));
+        Student student = new Student(getNsUser(1L, String.valueOf(1)));
+        Enrollment enrollment = new Enrollment(Enrollment.INFINITE_ENROLLMENT,
+                List.of(student));
 
         assertThatIllegalArgumentException().isThrownBy(() ->
-                enrollment.apply(getNsUser(1L, String.valueOf(1))));
+                enrollment.apply(student));
     }
 
     private NsUser getNsUser(Long id, String userId) {
@@ -33,16 +35,16 @@ public class EnrollmentTest {
 
         assertThat(enrollment.getEnrollment()).isEqualTo(5);
         assertThatIllegalStateException()
-                .isThrownBy(() -> enrollment.apply(getNsUser(10L, "10")));
+                .isThrownBy(() -> enrollment.apply(new Student(getNsUser(10L, "10"))));
     }
 
     private void registerStudent(int endExclusive, Enrollment enrollment) {
-        List<NsUser> students = LongStream.range(0, endExclusive)
-                .mapToObj(i -> getNsUser(i, String.valueOf(i)))
+        List<Student> students = LongStream.range(0, endExclusive)
+                .mapToObj(i -> new Student(getNsUser(i, String.valueOf(i))))
                 .collect(Collectors.toList());
 
         students.forEach(enrollment::apply);
-        students.forEach(enrollment::register);
+        students.forEach(student -> enrollment.register(student.getStudent()));
     }
 
     @Test

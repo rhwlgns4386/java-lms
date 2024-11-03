@@ -1,12 +1,15 @@
 package nextstep.courses.domain.enrollment;
 
+import lombok.Getter;
 import nextstep.courses.type.EnrollmentState;
 import nextstep.users.domain.NsUser;
 
 import java.util.Objects;
 
+@Getter
 public class Student {
 
+    private Long id;
     private final NsUser student;
     private EnrollmentState enrollmentState;
 
@@ -15,6 +18,11 @@ public class Student {
     }
 
     public Student(NsUser student, EnrollmentState enrollmentState) {
+        this(null, student, enrollmentState);
+    }
+
+    public Student(Long id, NsUser student, EnrollmentState enrollmentState) {
+        this.id = id;
         this.student = student;
         this.enrollmentState = enrollmentState;
     }

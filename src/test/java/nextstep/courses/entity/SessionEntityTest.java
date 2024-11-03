@@ -1,8 +1,10 @@
 package nextstep.courses.entity;
 
+import nextstep.courses.domain.enrollment.Student;
 import nextstep.courses.domain.session.Session;
 import nextstep.courses.type.RecruitState;
 import nextstep.courses.type.SessionState;
+import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -16,10 +18,13 @@ public class SessionEntityTest {
     @Test
     void to_domain() {
         SessionEntity entity = getSaveEntity();
+        Student student = new Student(NsUserTest.JAVAJIGI);
+        entity.addStudentEntities(List.of(StudentEntity.from(student)));
         Session session = entity.toDomain();
 
         assertThat(session.getCoverFilePaths())
                 .containsExactly(new File("src/test/java/nextstep/courses/domain/session/file/image.png").getAbsolutePath());
+
     }
 
     public static SessionEntity getSaveEntity() {
