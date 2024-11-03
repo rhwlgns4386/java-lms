@@ -7,7 +7,6 @@ import nextstep.courses.domain.student.StudentRepository;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
 import nextstep.users.domain.NsUserTest;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,8 +15,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -66,16 +69,27 @@ public class SessionServiceTest {
     void registerTest() {
         Long sessionId = 2L;
         NsUser nsUser = NsUserTest.JAVAJIGI;
-        Payment payment = new Payment("1234", sessionId, nsUser.getId(), 200_000L);
+        Long amount = 200_000L;
+        Payment payment = new Payment("1234", sessionId, nsUser.getId(), amount);
         PaidSession paidSession = new PaidSession(sessionId, title, image, sessionDate, sessionCapacity, fee);
+
+        Student student = new Student(amount, nsUser.getId());
+        Student student2 = new Student(amount, NsUserTest.SANJIGI.getId());
+
+        when(sessionRepository.findById(anyLong())).thenReturn(paidSession);
+        when(imageRepository.findBySessionId(anyLong())).thenReturn(image);
+        when(studentRepository.findAllBySessionId(anyLong())).thenReturn(new ArrayList<>(List.of(student2)));
+        when(studentRepository.saveAll(anyList(), anyLong())).thenReturn(new int[]{1});
 
         paidSession.open();
 
-        when(sessionRepository.findById(sessionId)).thenReturn(paidSession);
 
-        Session registerSession = sessionService.register(sessionId, nsUser, payment);
+        PaidSession registerSession = (PaidSession) sessionService.register(sessionId, nsUser, payment);
 
-        verify(studentRepository).saveAll(registerSession.getStudents(), sessionId);
+
+        assertThat(registerSession.getId()).isEqualTo(paidSession.getId());
+        assertThat(registerSession.getStudents()).hasSameElementsAs(List.of(student, student2));
+        assertThat(registerSession.getFee().getPrice()).isEqualTo(amount);
     }
 
     @Test
@@ -95,9 +109,9 @@ public class SessionServiceTest {
 
         Session foundSession = sessionService.findById(sessionId);
 
-        Assertions.assertThat(foundSession.getStudents()).hasSameElementsAs(Arrays.asList(student, student2));
-        Assertions.assertThat(foundSession.getId()).isEqualTo(sessionId);
-        Assertions.assertThat(foundSession.getImage()).isEqualTo(image);
-        Assertions.assertThat(foundSession.getSessionType()).isEqualTo(SessionType.PAID);
+        assertThat(foundSession.getStudents()).hasSameElementsAs(Arrays.asList(student, student2));
+        assertThat(foundSession.getId()).isEqualTo(sessionId);
+        assertThat(foundSession.getImage()).isEqualTo(image);
+        assertThat(foundSession.getSessionType()).isEqualTo(SessionType.PAID);
     }
 }
