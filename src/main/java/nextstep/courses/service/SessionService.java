@@ -63,7 +63,7 @@ public class SessionService {
 
     @Transactional
     public Session register(Long sessionId, NsUser nsUser, Payment payment) {
-        Session session = sessionRepository.findById(sessionId);
+        Session session = findById(sessionId);
 
         Registration registration = Registration.of(sessionId, nsUser, payment);
 
