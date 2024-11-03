@@ -92,3 +92,10 @@ CREATE TABLE course_session
     session_id BIGINT NOT NULL,
     PRIMARY KEY (course_id, session_id)
 );
+
+CREATE TABLE session_cover_images
+(
+    session_id     BIGINT NOT NULL,
+    cover_image_id BIGINT NOT NULL,
+    PRIMARY KEY (session_id, cover_image_id)
+);

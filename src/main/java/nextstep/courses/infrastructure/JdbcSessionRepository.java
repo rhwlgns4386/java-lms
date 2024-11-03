@@ -35,6 +35,7 @@ public class JdbcSessionRepository implements SessionRepository {
     public Long saveFreeSession(FreeSession session) {
         Long sessionId = saveSession(session);
         saveRegistrations(sessionId, session.getRegisteredStudentIds());
+        saveCoverImages(sessionId, session.getCoverImages());
         return sessionId;
     }
 
@@ -43,6 +44,7 @@ public class JdbcSessionRepository implements SessionRepository {
     public Long savePaidSession(PaidSession session) {
         Long sessionId = saveSession(session);
         saveRegistrations(sessionId, session.getRegisteredStudentIds());
+        saveCoverImages(sessionId, session.getCoverImages());
         return sessionId;
     }
 
@@ -67,6 +69,19 @@ public class JdbcSessionRepository implements SessionRepository {
         sessionRegistrationRepository.saveRegistrations(sessionId, userIds);
     }
 
+    private void saveCoverImages(Long sessionId, List<CoverImage> images) {
+        if (images.isEmpty()) {
+            return;
+        }
+
+        for (CoverImage image : images) {
+            jdbcTemplate.update(
+                    "INSERT INTO session_cover_images (session_id, cover_image_id) VALUES (?, ?)",
+                    sessionId, image.getId()
+            );
+        }
+    }
+
     @Override
     @Transactional(readOnly = true)
     public DefaultSession findById(Long id) {
@@ -77,16 +92,17 @@ public class JdbcSessionRepository implements SessionRepository {
                 String sessionType = rs.getString("session_type");
                 Status status = Status.from(rs.getString("status"));
                 Period period = new Period(rs.getDate("start_date").toLocalDate(), rs.getDate("end_date").toLocalDate());
-                CoverImage coverImage = coverImageRepository.findById(rs.getLong("cover_image_id"));
+                List<CoverImage> images = coverImageRepository.findBySessionId(id);
+
                 List<Long> registeredUserIds = sessionRegistrationRepository.findRegisteredUserIds(id);
                 Capacity capacity = createCapacity(rs, registeredUserIds);
 
                 if (SessionType.PAID.getCode().equals(sessionType)) {
                     Money courseFee = new Money(rs.getLong("course_fee"));
-                    return new PaidSession(id, status, period, coverImage, courseFee, capacity);
+                    return new PaidSession(id, status, period, images, courseFee, capacity);
                 }
 
-                return new FreeSession(id, status, period, coverImage, capacity);
+                return new FreeSession(id, status, period, images, capacity);
             }, id);
 
         } catch (EmptyResultDataAccessException e) {

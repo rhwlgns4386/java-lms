@@ -3,6 +3,7 @@ package nextstep.courses.infrastructure;
 import nextstep.courses.domain.cover.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
@@ -33,6 +34,7 @@ class CoverImageRepositoryTest {
         coverImage = new CoverImage(file, type, size);
     }
 
+    @DisplayName("커버 이미지를 저장할 수 있다.")
     @Test
     void save() {
         Long seq = coverImageRepository.save(coverImage);
@@ -40,6 +42,7 @@ class CoverImageRepositoryTest {
         assertThat(seq).isNotNull();
     }
 
+    @DisplayName("커버 이미지 SEQ로 조회할 수 있다.")
     @Test
     void findBy() {
         Long seq = coverImageRepository.save(coverImage);
@@ -51,6 +54,7 @@ class CoverImageRepositoryTest {
                 .containsExactly(file.getSize(), type, size.getWidth(), size.getHeight());
     }
 
+    @DisplayName("커버 이미지를 조회하지 못할 경우 예외로 처리한다.")
     @Test
     void findByNonExistentSessionId() {
         assertThatThrownBy(() -> coverImageRepository.findById(999L))

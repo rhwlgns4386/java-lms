@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.util.List;
 import java.util.Objects;
 
 @Repository("coverImageRepository")
@@ -50,5 +51,22 @@ public class JdbcCoverImageRepository implements CoverImageRepository {
                     new CoverImageSize(rs.getInt("width"), rs.getInt("height"))
             );
         }, id);
+    }
+
+    @Override
+    public List<CoverImage> findBySessionId(Long sessionId) {
+        String sql = "SELECT ci.* FROM cover_image ci " +
+                "JOIN session_cover_images sci ON ci.id = sci.cover_image_id " +
+                "WHERE sci.session_id = ?";
+
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
+            String imageType = rs.getString("image_type");
+            return new CoverImage(
+                    rs.getLong("id"),
+                    new CoverImageFile(rs.getInt("file_size")),
+                    CoverImageType.getCoverImageType(imageType),
+                    new CoverImageSize(rs.getInt("width"), rs.getInt("height"))
+            );
+        }, sessionId);
     }
 }

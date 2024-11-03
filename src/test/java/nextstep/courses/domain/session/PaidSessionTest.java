@@ -15,6 +15,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 class PaidSessionTest {
 
@@ -88,6 +89,33 @@ class PaidSessionTest {
 
         assertThatThrownBy(() -> paidCourse.register(NsUserTest.GREEN, null))
                 .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @DisplayName("여러 개의 커버 이미지를 가진 세션을 생성할 수 있다")
+    @Test
+    void createWithMultipleImages() {
+        // given
+        Money courseFee = new Money(10000);
+        Capacity capacity = new Capacity(10);
+
+        CoverImage secondImage = new CoverImage(
+                2L,
+                new CoverImageFile(1024 * 100),
+                CoverImageType.JPG,
+                new CoverImageSize(300, 200)
+        );
+        List<CoverImage> images = List.of(coverImage, secondImage);
+
+        // when
+        PaidSession session = new PaidSession(Status.OPEN, period, images, courseFee, capacity);
+
+        // then
+        assertAll(
+                () -> assertThat(session.getCoverImages()).hasSize(2),
+                () -> assertThat(session.getCoverImage()).isEqualTo(coverImage),
+                () -> assertThat(session.getCoverImages())
+                        .containsExactly(coverImage, secondImage)
+        );
     }
 
 }

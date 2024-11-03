@@ -18,8 +18,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.tuple;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @JdbcTest
 class SessionRepositoryTest {
@@ -96,6 +99,52 @@ class SessionRepositoryTest {
         assertThat(foundPaidSession)
                 .extracting("status", "period.startDate", "period.endDate", "courseFee", "capacity.maxStudents")
                 .containsExactly(Status.OPEN, period.getStartDate(), period.getEndDate(), 50000L, 20);
+    }
+
+    @DisplayName("세션의 모든 커버 이미지를 조회할 수 있다")
+    @Test
+    void findSessionWithMultipleImages() {
+        // given
+        long secondImageId = 2L;
+        CoverImage secondImage = new CoverImage(
+                secondImageId,
+                new CoverImageFile(1024 * 100),
+                CoverImageType.JPG,
+                new CoverImageSize(300, 200)
+        );
+        jdbcTemplate.update(
+                "INSERT INTO cover_image (id, file_size, image_type, width, height, created_at) VALUES (?, ?, ?, ?, ?, ?)",
+                secondImageId,
+                secondImage.getFileSize(),
+                secondImage.getTypeName(),
+                secondImage.getImageWidth(),
+                secondImage.getImageHeight(),
+                LocalDateTime.now()
+        );
+
+        PaidSession paidSession = new PaidSession(
+                Status.OPEN,
+                period,
+                List.of(coverImage, secondImage),
+                new Money(50000L),
+                new Capacity(20)
+        );
+        Long savedId = sessionRepository.savePaidSession(paidSession);
+
+        // when
+        DefaultSession foundSession = sessionRepository.findById(savedId);
+
+        // then
+        assertAll(
+                () -> assertThat(foundSession).isInstanceOf(PaidSession.class),
+                () -> assertThat(foundSession.getCoverImages()).hasSize(2),
+                () -> assertThat(foundSession.getCoverImages())
+                        .extracting("file.size", "type", "imageSize.width", "imageSize.height")
+                        .containsExactly(
+                                tuple(coverImage.getFileSize(), CoverImageType.JPG, 600, 400),
+                                tuple(1024 * 100, CoverImageType.JPG, 300, 200)
+                        )
+        );
     }
 
     @AfterEach

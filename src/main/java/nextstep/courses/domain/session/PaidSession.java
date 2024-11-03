@@ -4,6 +4,8 @@ import nextstep.courses.domain.cover.CoverImage;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
 
+import java.util.List;
+
 public class PaidSession extends DefaultSession {
 
     public PaidSession(Status status, Period period, CoverImage coverImage, Money courseFee, Capacity capacity) {
@@ -12,6 +14,14 @@ public class PaidSession extends DefaultSession {
 
     public PaidSession(Long id, Status status, Period period, CoverImage coverImage, Money courseFee, Capacity capacity) {
         super(id, status, period, coverImage, courseFee, capacity);
+    }
+
+    public PaidSession(Status status, Period period, List<CoverImage> coverImages, Money courseFee, Capacity capacity) {
+        this(0L, status, period, coverImages, courseFee, capacity);
+    }
+
+    public PaidSession(Long id, Status status, Period period, List<CoverImage> coverImages, Money courseFee, Capacity capacity) {
+        super(id, status, period, coverImages, courseFee, capacity);
     }
 
     @Override

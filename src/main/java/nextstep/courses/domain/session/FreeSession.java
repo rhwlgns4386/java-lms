@@ -4,6 +4,8 @@ import nextstep.courses.domain.cover.CoverImage;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
 
+import java.util.List;
+
 public class FreeSession extends DefaultSession {
 
     public FreeSession(Status status, Period period, CoverImage coverImage) {
@@ -16,6 +18,14 @@ public class FreeSession extends DefaultSession {
 
     private FreeSession(Long id, Status status, Period period, CoverImage coverImage, Money courseFee, Capacity capacity) {
         super(id, status, period, coverImage, courseFee, capacity);
+    }
+
+    public FreeSession(Long id, Status status, Period period, List<CoverImage> coverImages, Capacity capacity) {
+        this(id, status, period, coverImages, new Money(0), capacity);
+    }
+
+    private FreeSession(Long id, Status status, Period period, List<CoverImage> coverImages, Money courseFee, Capacity capacity) {
+        super(id, status, period, coverImages, courseFee, capacity);
     }
 
     @Override
