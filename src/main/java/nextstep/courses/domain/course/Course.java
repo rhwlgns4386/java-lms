@@ -33,18 +33,6 @@ public class Course {
         sessions.add(session);
     }
 
-    public boolean has(Session session) {
-        return sessions.contains(session);
-    }
-
-    public Session registerSession(Payment payment) {
-        return sessions.stream()
-                .filter(session -> session.isSameId(payment))
-                .peek(session -> session.register(payment))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("결제 정보에 대한 강의를 찾을 수 없습니다"));
-    }
-
     public Long getId() {
         return id;
     }
