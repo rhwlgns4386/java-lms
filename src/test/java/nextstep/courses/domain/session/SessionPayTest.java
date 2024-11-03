@@ -1,7 +1,7 @@
 package nextstep.courses.domain.session;
 
+import nextstep.courses.SessionPayException;
 import nextstep.payments.domain.Payment;
-import nextstep.qna.SessionPayException;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -14,7 +14,7 @@ public class SessionPayTest {
         Payment payment = new Payment("1", 1L, 1L, 3000L);
 
         assertThatThrownBy(
-                ()->sessionPay.validatePay(payment)
+                () -> sessionPay.validatePay(payment)
         ).isInstanceOf(SessionPayException.class);
 
     }

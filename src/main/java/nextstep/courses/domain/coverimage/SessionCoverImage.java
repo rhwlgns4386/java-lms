@@ -1,30 +1,43 @@
 package nextstep.courses.domain.coverimage;
 
-import nextstep.qna.CoverImageException;
+import nextstep.courses.CoverImageException;
 
 public class SessionCoverImage {
     private static final long MAX_STORAGE_CAPACITY = 1 * 1024 * 1024;
 
     private Long id;
     private Long sessionId;
+    private SessionCoverImageSize sessionCoverImageSize;
+    private SessionCoverImagePath sessionCoverImagePath;
 
-    public SessionCoverImage(long storageCapacity, SessionCoverImagePath imagePath, SessionCoverImageSize imageSize) {
-        validate(storageCapacity);
-        mapping(imagePath, imageSize);
+    public SessionCoverImage(Long id, Long sessionId, SessionCoverImagePath imagePath, SessionCoverImageSize imageSize) {
+        this.id = id;
+        this.sessionId = sessionId;
+        this.sessionCoverImagePath = imagePath;
+        this.sessionCoverImageSize = imageSize;
     }
 
-    private void validate(long storageCapacity) {
+    public static SessionCoverImage create(Long sessionId, Long storageCapacity, SessionCoverImagePath imagePath, SessionCoverImageSize imageSize) {
+        validate(storageCapacity);
+        return new SessionCoverImage(0L, sessionId, imagePath, imageSize);
+    }
+
+
+    private static void validate(long storageCapacity) {
         if (storageCapacity > MAX_STORAGE_CAPACITY) {
             throw new CoverImageException("1MB 용량을 초과했습니다.");
         }
     }
 
-    private void mapping(SessionCoverImagePath imagePath, SessionCoverImageSize imageSize) {
-        imagePath.mapping(this);
-        imageSize.mapping(this);
+    public Long getSessionId() {
+        return sessionId;
     }
 
-    public void save(Long sessionId) {
-        this.sessionId = sessionId;
+    public SessionCoverImagePath getSessionCoverImagePath() {
+        return sessionCoverImagePath;
+    }
+
+    public SessionCoverImageSize getSessionCoverImageSize() {
+        return sessionCoverImageSize;
     }
 }

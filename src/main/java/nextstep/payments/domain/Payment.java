@@ -30,4 +30,24 @@ public class Payment {
     public boolean isEqualsAmount(Long sessionPay) {
         return this.amount.equals(sessionPay);
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public Long getSessionId() {
+        return sessionId;
+    }
+
+    public Long getNsUserId() {
+        return nsUserId;
+    }
+
+    public Long getAmount() {
+        return amount;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
 }
