@@ -1,8 +1,10 @@
 package nextstep.courses.service;
 
 import nextstep.courses.entity.SessionEntity;
+import nextstep.courses.entity.SessionEntityTest;
 import nextstep.courses.infrastructure.course.CourseRepository;
 import nextstep.courses.infrastructure.course.JdbcCourseRepository;
+import nextstep.courses.infrastructure.cover.JdbcCoverImageRepository;
 import nextstep.courses.infrastructure.session.JdbcSessionRepository;
 import nextstep.courses.infrastructure.session.SessionRepository;
 import nextstep.payments.domain.Payment;
@@ -26,7 +28,7 @@ public class CourseServiceTest {
 
     @BeforeEach
     void init() {
-        sessionRepository = new JdbcSessionRepository(jdbcOperations);
+        sessionRepository = new JdbcSessionRepository(jdbcOperations, new JdbcCoverImageRepository(jdbcOperations));
         CourseRepository courseRepository = new JdbcCourseRepository(jdbcOperations, sessionRepository);
         courseService = new CourseService(courseRepository, sessionRepository);
     }

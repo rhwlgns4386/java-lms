@@ -1,10 +1,14 @@
 package nextstep.courses.domain.session;
 
+import nextstep.courses.domain.cover.CoverImage;
+import nextstep.courses.domain.cover.CoverImages;
 import nextstep.courses.type.RecruitState;
 import nextstep.courses.type.SessionState;
 import nextstep.payments.domain.Payment;
 
+import java.io.File;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 public abstract class Session {
@@ -14,6 +18,7 @@ public abstract class Session {
 
     protected final Long id;
     private CoverImage coverImage;
+    private CoverImages coverImages;
     private SessionStatus sessionStatus;
     protected final Enrollment enrollment;
     protected final SessionDuration sessionDuration;
@@ -50,6 +55,7 @@ public abstract class Session {
         this.id = id;
         this.sessionStatus = new SessionStatus(sessionState, recruitState);
         this.coverImage = coverImage;
+        this.coverImages = CoverImages.of(coverImage);
         this.enrollment = new Enrollment(enrollment, maxEnrollment);
         this.sessionDuration = new SessionDuration(startDate, endDate);
     }
@@ -76,6 +82,18 @@ public abstract class Session {
         return payment.isSameSessionId(id);
     }
 
+    public final void addCoverImage(String coverFilePath) {
+        coverImages.add(coverFilePath);
+    }
+
+    public final void addCoverImage(File coverFile) {
+        coverImages.add(coverFile);
+    }
+
+    public final void addCoverImage(CoverImage coverImage) {
+        coverImages.add(coverImage);
+    }
+
     public abstract long getSessionFee();
 
     public final Long getId() {
@@ -92,6 +110,10 @@ public abstract class Session {
 
     public final String getCoverFilePath() {
         return coverImage.getFilePath();
+    }
+
+    public final List<String> getCoverFilePaths() {
+        return coverImages.coverImagePaths();
     }
 
     public final int getEnrollment() {

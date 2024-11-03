@@ -1,11 +1,15 @@
 package nextstep.courses.domain.session;
 
+import nextstep.courses.domain.cover.CoverImage;
+import nextstep.courses.domain.cover.CoverImages;
 import nextstep.courses.type.RecruitState;
 import nextstep.courses.type.SessionState;
 import nextstep.courses.type.SessionType;
 
 import java.io.File;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static nextstep.courses.domain.session.Session.NOT_ASSIGNED;
@@ -20,6 +24,7 @@ public class SessionBuilder {
     private RecruitState recruitState = RecruitState.NOT_RECRUIT;
     private SessionType sessionType;
     private CoverImage coverImage;
+    private CoverImages coverImages;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
 
@@ -65,14 +70,34 @@ public class SessionBuilder {
         return this;
     }
 
+    public SessionBuilder coverImages(CoverImages coverImages) {
+        this.coverImages = coverImages;
+        return this;
+    }
+
+    public SessionBuilder coverImages(List<CoverImage> coverImages) {
+        this.coverImages = new CoverImages(coverImages);
+        return this;
+    }
+
     public SessionBuilder coverImage(String coverImagePath) {
         this.coverImage = CoverImage.of(coverImagePath);
+        setCoverImages(coverImage);
         return this;
     }
 
     public SessionBuilder coverImage(File coverImageFile) {
         this.coverImage = CoverImage.of(coverImageFile);
+        setCoverImages(coverImage);
         return this;
+    }
+
+    private void setCoverImages(CoverImage coverImage) {
+        if (coverImages == null) {
+            coverImages = CoverImages.of(coverImage);
+            return;
+        }
+        coverImages.add(coverImage);
     }
 
     public SessionBuilder startDate(LocalDateTime startDate) {

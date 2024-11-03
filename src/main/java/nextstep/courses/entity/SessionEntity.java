@@ -6,19 +6,22 @@ import nextstep.courses.domain.session.SessionBuilder;
 import nextstep.courses.type.RecruitState;
 import nextstep.courses.type.SessionState;
 import nextstep.courses.type.SessionType;
-import org.springframework.jdbc.support.KeyHolder;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static nextstep.courses.domain.session.Session.NOT_ASSIGNED;
 
 @Getter
 public class SessionEntity {
 
-    private Long id;
+    private final Long id;
     private final String coverFilePath;
+    private List<CoverImageEntity> coverImageEntities;
     private final SessionState sessionState;
     private final RecruitState recruitState;
     private final int enrollment;
@@ -27,19 +30,38 @@ public class SessionEntity {
     private final LocalDateTime startDate;
     private final LocalDateTime endDate;
 
+    public SessionEntity(Long id, String coverFilePath, List<String> coverFilePaths, SessionState sessionState,
+                         RecruitState recruitState, int enrollment, int maxEnrollment,
+                         long sessionFee, Timestamp startDate, Timestamp endDate) {
+        this(id, coverFilePath, coverFilePaths, sessionState, recruitState, enrollment, maxEnrollment,
+                sessionFee, toLocalDateTime(startDate), toLocalDateTime(endDate));
+    }
+
     public SessionEntity(Long id, String coverFilePath, SessionState sessionState, RecruitState recruitState,
                          int enrollment, int maxEnrollment, long sessionFee, Timestamp startDate, Timestamp endDate) {
-        this(id, coverFilePath, sessionState, recruitState, enrollment, maxEnrollment,
+        this(id, coverFilePath, null, sessionState, recruitState, enrollment, maxEnrollment,
                 sessionFee, toLocalDateTime(startDate), toLocalDateTime(endDate));
+    }
+
+    public SessionEntity(String coverFilePath, List<String> coverFilePaths, SessionState sessionState,
+                         RecruitState recruitState, int enrollment, int maxEnrollment, long sessionFee,
+                         LocalDateTime startDate, LocalDateTime endDate) {
+        this(null, coverFilePath, coverFilePaths, sessionState, recruitState, enrollment, maxEnrollment, sessionFee, startDate, endDate);
     }
 
     public SessionEntity(String coverFilePath, SessionState sessionState, RecruitState recruitState, int enrollment,
                          int maxEnrollment, long sessionFee, LocalDateTime startDate, LocalDateTime endDate) {
-        this(null, coverFilePath, sessionState, recruitState, enrollment, maxEnrollment, sessionFee, startDate, endDate);
+        this(null, coverFilePath, null, sessionState, recruitState, enrollment, maxEnrollment, sessionFee, startDate, endDate);
     }
 
     public SessionEntity(Long id, String coverFilePath, SessionState sessionState, RecruitState recruitState,
-                         int enrollment, int maxEnrollment, long sessionFee,
+                         int enrollment, int maxEnrollment, long sessionFee, LocalDateTime startDate, LocalDateTime endDate) {
+        this(id, coverFilePath, null, sessionState, recruitState, enrollment, maxEnrollment, sessionFee,
+                startDate, endDate);
+    }
+
+    public SessionEntity(Long id, String coverFilePath, List<String> coverFilePaths, SessionState sessionState,
+                         RecruitState recruitState, int enrollment, int maxEnrollment, long sessionFee,
                          LocalDateTime startDate, LocalDateTime endDate) {
         this.id = id;
         this.coverFilePath = coverFilePath;
@@ -50,6 +72,10 @@ public class SessionEntity {
         this.sessionFee = sessionFee;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.coverImageEntities = Optional.ofNullable(coverFilePaths).orElse(new ArrayList<>())
+                .stream()
+                .map(CoverImageEntity::new)
+                .collect(Collectors.toList());
     }
 
     private static LocalDateTime toLocalDateTime(Timestamp timestamp) {
@@ -59,12 +85,19 @@ public class SessionEntity {
         return timestamp.toLocalDateTime();
     }
 
+    public static SessionEntity from(Session session) {
+        return new SessionEntity(session.getId(), session.getCoverFilePath(), session.getCoverFilePaths(),
+                session.getSessionState(), session.getRecruitState(), session.getEnrollment(), session.getMaxEnrollment(),
+                session.getSessionFee(), session.getStartDate(), session.getEndDate());
+    }
+
     public Session toDomain() {
         SessionBuilder sessionBuilder = SessionBuilder.builder()
                 .id(id)
                 .sessionState(sessionState)
                 .recruitState(recruitState)
                 .coverImage(coverFilePath)
+                .coverImages(coverImageEntities.stream().map(CoverImageEntity::toDomain).collect(Collectors.toList()))
                 .enrollment(enrollment)
                 .maxEnrollment(maxEnrollment)
                 .startDate(startDate)
@@ -76,10 +109,8 @@ public class SessionEntity {
         return sessionBuilder.sessionType(SessionType.PAID).sessionFee(sessionFee).build();
     }
 
-    public static SessionEntity from(Session session) {
-        return new SessionEntity(session.getId(), session.getCoverFilePath(), session.getSessionState(),
-                session.getRecruitState(), session.getEnrollment(), session.getMaxEnrollment(),
-                session.getSessionFee(), session.getStartDate(), session.getEndDate());
+    public void addCover(List<String> coverFilePaths) {
+        this.coverImageEntities = coverFilePaths.stream().map(CoverImageEntity::new).collect(Collectors.toList());
     }
 
     public final boolean isPersisted() {

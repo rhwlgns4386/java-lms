@@ -12,5 +12,8 @@ INSERT INTO question (id, writer_id, title, contents, created_at, deleted) VALUE
 
 INSERT INTO course (creator_id, title, created_at) VALUES ('1', '테스트기수', CURRENT_TIMESTAMP());
 
-INSERT INTO session (course_id, session_state, cover_file_path, session_fee, enrollment, max_enrollment, start_date, end_date) VALUES (1, 'PROGRESS', '/Users/byungilsohn/Documents/programming/nextstep/java-lms/src/test/java/nextstep/courses/domain/session/file/image.png', 0, 0, -1, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
-INSERT INTO session (course_id, session_state, recruit_state, cover_file_path, session_fee, enrollment, max_enrollment, start_date, end_date) VALUES (1, 'PREPARING', 'RECRUIT', '/Users/byungilsohn/Documents/programming/nextstep/java-lms/src/test/java/nextstep/courses/domain/session/file/image.png', 10000, 0, 30, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+INSERT INTO session (course_id, session_state, cover_file_path, session_fee, enrollment, max_enrollment, start_date, end_date) VALUES (1, 'PROGRESS', 'src/test/java/nextstep/courses/domain/session/file/image.png', 0, 0, -1, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+INSERT INTO session (course_id, session_state, recruit_state, cover_file_path, session_fee, enrollment, max_enrollment, start_date, end_date) VALUES (1, 'PREPARING', 'RECRUIT', 'src/test/java/nextstep/courses/domain/session/file/image.png', 10000, 0, 30, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+
+INSERT INTO cover_file (file_path, session_id) values('src/test/java/nextstep/courses/domain/session/file/image.png', 1);
+INSERT INTO cover_file (file_path, session_id) values('src/test/java/nextstep/courses/domain/session/file/image.png', 2);

@@ -1,6 +1,7 @@
 package nextstep.courses.infrastructure.course;
 
 import nextstep.courses.entity.CourseEntity;
+import nextstep.courses.infrastructure.cover.JdbcCoverImageRepository;
 import nextstep.courses.infrastructure.session.JdbcSessionRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,7 +26,8 @@ public class CourseRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        courseRepository = new JdbcCourseRepository(jdbcTemplate, new JdbcSessionRepository(jdbcTemplate));
+        courseRepository = new JdbcCourseRepository(jdbcTemplate,
+                new JdbcSessionRepository(jdbcTemplate, new JdbcCoverImageRepository(jdbcTemplate)));
     }
 
     @Test
