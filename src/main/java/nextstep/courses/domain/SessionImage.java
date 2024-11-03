@@ -1,7 +1,5 @@
 package nextstep.courses.domain;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class SessionImage {
@@ -11,7 +9,7 @@ public class SessionImage {
     private static final int RATIO_WIDTH = 3;
     private static final int RATIO_HEIGHT = 2;
 
-    private static List<String> list = new ArrayList<>(Arrays.asList("gif", "jpg", "jpeg", "png", "svg"));
+    private static final List<String> FILE_EXTENSIONS = List.of("gif", "jpg", "jpeg", "png", "svg");
 
     private final int fileSize;
     private final String type;
@@ -48,7 +46,7 @@ public class SessionImage {
     }
 
     private static void validateType(String type) {
-        if (!list.contains(type)) {
+        if (!FILE_EXTENSIONS.contains(type)) {
             throw new IllegalArgumentException("이미지 타입은 gif, jpg(jpeg 포함),png, svg만 허용합니다.");
         }
     }
