@@ -3,6 +3,7 @@ package nextstep.courses.domain;
 import nextstep.courses.exception.CannotRegisteSessionException;
 import nextstep.courses.request.RequestOrderParam;
 import nextstep.courses.strategy.SessionStrategy;
+import nextstep.users.domain.NsUser;
 
 public class FreeSession extends Session implements SessionStrategy {
     // private Session session;//구성이 필요한 관계는 이렇게 합성
@@ -12,8 +13,15 @@ public class FreeSession extends Session implements SessionStrategy {
         super(sessionInfo, sessionImage, 0, stateCode);
     }
 
-    public void validateOrderSession(RequestOrderParam requestOrderParam) {
+    public void validateOrderSession(RequestOrderParam requestOrderParam) throws CannotRegisteSessionException {
         validateOrderSessionStatus();
+        validateDuplicateStudent(requestOrderParam.getStudent());
+    }
+
+    private void validateDuplicateStudent(NsUser student) throws CannotRegisteSessionException {
+        if (isDuplicateStudent(student)) {
+            throw new CannotRegisteSessionException("강의는 중복 신청할 수 없습니다.");
+        }
     }
 
     @Override
