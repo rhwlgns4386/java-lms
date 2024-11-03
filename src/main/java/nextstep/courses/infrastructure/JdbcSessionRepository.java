@@ -1,9 +1,7 @@
 package nextstep.courses.infrastructure;
 
-import nextstep.courses.domain.cover.CoverImageRepository;
-import nextstep.courses.domain.session.SessionRegistrationRepository;
-import nextstep.courses.domain.session.SessionRepository;
 import nextstep.courses.domain.cover.CoverImage;
+import nextstep.courses.domain.cover.CoverImageRepository;
 import nextstep.courses.domain.session.*;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcOperations;
@@ -15,17 +13,18 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
+
+import static java.sql.Date.*;
 
 @Repository("sessionRepository")
 public class JdbcSessionRepository implements SessionRepository {
 
-    private SessionRegistrationRepository sessionRegistrationRepository;
     private JdbcOperations jdbcTemplate;
     private CoverImageRepository coverImageRepository;
+    private SessionRegistrationRepository sessionRegistrationRepository;
 
     public JdbcSessionRepository(JdbcOperations jdbcTemplate, SessionRegistrationRepository sessionRegistrationRepository, CoverImageRepository coverImageRepository) {
         this.jdbcTemplate = jdbcTemplate;
@@ -36,39 +35,33 @@ public class JdbcSessionRepository implements SessionRepository {
     @Override
     @Transactional
     public Long saveFreeSession(FreeSession session) {
-        SessionEntity entity = SessionEntity.fromFreeSession(session);
-        Long sessionId = saveSessionEntity(entity);
-        saveRegistrations(sessionId, entity.getRegisteredUserIds());
+        Long sessionId = saveSession(session);
+        saveRegistrations(sessionId, session.getRegisteredStudentIds());
         return sessionId;
     }
 
     @Override
     @Transactional
     public Long savePaidSession(PaidSession session) {
-        SessionEntity entity = SessionEntity.fromPaidSession(session);
-        Long sessionId = saveSessionEntity(entity);
-        saveRegistrations(sessionId, entity.getRegisteredUserIds());
+        Long sessionId = saveSession(session);
+        saveRegistrations(sessionId, session.getRegisteredStudentIds());
         return sessionId;
     }
 
-    private Long saveSessionEntity(SessionEntity entity) {
+    private Long saveSession(DefaultSession session) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
+        String sql = "INSERT INTO session (status, start_date, end_date, cover_image_id, session_type, course_fee, max_students) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(
-                    "INSERT INTO session (status, start_date, end_date, cover_image_id, " +
-                            "session_type, course_fee, max_students) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                    new String[]{"id"}
-            );
-
-            ps.setString(1, entity.getStatus());
-            ps.setDate(2, java.sql.Date.valueOf(entity.getStartDate()));
-            ps.setDate(3, java.sql.Date.valueOf(entity.getEndDate()));
-            ps.setLong(4, entity.getCoverImageId());
-            ps.setString(5, entity.getSessionType());
-            setNullableLong(ps, 6, entity.getCourseFee());
-            setNullableInt(ps, 7, entity.getMaxStudents());
-
+            PreparedStatement ps = connection.prepareStatement(sql, new String[]{"id"});
+            ps.setString(1, session.getStatus().getCode());
+            ps.setDate(2, valueOf(session.getStartDate()));
+            ps.setDate(3, valueOf(session.getEndDate()));
+            ps.setLong(4, session.getCoverImageId());
+            ps.setString(5, session instanceof PaidSession ? SessionType.PAID.getCode() : SessionType.FREE.getCode());
+            setNullableParameter(ps, 6, session instanceof PaidSession ? session.getCourseFee() : null);
+            setNullableParameter(ps, 7, session.getCapacity().getMaxStudentsSize());
             return ps;
         }, keyHolder);
 
@@ -79,30 +72,23 @@ public class JdbcSessionRepository implements SessionRepository {
         if (userIds.isEmpty()) {
             return;
         }
-
-        LocalDateTime registeredAt = LocalDateTime.now();
-        List<SessionRegistrationEntity> registrations = userIds.stream()
-                .map(userId -> new SessionRegistrationEntity(sessionId, userId, registeredAt))
-                .collect(Collectors.toList());
-
-        sessionRegistrationRepository.saveRegistrations(registrations);
+        sessionRegistrationRepository.saveRegistrations(sessionId, userIds);
     }
 
-
-    private void setNullableLong(PreparedStatement ps, int index, Long value) throws SQLException {
-        if (value != null) {
-            ps.setLong(index, value);
-        } else {
-            ps.setNull(index, Types.BIGINT);
+    private <T> void setNullableParameter(PreparedStatement ps, int index, T value) throws SQLException {
+        if (value instanceof Integer) {
+            ps.setInt(index, (Integer) value);
+            return;
         }
-    }
-
-    private void setNullableInt(PreparedStatement ps, int index, Integer value) throws SQLException {
-        if (value != null) {
-            ps.setInt(index, value);
-        } else {
-            ps.setNull(index, Types.INTEGER);
+        if (value instanceof Long) {
+            ps.setLong(index, (Long) value);
+            return;
         }
+        if (value == null) {
+            ps.setNull(index, Types.NULL);
+            return;
+        }
+        throw new IllegalArgumentException("지원하지 않는 타입입니다: " + value.getClass().getName());
     }
 
     @Override
@@ -111,34 +97,21 @@ public class JdbcSessionRepository implements SessionRepository {
         String sql = "SELECT * FROM session WHERE id = ?";
 
         try {
-            SessionEntity entity = jdbcTemplate.queryForObject(
-                    sql,
-                    (rs, rowNum) -> new SessionEntity(
-                            rs.getLong("id"),
-                            rs.getString("status"),
-                            rs.getDate("start_date").toLocalDate(),
-                            rs.getDate("end_date").toLocalDate(),
-                            rs.getLong("cover_image_id"),
-                            rs.getString("session_type"),
-                            rs.getObject("course_fee") != null ? rs.getLong("course_fee") : null,
-                            rs.getObject("max_students") != null ? rs.getInt("max_students") : null,
-                            sessionRegistrationRepository.findRegisteredUserIds(id)
-                    ),
-                    id
-            );
+            return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> {
+                String sessionType = rs.getString("session_type");
+                Status status = Status.from(rs.getString("status"));
+                Period period = new Period(rs.getDate("start_date").toLocalDate(), rs.getDate("end_date").toLocalDate());
+                CoverImage coverImage = coverImageRepository.findById(rs.getLong("cover_image_id"));
+                List<Long> registeredUserIds = sessionRegistrationRepository.findRegisteredUserIds(id);
 
-            if (entity == null) {
-                throw new EmptyResultDataAccessException(1);
-            }
-            CoverImage coverImage = coverImageRepository.findById(entity.getCoverImageId());
+                Capacity capacity = new Capacity(new HashSet<>(registeredUserIds), SessionType.PAID.getCode().equals(sessionType) ? rs.getInt("max_students") : Integer.MAX_VALUE);
+                Money courseFee = SessionType.PAID.getCode().equals(sessionType) ? new Money(rs.getLong("course_fee")) : new Money(0L);
 
-            if (SessionType.PAID.getCode().equals(entity.getSessionType())) {
-                return entity.toPaidSession(coverImage);
-            }
-            return entity.toFreeSession(coverImage);
+                return SessionFactory.createSession(sessionType, id, status, period, coverImage, courseFee, capacity);
+            }, id);
 
         } catch (EmptyResultDataAccessException e) {
-            throw new IllegalArgumentException("세션을 찾을 수 없습니다." + id);
+            throw new IllegalArgumentException("세션을 찾을 수 없습니다: " + id, e);
         }
     }
 
