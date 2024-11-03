@@ -10,4 +10,8 @@ public class CoverImageFile {
         }
         this.size = size;
     }
+
+    public int getSize() {
+        return size;
+    }
 }

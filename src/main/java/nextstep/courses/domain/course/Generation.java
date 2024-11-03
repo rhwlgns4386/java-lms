@@ -3,7 +3,7 @@ package nextstep.courses.domain.course;
 import java.util.Objects;
 
 public class Generation {
-    public static final int INIT_GENERATION = 1;
+    private static final int INIT_GENERATION = 1;
     private final int generation;
 
     public Generation() {
@@ -15,10 +15,6 @@ public class Generation {
             throw new IllegalArgumentException("기수는" + INIT_GENERATION + "이상이어야 합니다.");
         }
         this.generation = generation;
-    }
-
-    public int getGeneration() {
-        return generation;
     }
 
     @Override

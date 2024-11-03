@@ -22,4 +22,7 @@ public enum CoverImageType {
                 .orElseThrow(() -> new IllegalArgumentException("사용할 수 없는 이미지 확장자 입니다."));
     }
 
+    public String getCode() {
+        return code;
+    }
 }
