@@ -1,9 +1,15 @@
 package nextstep.courses.infrastructure;
 
+import nextstep.courses.collection.Students;
 import nextstep.courses.domain.Session;
-//임의로
-public class SessionRepository {
-    public Session insert(Session session) {
-        return session;
-    }
+import nextstep.users.domain.NsUser;
+
+public interface SessionRepository {
+    int saveRegisterSession(Session session);
+
+    Session findSessionInfoById(long id);
+
+    Students findOrderInfoBySessionId(long l);
+
+    int saveOrderSession(NsUser user, Session session);
 }
