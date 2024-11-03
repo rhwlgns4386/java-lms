@@ -12,6 +12,14 @@ public class EnrollUserInfo {
         this.nsUserId = nsUserId;
     }
 
+    public Long getSessionId() {
+        return sessionId;
+    }
+
+    public Long getNsUserId() {
+        return nsUserId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

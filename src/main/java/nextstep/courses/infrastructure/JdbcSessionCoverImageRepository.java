@@ -35,4 +35,5 @@ public class JdbcSessionCoverImageRepository implements SessionCoverImageReposit
 
         return jdbcTemplate.update(sql, sessionCoverImage.getSessionId(), sessionCoverImage.getFileName(), sessionCoverImage.getCoverImageVolume().getSize(), sessionCoverImage.getCoverImageExtensionType().getExtension(), sessionCoverImage.getCoverImageFileSize().getHeight(), sessionCoverImage.getCoverImageFileSize().getWidth());
     }
+
 }
