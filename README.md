@@ -9,6 +9,11 @@
 * [텍스트와 이미지로 살펴보는 온라인 코드 리뷰 과정](https://github.com/next-step/nextstep-docs/tree/master/codereview)
 
 # STEP3 TODO
+- [ ] 3단계 피드백
+  - [ ] 2단계 도메인 클래스를 Entity로 변경 (새로운 entity제거)
+  - [ ] setNulableLong 제네릭 타입으로 공통화
+  - [ ] JdbcSessionRepository에서 리플렉션으로 파라미터 맵핑 작업을 클래스로 받아서 사용 
+  - [ ] RDBMS 외래키 사용 시 장점/ 단점
 # STEP3 DONE
 - [x] 2단계 피드백
   - [x] register안으로 validate이동
@@ -23,6 +28,8 @@
     - [x] 수강신청
     - [x] 세션
     - [x] 강의 (세션과 1:N)
+  - [x] 3단계 피드백
+    - [x] 공통 유효성 검증 pravte 변경 
 ---
 # STEP2 TODO
 # STEP2 DONE

@@ -24,6 +24,7 @@ public abstract class DefaultSession {
     }
 
     public void register(NsUser student, Payment payment) {
+        validateSessionStatus();
         validate(student, payment);
         doRegister(student, payment);
     }
@@ -32,7 +33,7 @@ public abstract class DefaultSession {
 
     protected abstract void doRegister(NsUser user, Payment payment);
 
-    protected void validateSessionStatus() {
+    private void validateSessionStatus() {
         if (status.isOpen()) {
             return;
         }

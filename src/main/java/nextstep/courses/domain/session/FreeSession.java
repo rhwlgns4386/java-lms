@@ -18,10 +18,9 @@ public class FreeSession extends DefaultSession {
         super(id, status, period, coverImage, courseFee, capacity);
     }
 
-    //무료 세선은 수강신청 제한이 없음
     @Override
     protected void validate(NsUser student, Payment payment) {
-        validateSessionStatus();
+        //무료 세선은 수강신청 제한이 없음
     }
 
     @Override

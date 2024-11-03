@@ -16,7 +16,6 @@ public class PaidSession extends DefaultSession {
 
     @Override
     protected void validate(NsUser student, Payment payment) {
-        validateSessionStatus();
         validateCapacity();
         validatePayment(payment);
     }
