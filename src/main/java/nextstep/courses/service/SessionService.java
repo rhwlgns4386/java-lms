@@ -41,7 +41,6 @@ public class SessionService {
         Session foundSession = getSession(sessionId);
         Student student = new Student(userService.getUser(userId));
         foundSession.apply(student, payment);
-        sessionRepository.save(SessionEntity.from(foundSession), Session.NOT_ASSIGNED);
         studentRepository.save(StudentEntity.from(student), sessionId);
     }
 
