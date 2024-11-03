@@ -1,7 +1,6 @@
 package nextstep.courses.domain.course;
 
 import nextstep.courses.domain.session.Session;
-import nextstep.payments.domain.Payment;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
