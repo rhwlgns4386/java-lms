@@ -11,9 +11,9 @@ public class SessionCoverImageTest {
 
     @Test
     void 이미지_타입_제한_성공_테스트_코드() {
-        SessionCoverImage sessionCoverImage = new SessionCoverImageBuilder(1L).sessionId(1L).fileName("leo.png").volume(150).width(300).height(200).build();
+        SessionCoverImage sessionCoverImage = new SessionCoverImage.SessionCoverImageBuilder(1L).fileName("leo.png").filePath("/home/lms/image/cover/leo.png").volume(150).width(300).height(200).build();
 
-        assertThat(sessionCoverImage).isEqualTo(new SessionCoverImage(1L, 1L, "leo.png", new CoverImageVolume(150), CoverImageExtensionType.valueOfExtension("leo.png"), new CoverImageFileSize(300, 200)));
+        assertThat(sessionCoverImage).isEqualTo(new SessionCoverImage(1L, 1L, "leo.png", new CoverImageVolume(150), CoverImageExtensionType.valueOfExtension("leo.png"), new CoverImageFileSize(300, 200), "/home/lms/image/cover/leo.png"));
     }
 
 

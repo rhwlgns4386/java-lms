@@ -10,19 +10,20 @@ public class SessionCoverImage {
     private final CoverImageVolume coverImageVolume;
     private final CoverImageExtensionType coverImageExtensionType;
     private final CoverImageFileSize coverImageFileSize;
+    private final String filePath;
 
-
-    public SessionCoverImage(Long id, Long sessionId, int volume, String fileName, int width, int height) {
-        this(id, sessionId, fileName, new CoverImageVolume(volume), CoverImageExtensionType.valueOfExtension(fileName), new CoverImageFileSize(width, height));
+    public SessionCoverImage(Long id, Long sessionId, int volume, String fileName,int width, int height, String filePath) {
+        this(id, sessionId, fileName, new CoverImageVolume(volume), CoverImageExtensionType.valueOfExtension(fileName), new CoverImageFileSize(width, height), filePath);
     }
 
-    public SessionCoverImage(long id, Long sessionId, String fileName, CoverImageVolume coverImageVolume, CoverImageExtensionType coverImageExtensionType, CoverImageFileSize coverImageFileSize) {
+    public SessionCoverImage(long id, Long sessionId, String fileName, CoverImageVolume coverImageVolume, CoverImageExtensionType coverImageExtensionType, CoverImageFileSize coverImageFileSize, String filePath) {
         this.id = id;
         this.sessionId = sessionId;
         this.fileName = fileName;
         this.coverImageVolume = coverImageVolume;
         this.coverImageExtensionType = coverImageExtensionType;
         this.coverImageFileSize = coverImageFileSize;
+        this.filePath = filePath;
     }
 
     public SessionCoverImage(SessionCoverImageBuilder sessionCoverImageBuilder) {
@@ -32,6 +33,7 @@ public class SessionCoverImage {
         this.coverImageFileSize = new CoverImageFileSize(sessionCoverImageBuilder.width, sessionCoverImageBuilder.height);
         this.sessionId = sessionCoverImageBuilder.sessionId;
         this.fileName = sessionCoverImageBuilder.fileName;
+        this.filePath = sessionCoverImageBuilder.filePath;
     }
 
     public Long getId() {
@@ -58,6 +60,10 @@ public class SessionCoverImage {
         return fileName;
     }
 
+    public String getFilePath() {
+        return filePath;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -82,6 +88,7 @@ public class SessionCoverImage {
         private String fileName;
         private int width;
         private int height;
+        private String filePath;
 
         public SessionCoverImageBuilder(Long id) {
             this.id = id;
@@ -109,6 +116,11 @@ public class SessionCoverImage {
 
         public SessionCoverImageBuilder height(int height) {
             this.height = height;
+            return this;
+        }
+
+        public SessionCoverImageBuilder filePath(String filePath) {
+            this.filePath = filePath;
             return this;
         }
 

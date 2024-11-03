@@ -17,23 +17,24 @@ public class JdbcSessionCoverImageRepository implements SessionCoverImageReposit
 
     @Override
     public SessionCoverImage findById(Long id) {
-        String sql = "select id, session_id, volume, fileName, width, height from session_cover_image where id = ?";
+        String sql = "select id, session_id, volume, fileName, width, height, file_path from session_cover_image where id = ?";
         RowMapper<SessionCoverImage> rowMapper = (rs, rowNum) -> new SessionCoverImage(
                 rs.getLong(1),
                 rs.getLong(2),
                 rs.getInt(3),
                 rs.getString(4),
                 rs.getInt(5),
-                rs.getInt(6)
+                rs.getInt(6),
+                rs.getString(7)
         );
         return jdbcTemplate.queryForObject(sql, rowMapper, id);
     }
 
     @Override
     public int save(SessionCoverImage sessionCoverImage) {
-        String sql = "insert into session_cover_image (session_id, fileName, volume ,extension, height, width) values(?,?,?,?,?,?)";
+        String sql = "insert into session_cover_image (session_id, fileName, volume ,extension, height, width, file_path) values(?,?,?,?,?,?,?)";
 
-        return jdbcTemplate.update(sql, sessionCoverImage.getSessionId(), sessionCoverImage.getFileName(), sessionCoverImage.getCoverImageVolume().getSize(), sessionCoverImage.getCoverImageExtensionType().getExtension(), sessionCoverImage.getCoverImageFileSize().getHeight(), sessionCoverImage.getCoverImageFileSize().getWidth());
+        return jdbcTemplate.update(sql, sessionCoverImage.getSessionId(), sessionCoverImage.getFileName(), sessionCoverImage.getCoverImageVolume().getSize(), sessionCoverImage.getCoverImageExtensionType().getExtension(), sessionCoverImage.getCoverImageFileSize().getHeight(), sessionCoverImage.getCoverImageFileSize().getWidth(), sessionCoverImage.getFilePath());
     }
 
 }

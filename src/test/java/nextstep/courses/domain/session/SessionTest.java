@@ -24,7 +24,7 @@ public class SessionTest {
 
     @BeforeEach
     void setUp() {
-        sessionCoverImage = new SessionCoverImage.SessionCoverImageBuilder(1L).fileName("leo.png").volume(150).width(300).height(200).build();
+        sessionCoverImage = new SessionCoverImage.SessionCoverImageBuilder(1L).fileName("leo.png").filePath("/home/lms/image/cover/leo.png").volume(150).width(300).height(200).build();
         EnrollUserInfo enrollUserInfo = new EnrollUserInfo(1L, 1L);
         enrollUserInfos = new EnrollUserInfos(20);
         enrollUserInfos.add(enrollUserInfo);

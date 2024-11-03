@@ -27,13 +27,7 @@ public class SessionCoverImageRepositoryTest {
 
     @Test
     void 이미지_저장_테스트() {
-        SessionCoverImage sessionCoverImage = new SessionCoverImageBuilder(1L)
-                .sessionId(1L)
-                .height(200)
-                .width(300)
-                .volume(150)
-                .fileName("leo.png")
-                .build();
+        SessionCoverImage sessionCoverImage = new SessionCoverImage.SessionCoverImageBuilder(1L).sessionId(1L).fileName("leo.png").filePath("/home/lms/image/cover/leo.png").volume(150).width(300).height(200).build();
 
         int count = sessionCoverImageRepository.save(sessionCoverImage);
         SessionCoverImage savedCoverImage = sessionCoverImageRepository.findById(1L);

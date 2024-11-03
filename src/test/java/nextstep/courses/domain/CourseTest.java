@@ -18,7 +18,7 @@ class CourseTest {
     @Test
     void 코스_세션_추가_테스트() {
         Course course = new Course();
-        SessionCoverImage sessionCoverImage = new SessionCoverImage(1L, 1L,150, "leo.png", 300, 200);
+        SessionCoverImage sessionCoverImage =new SessionCoverImage.SessionCoverImageBuilder(1L).sessionId(1L).fileName("leo.png").filePath("/home/lms/image/cover/leo.png").volume(150).width(300).height(200).build();
 
         Session session = new SessionBuilder(1L)
                 .price(1000L)
