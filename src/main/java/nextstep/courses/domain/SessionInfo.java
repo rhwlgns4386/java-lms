@@ -5,27 +5,17 @@ import java.time.LocalDateTime;
 public class SessionInfo {
     private String title;
 
-    private LocalDateTime applyStartDate;
+    private SessionPeriod sessionPeriod;
 
-    private LocalDateTime applyEndDate;
-
-    private long createId;
+    private String creatorId;
 
     public SessionInfo(String title, LocalDateTime applyStartDate, LocalDateTime applyEndDate,
-                       long createId) {
+                       String creatorId) {
         this.title = title;
-        this.applyStartDate = applyStartDate;
-        this.applyEndDate = applyEndDate;
-        this.createId = createId;
+        this.sessionPeriod = new SessionPeriod(applyStartDate, applyEndDate);
+        this.creatorId = creatorId;
     }
 
-    public LocalDateTime getApplyStartDate() {
-        return applyStartDate;
-    }
-
-    public LocalDateTime getApplyEndDate() {
-        return applyEndDate;
-    }
 }
 
 

@@ -18,27 +18,40 @@ public class Session {
 
     private Students students;
 
-    private boolean isPaid;
+    private SessionType sessionType;
 
     public Session() {
     }
 
     public Session(String title, LocalDateTime applyStartDate, LocalDateTime applyEndDate,
-                   long salePrice, StateCode stateCode, int createId,
-                   int fileSize, String type, int width, int height, String fileName, boolean isPaid) {
+                   long salePrice, StateCode stateCode, String createId,
+                   int fileSize, String type, int width, int height, String fileName, SessionType sessionType) {
         this(title, applyStartDate, applyEndDate, salePrice, stateCode, createId,
-                fileSize, type, width, height, fileName, new Students(Collections.emptyList()), isPaid);
+                fileSize, type, width, height, fileName, new Students(Collections.emptyList()), sessionType);
     }
 
     public Session(String title, LocalDateTime applyStartDate, LocalDateTime applyEndDate,
-                   long salePrice, StateCode stateCode, int createId,
-                   int fileSize, String type, int width, int height, String fileName, Students students, boolean isPaid) {
+                   long salePrice, StateCode stateCode, String createId,
+                   int fileSize, String type, int width, int height, String fileName, Students students, SessionType sessionType) {
         this.sessionInfo = new SessionInfo(title, applyStartDate, applyEndDate, createId);
         this.stateCode = stateCode;
         this.salePrice = salePrice;
         this.sessionImage = new SessionImage(fileSize, type, width, height, fileName);
         this.students = students;
-        this.isPaid = isPaid;
+        this.sessionType = sessionType;
+    }
+
+    public Session(SessionInfo sessionInfo, SessionImage sessionImage, long salePrice, StateCode stateCode) {
+        this(sessionInfo, sessionImage, salePrice, stateCode, SessionType.FREE);
+    }
+
+    public Session(SessionInfo sessionInfo, SessionImage sessionImage, long salePrice, StateCode stateCode, SessionType sessionType) {
+        this.sessionInfo = sessionInfo;
+        this.sessionImage = sessionImage;
+        this.salePrice = salePrice;
+        this.stateCode = stateCode;
+        this.sessionType = sessionType;
+        this.students = new Students(Collections.emptyList());
     }
 
     public long getSalePrice() {
