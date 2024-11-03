@@ -4,30 +4,26 @@ import nextstep.courses.CannotRegisteSessionException;
 import nextstep.courses.domain.RequestOrderParam;
 import nextstep.courses.domain.Session;
 import nextstep.courses.domain.SessionFactory;
+import nextstep.courses.domain.SessionImage;
+import nextstep.courses.domain.SessionInfo;
+import nextstep.courses.domain.SessionType;
 import nextstep.courses.domain.Sessions;
 import nextstep.courses.domain.StateCode;
+import nextstep.courses.infrastructure.SessionRepository;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
+import javax.annotation.Resource;
 
 public class SessionService {
+    @Resource(name = "sessionRepository")
+    private SessionRepository sessionRepository;
 
-    public Sessions registerPaidSession() {
-        Session paidSession = SessionFactory.createSession("제목1", LocalDateTime.now(), LocalDateTime.now().plus(10, ChronoUnit.HALF_DAYS),
-                1000, StateCode.RECRUITING, 1, 100, "jpg", 300, 200, "imageFileName1", 2, true);
+    public void registerPaidSession(SessionInfo sessionInfo, SessionImage sessionImage, long salePrice, StateCode stateCode, int studentMaxCount, SessionType sessionType) {
 
-        Session freeSession = SessionFactory.createSession("제목2", LocalDateTime.now(), LocalDateTime.now().plus(10, ChronoUnit.HALF_DAYS),
-                0, StateCode.RECRUITING, 2, 100, "jpg", 300, 200, "imageFileName1",false);
+        Session session = SessionFactory.createSession(sessionInfo, sessionImage, salePrice, stateCode, studentMaxCount, sessionType);
 
-        //db insert 강의 등록으로 변경 예정
-        List<Session> sessions = new ArrayList<>();
-        sessions.add(paidSession);
-        sessions.add(freeSession);
-        return new Sessions(sessions);
+        sessionRepository.insert(session);
     }
 
     public void orderPaidSession(Sessions sessions, Payment payment, NsUser user, int idx) throws CannotRegisteSessionException {
