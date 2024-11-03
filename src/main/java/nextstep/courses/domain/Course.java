@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 public class Course {
     private Long id;
 
+    private int term;
+
     private String title;
 
     private Long creatorId;
@@ -12,6 +14,8 @@ public class Course {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
+    private Sessions sessions;
 
     public Course() {
     }
