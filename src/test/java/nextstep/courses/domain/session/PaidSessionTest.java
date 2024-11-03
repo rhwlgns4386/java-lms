@@ -33,7 +33,7 @@ class PaidSessionTest {
     void register() {
         Money courseFee = new Money(10000);
         Capacity capacity = new Capacity(10);
-        PaidSession course = new PaidSession(Status.OPEN, period, coverImage, courseFee, capacity);
+        PaidSession course = new PaidSession(Status.OPEN, SessionStatus.ready().recruiting(), period, coverImage, courseFee, capacity);
         Payment payment = new Payment("PG1", 1L, 1L, 10000L);
 
         course.register(NsUserTest.GREEN, payment);
@@ -59,7 +59,7 @@ class PaidSessionTest {
     void register_FullCapacity() {
         Capacity capacity = new Capacity(1);
         Money courseFee = new Money(10000);
-        PaidSession paidCourse = new PaidSession(Status.OPEN, period, coverImage, courseFee, capacity);
+        PaidSession paidCourse = new PaidSession(Status.OPEN, SessionStatus.ready().recruiting(), period, coverImage, courseFee, capacity);
         Payment payment = new Payment("PG1", 1L, 1L, 10000L);
 
         paidCourse.register(NsUserTest.GREEN, payment);

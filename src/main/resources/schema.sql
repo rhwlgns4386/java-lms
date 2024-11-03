@@ -99,3 +99,10 @@ CREATE TABLE session_cover_images
     cover_image_id BIGINT NOT NULL,
     PRIMARY KEY (session_id, cover_image_id)
 );
+
+CREATE TABLE session_status
+(
+    session_id         BIGINT PRIMARY KEY,
+    progress_status    VARCHAR(20) NOT NULL,
+    recruitment_status VARCHAR(20) NOT NULL
+);

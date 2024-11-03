@@ -16,6 +16,8 @@ public abstract class DefaultSession {
     protected final Long id;
     @Column(name = "status")
     protected final Status status;
+
+    protected final SessionStatus status2;
     // Period는 start_date와 end_date 두 컬럼에 매핑되므로 두 개의 @Column 사용
     @Column(name = "start_date", subField = "startDate")
     @Column(name = "end_date", subField = "endDate")
@@ -34,8 +36,13 @@ public abstract class DefaultSession {
 
     protected DefaultSession(Long id, Status status, Period period,
                              List<CoverImage> coverImages, Money courseFee, Capacity capacity) {
+        this(id, status, SessionStatus.ready(), period, coverImages, courseFee, capacity);
+    }
+
+    protected DefaultSession(Long id, Status status, SessionStatus status2, Period period, List<CoverImage> coverImages, Money courseFee, Capacity capacity) {
         this.id = id;
         this.status = status;
+        this.status2 = status2;
         this.period = period;
         this.coverImage = coverImages.get(0);
         this.coverImages = coverImages;
@@ -54,7 +61,7 @@ public abstract class DefaultSession {
     protected abstract void doRegister(NsUser user, Payment payment);
 
     private void validateSessionStatus() {
-        if (status.isOpen()) {
+        if (status2.canRegister()) {
             return;
         }
         throw new IllegalArgumentException("강의 상태가 모집 중일때만 수강신청이 가능합니다.");

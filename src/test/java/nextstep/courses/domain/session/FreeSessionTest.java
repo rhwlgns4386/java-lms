@@ -10,6 +10,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 class FreeSessionTest {
@@ -26,8 +29,11 @@ class FreeSessionTest {
     void register() {
         LocalDate startDate = LocalDate.of(2024, 10, 10);
         LocalDate endDate = LocalDate.of(2024, 10, 19);
-        FreeSession freeCourse = new FreeSession(Status.OPEN, new Period(startDate, endDate), coverImage);
+        FreeSession freeCourse = new FreeSession(Status.OPEN, new SessionStatus(SessionProgress.READY, RecruitmentStatus.RECRUITING), new Period(startDate, endDate), coverImage);
 
         freeCourse.register(NsUserTest.GREEN);
+
+        assertThat(freeCourse.getCapacity().getRegisteredStudentIds())
+                .isEqualTo(List.of(NsUserTest.GREEN.getId()));
     }
 }

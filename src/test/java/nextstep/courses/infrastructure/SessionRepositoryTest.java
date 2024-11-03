@@ -70,7 +70,7 @@ class SessionRepositoryTest {
     @Test
     void findFreeSession() {
         // given
-        FreeSession freeSession = new FreeSession(Status.OPEN, period, coverImage);
+        FreeSession freeSession = new FreeSession(Status.OPEN, SessionStatus.ready().recruiting(), period, coverImage);
         Long savedId = sessionRepository.saveFreeSession(freeSession);
 
         // when
