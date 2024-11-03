@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -77,16 +79,27 @@ public class JdbcSessionRepository implements SessionRepository {
                 Period period = new Period(rs.getDate("start_date").toLocalDate(), rs.getDate("end_date").toLocalDate());
                 CoverImage coverImage = coverImageRepository.findById(rs.getLong("cover_image_id"));
                 List<Long> registeredUserIds = sessionRegistrationRepository.findRegisteredUserIds(id);
+                Capacity capacity = createCapacity(rs, registeredUserIds);
 
-                Capacity capacity = new Capacity(new HashSet<>(registeredUserIds), SessionType.PAID.getCode().equals(sessionType) ? rs.getInt("max_students") : Integer.MAX_VALUE);
-                Money courseFee = SessionType.PAID.getCode().equals(sessionType) ? new Money(rs.getLong("course_fee")) : new Money(0L);
+                if (SessionType.PAID.getCode().equals(sessionType)) {
+                    Money courseFee = new Money(rs.getLong("course_fee"));
+                    return new PaidSession(id, status, period, coverImage, courseFee, capacity);
+                }
 
-                return SessionFactory.createSession(sessionType, id, status, period, coverImage, courseFee, capacity);
+                return new FreeSession(id, status, period, coverImage, capacity);
             }, id);
 
         } catch (EmptyResultDataAccessException e) {
             throw new IllegalArgumentException("세션을 찾을 수 없습니다: " + id, e);
         }
+    }
+
+    private static Capacity createCapacity(ResultSet rs, List<Long> registeredUserIds) throws SQLException {
+        int maxStudents = SessionType.PAID.getCode().equals(rs.getString("session_type"))
+                ? rs.getInt("max_students")
+                : Integer.MAX_VALUE;
+
+        return new Capacity(new HashSet<>(registeredUserIds), maxStudents);
     }
 
 }

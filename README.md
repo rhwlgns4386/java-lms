@@ -8,6 +8,12 @@
 ## 온라인 코드 리뷰 과정
 * [텍스트와 이미지로 살펴보는 온라인 코드 리뷰 과정](https://github.com/next-step/nextstep-docs/tree/master/codereview)
 
+# STEP4 TODO
+# STEP4 DONE
+- [x] 3단계 피드백 반영 
+  - [x] 팩토리 메소드 분리
+
+---
 # STEP3 TODO
 # STEP3 DONE
 - [x] 3단계 요구사항
