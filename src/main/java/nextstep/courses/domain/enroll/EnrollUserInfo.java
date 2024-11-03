@@ -7,13 +7,9 @@ public class EnrollUserInfo {
     private final Long sessionId;
     private final Long nsUserId;
 
-    private final LocalDateTime createdAt = LocalDateTime.now();
-    private LocalDateTime updatedAt;
-
     public EnrollUserInfo(Long sessionId, Long nsUserId) {
         this.sessionId = sessionId;
         this.nsUserId = nsUserId;
-        this.updatedAt = LocalDateTime.now();
     }
 
     @Override

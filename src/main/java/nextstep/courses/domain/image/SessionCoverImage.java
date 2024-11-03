@@ -5,17 +5,21 @@ import java.util.Objects;
 
 public class SessionCoverImage {
     private final Long id;
+    private final Long sessionId;
+    private final String fileName;
     private final CoverImageVolume coverImageVolume;
     private final CoverImageExtensionType coverImageExtensionType;
     private final CoverImageFileSize coverImageFileSize;
 
 
-    public SessionCoverImage(long id, int volume, String fileName, int width, int height) {
-        this(id, new CoverImageVolume(volume), CoverImageExtensionType.valueOfExtension(fileName), new CoverImageFileSize(width, height));
+    public SessionCoverImage(Long id, Long sessionId, int volume, String fileName, int width, int height) {
+        this(id, sessionId, fileName, new CoverImageVolume(volume), CoverImageExtensionType.valueOfExtension(fileName), new CoverImageFileSize(width, height));
     }
 
-    public SessionCoverImage(long id, CoverImageVolume coverImageVolume, CoverImageExtensionType coverImageExtensionType, CoverImageFileSize coverImageFileSize) {
+    public SessionCoverImage(long id, Long sessionId, String fileName, CoverImageVolume coverImageVolume, CoverImageExtensionType coverImageExtensionType, CoverImageFileSize coverImageFileSize) {
         this.id = id;
+        this.sessionId = sessionId;
+        this.fileName = fileName;
         this.coverImageVolume = coverImageVolume;
         this.coverImageExtensionType = coverImageExtensionType;
         this.coverImageFileSize = coverImageFileSize;
@@ -26,6 +30,32 @@ public class SessionCoverImage {
         this.coverImageVolume = new CoverImageVolume(sessionCoverImageBuilder.volume);
         this.coverImageExtensionType = CoverImageExtensionType.valueOfExtension(sessionCoverImageBuilder.fileName);
         this.coverImageFileSize = new CoverImageFileSize(sessionCoverImageBuilder.width, sessionCoverImageBuilder.height);
+        this.sessionId = sessionCoverImageBuilder.sessionId;
+        this.fileName = sessionCoverImageBuilder.fileName;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Long getSessionId() {
+        return sessionId;
+    }
+
+    public CoverImageVolume getCoverImageVolume() {
+        return coverImageVolume;
+    }
+
+    public CoverImageExtensionType getCoverImageExtensionType() {
+        return coverImageExtensionType;
+    }
+
+    public CoverImageFileSize getCoverImageFileSize() {
+        return coverImageFileSize;
+    }
+
+    public String getFileName() {
+        return fileName;
     }
 
     @Override
@@ -47,6 +77,7 @@ public class SessionCoverImage {
 
     public static class SessionCoverImageBuilder {
         private Long id;
+        private Long sessionId;
         private int volume;
         private String fileName;
         private int width;
@@ -54,6 +85,11 @@ public class SessionCoverImage {
 
         public SessionCoverImageBuilder(Long id) {
             this.id = id;
+        }
+
+        public SessionCoverImageBuilder sessionId(Long sessionId) {
+            this.sessionId = sessionId;
+            return this;
         }
 
         public SessionCoverImageBuilder volume(int volume) {

@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class CoverImageFilePixelTest {
+public class CoverImageFileSizeTest {
 
     @Test
     void 이미지_사이즈_저장_성공_테스트() {
