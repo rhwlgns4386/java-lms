@@ -4,21 +4,17 @@ import nextstep.courses.CannotRegisteSessionException;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
 
-import java.time.LocalDateTime;
-
 public class PaidSession extends Session implements SessionStrategy {
     //private Session session;
 
     private int studentMaxCount;
 
-    public PaidSession(String title, LocalDateTime applyStartDate, LocalDateTime applyEndDate,
-                       long salePrice, StateCode stateCode, int createId,
-                       int fileSize, String type, int width, int height, String fileName, int studentMaxCount) {
-        super(title, applyStartDate, applyEndDate, salePrice, stateCode, createId, fileSize, type, width, height, fileName, true);
+    public PaidSession(SessionInfo sessionInfo, SessionImage sessionImage,
+                       long salePrice, StateCode stateCode, int studentMaxCount) {
+        super(sessionInfo, sessionImage, salePrice, stateCode, SessionType.PAID);
         this.studentMaxCount = studentMaxCount;
     }
 
-    @Override
     public void validateOrderSession(RequestOrderParam requestOrderParam) throws CannotRegisteSessionException {
         validateSalePrice(requestOrderParam.getPayment());
         validateMaxStudentCount();

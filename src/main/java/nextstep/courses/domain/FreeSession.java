@@ -7,13 +7,18 @@ import java.time.LocalDateTime;
 public class FreeSession extends Session implements SessionStrategy {
     // private Session session;//구성이 필요한 관계는 이렇게 합성
 
-    public FreeSession(String title, LocalDateTime applyStartDate, LocalDateTime applyEndDate,
-                       long salePrice, StateCode stateCode, int createId,
-                       int fileSize, String type, int width, int height, String fileName) {
-        super(title, applyStartDate, applyEndDate, salePrice, stateCode, createId, fileSize, type, width, height, fileName, false);
+    public FreeSession(SessionInfo sessionInfo,SessionImage sessionImage,
+                       long salePrice, StateCode stateCode) {
+        super(sessionInfo, sessionImage, salePrice, stateCode);
+        validateRegistSession(salePrice);
     }
 
-    @Override
+    private void validateRegistSession(long salePrice) {
+        if(salePrice > 0) {
+            throw new IllegalArgumentException("무료강의는 판매가가 0원이어야 합니다.");
+        }
+    }
+
     public void validateOrderSession(RequestOrderParam requestOrderParam) {
         validateOrderSessionStatus();
     }
