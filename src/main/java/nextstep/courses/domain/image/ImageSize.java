@@ -1,4 +1,4 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.image;
 
 import java.util.Objects;
 
@@ -33,5 +33,12 @@ public class ImageSize {
     @Override
     public int hashCode() {
         return Objects.hashCode(getSize());
+    }
+
+    @Override
+    public String toString() {
+        return "ImageSize{" +
+                "size=" + size +
+                '}';
     }
 }

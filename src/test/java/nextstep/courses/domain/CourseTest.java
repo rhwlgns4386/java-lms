@@ -1,5 +1,11 @@
 package nextstep.courses.domain;
 
+import nextstep.courses.domain.course.Course;
+import nextstep.courses.domain.image.Image;
+import nextstep.courses.domain.image.ImagePixel;
+import nextstep.courses.domain.image.ImageSize;
+import nextstep.courses.domain.image.ImageType;
+import nextstep.courses.domain.session.*;
 import nextstep.users.domain.NsUserTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,20 +26,18 @@ public class CourseTest {
 
     @BeforeEach
     void init() {
-        Image image = new Image(1L, new ImageSize(1024), ImageType.GIF, new ImagePixel(300L, 200L));
+        Image image = new Image(1L, new ImageSize(1024), ImageType.GIF, new ImagePixel(300, 200));
 
         LocalDateTime start = LocalDateTime.of(2024, 10, 10, 10, 10);
         LocalDateTime end = LocalDateTime.of(2024, 10, 10, 10, 11);
 
         SessionDate sessionDate = new SessionDate(start, end);
-        SessionId sessionId = SessionId.of(1L, "TDD");
-        this.freeSession = new FreeSession(sessionId, sessionDate, image);
+        this.freeSession = new FreeSession(1L, "TDD", sessionDate, image);
 
-        sessionId = SessionId.of(2L, "TDD");
         SessionCapacity sessionCapacity = new SessionCapacity(1);
         Money fee = new Money(200_000L);
 
-        this.paidSession = new PaidSession(image, sessionDate, sessionId, sessionCapacity, fee);
+        this.paidSession = new PaidSession(2L, "TDD", image, sessionDate, sessionCapacity, fee);
     }
 
     @Test

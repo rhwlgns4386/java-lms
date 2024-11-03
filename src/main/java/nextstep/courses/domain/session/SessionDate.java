@@ -1,4 +1,4 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.session;
 
 import java.time.LocalDateTime;
 
@@ -12,5 +12,13 @@ public class SessionDate {
         }
         this.start = start;
         this.end = end;
+    }
+
+    public LocalDateTime getStart() {
+        return start;
+    }
+
+    public LocalDateTime getEnd() {
+        return end;
     }
 }

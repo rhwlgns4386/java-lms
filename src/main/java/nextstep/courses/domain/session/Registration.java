@@ -1,4 +1,4 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.session;
 
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
@@ -6,24 +6,28 @@ import nextstep.users.domain.NsUser;
 import java.util.Objects;
 
 public class Registration {
-    private Long id;
+    private Long sessionId;
     private Long nsUserId;
     private Long amount;
 
-    public Registration(Long id, NsUser user, Payment payment) {
+    public Registration(Long sessionId, NsUser user, Payment payment) {
         if (user == null || payment == null) {
             throw new IllegalArgumentException("User or Payment cannot be null");
         }
         if (!user.getId().equals(payment.getNsUserId())) {
             throw new IllegalArgumentException("Payment user_id does not match User");
         }
-        this.id = id;
+        this.sessionId = sessionId;
         this.nsUserId = user.getId();
         this.amount = payment.getAmount();
     }
 
-    public Long getId() {
-        return id;
+    public static Registration of(Long sessionId, NsUser user, Payment payment) {
+        return new Registration(sessionId, user, payment);
+    }
+
+    public Long getSessionId() {
+        return sessionId;
     }
 
     public Long getNsUserId() {
@@ -44,11 +48,11 @@ public class Registration {
         }
 
         Registration that = (Registration) o;
-        return Objects.equals(getId(), that.getId());
+        return Objects.equals(getSessionId(), that.getSessionId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId());
+        return Objects.hashCode(getSessionId());
     }
 }

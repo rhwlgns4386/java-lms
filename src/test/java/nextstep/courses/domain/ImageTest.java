@@ -1,5 +1,9 @@
 package nextstep.courses.domain;
 
+import nextstep.courses.domain.image.Image;
+import nextstep.courses.domain.image.ImagePixel;
+import nextstep.courses.domain.image.ImageSize;
+import nextstep.courses.domain.image.ImageType;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,7 +18,7 @@ public class ImageTest {
     @BeforeEach
     void init() {
         this.imageSize = new ImageSize(1024);
-        this.imagePixel = new ImagePixel(300L, 200L);
+        this.imagePixel = new ImagePixel(300, 200);
         this.imageType = ImageType.JPG;
         this.imageId = 1L;
     }
@@ -38,21 +42,21 @@ public class ImageTest {
     @Test
     @DisplayName("image min width 체크")
     void checkMinImageWidthTest() {
-        Assertions.assertThatThrownBy(() -> new Image(imageId, imageSize, imageType, new ImagePixel(299L, 200L)))
+        Assertions.assertThatThrownBy(() -> new Image(imageId, imageSize, imageType, new ImagePixel(299, 200)))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     @DisplayName("image min height 체크")
     void checkMinImageHeightTest() {
-        Assertions.assertThatThrownBy(() -> new Image(imageId, imageSize, imageType, new ImagePixel(300L, 199L)))
+        Assertions.assertThatThrownBy(() -> new Image(imageId, imageSize, imageType, new ImagePixel(300, 199)))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     @DisplayName("Image width,height 비율 체크")
     void checkImageWidthHeightRatioTest() {
-        Assertions.assertThatThrownBy(() -> new Image(imageId, imageSize, imageType, new ImagePixel(299L, 199L)))
+        Assertions.assertThatThrownBy(() -> new Image(imageId, imageSize, imageType, new ImagePixel(299, 199)))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 }

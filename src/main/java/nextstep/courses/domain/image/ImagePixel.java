@@ -1,16 +1,16 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.image;
 
 import java.util.Objects;
 
 public class ImagePixel {
     private static final double RATIO = 3.0 / 2.0;
-    private static final long MIN_WIDTH = 300;
-    private static final long MIN_HEIGHT = 200;
+    private static final int MIN_WIDTH = 300;
+    private static final int MIN_HEIGHT = 200;
 
-    private Long width;
-    private Long height;
+    private Integer width;
+    private Integer height;
 
-    public ImagePixel(Long width, Long height) {
+    public ImagePixel(Integer width, Integer height) {
         if (width < MIN_WIDTH || height < MIN_HEIGHT) {
             throw new IllegalArgumentException("invalid width or height(width must be greater than 300, height must be greater than 200)");
         }
@@ -22,11 +22,11 @@ public class ImagePixel {
         this.height = height;
     }
 
-    public Long getWidth() {
+    public Integer getWidth() {
         return width;
     }
 
-    public Long getHeight() {
+    public Integer getHeight() {
         return height;
     }
 
@@ -45,5 +45,13 @@ public class ImagePixel {
     @Override
     public int hashCode() {
         return Objects.hash(getWidth(), getHeight());
+    }
+
+    @Override
+    public String toString() {
+        return "ImagePixel{" +
+                "width=" + width +
+                ", height=" + height +
+                '}';
     }
 }

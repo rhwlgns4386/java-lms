@@ -1,32 +1,21 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.session;
 
 public class SessionCapacity {
     private int capacity;
-    private int currentCount;
 
     public SessionCapacity(int capacity) {
-        this(capacity, 0);
-    }
-
-    public SessionCapacity(int capacity, int currentCount) {
         if (capacity <= 0) {
             throw new IllegalArgumentException("Capacity must be greater than 0");
         }
         this.capacity = capacity;
-        this.currentCount = currentCount;
     }
 
     public int getCapacity() {
         return capacity;
     }
 
-    public int getCurrentCount() {
-        return currentCount;
-    }
-
-    public void increase() {
-        this.currentCount++;
-        if (this.currentCount > this.capacity) {
+    public void checkCapacity(int countOfStudents) {
+        if (countOfStudents > this.capacity) {
             throw new IllegalArgumentException("Capacity is full");
         }
     }
@@ -41,13 +30,11 @@ public class SessionCapacity {
         }
 
         SessionCapacity that = (SessionCapacity) o;
-        return capacity == that.capacity && currentCount == that.currentCount;
+        return getCapacity() == that.getCapacity();
     }
 
     @Override
     public int hashCode() {
-        int result = capacity;
-        result = 31 * result + currentCount;
-        return result;
+        return getCapacity();
     }
 }

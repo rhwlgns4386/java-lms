@@ -1,4 +1,4 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.image;
 
 import java.util.Objects;
 
@@ -8,8 +8,8 @@ public class Image {
     private ImageType imageType;
     private ImagePixel imagePixel;
 
-    public Image() {
-        this(null, null, null, null);
+    public Image(ImageSize imageSize, ImageType imageType, ImagePixel imagePixel) {
+        this(null, imageSize, imageType, imagePixel);
     }
 
     public Image(Long id, ImageSize imageSize, ImageType imageType, ImagePixel imagePixel) {
@@ -31,7 +31,7 @@ public class Image {
         return imageType;
     }
 
-    public ImagePixel getImageProperty() {
+    public ImagePixel getImagePixel() {
         return imagePixel;
     }
 
@@ -44,11 +44,21 @@ public class Image {
             return false;
         }
         Image image = (Image) o;
-        return Objects.equals(getId(), image.getId()) && Objects.equals(getImageSize(), image.getImageSize()) && getImageType() == image.getImageType() && Objects.equals(getImageProperty(), image.getImageProperty());
+        return Objects.equals(getId(), image.getId()) && Objects.equals(getImageSize(), image.getImageSize()) && getImageType() == image.getImageType() && Objects.equals(getImagePixel(), image.getImagePixel());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getImageSize(), getImageType(), getImageProperty());
+        return Objects.hash(getId(), getImageSize(), getImageType(), getImagePixel());
+    }
+
+    @Override
+    public String toString() {
+        return "Image{" +
+                "id=" + id +
+                ", imageSize=" + imageSize +
+                ", imageType=" + imageType +
+                ", imagePixel=" + imagePixel +
+                '}';
     }
 }

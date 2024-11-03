@@ -30,3 +30,30 @@
 * 유료 강의 신청 로직 개발 [X]
 * 강의 상태 변경 로직 개발 [X]
 * 과정에 강의 추가 로직 개발 [X]
+* SessionId class 삭제 [X]
+* Student class 생성 [X]
+* PaidSession의 수강 학생수를 이용해서 SessionCapacity의 currentCount 업데이트하도록 로직 수정 [X]
+* erd 작성 [X]
+* Course 테이블 추가 [X]
+* Session 테이블 추가 [X]
+* Image 테이블 추가 [X]
+* Student 테이블 추가 [X]
+* Course crud 로직 [X]
+* Session crud 로직 [X]
+* Student crud 로직 [X]
+* Image crud 로직 [X]
+* Session 생성 서비스 로직 [X]
+* Session 수강신청 서비스 로직 [X]
+* Session 조회 서비스 로직 [X]
+* Course 생성 서비스 로직 [X]
+* Course 조회 서비스 로직 [X]
+
+## ERD
+
+```mermaid
+erDiagram
+    COURSE ||--o{ SESSION: has
+    SESSION ||--|| IMAGE: has
+    SESSION ||--o{ STUDENT: use
+    NS_USER ||--o{ STUDENT: use
+```

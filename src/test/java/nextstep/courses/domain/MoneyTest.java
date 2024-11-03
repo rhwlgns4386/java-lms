@@ -1,5 +1,6 @@
 package nextstep.courses.domain;
 
+import nextstep.courses.domain.session.Money;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -7,7 +8,7 @@ import org.junit.jupiter.api.Test;
 public class MoneyTest {
     @Test
     @DisplayName("Money 생성")
-    void createMoneyTest(){
+    void createMoneyTest() {
         long price = 100_000L;
 
         Money money = new Money(price);
@@ -17,10 +18,10 @@ public class MoneyTest {
 
     @Test
     @DisplayName("price 유효성 체크")
-    void checkMoneyPriceTest(){
+    void checkMoneyPriceTest() {
         long price = 0L;
 
         Assertions.assertThatThrownBy(() -> new Money(price))
-            .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(IllegalArgumentException.class);
     }
 }

@@ -25,18 +25,22 @@ public class NsUser {
     public NsUser() {
     }
 
+    public NsUser(String userId, String password, String name, String email) {
+        this(null, userId, password, name, email);
+    }
+
     public NsUser(Long id, String userId, String password, String name, String email) {
-        this(id, userId, password, name, email, LocalDateTime.now(), null);
+        this(id, userId, password, name, email, LocalDateTime.now(), LocalDateTime.now());
     }
 
     public NsUser(Long id, String userId, String password, String name, String email, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.id = id;
-        this.userId = userId;
-        this.password = password;
-        this.name = name;
-        this.email = email;
         this.createdAt = createdAt;
+        this.email = email;
+        this.id = id;
+        this.name = name;
+        this.password = password;
         this.updatedAt = updatedAt;
+        this.userId = userId;
     }
 
     public Long getId() {
