@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Repository
 public class JdbcImageRepository implements ImageRepository {
@@ -44,18 +45,18 @@ public class JdbcImageRepository implements ImageRepository {
     }
 
     @Override
-    public Image findById(long id) {
+    public Optional<Image> findById(long id) {
         String sql = "select id, size, image_type, width, height from image where id = :id";
         MapSqlParameterSource param = new MapSqlParameterSource();
         param.addValue("id", id);
-        return namedParameterJdbcTemplate.queryForObject(sql, param, IMAGE_ROW_MAPPER);
+        return Optional.ofNullable(namedParameterJdbcTemplate.queryForObject(sql, param, IMAGE_ROW_MAPPER));
     }
 
     @Override
-    public Image findBySessionId(long sessionId) {
+    public Optional<Image> findBySessionId(long sessionId) {
         String sql = "select id, size, image_type, width, height from image where session_id = :sessionId";
         MapSqlParameterSource param = new MapSqlParameterSource();
         param.addValue("sessionId", sessionId);
-        return namedParameterJdbcTemplate.queryForObject(sql, param, IMAGE_ROW_MAPPER);
+        return Optional.ofNullable(namedParameterJdbcTemplate.queryForObject(sql, param, IMAGE_ROW_MAPPER));
     }
 }

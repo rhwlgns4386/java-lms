@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class JdbcStudentRepository implements StudentRepository {
@@ -47,12 +48,12 @@ public class JdbcStudentRepository implements StudentRepository {
     }
 
     @Override
-    public Student findById(Long nsUserId, Long sessionId) {
+    public Optional<Student> findById(Long nsUserId, Long sessionId) {
         String sql = "select ns_user_id, amount from student where ns_user_id = :nsUserId and session_id = :sessionId";
         MapSqlParameterSource param = new MapSqlParameterSource();
         param.addValue("nsUserId", nsUserId);
         param.addValue("sessionId", sessionId);
-        return namedParameterJdbcTemplate.queryForObject(sql, param, STUDENT_ROW_MAPPER);
+        return Optional.ofNullable(namedParameterJdbcTemplate.queryForObject(sql, param, STUDENT_ROW_MAPPER));
     }
 
     @Override

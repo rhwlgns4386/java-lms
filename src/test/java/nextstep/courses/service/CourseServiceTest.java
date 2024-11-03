@@ -19,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -56,7 +57,7 @@ public class CourseServiceTest {
     void findByCourseIdTest() {
         Course course = new Course(1L, 1L, "TDD, 클린 코드 with Java", NsUserTest.SANJIGI.getId());
 
-        when(courseRepository.findById(course.getId())).thenReturn(course);
+        when(courseRepository.findById(course.getId())).thenReturn(Optional.of(course));
         when(sessionService.findAllByCourseId(course.getId())).thenReturn(List.of(freeSession));
 
         Course foundCourse = courseService.findById(course.getId());

@@ -34,7 +34,7 @@ public class CourseRepositoryTest {
         Course course = new Course("TDD, 클린 코드 with Java", 1L);
         long saveId = courseRepository.save(course);
         assertThat(saveId).isEqualTo(1);
-        Course savedCourse = courseRepository.findById(1L);
+        Course savedCourse = courseRepository.findById(1L).orElseThrow();
         assertThat(course.getTitle()).isEqualTo(savedCourse.getTitle());
         LOGGER.debug("Course: {}", savedCourse);
     }

@@ -28,7 +28,7 @@ public class CourseService {
 
     @Transactional(readOnly = true)
     public Course findById(long courseId) {
-        Course course = courseRepository.findById(courseId);
+        Course course = courseRepository.findById(courseId).orElseThrow();
         List<Session> sessions = sessionService.findAllByCourseId(course.getId());
 
         return Course.of(course, sessions);

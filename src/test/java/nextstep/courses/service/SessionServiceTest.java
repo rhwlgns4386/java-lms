@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyList;
@@ -76,8 +77,8 @@ public class SessionServiceTest {
         Student student = new Student(amount, nsUser.getId());
         Student student2 = new Student(amount, NsUserTest.SANJIGI.getId());
 
-        when(sessionRepository.findById(anyLong())).thenReturn(paidSession);
-        when(imageRepository.findBySessionId(anyLong())).thenReturn(image);
+        when(sessionRepository.findById(anyLong())).thenReturn(Optional.of(paidSession));
+        when(imageRepository.findBySessionId(anyLong())).thenReturn(Optional.of(image));
         when(studentRepository.findAllBySessionId(anyLong())).thenReturn(new ArrayList<>(List.of(student2)));
         when(studentRepository.saveAll(anyList(), anyLong())).thenReturn(new int[]{1});
 
@@ -103,8 +104,8 @@ public class SessionServiceTest {
         Student student = new Student(amount, nsUser.getId());
         Student student2 = new Student(amount, NsUserTest.SANJIGI.getId());
 
-        when(sessionRepository.findById(anyLong())).thenReturn(paidSession);
-        when(imageRepository.findBySessionId(anyLong())).thenReturn(image);
+        when(sessionRepository.findById(anyLong())).thenReturn(Optional.of(paidSession));
+        when(imageRepository.findBySessionId(anyLong())).thenReturn(Optional.of(image));
         when(studentRepository.findAllBySessionId(anyLong())).thenReturn(Arrays.asList(student, student2));
 
         Session foundSession = sessionService.findById(sessionId);

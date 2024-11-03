@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Optional;
 
 @Repository
 public class JdbcCourseRepository implements CourseRepository {
@@ -49,13 +50,13 @@ public class JdbcCourseRepository implements CourseRepository {
     }
 
     @Override
-    public Course findById(Long id) {
+    public Optional<Course> findById(Long id) {
         String sql = "select id, \"order\", title, creator_id, created_at, updated_at from course where id = :id";
 
         MapSqlParameterSource param = new MapSqlParameterSource();
         param.addValue("id", id);
 
-        return namedParameterJdbcTemplate.queryForObject(sql, param, COURSE_ROW_MAPPER);
+        return Optional.ofNullable(namedParameterJdbcTemplate.queryForObject(sql, param, COURSE_ROW_MAPPER));
     }
 
     private static LocalDateTime toLocalDateTime(Timestamp timestamp) {

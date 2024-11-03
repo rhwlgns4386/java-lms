@@ -1,9 +1,11 @@
 package nextstep.courses.domain.image;
 
+import java.util.Optional;
+
 public interface ImageRepository {
     int save(Image image, Long sessionId);
 
-    Image findById(long id);
+    Optional<Image> findById(long id);
 
-    Image findBySessionId(long sessionId);
+    Optional<Image> findBySessionId(long sessionId);
 }

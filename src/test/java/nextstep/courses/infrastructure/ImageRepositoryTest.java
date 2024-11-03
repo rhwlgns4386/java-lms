@@ -32,7 +32,7 @@ public class ImageRepositoryTest {
         Image image = new Image(imageSize, ImageType.JPG, imagePixel);
         int count = imageRepository.save(image, 1L);
         assertThat(count).isEqualTo(1);
-        Image saveImage = imageRepository.findById(1L);
+        Image saveImage = imageRepository.findById(1L).orElseThrow();
         assertThat(image.getImagePixel()).isEqualTo(saveImage.getImagePixel());
         assertThat(image.getImageType()).isEqualTo(saveImage.getImageType());
         assertThat(image.getImageSize()).isEqualTo(saveImage.getImageSize());
@@ -47,7 +47,7 @@ public class ImageRepositoryTest {
         int count = imageRepository.save(image, 1L);
         assertThat(count).isEqualTo(1);
 
-        Image saveImage = imageRepository.findBySessionId(1L);
+        Image saveImage = imageRepository.findBySessionId(1L).orElseThrow();
         assertThat(image.getImagePixel()).isEqualTo(saveImage.getImagePixel());
         assertThat(image.getImageType()).isEqualTo(saveImage.getImageType());
         assertThat(image.getImageSize()).isEqualTo(saveImage.getImageSize());

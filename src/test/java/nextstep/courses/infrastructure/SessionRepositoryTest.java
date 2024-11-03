@@ -49,9 +49,9 @@ public class SessionRepositoryTest {
         long id2 = sessionRepository.save(freeSession, courseId);
         Assertions.assertThat(id2).isEqualTo(2);
 
-        Session savePaidSession = sessionRepository.findById(1L);
+        Session savePaidSession = sessionRepository.findById(1L).orElseThrow();
         Assertions.assertThat(savePaidSession.getSessionType()).isEqualTo(SessionType.PAID);
-        Session saveFreeSession = sessionRepository.findById(2L);
+        Session saveFreeSession = sessionRepository.findById(2L).orElseThrow();
         Assertions.assertThat(saveFreeSession.getSessionType()).isEqualTo(SessionType.FREE);
     }
 

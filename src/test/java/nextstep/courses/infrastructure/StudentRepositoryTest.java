@@ -41,7 +41,8 @@ public class StudentRepositoryTest {
         int count = studentRepository.save(student, sessionId);
         assertThat(count).isEqualTo(1);
 
-        Student saveStudent = studentRepository.findById(sanjigi.getId(), sessionId);
+        Student saveStudent = studentRepository.findById(sanjigi.getId(), sessionId)
+                .orElseThrow();
         assertThat(saveStudent.getNsUserId()).isEqualTo(sanjigi.getId());
         assertThat(saveStudent.getAmount()).isEqualTo(amount);
     }

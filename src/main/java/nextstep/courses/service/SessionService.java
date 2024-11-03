@@ -27,8 +27,8 @@ public class SessionService {
 
     @Transactional(readOnly = true)
     public Session findById(long sessionId) {
-        Session session = sessionRepository.findById(sessionId);
-        Image image = imageRepository.findBySessionId(sessionId);
+        Session session = sessionRepository.findById(sessionId).orElseThrow();
+        Image image = imageRepository.findBySessionId(sessionId).orElse(null);
         List<Student> students = studentRepository.findAllBySessionId(sessionId);
 
         return getSession(session, image, students);
@@ -45,7 +45,7 @@ public class SessionService {
     public List<Session> findAllByCourseId(long courseId) {
         return sessionRepository.findAllByCourseId(courseId).stream()
                 .map(it -> {
-                    Image image = imageRepository.findBySessionId(it.getId());
+                    Image image = imageRepository.findBySessionId(it.getId()).orElse(null);
                     List<Student> students = studentRepository.findAllBySessionId(it.getId());
 
                     return getSession(it, image, students);

@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Repository
 public class JdbcSessionRepository implements SessionRepository {
@@ -74,11 +75,11 @@ public class JdbcSessionRepository implements SessionRepository {
     }
 
     @Override
-    public Session findById(Long id) {
+    public Optional<Session> findById(Long id) {
         String sql = "select id, title, start_at, end_at, session_type, session_status, capacity, price from session where id = :id";
         MapSqlParameterSource param = new MapSqlParameterSource();
         param.addValue("id", id);
-        return namedParameterJdbcTemplate.queryForObject(sql, param, COURSE_ROW_MAPPER);
+        return Optional.ofNullable(namedParameterJdbcTemplate.queryForObject(sql, param, COURSE_ROW_MAPPER));
     }
 
     @Override
