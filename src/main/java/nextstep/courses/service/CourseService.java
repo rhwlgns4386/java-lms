@@ -6,15 +6,17 @@ import nextstep.courses.domain.session.Session;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.List;
 
-@Service("courseService")
+@Service
 public class CourseService {
-    @Resource(name = "courseRepository")
-    private CourseRepository courseRepository;
-    @Resource(name = "sessionService")
-    private SessionService sessionService;
+    private final CourseRepository courseRepository;
+    private final SessionService sessionService;
+
+    public CourseService(CourseRepository courseRepository, SessionService sessionService) {
+        this.courseRepository = courseRepository;
+        this.sessionService = sessionService;
+    }
 
     @Transactional
     public long create(Course course, Session session) {

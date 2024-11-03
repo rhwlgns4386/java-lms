@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository("studentRepository")
+@Repository
 public class JdbcStudentRepository implements StudentRepository {
     private static final RowMapper<Student> STUDENT_ROW_MAPPER = (rs, rowNum) -> new Student(
             rs.getLong(2),

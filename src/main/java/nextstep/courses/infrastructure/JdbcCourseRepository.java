@@ -13,7 +13,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-@Repository("courseRepository")
+@Repository
 public class JdbcCourseRepository implements CourseRepository {
     private static final RowMapper<Course> COURSE_ROW_MAPPER = (rs, rowNum) -> new Course(
             rs.getLong(1),

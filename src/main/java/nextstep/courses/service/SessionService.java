@@ -10,18 +10,20 @@ import nextstep.users.domain.NsUser;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service("sessionService")
+@Service
 public class SessionService {
-    @Resource(name = "sessionRepository")
-    private SessionRepository sessionRepository;
-    @Resource(name = "imageRepository")
-    private ImageRepository imageRepository;
-    @Resource(name = "studentRepository")
-    private StudentRepository studentRepository;
+    private final SessionRepository sessionRepository;
+    private final ImageRepository imageRepository;
+    private final StudentRepository studentRepository;
+
+    public SessionService(SessionRepository sessionRepository, ImageRepository imageRepository, StudentRepository studentRepository) {
+        this.sessionRepository = sessionRepository;
+        this.imageRepository = imageRepository;
+        this.studentRepository = studentRepository;
+    }
 
     @Transactional(readOnly = true)
     public Session findById(long sessionId) {

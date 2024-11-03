@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 
-@Repository("imageRepository")
+@Repository
 public class JdbcImageRepository implements ImageRepository {
     private static final RowMapper<Image> IMAGE_ROW_MAPPER = (rs, rowNum) -> {
         long imageId = rs.getLong(1);

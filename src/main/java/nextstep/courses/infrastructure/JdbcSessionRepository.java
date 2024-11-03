@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@Repository("sessionRepository")
+@Repository
 public class JdbcSessionRepository implements SessionRepository {
     private static final RowMapper<Session> COURSE_ROW_MAPPER = (rs, rowNum) -> {
         long sessionId = rs.getLong(1);
