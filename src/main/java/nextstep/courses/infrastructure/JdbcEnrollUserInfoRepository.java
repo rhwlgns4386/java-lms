@@ -30,4 +30,6 @@ public class JdbcEnrollUserInfoRepository implements EnrollUserInfoRepository {
         );
         return jdbcTemplate.queryForObject(sql, rowMapper, sessionId, userId);
     }
+
+
 }

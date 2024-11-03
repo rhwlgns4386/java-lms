@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import static nextstep.courses.domain.image.SessionCoverImage.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @JdbcTest
@@ -27,11 +26,12 @@ public class SessionCoverImageRepositoryTest {
 
     @Test
     void 이미지_저장_테스트() {
-        SessionCoverImage sessionCoverImage = new SessionCoverImage.SessionCoverImageBuilder(1L).sessionId(1L).fileName("leo.png").filePath("/home/lms/image/cover/leo.png").volume(150).width(300).height(200).build();
+        SessionCoverImage sessionCoverImage = new SessionCoverImage.SessionCoverImageBuilder().id(1L).sessionId(1L).fileName("leo.png").filePath("/home/lms/image/cover/leo.png").volume(150).width(300).height(200).build();
 
-        int count = sessionCoverImageRepository.save(sessionCoverImage);
+        Long key = sessionCoverImageRepository.save(sessionCoverImage);
         SessionCoverImage savedCoverImage = sessionCoverImageRepository.findById(1L);
         assertThat(sessionCoverImage.getFileName()).isEqualTo(savedCoverImage.getFileName());
+        assertThat(key).isEqualTo(1L);
     }
 
 }

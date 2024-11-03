@@ -4,7 +4,12 @@ import nextstep.courses.domain.image.SessionCoverImage;
 import nextstep.courses.domain.port.SessionCoverImageRepository;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+
+import java.sql.PreparedStatement;
+import java.util.Objects;
 
 @Repository("jdbcSessionCoverImageRepository")
 public class JdbcSessionCoverImageRepository implements SessionCoverImageRepository {
@@ -31,10 +36,24 @@ public class JdbcSessionCoverImageRepository implements SessionCoverImageReposit
     }
 
     @Override
-    public int save(SessionCoverImage sessionCoverImage) {
+    public Long save(SessionCoverImage sessionCoverImage) {
         String sql = "insert into session_cover_image (session_id, fileName, volume ,extension, height, width, file_path) values(?,?,?,?,?,?,?)";
 
-        return jdbcTemplate.update(sql, sessionCoverImage.getSessionId(), sessionCoverImage.getFileName(), sessionCoverImage.getCoverImageVolume().getSize(), sessionCoverImage.getCoverImageExtensionType().getExtension(), sessionCoverImage.getCoverImageFileSize().getHeight(), sessionCoverImage.getCoverImageFileSize().getWidth(), sessionCoverImage.getFilePath());
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, new String[] {"id"});
+            ps.setLong(1, sessionCoverImage.getSessionId());
+            ps.setString(2, sessionCoverImage.getFileName());
+            ps.setInt(3, sessionCoverImage.getCoverImageVolume().getSize());
+            ps.setString(4, sessionCoverImage.getCoverImageExtensionType().getExtension());
+            ps.setInt(5, sessionCoverImage.getCoverImageFileSize().getHeight());
+            ps.setInt(6, sessionCoverImage.getCoverImageFileSize().getWidth());
+            ps.setString(7, sessionCoverImage.getFilePath());
+            return ps;
+        }, keyHolder);
+
+        return Objects.requireNonNull(keyHolder.getKey()).longValue();
     }
 
 }

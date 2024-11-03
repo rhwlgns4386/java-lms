@@ -6,5 +6,5 @@ public interface SessionCoverImageRepository {
 
     SessionCoverImage findById(Long id);
 
-    int save(SessionCoverImage sessionCoverImage);
+    Long save(SessionCoverImage sessionCoverImage);
 }

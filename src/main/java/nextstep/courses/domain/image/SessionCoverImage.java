@@ -90,8 +90,13 @@ public class SessionCoverImage {
         private int height;
         private String filePath;
 
-        public SessionCoverImageBuilder(Long id) {
+        public SessionCoverImageBuilder() {
+
+        }
+
+        public SessionCoverImageBuilder id(Long id) {
             this.id = id;
+            return this;
         }
 
         public SessionCoverImageBuilder sessionId(Long sessionId) {

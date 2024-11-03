@@ -18,10 +18,17 @@ class CourseTest {
     @Test
     void 코스_세션_추가_테스트() {
         Course course = new Course();
-        SessionCoverImage sessionCoverImage =new SessionCoverImage.SessionCoverImageBuilder(1L).sessionId(1L).fileName("leo.png").filePath("/home/lms/image/cover/leo.png").volume(150).width(300).height(200).build();
+        SessionCoverImage sessionCoverImage =new SessionCoverImage.SessionCoverImageBuilder().id(1L).sessionId(1L).fileName("leo.png").filePath("/home/lms/image/cover/leo.png").volume(150).width(300).height(200).build();
 
-        Session session = new SessionBuilder(1L)
+        Session session = new SessionBuilder()
+                .sessionId(1L)
                 .price(1000L)
+                .sessionPriceType(SessionPriceType.FREE)
+                .sessionStatus(SessionStatus.COMPLETED)
+                .sessionCoverImage(sessionCoverImage)
+                .startDateTime(LocalDateTime.of(2024, 10, 30, 10, 30))
+                .endDateTime(LocalDateTime.of(2024, 11, 20, 10, 30))
+                .availableEnrollCount(30).price(1000L)
                 .sessionPriceType(SessionPriceType.FREE)
                 .sessionStatus(SessionStatus.COMPLETED)
                 .sessionCoverImage(sessionCoverImage)

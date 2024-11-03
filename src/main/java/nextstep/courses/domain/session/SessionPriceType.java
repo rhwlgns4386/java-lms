@@ -7,4 +7,6 @@ public enum SessionPriceType {
         return this == FREE;
     }
 
+
+
 }
