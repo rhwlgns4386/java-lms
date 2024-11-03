@@ -2,11 +2,13 @@ package nextstep.courses.infrastructure;
 
 import nextstep.courses.domain.course.Course;
 import nextstep.courses.domain.course.CourseRepository;
-import nextstep.courses.domain.course.CourseEntity;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -21,27 +23,30 @@ public class JdbcCourseRepository implements CourseRepository {
 
     @Override
     public int save(Course course) {
-        CourseEntity courseEntity = CourseEntity.from(course);
-        String sql = "insert into course (title, creator_id, created_at) values (?, ?, ?)";
-        return jdbcTemplate.update(sql,
-                courseEntity.getTitle(),
-                courseEntity.getCreatorId(),
-                courseEntity.getCreatedAt()
-        );
+        String sql = "INSERT INTO course (title, creator_id, created_at) VALUES (?, ?, ?)";
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, new String[]{"id"});
+            ps.setString(1, course.getCourseTitle());
+            ps.setLong(2, course.getCreatorId());
+            ps.setObject(3, course.getCreatedAt());
+            return ps;
+        }, keyHolder);
+
+        return Objects.requireNonNull(keyHolder.getKey()).intValue();
     }
 
     @Override
     public Course findById(Long id) {
         String sql = "select id, title, creator_id, created_at, updated_at from course where id = ?";
-        RowMapper<CourseEntity> rowMapper = (rs, rowNum) -> new CourseEntity(
-                rs.getLong("id"),
-                rs.getString("title"),
-                rs.getLong("creator_id"),
-                toLocalDateTime(rs.getTimestamp("created_at")),
-                toLocalDateTime(rs.getTimestamp("updated_at"))
-        );
-        CourseEntity courseEntity = jdbcTemplate.queryForObject(sql, rowMapper, id);
-        return Objects.requireNonNull(courseEntity).toCourse();
+        RowMapper<Course> rowMapper = (rs, rowNum) -> new Course(
+                rs.getLong(1),
+                rs.getString(2),
+                rs.getLong(3),
+                toLocalDateTime(rs.getTimestamp(4)),
+                toLocalDateTime(rs.getTimestamp(5)));
+        return jdbcTemplate.queryForObject(sql, rowMapper, id);
     }
 
     private LocalDateTime toLocalDateTime(Timestamp timestamp) {

@@ -55,7 +55,7 @@ class SessionRepositoryTest {
                 "INSERT INTO cover_image (id, file_size, image_type, width, height, created_at) VALUES (?, ?, ?, ?, ?, ?)",
                 coverImageId,
                 coverImage.getFileSize(),
-                coverImage.getType(),
+                coverImage.getTypeName(),
                 coverImage.getImageWidth(),
                 coverImage.getImageHeight(),
                 LocalDateTime.now()
@@ -74,11 +74,10 @@ class SessionRepositoryTest {
         DefaultSession foundSession = sessionRepository.findById(savedId);
 
         // then
-        assertThat(foundSession).isInstanceOf(FreeSession.class);
         FreeSession foundFreeSession = (FreeSession) foundSession;
         assertThat(foundFreeSession)
                 .extracting("status", "period.startDate", "period.endDate", "courseFee", "capacity.maxStudents")
-                .containsExactly(Status.OPEN, period.getStartDate(), period.getEndDate(), new Money(0), Integer.MAX_VALUE);
+                .containsExactly(Status.OPEN, period.getStartDate(), period.getEndDate(), 0L, Integer.MAX_VALUE);
     }
 
     @DisplayName("유료세션을 조회할 수 있다.")
@@ -93,11 +92,10 @@ class SessionRepositoryTest {
         DefaultSession foundSession = sessionRepository.findById(savedId);
 
         // then
-        assertThat(foundSession).isInstanceOf(PaidSession.class);
         PaidSession foundPaidSession = (PaidSession) foundSession;
         assertThat(foundPaidSession)
                 .extracting("status", "period.startDate", "period.endDate", "courseFee", "capacity.maxStudents")
-                .containsExactly(Status.OPEN, period.getStartDate(), period.getEndDate(), courseFee, 20);
+                .containsExactly(Status.OPEN, period.getStartDate(), period.getEndDate(), 50000L, 20);
     }
 
     @AfterEach

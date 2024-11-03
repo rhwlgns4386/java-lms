@@ -11,13 +11,9 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Types;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-
-import static java.sql.Date.*;
 
 @Repository("sessionRepository")
 public class JdbcSessionRepository implements SessionRepository {
@@ -55,13 +51,7 @@ public class JdbcSessionRepository implements SessionRepository {
 
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, new String[]{"id"});
-            ps.setString(1, session.getStatus().getCode());
-            ps.setDate(2, valueOf(session.getStartDate()));
-            ps.setDate(3, valueOf(session.getEndDate()));
-            ps.setLong(4, session.getCoverImageId());
-            ps.setString(5, session instanceof PaidSession ? SessionType.PAID.getCode() : SessionType.FREE.getCode());
-            setNullableParameter(ps, 6, session instanceof PaidSession ? session.getCourseFee() : null);
-            setNullableParameter(ps, 7, session.getCapacity().getMaxStudentsSize());
+            PreparedStatementMapper.mapParameters(ps, session);
             return ps;
         }, keyHolder);
 
@@ -73,22 +63,6 @@ public class JdbcSessionRepository implements SessionRepository {
             return;
         }
         sessionRegistrationRepository.saveRegistrations(sessionId, userIds);
-    }
-
-    private <T> void setNullableParameter(PreparedStatement ps, int index, T value) throws SQLException {
-        if (value instanceof Integer) {
-            ps.setInt(index, (Integer) value);
-            return;
-        }
-        if (value instanceof Long) {
-            ps.setLong(index, (Long) value);
-            return;
-        }
-        if (value == null) {
-            ps.setNull(index, Types.NULL);
-            return;
-        }
-        throw new IllegalArgumentException("지원하지 않는 타입입니다: " + value.getClass().getName());
     }
 
     @Override
