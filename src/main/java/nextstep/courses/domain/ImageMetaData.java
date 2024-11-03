@@ -3,12 +3,12 @@ package nextstep.courses.domain;
 import java.util.Objects;
 
 public class ImageMetaData {
-    public static final int byteMB = 1;
+    public static final int MAX_SIZE_MEGABYTE = 1;
     private final int byteSize;
     private final Extension extension;
 
     public ImageMetaData(int byteSize, Extension extension) {
-        if (byteSize > byteMB) {
+        if (byteSize > MAX_SIZE_MEGABYTE) {
             throw new IllegalArgumentException();
         }
         this.byteSize = byteSize;

@@ -3,6 +3,7 @@ package nextstep.courses.domain;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import nextstep.users.domain.NsUser;
 
@@ -20,7 +21,6 @@ public class Students {
         this.students = new ArrayList<>(students);
     }
 
-
     public boolean isBigger(int studentMaxValue) {
         return studentMaxValue < this.students.size() + 1;
     }
@@ -31,6 +31,30 @@ public class Students {
 
     public int size() {
         return this.students.size();
+    }
+
+    public List<SessionStudent> toRegistered(List<SessionStudent> sessionStudents) {
+        List<Long> studentIds = students.stream()
+            .map(NsUser::getId)
+            .collect(Collectors.toList());
+
+        sessionStudents.stream()
+            .filter(sessionStudent -> studentIds.contains(sessionStudent.getStudentId()))
+            .forEach(SessionStudent::toRegistered);
+
+        return sessionStudents;
+    }
+
+    public List<SessionStudent> toCancel(List<SessionStudent> sessionStudents) {
+        List<Long> studentIds = students.stream()
+            .map(NsUser::getId)
+            .collect(Collectors.toList());
+
+        sessionStudents.stream()
+            .filter(sessionStudent -> studentIds.contains(sessionStudent.getStudentId()))
+            .forEach(SessionStudent::toCanceled);
+
+        return sessionStudents;
     }
 
     public Long getSessionId() {

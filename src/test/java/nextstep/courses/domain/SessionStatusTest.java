@@ -7,21 +7,18 @@ import org.junit.jupiter.api.Test;
 
 class SessionStatusTest {
 
-    @DisplayName("모집중인지 확인한다")
-    @Test
-    void checkSameStatus() {
-        boolean result = SessionStatus.isNotRegister(SessionStatus.REGISTER);
-        boolean result2 = SessionStatus.isNotRegister(SessionStatus.PREPARE);
-
-        assertThat(result).isFalse();
-        assertThat(result2).isTrue();
-    }
-
     @DisplayName("문자열을 받아서 해당하는 SessionStatus를 반환한다")
     @Test
     void toSessionStatus() {
-        String stringSessionStatus = "register";
+        String stringSessionStatus = "prepare";
         SessionStatus sessionStatus = SessionStatus.from(stringSessionStatus);
-        assertThat(sessionStatus).isEqualTo(SessionStatus.REGISTER);
+        assertThat(sessionStatus).isEqualTo(SessionStatus.PREPARE);
+    }
+
+    @DisplayName("수강신청이 안되는 상태인지 확인한다")
+    @Test
+    void checkSessionStatus() {
+        boolean result = SessionStatus.cannotRegister(SessionStatus.CLOSE);
+        assertThat(result).isTrue();
     }
 }

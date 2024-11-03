@@ -13,4 +13,13 @@ class SessionStudentTest {
         SessionStudent sessionStudent = new SessionStudent(1L, 1L);
         assertThat(sessionStudent).isEqualTo(new SessionStudent(1L, 1L));
     }
+
+    @DisplayName("상태를 REGISTERED로 변경한다")
+    @Test
+    void toRegistered() {
+        SessionStudent sessionStudent = new SessionStudent(1L, 1L, SessionStudentStatus.PASS);
+        sessionStudent.toRegistered();
+
+        assertThat(sessionStudent).isEqualTo(new SessionStudent(1L, 1L, SessionStudentStatus.REGISTERED));
+    }
 }

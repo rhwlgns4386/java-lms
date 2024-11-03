@@ -3,6 +3,7 @@ package nextstep.courses.domain;
 public enum SessionStatus {
     PREPARE,
     REGISTER,
+    PROGRESS,
     CLOSE,
     ;
 
@@ -12,5 +13,9 @@ public enum SessionStatus {
 
     public static SessionStatus from(String stringValue) {
         return SessionStatus.valueOf(stringValue.toUpperCase());
+    }
+
+    public static boolean cannotRegister(SessionStatus status) {
+        return CLOSE == status;
     }
 }

@@ -13,8 +13,8 @@ class SessionsTest {
     @Test
     void create() {
         List<Session> sessionList = List.of(
-            SessionTestFixture.createPaidSession(1L, 3000L, 3, SessionStatus.PREPARE),
-            SessionTestFixture.createFreeSession(2L, SessionStatus.PREPARE)
+            SessionTestFixture.createPaidSession(1L, 3000L, 3, SessionStatus.PREPARE, RegisterStatus.REGISTER),
+            SessionTestFixture.createFreeSession(2L, SessionStatus.PREPARE, RegisterStatus.REGISTER)
         );
         Sessions sessions = new Sessions(sessionList);
 
@@ -25,13 +25,13 @@ class SessionsTest {
     @Test
     void get_session_with_session_id() {
         List<Session> sessionList = List.of(
-            SessionTestFixture.createPaidSession(1L, 3000L, 3, SessionStatus.PREPARE),
-            SessionTestFixture.createFreeSession(2L, SessionStatus.PREPARE)
+            SessionTestFixture.createPaidSession(1L, 3000L, 3, SessionStatus.PREPARE, RegisterStatus.REGISTER),
+            SessionTestFixture.createFreeSession(2L, SessionStatus.PREPARE, RegisterStatus.REGISTER)
         );
         Sessions sessions = new Sessions(sessionList);
 
         Session session = sessions.getSession(2L);
 
-        assertThat(session).isEqualTo(SessionTestFixture.createFreeSession(2L, SessionStatus.PREPARE));
+        assertThat(session).isEqualTo(SessionTestFixture.createFreeSession(2L, SessionStatus.PREPARE, RegisterStatus.REGISTER));
     }
 }

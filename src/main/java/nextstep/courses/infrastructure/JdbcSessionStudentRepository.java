@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import nextstep.courses.domain.SessionStudent;
 import nextstep.courses.domain.SessionStudentRepository;
+import nextstep.courses.domain.SessionStudentStatus;
 import nextstep.courses.domain.Students;
 
 @Repository("sessionStudentRepository")
@@ -24,7 +25,7 @@ public class JdbcSessionStudentRepository implements SessionStudentRepository {
 
     @Override
     public int[] saveAll(Students students) {
-        String sql = "insert into session_student (session_id, student_id) values (?, ?)";
+        String sql = "insert into session_student (session_id, student_id, session_student_status) values (?, ?, ?)";
 
         List<SessionStudent> sessionStudents = students.getStudents().stream()
             .map(it -> new SessionStudent(students.getSessionId(), it.getId()))
@@ -36,6 +37,27 @@ public class JdbcSessionStudentRepository implements SessionStudentRepository {
                 SessionStudent sessionStudent = sessionStudents.get(i);
                 ps.setLong(1, sessionStudent.getSessionId());
                 ps.setLong(2, sessionStudent.getStudentId());
+                ps.setString(3, sessionStudent.getSessionStudentStatus().toString());
+            }
+
+            @Override
+            public int getBatchSize() {
+                return sessionStudents.size();
+            }
+        });
+    }
+
+    @Override
+    public int[] saveAll(List<SessionStudent> sessionStudents) {
+        String sql = "insert into session_student (session_id, student_id, session_student_status) values (?, ?, ?)";
+
+        return jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+                SessionStudent sessionStudent = sessionStudents.get(i);
+                ps.setLong(1, sessionStudent.getSessionId());
+                ps.setLong(2, sessionStudent.getStudentId());
+                ps.setString(3, sessionStudent.getSessionStudentStatus().toString());
             }
 
             @Override
@@ -47,12 +69,13 @@ public class JdbcSessionStudentRepository implements SessionStudentRepository {
 
     @Override
     public List<SessionStudent> findAllBySessionId(long sessionId) {
-        String sql = "select id, session_id, student_id from session_student where session_id = ?";
+        String sql = "select id, session_id, student_id, session_student_status from session_student where session_id = ?";
 
         RowMapper<SessionStudent> rowMapper = (rs, rowNum) -> new SessionStudent(
             rs.getLong("id"),
             rs.getLong("session_id"),
-            rs.getLong("student_id")
+            rs.getLong("student_id"),
+            SessionStudentStatus.from(rs.getString("session_student_status"))
         );
 
         return jdbcTemplate.query(sql, rowMapper, sessionId);

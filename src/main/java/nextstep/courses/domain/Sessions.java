@@ -27,6 +27,10 @@ public class Sessions {
             .orElseThrow(() -> new IllegalArgumentException("not found session"));
     }
 
+    public boolean contains(Long sessionId) {
+        return sessions.stream().anyMatch(it -> it.compareId(sessionId));
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o)

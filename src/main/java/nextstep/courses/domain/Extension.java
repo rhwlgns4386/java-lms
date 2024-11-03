@@ -1,8 +1,8 @@
 package nextstep.courses.domain;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public enum Extension {
     GIF("gif"),
@@ -12,22 +12,22 @@ public enum Extension {
     SVG("svg");
 
     private final String extension;
-    private static final Map<String, Extension> cachedExtensions = new HashMap<>();
-
-    static {
-        Arrays.stream(Extension.values())
-            .forEach(it -> cachedExtensions.put(it.extension, it));
-    }
+    private static Map<String, Extension> cachedExtensions;
 
     Extension(String extension) {
         this.extension = extension;
     }
 
-    public static Extension getWithString(String extension) {
-        return cachedExtensions.get(extension);
+    private static Map<String, Extension> getCachedExtensions() {
+        cachedExtensions = Arrays.stream(Extension.values())
+            .collect(Collectors.toMap(
+                ext -> ext.extension,
+                ext -> ext
+            ));
+        return cachedExtensions;
     }
 
-    public static boolean verify(String extension) {
-        return cachedExtensions.get(extension) != null;
+    public static Extension getWithString(String extension) {
+        return getCachedExtensions().get(extension);
     }
 }

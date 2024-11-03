@@ -13,21 +13,22 @@ class SessionTest {
     @DisplayName("강의 상태를 가지고 무료 강의를 생성한다")
     @Test
     void createFreeSession() {
-        Session freeSession = SessionTestFixture.createFreeSession(1L, SessionStatus.PREPARE);
-        assertThat(freeSession).isEqualTo(SessionTestFixture.createFreeSession(1L, SessionStatus.PREPARE));
+        Session freeSession = SessionTestFixture.createFreeSession(1L, SessionStatus.PREPARE, RegisterStatus.REGISTER);
+        assertThat(freeSession).isEqualTo(SessionTestFixture.createFreeSession(1L, SessionStatus.PREPARE, RegisterStatus.REGISTER));
     }
 
     @DisplayName("가격과 강의 상태를 가지고 유료 강의를 생성한다")
     @Test
     void createPaidSession() {
-        Session paidSession = SessionTestFixture.createPaidSession(1L, 3000L, 3, SessionStatus.PREPARE);
-        assertThat(paidSession).isEqualTo(SessionTestFixture.createPaidSession(1L, 3000L, 3, SessionStatus.PREPARE));
+        Session paidSession = SessionTestFixture.createPaidSession(1L, 3000L, 3, SessionStatus.PREPARE, RegisterStatus.REGISTER);
+        assertThat(paidSession).isEqualTo(SessionTestFixture.createPaidSession(1L, 3000L, 3, SessionStatus.PREPARE, RegisterStatus.REGISTER));
     }
 
-    @DisplayName("모집중이 아닌 상태라면 학생을 등록하지 못한다")
+    @DisplayName("강의가 닫히거나 모집중이 아닌 상태라면 학생을 등록하지 못한다")
     @Test
     void addStudent() {
-        Session freeSession = SessionTestFixture.createFreeSession(1L, SessionStatus.PREPARE);
+        Session freeSession = SessionTestFixture.createFreeSession(1L, SessionStatus.CLOSE, RegisterStatus.REGISTER);
+        Session notRegisterSession = SessionTestFixture.createFreeSession(1L, SessionStatus.PREPARE, RegisterStatus.NOTREGISTER);
 
         assertThatThrownBy(() -> freeSession.register(NsUserTest.GYEONGJAE))
             .isInstanceOf(IllegalStateException.class);
@@ -37,7 +38,7 @@ class SessionTest {
     @Test
     void register() {
         Payment payment = new Payment("id", 1L, 1L, 3000L);
-        Session paidSession = SessionTestFixture.createPaidSession(1L, 3000L, 3, SessionStatus.REGISTER);
+        Session paidSession = SessionTestFixture.createPaidSession(1L, 3000L, 3, SessionStatus.PREPARE, RegisterStatus.REGISTER);
 
         paidSession.register(payment, NsUserTest.JAVAJIGI);
 
@@ -48,7 +49,7 @@ class SessionTest {
     @Test
     void register_throw_exception() {
         Payment payment = new Payment("id", 1L, 1L, 3000L);
-        Session paidSession = SessionTestFixture.createPaidSession(1L, 3000L, 3, SessionStatus.PREPARE);
+        Session paidSession = SessionTestFixture.createPaidSession(1L, 3000L, 3, SessionStatus.PREPARE, RegisterStatus.NOTREGISTER);
 
         assertThatThrownBy(() -> paidSession.register(payment, NsUserTest.JAVAJIGI))
             .isInstanceOf(IllegalStateException.class);
