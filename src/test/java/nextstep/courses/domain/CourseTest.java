@@ -2,8 +2,6 @@ package nextstep.courses.domain;
 
 import nextstep.payments.domain.Payment;
 import nextstep.sessions.Session;
-import nextstep.sessions.SessionDate;
-import nextstep.sessions.SessionDetail;
 import nextstep.sessions.SessionState;
 import nextstep.users.domain.Student;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,12 +11,14 @@ import java.time.LocalDateTime;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class CourseTest {
     private Course course;
     private Session session;
     private Session freeSession;
     private Student student;
+
     @BeforeEach
     void setUp() {
         course = new Course("자바지기", 1L, 1);
@@ -48,6 +48,7 @@ public class CourseTest {
 
         student = new Student(1L, "javajigi", "password", "자바지기", "test@test.com");
     }
+
     @Test
     public void 코스는_기수를_가진다() {
         assertThat(course.getCohort()).isEqualTo(1);
@@ -57,6 +58,7 @@ public class CourseTest {
     public void 코스에_세션을_추가한다() {
         Course course = new Course("자바지기", 1L, 1);
         course.addSession(session);
+
         assertThat(course.getSessionSize()).isEqualTo(1);
         assertThat(course.contains(session)).isTrue();
     }
@@ -66,12 +68,16 @@ public class CourseTest {
         course.addSession(session);
         Payment payment = course.processPayment(student, 10000L, session);
 
-        assertThat(payment).isNotNull();
-        assertThat(payment.getAmount()).isEqualTo(10000L);
-        assertThat(payment.getCourseId()).isEqualTo(course.getId());
-        assertThat(payment.getSessionId()).isEqualTo(session.getId());
-        assertThat(payment.getStudentId()).isEqualTo(student.getId());
+        assertAll(
+                () -> assertThat(session.contains(student)).isTrue(),
+                () -> assertThat(payment).isNotNull(),
+                () -> assertThat(payment.getAmount()).isEqualTo(10000L),
+                () -> assertThat(payment.getCourseId()).isEqualTo(course.getId()),
+                () -> assertThat(payment.getSessionId()).isEqualTo(session.getId()),
+                () -> assertThat(payment.getStudentId()).isEqualTo(student.getId())
+        );
     }
+
     @Test
     public void 등록기간이_아닌_세션에_등록하려면_예외가_발생한다() {
         session.setClose();

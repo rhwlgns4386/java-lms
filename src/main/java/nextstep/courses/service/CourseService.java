@@ -40,10 +40,9 @@ public class CourseService {
             course.addSession(session);
             courseRepository.save(course);
             return Optional.of(course);
-        } else {
-            return Optional.empty();
-
         }
+
+        return Optional.empty();
     }
 
     public void processPayment(Long courseId, Student student, Long amount, Session session) {

@@ -4,6 +4,7 @@ import nextstep.payments.domain.Payment;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class PaymentTest {
 
@@ -17,12 +18,16 @@ public class PaymentTest {
 
         Payment payment = new Payment(id, courseId, sessionId, studentId, amount);
 
-        assertThat(payment).isNotNull();
-        assertThat(payment.getId()).isEqualTo(id);
-        assertThat(payment.getCourseId()).isEqualTo(courseId);
-        assertThat(payment.getSessionId()).isEqualTo(sessionId);
-        assertThat(payment.getStudentId()).isEqualTo(studentId);
-        assertThat(payment.getAmount()).isEqualTo(amount);
-        assertThat(payment.getCreatedAt()).isBeforeOrEqualTo(LocalDateTime.now());
+        assertAll(
+                () -> assertThat(payment).isNotNull(),
+                () -> assertThat(payment.getId()).isEqualTo(id),
+                () -> assertThat(payment.getCourseId()).isEqualTo(courseId),
+                () -> assertThat(payment.getSessionId()).isEqualTo(sessionId),
+                () -> assertThat(payment.getStudentId()).isEqualTo(studentId),
+                () -> assertThat(payment.getAmount()).isEqualTo(amount),
+                () -> assertThat(payment.getCreatedAt()).isBeforeOrEqualTo(LocalDateTime.now())
+        );
+
+
     }
 }

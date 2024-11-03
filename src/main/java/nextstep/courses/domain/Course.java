@@ -6,34 +6,26 @@ import nextstep.sessions.Sessions;
 import nextstep.users.domain.Student;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 public class Course {
-    private final String title;
-    private final Long creatorId;
-    private final int cohort;
     private Long id;
-    private final LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
+    private final CourseDetail courseDetail;
+    private final CourseDate courseDate;
 
     private Sessions sessions = new Sessions();
 
     public Course(String title, Long creatorId, int cohort) {
-        this(0L, title, creatorId, cohort, LocalDateTime.now(), LocalDateTime.now());
+        this(0L, new CourseDetail(title, creatorId, cohort), new CourseDate(LocalDateTime.now(), LocalDateTime.now()));
     }
 
-    public Course(Long id, String title, Long creatorId, int cohort, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Course(Long id, CourseDetail courseDetail, CourseDate courseDate) {
         this.id = id;
-        this.title = title;
-        this.creatorId = creatorId;
-        this.cohort = cohort;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        this.courseDetail = courseDetail;
+        this.courseDate = courseDate;
     }
 
     public int getCohort() {
-        return cohort;
+        return courseDetail.getCohort();
     }
 
     public void addSession(Session session) {
@@ -46,15 +38,15 @@ public class Course {
     }
 
     public String getTitle() {
-        return title;
+        return courseDetail.getTitle();
     }
 
     public LocalDateTime getCreatedAt() {
-        return createdAt;
+        return courseDate.getCreatedAt();
     }
 
     public Long getCreatorId() {
-        return creatorId;
+        return courseDetail.getCreatorId();
     }
 
     public Long getId() {
@@ -68,13 +60,20 @@ public class Course {
     public boolean contains(Session session) {
         return sessions.contains(session);
     }
+
     public int getSessionSize() {
         return sessions.size();
     }
 
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
         Course course = (Course) o;
         return id.equals(course.id);
     }
@@ -82,15 +81,16 @@ public class Course {
     public int hashCode() {
         return id.hashCode();
     }
+
     @Override
     public String toString() {
         return "Course{" +
                 "id=" + id +
-                ", title='" + title + '\'' +
-                ", creatorId=" + creatorId +
-                ", cohort=" + cohort +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
+                ", title='" + courseDetail.getTitle() + '\'' +
+                ", creatorId=" + courseDetail.getCreatorId() +
+                ", cohort=" + courseDetail.getCohort() +
+                ", createdAt=" + courseDate.getCreatedAt() +
+                ", updatedAt=" + courseDate.getUpdatedAt() +
                 '}';
     }
 

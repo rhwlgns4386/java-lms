@@ -42,6 +42,7 @@ public class SessionDetailTest {
     public void 학생_등록_테스트() {
         paidSessionDetail.checkRegistrationEligibility(300L);
         paidSessionDetail.registerNewStudent(student);
+
         assertThat(paidSessionDetail.isAllowable()).isTrue();
     }
 
@@ -65,7 +66,8 @@ public class SessionDetailTest {
             limitedSessionDetail.checkRegistrationEligibility(300L);
             limitedSessionDetail.registerNewStudent(new Student(2L, "Jane Doe", "1234", "Doe", "johndoe@test.com"));
         });
-        assertThat(exception.getMessage()).isEqualTo("해당 강의는 수강인원이 모두 찼습니다.");
+
+        assertThat(exception.getMessage()).isEqualTo(SessionDetail.SESSION_FULL_MESSAGE);
     }
 
     @Test

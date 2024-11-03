@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class Sessions {
+    public static final String SESSION_NOT_FOUND_MESSAGE = "해당 코스에 해당하는 강의가 아닙니다.";
     private final List<Session> sessions;
 
     public Sessions(List<Session> sessions) {
@@ -29,7 +30,7 @@ public class Sessions {
 
     public void validateSession(Session session) {
         if (!sessions.contains(session)) {
-            throw new IllegalStateException("해당 코스에 해당하는 강의가 아닙니다.");
+            throw new IllegalStateException(SESSION_NOT_FOUND_MESSAGE);
         }
     }
 

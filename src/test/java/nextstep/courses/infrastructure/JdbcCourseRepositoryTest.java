@@ -1,6 +1,8 @@
 package nextstep.courses.infrastructure;
 
 import nextstep.courses.domain.Course;
+import nextstep.courses.domain.CourseDate;
+import nextstep.courses.domain.CourseDetail;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -13,6 +15,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.*;
 
 public class JdbcCourseRepositoryTest {
@@ -28,16 +31,20 @@ public class JdbcCourseRepositoryTest {
 
     private static final RowMapper<Course> COURSE_ROW_MAPPER = (rs, row) -> new Course(
             rs.getLong("id"),
-            rs.getString("title"),
-            rs.getLong("creator_id"),
-            rs.getInt("cohort"),
-            rs.getTimestamp("created_at").toLocalDateTime(),
-            rs.getTimestamp("updated_at").toLocalDateTime());
+            new CourseDetail(
+                    rs.getString("title"),
+                    rs.getLong("creator_id"),
+                    rs.getInt("cohort")
+            ),
+            new CourseDate(
+                    rs.getTimestamp("created_at").toLocalDateTime(),
+                    rs.getTimestamp("updated_at").toLocalDateTime())
+    );
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        course = new Course(1L, "자바지기", 1L, 1, LocalDateTime.now(), LocalDateTime.now());
+        course = new Course(1L, new CourseDetail("자바지기", 1L, 1), new CourseDate(LocalDateTime.now(), LocalDateTime.now()));
     }
 
     @Test
@@ -65,12 +72,14 @@ public class JdbcCourseRepositoryTest {
         assertThat(optionalCourse).isPresent();
         Course foundCourse = optionalCourse.get();
 
-        assertThat(foundCourse).isEqualTo(course);
-        assertThat(foundCourse).isNotNull();
-        assertThat(foundCourse.getId()).isEqualTo(course.getId());
-        assertThat(foundCourse.getTitle()).isEqualTo(course.getTitle());
-        assertThat(foundCourse.getCreatorId()).isEqualTo(course.getCreatorId());
-        assertThat(foundCourse.getCohort()).isEqualTo(course.getCohort());
+        assertAll(
+                () -> assertThat(foundCourse).isEqualTo(course),
+                () -> assertThat(foundCourse).isNotNull(),
+                () -> assertThat(foundCourse.getId()).isEqualTo(course.getId()),
+                () -> assertThat(foundCourse.getTitle()).isEqualTo(course.getTitle()),
+                () -> assertThat(foundCourse.getCreatorId()).isEqualTo(course.getCreatorId()),
+                () -> assertThat(foundCourse.getCohort()).isEqualTo(course.getCohort())
+        );
     }
 
     @Test

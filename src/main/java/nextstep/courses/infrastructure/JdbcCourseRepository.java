@@ -1,6 +1,8 @@
 package nextstep.courses.infrastructure;
 
 import nextstep.courses.domain.Course;
+import nextstep.courses.domain.CourseDate;
+import nextstep.courses.domain.CourseDetail;
 import nextstep.courses.domain.CourseRepository;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -45,9 +47,14 @@ public class JdbcCourseRepository implements CourseRepository {
 
     private static final RowMapper<Course> COURSE_ROW_MAPPER = (rs, row) -> new Course(
             rs.getLong("id"),
-            rs.getString("title"),
-            rs.getLong("creator_id"),
-            rs.getInt("cohort"),
-            rs.getTimestamp("created_at").toLocalDateTime(),
-            rs.getTimestamp("updated_at").toLocalDateTime());
+            new CourseDetail(
+                    rs.getString("title"),
+                    rs.getLong("creator_id"),
+                    rs.getInt("cohort")
+            ),
+            new CourseDate(
+                    rs.getTimestamp("created_at").toLocalDateTime(),
+                    rs.getTimestamp("updated_at").toLocalDateTime())
+    );
+
 }

@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class SessionDetail {
+    public static final String SESSION_FULL_MESSAGE = "해당 강의는 수강인원이 모두 찼습니다.";
     private final boolean isFree;
     private final int maxStudentCount;
     private final Long sessionFee;
@@ -49,7 +50,11 @@ public class SessionDetail {
         }
 
         if (!isAllowable()) {
-            throw new IllegalStateException("해당 강의는 수강인원이 모두 찼습니다.");
+            throw new IllegalStateException(SESSION_FULL_MESSAGE);
         }
+    }
+
+    public boolean contains(Student student) {
+        return students.contains(student);
     }
 }

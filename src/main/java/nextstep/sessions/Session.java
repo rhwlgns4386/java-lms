@@ -6,14 +6,17 @@ import nextstep.users.domain.Student;
 import java.time.LocalDateTime;
 
 public class Session {
+    public static final String SESSION_NOT_OPEN_MESSAGE = "아직 접수 기간이 아닙니다.";
+
     private static final int MAX_STUDENT_COUNT = 999;
     private static final boolean DEFAULT_IS_FREE = true;
     private static final Long DEFAULT_SESSION_FEE = 0L;
     private final Long id;
     private final String name;
     private final String description;
-    private final CoverImage image;
     private SessionState state;
+    private final CoverImage image;
+
     private final SessionDetail sessionDetail;
     private final SessionDate sessionDate;
 
@@ -58,7 +61,7 @@ public class Session {
 
     private void validateRegistrationEligibility(Long amount) {
         if (!state.isOpen()) {
-            throw new IllegalStateException("아직 접수 기간이 아닙니다.");
+            throw new IllegalStateException(SESSION_NOT_OPEN_MESSAGE);
         }
 
         sessionDetail.checkRegistrationEligibility(amount);
@@ -68,12 +71,8 @@ public class Session {
         this.state = SessionState.CLOSE;
     }
 
-    public void setReady() {
-        this.state = SessionState.READY;
-    }
-
-    public void setOpen() {
-        this.state = SessionState.OPEN;
+    public boolean contains(Student student) {
+        return sessionDetail.contains(student);
     }
 
     public static class SessionBuilder {

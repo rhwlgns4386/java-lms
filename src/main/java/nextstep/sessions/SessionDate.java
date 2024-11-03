@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class SessionDate {
+    public static final String SESSION_END_DATE_BEFORE_START_DATE_MESSAGE = "강의의 종료날짜는 시작날짜보다 이전일 수 없습니다.";
     private final LocalDateTime startDate;
     private final LocalDateTime endDate;
 
@@ -25,7 +26,7 @@ public class SessionDate {
 
     private void validateSessionDate(LocalDateTime startDate, LocalDateTime endDate) {
         if (endDate.isBefore(startDate)) {
-            throw new IllegalStateException("강의의 종료날짜는 시작날짜보다 이전일 수 없습니다.");
+            throw new IllegalStateException(SESSION_END_DATE_BEFORE_START_DATE_MESSAGE);
         }
     }
 

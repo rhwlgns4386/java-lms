@@ -56,7 +56,7 @@ public class SessionTest {
 
         assertThatThrownBy(() -> session.register(student, 10000L))
                 .isInstanceOf(IllegalStateException.class)
-                .hasMessage("아직 접수 기간이 아닙니다.");
+                .hasMessage(Session.SESSION_NOT_OPEN_MESSAGE);
     }
 
     @Test

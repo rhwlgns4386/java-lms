@@ -23,7 +23,7 @@ public class SessionDateTest {
         IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
             SessionDate.of("2021-08-31", "2021-08-01");
         });
-        assertThat(exception.getMessage()).isEqualTo("강의의 종료날짜는 시작날짜보다 이전일 수 없습니다.");
+        assertThat(exception.getMessage()).isEqualTo(SessionDate.SESSION_END_DATE_BEFORE_START_DATE_MESSAGE);
     }
 
     @Test

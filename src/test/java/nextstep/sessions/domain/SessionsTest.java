@@ -1,6 +1,7 @@
 package nextstep.sessions.domain;
 
 import nextstep.sessions.Session;
+import nextstep.sessions.SessionDetail;
 import nextstep.sessions.Sessions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,6 +43,6 @@ public class SessionsTest {
     public void 세션_유효성_검사_예외_발생() {
         assertThatThrownBy(() -> sessions.validateSession(session2))
                 .isInstanceOf(IllegalStateException.class)
-                .hasMessage("해당 코스에 해당하는 강의가 아닙니다.");
+                .hasMessage(Sessions.SESSION_NOT_FOUND_MESSAGE);
     }
 }
