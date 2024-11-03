@@ -1,12 +1,19 @@
 package nextstep.sessions;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Sessions {
-    private List<Session> sessions;
+    public static final String SESSION_NOT_FOUND_MESSAGE = "해당 코스에 해당하는 강의가 아닙니다.";
+    private final List<Session> sessions;
 
     public Sessions(List<Session> sessions) {
-        this.sessions = sessions;
+        this.sessions = new ArrayList<>(sessions);
+    }
+
+    public Sessions() {
+        this.sessions = new ArrayList<>();
     }
 
     public void addSession(Session session) {
@@ -14,7 +21,7 @@ public class Sessions {
     }
 
     public List<Session> getSessions() {
-        return sessions;
+        return Collections.unmodifiableList(sessions);
     }
 
     public boolean contains(Session session) {
@@ -23,7 +30,15 @@ public class Sessions {
 
     public void validateSession(Session session) {
         if (!sessions.contains(session)) {
-            throw new IllegalStateException("해당 코스에 해당하는 강의가 아닙니다.");
+            throw new IllegalStateException(SESSION_NOT_FOUND_MESSAGE);
         }
+    }
+
+    public List<Session> clone() {
+        return new ArrayList<>(sessions);
+    }
+
+    public int size() {
+        return sessions.size();
     }
 }

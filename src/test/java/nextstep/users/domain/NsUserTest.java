@@ -25,6 +25,7 @@ public class NsUserTest {
     @Test
     public void 유저_이름과_이메일_일치_확인() {
         NsUser sameInfoUser = new NsUser(3L, "differentUser", "password", "name", "javajigi@slipp.net");
+
         assertThat(JAVAJIGI.equalsNameAndEmail(sameInfoUser)).isTrue();
     }
 
@@ -60,6 +61,7 @@ public class NsUserTest {
     @Test
     public void 게스트_유저_확인() {
         NsUser guestUser = JAVAJIGI.GUEST_USER;
+
         assertThat(guestUser.isGuestUser()).isTrue();
         assertThat(JAVAJIGI.isGuestUser()).isFalse();
     }

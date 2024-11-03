@@ -1,45 +1,60 @@
 package nextstep.courses.infrastructure;
 
 import nextstep.courses.domain.Course;
+import nextstep.courses.domain.CourseDate;
+import nextstep.courses.domain.CourseDetail;
 import nextstep.courses.domain.CourseRepository;
-import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import java.util.Optional;
 
-@Repository("courseRepository")
+@Repository
 public class JdbcCourseRepository implements CourseRepository {
-    private JdbcOperations jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
-    public JdbcCourseRepository(JdbcOperations jdbcTemplate) {
+    public JdbcCourseRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
+    private static final String INSERT_COURSE_SQL = "INSERT INTO courses (id, title, creator_id, cohort, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)";
+    private static final String SELECT_COURSE_BY_ID_SQL = "SELECT * FROM courses WHERE id = ?";
+
 
     @Override
     public int save(Course course) {
-        String sql = "insert into course (title, creator_id, created_at) values(?, ?, ?)";
-        return jdbcTemplate.update(sql, course.getTitle(), course.getCreatorId(), course.getCreatedAt());
+        return jdbcTemplate.update(
+                INSERT_COURSE_SQL,
+                course.getId(),
+                course.getTitle(),
+                course.getCreatorId(),
+                course.getCohort(),
+                course.getCreatedAt(),
+                course.getCreatedAt()
+        );
     }
 
     @Override
-    public Course findById(Long id) {
-        String sql = "select id, title, creator_id, created_at, updated_at from course where id = ?";
-        RowMapper<Course> rowMapper = (rs, rowNum) -> new Course(
-                rs.getLong(1),
-                rs.getString(2),
-                rs.getLong(3),
-                rs.getInt(1),
-                toLocalDateTime(rs.getTimestamp(4)),
-                toLocalDateTime(rs.getTimestamp(5)));
-        return jdbcTemplate.queryForObject(sql, rowMapper, id);
+    public Optional<Course> findById(Long id) {
+        try {
+            Course course = jdbcTemplate.queryForObject(SELECT_COURSE_BY_ID_SQL, COURSE_ROW_MAPPER, id);
+            return Optional.ofNullable(course);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
     }
 
-    private LocalDateTime toLocalDateTime(Timestamp timestamp) {
-        if (timestamp == null) {
-            return null;
-        }
-        return timestamp.toLocalDateTime();
-    }
+    private static final RowMapper<Course> COURSE_ROW_MAPPER = (rs, row) -> new Course(
+            rs.getLong("id"),
+            new CourseDetail(
+                    rs.getString("title"),
+                    rs.getLong("creator_id"),
+                    rs.getInt("cohort")
+            ),
+            new CourseDate(
+                    rs.getTimestamp("created_at").toLocalDateTime(),
+                    rs.getTimestamp("updated_at").toLocalDateTime())
+    );
+
 }

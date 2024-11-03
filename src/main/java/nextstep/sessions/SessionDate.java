@@ -4,12 +4,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class SessionDate {
+    public static final String SESSION_END_DATE_BEFORE_START_DATE_MESSAGE = "강의의 종료날짜는 시작날짜보다 이전일 수 없습니다.";
     private final LocalDateTime startDate;
     private final LocalDateTime endDate;
-
-    public SessionDate(String startDate, String endDate) {
-        this(LocalDate.parse(startDate).atStartOfDay(), LocalDate.parse(endDate).atStartOfDay());
-    }
 
     public SessionDate(LocalDateTime startDate, LocalDateTime endDate) {
         validateSessionDate(startDate, endDate);
@@ -17,9 +14,19 @@ public class SessionDate {
         this.endDate = endDate;
     }
 
+    public static SessionDate of(String startDate, String endDate) {
+        LocalDateTime startDateTime = LocalDate.parse(startDate).atStartOfDay();
+        LocalDateTime endDateTime = LocalDate.parse(endDate).atStartOfDay();
+        return new SessionDate(startDateTime, endDateTime);
+    }
+
+    public static SessionDate of(LocalDateTime startDate, LocalDateTime endDate) {
+        return new SessionDate(startDate, endDate);
+    }
+
     private void validateSessionDate(LocalDateTime startDate, LocalDateTime endDate) {
         if (endDate.isBefore(startDate)) {
-            throw new IllegalStateException("강의의 종료날짜는 시작날짜보다 이전일 수 없습니다.");
+            throw new IllegalStateException(SESSION_END_DATE_BEFORE_START_DATE_MESSAGE);
         }
     }
 

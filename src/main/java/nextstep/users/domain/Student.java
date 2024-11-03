@@ -1,7 +1,6 @@
 package nextstep.users.domain;
 
 import nextstep.sessions.Session;
-import nextstep.users.domain.NsUser;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

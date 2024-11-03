@@ -41,6 +41,9 @@
 - [x] 미사용 Office 객체 삭제
 - [x] Student 객체를 NsUser 상속이 아닌 위임으로 변경
 - [x] sessions List를 일급 객체로 변경
+- [x] 일급 컬렉션 초기화
+- [ ] Service 객체 테스트 코드 추가
+- [x] register전 registable로 체크
 
 ## 프로그래밍 요구사항
 - DB 테이블 설계 없이 도메인 모델부터 구현한다.

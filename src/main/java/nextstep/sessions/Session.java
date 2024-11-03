@@ -6,12 +6,17 @@ import nextstep.users.domain.Student;
 import java.time.LocalDateTime;
 
 public class Session {
+    public static final String SESSION_NOT_OPEN_MESSAGE = "아직 접수 기간이 아닙니다.";
+
     private static final int MAX_STUDENT_COUNT = 999;
+    private static final boolean DEFAULT_IS_FREE = true;
+    private static final Long DEFAULT_SESSION_FEE = 0L;
     private final Long id;
     private final String name;
     private final String description;
+    private SessionState state;
     private final CoverImage image;
-    private final SessionState state;
+
     private final SessionDetail sessionDetail;
     private final SessionDate sessionDate;
 
@@ -50,10 +55,24 @@ public class Session {
     }
 
     public void register(Student student, Long amount) {
+        validateRegistrationEligibility(amount);
+        sessionDetail.registerNewStudent(student);
+    }
+
+    private void validateRegistrationEligibility(Long amount) {
         if (!state.isOpen()) {
-            throw new IllegalStateException("아직 접수 기간이 아닙니다.");
+            throw new IllegalStateException(SESSION_NOT_OPEN_MESSAGE);
         }
-        sessionDetail.registerNewStudent(student, amount);
+
+        sessionDetail.checkRegistrationEligibility(amount);
+    }
+
+    public void setClose() {
+        this.state = SessionState.CLOSE;
+    }
+
+    public boolean contains(Student student) {
+        return sessionDetail.contains(student);
     }
 
     public static class SessionBuilder {
@@ -61,14 +80,14 @@ public class Session {
         private final String name;
         private final String description;
         private final CoverImage image;
-        private final String startDate;
-        private final String endDate;
-        private boolean isFree = true;
+        private final LocalDateTime startDate;
+        private final LocalDateTime endDate;
+        private boolean isFree = DEFAULT_IS_FREE;
         private int maxStudentCount = MAX_STUDENT_COUNT;
-        private Long sessionFee = 0L;
+        private Long sessionFee = DEFAULT_SESSION_FEE;
         private SessionState state;
 
-        public SessionBuilder(Long id, String name, String description, CoverImage image, String startDate, String endDate) {
+        public SessionBuilder(Long id, String name, String description, CoverImage image, LocalDateTime startDate, LocalDateTime endDate) {
             this.id = id;
             this.name = name;
             this.description = description;
