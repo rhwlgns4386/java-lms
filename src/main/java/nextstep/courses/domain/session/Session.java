@@ -60,6 +60,17 @@ public abstract class Session {
         this.sessionDuration = new SessionDuration(startDate, endDate);
     }
 
+    protected Session(Long id, CoverImage coverImage, CoverImages coverImages, int maxEnrollment, int enrollment,
+                      SessionState sessionState, RecruitState recruitState,
+                      LocalDateTime startDate, LocalDateTime endDate) {
+        this.id = id;
+        this.sessionStatus = new SessionStatus(sessionState, recruitState);
+        this.coverImage = coverImage;
+        this.coverImages = coverImages;
+        this.enrollment = new Enrollment(enrollment, maxEnrollment);
+        this.sessionDuration = new SessionDuration(startDate, endDate);
+    }
+
     public final boolean register(Payment payment) {
         validateSessionState();
         enrollment.validateAvailability();
