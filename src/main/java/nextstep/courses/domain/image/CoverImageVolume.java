@@ -19,6 +19,10 @@ public class CoverImageVolume {
         return size;
     }
 
+    public int getSize() {
+        return size;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

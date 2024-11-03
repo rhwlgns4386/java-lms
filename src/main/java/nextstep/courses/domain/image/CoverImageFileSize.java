@@ -23,6 +23,14 @@ public class CoverImageFileSize {
         this.width = width;
     }
 
+    public int getHeight() {
+        return height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

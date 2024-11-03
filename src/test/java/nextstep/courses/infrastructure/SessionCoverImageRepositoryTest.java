@@ -1,6 +1,7 @@
 package nextstep.courses.infrastructure;
 
 import nextstep.courses.domain.image.SessionCoverImage;
+import nextstep.courses.domain.port.SessionCoverImageRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class SessionCoverImageRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        sessionCoverImageRepository = new JdbcCourseRepository(jdbcTemplate);
+        sessionCoverImageRepository = new JdbcSessionCoverImageRepository(jdbcTemplate);
     }
 
 
@@ -34,7 +35,7 @@ public class SessionCoverImageRepositoryTest {
                 .fileName("leo.png")
                 .build();
 
-        int count = sessionCoverImage.save(sessionCoverImage);
+        int count = sessionCoverImageRepository.save(sessionCoverImage);
         SessionCoverImage savedCoverImage = sessionCoverImageRepository.findById(1L);
         assertThat(sessionCoverImage.getFileName()).isEqualTo(savedCoverImage.getFileName());
     }
