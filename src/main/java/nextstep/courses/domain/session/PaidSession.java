@@ -16,7 +16,7 @@ public class PaidSession extends Session {
                        SessionCapacity capacity,
                        Money fee
     ) {
-        this(null, title, sessionDate, images, SessionType.PAID, LegacySessionStatus.PREPARING, SessionStatus.init(), new ArrayList<>(), capacity, fee);
+        this(null, title, sessionDate, images, SessionType.PAID, SessionStatus.init(), new ArrayList<>(), capacity, fee);
     }
 
     public PaidSession(Long id,
@@ -26,7 +26,7 @@ public class PaidSession extends Session {
                        SessionCapacity capacity,
                        Money fee
     ) {
-        this(id, title, sessionDate, images, SessionType.PAID, LegacySessionStatus.PREPARING, SessionStatus.init(), new ArrayList<>(), capacity, fee);
+        this(id, title, sessionDate, images, SessionType.PAID, SessionStatus.init(), new ArrayList<>(), capacity, fee);
     }
 
     public PaidSession(Long id,
@@ -34,12 +34,11 @@ public class PaidSession extends Session {
                        SessionDate sessionDate,
                        List<Image> images,
                        SessionType sessionType,
-                       LegacySessionStatus legacySessionStatus,
                        List<Student> students,
                        SessionCapacity capacity,
                        Money fee
     ) {
-        super(id, title, sessionDate, images, sessionType, legacySessionStatus, SessionStatus.init(), students);
+        super(id, title, sessionDate, images, sessionType, SessionStatus.init(), students);
         this.capacity = capacity;
         this.fee = fee;
     }
@@ -49,13 +48,12 @@ public class PaidSession extends Session {
                        SessionDate sessionDate,
                        List<Image> images,
                        SessionType sessionType,
-                       LegacySessionStatus legacySessionStatus,
                        SessionStatus sessionStatus,
                        List<Student> students,
                        SessionCapacity capacity,
                        Money fee
     ) {
-        super(id, title, sessionDate, images, sessionType, legacySessionStatus, sessionStatus, students);
+        super(id, title, sessionDate, images, sessionType, sessionStatus, students);
         this.capacity = capacity;
         this.fee = fee;
     }
@@ -67,7 +65,6 @@ public class PaidSession extends Session {
                 session.getSessionDate(),
                 images,
                 session.getSessionType(),
-                session.getLegacySessionStatus(),
                 session.getSessionStatus(),
                 students,
                 session.getCapacity(),

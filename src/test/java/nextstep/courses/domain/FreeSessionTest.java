@@ -5,7 +5,6 @@ import nextstep.courses.domain.image.ImagePixel;
 import nextstep.courses.domain.image.ImageSize;
 import nextstep.courses.domain.image.ImageType;
 import nextstep.courses.domain.session.FreeSession;
-import nextstep.courses.domain.session.LegacySessionStatus;
 import nextstep.courses.domain.session.SessionDate;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -54,7 +53,6 @@ public class FreeSessionTest {
         freeSession.register(RegistrationTest.REGISTRATION);
 
         Assertions.assertThat(freeSession.getId()).isEqualTo(id);
-        Assertions.assertThat(freeSession.getLegacySessionStatus()).isEqualTo(LegacySessionStatus.RECRUITING);
     }
 
     @Test
@@ -72,8 +70,6 @@ public class FreeSessionTest {
         FreeSession freeSession = new FreeSession(id, title, sessionDate, images);
 
         freeSession.open();
-
-        Assertions.assertThat(freeSession.getLegacySessionStatus()).isEqualTo(LegacySessionStatus.RECRUITING);
     }
 
     @Test
@@ -82,7 +78,5 @@ public class FreeSessionTest {
         FreeSession freeSession = new FreeSession(id, title, sessionDate, images);
 
         freeSession.close();
-
-        Assertions.assertThat(freeSession.getLegacySessionStatus()).isEqualTo(LegacySessionStatus.CLOSE);
     }
 }

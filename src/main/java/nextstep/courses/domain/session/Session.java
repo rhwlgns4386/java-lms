@@ -11,7 +11,6 @@ public abstract class Session {
     private SessionDate sessionDate;
     private List<Image> images;
     private SessionType sessionType;
-    private LegacySessionStatus legacySessionStatus;
     private SessionStatus sessionStatus;
     private List<Student> students;
 
@@ -20,23 +19,6 @@ public abstract class Session {
                    SessionDate sessionDate,
                    List<Image> images,
                    SessionType sessionType,
-                   LegacySessionStatus legacySessionStatus,
-                   List<Student> students
-    ) {
-        this.id = id;
-        this.title = title;
-        this.sessionDate = sessionDate;
-        this.images = images;
-        this.sessionType = sessionType;
-        this.legacySessionStatus = legacySessionStatus;
-        this.students = students;
-    }
-
-    public Session(Long id,
-                   String title,
-                   SessionDate sessionDate,
-                   List<Image> images,
-                   SessionType sessionType,
                    SessionStatus sessionStatus,
                    List<Student> students
     ) {
@@ -45,25 +27,6 @@ public abstract class Session {
         this.sessionDate = sessionDate;
         this.images = images;
         this.sessionType = sessionType;
-        this.sessionStatus = sessionStatus;
-        this.students = students;
-    }
-
-    public Session(Long id,
-                   String title,
-                   SessionDate sessionDate,
-                   List<Image> images,
-                   SessionType sessionType,
-                   LegacySessionStatus legacySessionStatus,
-                   SessionStatus sessionStatus,
-                   List<Student> students
-    ) {
-        this.id = id;
-        this.title = title;
-        this.sessionDate = sessionDate;
-        this.images = images;
-        this.sessionType = sessionType;
-        this.legacySessionStatus = legacySessionStatus;
         this.sessionStatus = sessionStatus;
         this.students = students;
     }
@@ -99,27 +62,17 @@ public abstract class Session {
     public abstract void register(Registration registration);
 
     public void open() {
-        updateStatus(LegacySessionStatus.RECRUITING);
         this.sessionStatus.openSession();
         this.sessionStatus.startRecruiting();
     }
 
     public void close() {
-        updateStatus(LegacySessionStatus.CLOSE);
         this.sessionStatus.endSession();
         this.sessionStatus.finishRecruiting();
     }
 
     protected boolean isRegistrationAvailable() {
         return this.sessionStatus.isApplicationAvailable();
-    }
-
-    protected void updateStatus(LegacySessionStatus legacySessionStatus) {
-        this.legacySessionStatus = legacySessionStatus;
-    }
-
-    public LegacySessionStatus getLegacySessionStatus() {
-        return legacySessionStatus;
     }
 
     public SessionStatus getSessionStatus() {

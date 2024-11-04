@@ -17,7 +17,7 @@ create table session
     start_at                timestamp    not null,
     end_at                  timestamp    not null,
     session_type            varchar(100) not null,
-    session_status          varchar(100) not null,
+    session_status          varchar(100),
     session_progress_status varchar(100),
     session_recruit_status  varchar(100),
     capacity                integer,
