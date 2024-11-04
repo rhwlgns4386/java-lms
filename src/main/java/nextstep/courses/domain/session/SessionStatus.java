@@ -9,6 +9,10 @@ public class SessionStatus {
         this.sessionRecruitStatus = sessionRecruitStatus;
     }
 
+    public static SessionStatus init() {
+        return new SessionStatus(SessionProgressStatus.PREPARING, SessionRecruitStatus.NON_RECRUITMENT);
+    }
+
     public SessionProgressStatus getSessionProgressStatus() {
         return sessionProgressStatus;
     }

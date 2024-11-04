@@ -12,7 +12,7 @@ public class FreeSession extends Session {
                        SessionDate sessionDate,
                        List<Image> images
     ) {
-        this(null, title, sessionDate, images, SessionType.FREE, LegacySessionStatus.PREPARING, new ArrayList<>());
+        this(null, title, sessionDate, images, SessionType.FREE, LegacySessionStatus.PREPARING, SessionStatus.init(), new ArrayList<>());
     }
 
     public FreeSession(Long id,
@@ -20,7 +20,7 @@ public class FreeSession extends Session {
                        SessionDate sessionDate,
                        List<Image> images
     ) {
-        this(id, title, sessionDate, images, SessionType.FREE, LegacySessionStatus.PREPARING, new ArrayList<>());
+        this(id, title, sessionDate, images, SessionType.FREE, LegacySessionStatus.PREPARING, SessionStatus.init(), new ArrayList<>());
     }
 
     public FreeSession(Long id,
@@ -34,6 +34,28 @@ public class FreeSession extends Session {
         super(id, title, sessionDate, images, sessionType, legacySessionStatus, students);
     }
 
+    public FreeSession(Long id,
+                       String title,
+                       SessionDate sessionDate,
+                       List<Image> images,
+                       SessionType sessionType,
+                       SessionStatus sessionStatus,
+                       List<Student> students
+    ) {
+        super(id, title, sessionDate, images, sessionType, LegacySessionStatus.PREPARING, sessionStatus, students);
+    }
+
+    public FreeSession(Long id,
+                       String title,
+                       SessionDate sessionDate,
+                       List<Image> images,
+                       SessionType sessionType,
+                       LegacySessionStatus legacySessionStatus,
+                       SessionStatus sessionStatus,
+                       List<Student> students
+    ) {
+        super(id, title, sessionDate, images, sessionType, legacySessionStatus, sessionStatus, students);
+    }
 
     public static FreeSession of(FreeSession session, List<Image> images, List<Student> students) {
         return new FreeSession(session.getId(), session.getTitle(), session.getSessionDate(), images, session.getSessionType(), session.getSessionStatus(), students);

@@ -54,7 +54,7 @@ public class FreeSessionTest {
         freeSession.register(RegistrationTest.REGISTRATION);
 
         Assertions.assertThat(freeSession.getId()).isEqualTo(id);
-        Assertions.assertThat(freeSession.getSessionStatus()).isEqualTo(LegacySessionStatus.RECRUITING);
+        Assertions.assertThat(freeSession.getLegacySessionStatus()).isEqualTo(LegacySessionStatus.RECRUITING);
     }
 
     @Test
@@ -73,7 +73,7 @@ public class FreeSessionTest {
 
         freeSession.open();
 
-        Assertions.assertThat(freeSession.getSessionStatus()).isEqualTo(LegacySessionStatus.RECRUITING);
+        Assertions.assertThat(freeSession.getLegacySessionStatus()).isEqualTo(LegacySessionStatus.RECRUITING);
     }
 
     @Test
@@ -83,6 +83,6 @@ public class FreeSessionTest {
 
         freeSession.close();
 
-        Assertions.assertThat(freeSession.getSessionStatus()).isEqualTo(LegacySessionStatus.CLOSE);
+        Assertions.assertThat(freeSession.getLegacySessionStatus()).isEqualTo(LegacySessionStatus.CLOSE);
     }
 }

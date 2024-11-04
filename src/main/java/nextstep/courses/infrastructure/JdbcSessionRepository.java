@@ -59,7 +59,7 @@ public class JdbcSessionRepository implements SessionRepository {
         param.addValue("startAt", session.getSessionDate().getStart());
         param.addValue("endAt", session.getSessionDate().getEnd());
         param.addValue("sessionType", session.getSessionType().name());
-        param.addValue("sessionStatus", session.getSessionStatus().name());
+        param.addValue("sessionStatus", session.getLegacySessionStatus().name());
         param.addValue("createdAt", LocalDateTime.now());
 
         if (session instanceof FreeSession) {
