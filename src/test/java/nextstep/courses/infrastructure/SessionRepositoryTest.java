@@ -30,22 +30,20 @@ public class SessionRepositoryTest {
 
     private SessionRepository sessionRepository;
     private SessionImageRepository sessionImageRepository;
-    private SessionSessionImageRepository sessionSessionImageRepository;
 
     @BeforeEach
     void setUp() {
         sessionImageRepository = new JdbcSessionImageRepository(jdbcTemplate);
         SessionStudentRepository sessionStudentRepository = new JdbcSessionStudentRepository(jdbcTemplate);
-        sessionSessionImageRepository = new JdbcSessionSessionImageRepository(jdbcTemplate);
-        sessionRepository = new JdbcSessionRepository(jdbcTemplate, sessionImageRepository, sessionStudentRepository, sessionSessionImageRepository);
+        sessionRepository = new JdbcSessionRepository(jdbcTemplate, sessionImageRepository, sessionStudentRepository);
     }
 
     @Test
     void crud_free() {
         SessionImage sessionImage1 = SessionImageCreator.id(1L);
         SessionImage sessionImage2 = SessionImageCreator.id(2L);
-        sessionImageRepository.save(sessionImage1);
-        sessionImageRepository.save(sessionImage2);
+        sessionImageRepository.save(sessionImage1, 1L);
+        sessionImageRepository.save(sessionImage2,1L);
         Session freeSession = new FreeSessionBuilder()
                 .withId(1L)
                 .withImages(List.of(sessionImage1, sessionImage2))
@@ -54,7 +52,6 @@ public class SessionRepositoryTest {
                 .withApplyStudents(List.of(1L))
                 .build();
         int count = sessionRepository.saveNew(freeSession);
-        sessionSessionImageRepository.save(freeSession.getSessionId(), List.of(1L, 2L));
         Session savedSession = sessionRepository.findByIdNew(1L);
         assertAll(
                 () -> assertThat(count).isEqualTo(1),
@@ -72,8 +69,8 @@ public class SessionRepositoryTest {
     void crud_paid() {
         SessionImage sessionImage1 = SessionImageCreator.id(1L);
         SessionImage sessionImage2 = SessionImageCreator.id(2L);
-        sessionImageRepository.save(sessionImage1);
-        sessionImageRepository.save(sessionImage2);
+        sessionImageRepository.save(sessionImage1,1L);
+        sessionImageRepository.save(sessionImage2,1L);
         PaidSession paidSession = new PaidSessionBuilder()
                 .withId(1L)
                 .withImages(List.of(sessionImage1, sessionImage2))
@@ -82,9 +79,6 @@ public class SessionRepositoryTest {
                 .withApplyStudents(List.of(2L))
                 .build();
         int count = sessionRepository.saveNew(paidSession);
-        sessionImageRepository.save(sessionImage1);
-        sessionImageRepository.save(sessionImage2);
-        sessionSessionImageRepository.save(paidSession.getSessionId(), List.of(1L, 2L));
         PaidSession savedSession = (PaidSession) sessionRepository.findByIdNew(1L);
         assertAll(
                 () -> assertThat(count).isEqualTo(1),

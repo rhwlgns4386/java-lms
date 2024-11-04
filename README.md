@@ -135,3 +135,8 @@
 - [X] session 에 applyStudents 추가,  approve, cancel 메소드 구현
 - [X] 데이터 베이스 저장 시, approve, apply 구분해서 저장
 - [X] 데이터 베이스 조회 시, approve, apply 구분해서 조회
+
+## Step4. 피드백 구현
+- [X] 기존 session_session_image 삭제 및 로직 삭제
+- [X] SessionImageEntity 생성
+- [X] SessionImage에서 sessionId 추가 및 select, save 구현
