@@ -48,13 +48,12 @@ public class PreparedStatementMapper {
 
     private static Integer getSqlIndex(String columnName) {
         Map<String, Integer> sqlOrder = Map.of(
-                "status", 1,
-                "start_date", 2,
-                "end_date", 3,
-                "cover_image_id", 4,
-                "session_type", 5,
-                "course_fee", 6,
-                "max_students", 7
+                "start_date", 1,
+                "end_date", 2,
+                "cover_image_id", 3,
+                "session_type", 4,
+                "course_fee", 5,
+                "max_students", 6
         );
         return sqlOrder.getOrDefault(columnName, Integer.MAX_VALUE);
     }

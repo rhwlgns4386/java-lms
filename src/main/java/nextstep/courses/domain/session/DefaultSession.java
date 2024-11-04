@@ -5,7 +5,6 @@ import nextstep.courses.domain.cover.CoverImage;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
 
-import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
@@ -14,10 +13,8 @@ public abstract class DefaultSession {
     @Column(name = "session_type")
     protected static String TYPE;
     protected final Long id;
-    @Column(name = "status")
-    protected final Status status;
 
-    protected final SessionStatus status2;
+    protected final SessionStatus status;
     // Period는 start_date와 end_date 두 컬럼에 매핑되므로 두 개의 @Column 사용
     @Column(name = "start_date", subField = "startDate")
     @Column(name = "end_date", subField = "endDate")
@@ -30,19 +27,17 @@ public abstract class DefaultSession {
     @Column(name = "max_students", subField = "maxStudents")
     protected Capacity capacity;
 
-    protected DefaultSession(Long id, Status status, Period period, CoverImage coverImage, Money courseFee, Capacity capacity) {
-        this(id, status, period, List.of(coverImage), courseFee, capacity);
+    protected DefaultSession(Long id, Period period, CoverImage coverImage, Money courseFee, Capacity capacity) {
+        this(id, period, List.of(coverImage), courseFee, capacity);
     }
 
-    protected DefaultSession(Long id, Status status, Period period,
-                             List<CoverImage> coverImages, Money courseFee, Capacity capacity) {
-        this(id, status, SessionStatus.ready(), period, coverImages, courseFee, capacity);
+    protected DefaultSession(Long id, Period period, List<CoverImage> coverImages, Money courseFee, Capacity capacity) {
+        this(id, SessionStatus.ready(), period, coverImages, courseFee, capacity);
     }
 
-    protected DefaultSession(Long id, Status status, SessionStatus status2, Period period, List<CoverImage> coverImages, Money courseFee, Capacity capacity) {
+    protected DefaultSession(Long id, SessionStatus status, Period period, List<CoverImage> coverImages, Money courseFee, Capacity capacity) {
         this.id = id;
         this.status = status;
-        this.status2 = status2;
         this.period = period;
         this.coverImage = coverImages.get(0);
         this.coverImages = coverImages;
@@ -61,7 +56,7 @@ public abstract class DefaultSession {
     protected abstract void doRegister(NsUser user, Payment payment);
 
     private void validateSessionStatus() {
-        if (status2.canRegister()) {
+        if (status.canRegister()) {
             return;
         }
         throw new IllegalArgumentException("강의 상태가 모집 중일때만 수강신청이 가능합니다.");
@@ -71,16 +66,9 @@ public abstract class DefaultSession {
         return id;
     }
 
-    public Status getStatus() {
-        return status;
-    }
 
     public CoverImage getCoverImage() {
         return coverImage;
-    }
-
-    public Long getCoverImageId() {
-        return coverImage.getId();
     }
 
     public List<Long> getRegisteredStudentIds() {
@@ -91,23 +79,15 @@ public abstract class DefaultSession {
         return period;
     }
 
-    public LocalDate getStartDate() {
-        return period.getStartDate();
-    }
-
-    public LocalDate getEndDate() {
-        return period.getEndDate();
-    }
-
-    public long getCourseFee() {
-        return courseFee.getAmount();
-    }
-
     public Capacity getCapacity() {
         return capacity;
     }
 
     public List<CoverImage> getCoverImages() {
         return Collections.unmodifiableList(coverImages);
+    }
+
+    public SessionStatus getStatus() {
+        return status;
     }
 }

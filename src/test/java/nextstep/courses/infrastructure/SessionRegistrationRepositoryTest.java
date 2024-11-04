@@ -5,7 +5,6 @@ import nextstep.courses.domain.cover.CoverImageFile;
 import nextstep.courses.domain.cover.CoverImageSize;
 import nextstep.courses.domain.cover.CoverImageType;
 import nextstep.courses.domain.session.*;
-import nextstep.users.domain.NsUser;
 import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,7 +39,7 @@ class SessionRegistrationRepositoryTest {
         Period period = new Period(LocalDate.of(2024, 10, 10), LocalDate.of(2024, 10, 19));
         Capacity capacity = new Capacity(10);
 
-        freeSession = new FreeSession(sessionId, Status.OPEN, period, coverImage, capacity);
+        freeSession = new FreeSession(sessionId, SessionStatus.ready().recruiting(), period, List.of(coverImage), capacity);
     }
 
     @DisplayName("세션의 수강 신청 정보를 조회할 수 있다.")

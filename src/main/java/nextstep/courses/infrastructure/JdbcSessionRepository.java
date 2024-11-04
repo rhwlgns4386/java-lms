@@ -30,6 +30,14 @@ public class JdbcSessionRepository implements SessionRepository {
         this.coverImageRepository = coverImageRepository;
     }
 
+    private static Capacity createCapacity(ResultSet rs, List<Long> registeredUserIds) throws SQLException {
+        int maxStudents = SessionType.PAID.getCode().equals(rs.getString("session_type"))
+                ? rs.getInt("max_students")
+                : Integer.MAX_VALUE;
+
+        return new Capacity(new HashSet<>(registeredUserIds), maxStudents);
+    }
+
     @Override
     @Transactional
     public Long saveFreeSession(FreeSession session) {
@@ -50,8 +58,8 @@ public class JdbcSessionRepository implements SessionRepository {
 
     private Long saveSession(DefaultSession session) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        String sql = "INSERT INTO session (status, start_date, end_date, cover_image_id, session_type, course_fee, max_students) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO session (start_date, end_date, cover_image_id, session_type, course_fee, max_students) " +
+                "VALUES ( ?, ?, ?, ?, ?, ?)";
 
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, new String[]{"id"});
@@ -59,7 +67,10 @@ public class JdbcSessionRepository implements SessionRepository {
             return ps;
         }, keyHolder);
 
-        return Objects.requireNonNull(keyHolder.getKey()).longValue();
+
+        long sessionId = Objects.requireNonNull(keyHolder.getKey()).longValue();
+        saveSessionStatus(sessionId, session.getStatus());
+        return sessionId;
     }
 
     private void saveRegistrations(Long sessionId, List<Long> userIds) {
@@ -82,6 +93,11 @@ public class JdbcSessionRepository implements SessionRepository {
         }
     }
 
+    private void saveSessionStatus(Long sessionId, SessionStatus sessionStatus) {
+        String sql = "INSERT INTO session_status (session_id, progress_status, recruitment_status) VALUES (?, ?, ?)";
+        jdbcTemplate.update(sql, sessionId, sessionStatus.getProgressCode(), sessionStatus.getRecruitmentCode());
+    }
+
     @Override
     @Transactional(readOnly = true)
     public DefaultSession findById(Long id) {
@@ -90,19 +106,20 @@ public class JdbcSessionRepository implements SessionRepository {
         try {
             return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> {
                 String sessionType = rs.getString("session_type");
-                Status status = Status.from(rs.getString("status"));
                 Period period = new Period(rs.getDate("start_date").toLocalDate(), rs.getDate("end_date").toLocalDate());
                 List<CoverImage> images = coverImageRepository.findBySessionId(id);
 
                 List<Long> registeredUserIds = sessionRegistrationRepository.findRegisteredUserIds(id);
                 Capacity capacity = createCapacity(rs, registeredUserIds);
+                SessionStatus sessionStatus = findSessionStatusById(id);
+
 
                 if (SessionType.PAID.getCode().equals(sessionType)) {
                     Money courseFee = new Money(rs.getLong("course_fee"));
-                    return new PaidSession(id, status, period, images, courseFee, capacity);
+                    return new PaidSession(id, sessionStatus, period, images, courseFee, capacity);
                 }
 
-                return new FreeSession(id, status, period, images, capacity);
+                return new FreeSession(id, sessionStatus, period, images, capacity);
             }, id);
 
         } catch (EmptyResultDataAccessException e) {
@@ -110,12 +127,12 @@ public class JdbcSessionRepository implements SessionRepository {
         }
     }
 
-    private static Capacity createCapacity(ResultSet rs, List<Long> registeredUserIds) throws SQLException {
-        int maxStudents = SessionType.PAID.getCode().equals(rs.getString("session_type"))
-                ? rs.getInt("max_students")
-                : Integer.MAX_VALUE;
-
-        return new Capacity(new HashSet<>(registeredUserIds), maxStudents);
+    private SessionStatus findSessionStatusById(Long sessionId) {
+        String sql = "SELECT progress_status, recruitment_status FROM session_status WHERE session_id = ?";
+        return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> new SessionStatus(
+                SessionProgress.from(rs.getString("progress_status")),
+                RecruitmentStatus.from(rs.getString("recruitment_status"))
+        ), sessionId);
     }
 
 }
