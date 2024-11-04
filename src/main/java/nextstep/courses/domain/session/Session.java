@@ -3,6 +3,7 @@ package nextstep.courses.domain.session;
 import nextstep.courses.domain.image.Image;
 import nextstep.courses.domain.student.Student;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Session {
@@ -10,6 +11,7 @@ public abstract class Session {
     private String title;
     private SessionDate sessionDate;
     private Image image;
+    private List<Image> images;
     private SessionType sessionType;
     private SessionStatus sessionStatus;
     private List<Student> students;
@@ -23,6 +25,7 @@ public abstract class Session {
                    List<Student> students
     ) {
         this.image = image;
+        this.images = image == null ? new ArrayList<>() : new ArrayList<>(List.of(image));
         this.sessionDate = sessionDate;
         this.id = id;
         this.title = title;
@@ -45,6 +48,10 @@ public abstract class Session {
 
     public Image getImage() {
         return image;
+    }
+
+    public List<Image> getImages() {
+        return images;
     }
 
     public SessionType getSessionType() {
