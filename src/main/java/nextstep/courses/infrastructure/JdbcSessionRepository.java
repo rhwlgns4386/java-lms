@@ -25,12 +25,12 @@ public class JdbcSessionRepository implements SessionRepository {
         SessionType type = SessionType.of(rs.getString(5));
         SessionStatus status = SessionStatus.valueOf(rs.getString(6));
         if (type.equals(SessionType.FREE)) {
-            return new FreeSession(null, date, sessionId, title, status, type, new ArrayList<>());
+            return new FreeSession(sessionId, title, date, new ArrayList<>(), type, status, new ArrayList<>());
         }
 
         SessionCapacity capacity = new SessionCapacity(rs.getInt(7));
         Money money = new Money(rs.getLong(8));
-        return new PaidSession(null, date, sessionId, title, status, type, capacity, money, new ArrayList<>());
+        return new PaidSession(sessionId, title, date, new ArrayList<>(), type, status, new ArrayList<>(), capacity, money);
     };
 
     private NamedParameterJdbcOperations namedParameterJdbcTemplate;

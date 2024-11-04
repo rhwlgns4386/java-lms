@@ -29,21 +29,6 @@ public class PaidSession extends Session {
         this(id, title, sessionDate, images, SessionType.PAID, SessionStatus.PREPARING, new ArrayList<>(), capacity, fee);
     }
 
-    public PaidSession(Image image,
-                       SessionDate sessionDate,
-                       Long id,
-                       String title,
-                       SessionStatus sessionStatus,
-                       SessionType sessionType,
-                       SessionCapacity capacity,
-                       Money fee,
-                       List<Student> students
-    ) {
-        super(image, sessionDate, id, title, sessionStatus, sessionType, students);
-        this.capacity = capacity;
-        this.fee = fee;
-    }
-
     public PaidSession(Long id,
                        String title,
                        SessionDate sessionDate,
@@ -57,10 +42,6 @@ public class PaidSession extends Session {
         super(id, title, sessionDate, images, sessionType, sessionStatus, students);
         this.capacity = capacity;
         this.fee = fee;
-    }
-
-    public static PaidSession of(PaidSession session, Image image, List<Student> students) {
-        return new PaidSession(image, session.getSessionDate(), session.getId(), session.getTitle(), session.getSessionStatus(), session.getSessionType(), session.getCapacity(), session.getFee(), students);
     }
 
     public static PaidSession of(PaidSession session, List<Image> images, List<Student> students) {

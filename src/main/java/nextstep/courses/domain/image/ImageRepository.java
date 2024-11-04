@@ -6,9 +6,9 @@ import java.util.Optional;
 public interface ImageRepository {
     int save(Image image, Long sessionId);
 
-    Optional<Image> findById(long id);
+    int[] saveAll(List<Image> images, Long sessionId);
 
-    Optional<Image> findBySessionId(long sessionId);
+    Optional<Image> findById(long id);
 
     List<Image> findAllBySessionId(long sessionId);
 }

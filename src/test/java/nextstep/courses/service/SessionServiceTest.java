@@ -59,10 +59,10 @@ public class SessionServiceTest {
     @Test
     void createSessionTest() {
         Long courseId = 1L;
-        long sessionId = sessionService.create(courseId, session, session.getImage());
+        long sessionId = sessionService.create(courseId, session, session.getImages());
 
         verify(sessionRepository).save(session, courseId);
-        verify(imageRepository).save(session.getImage(), sessionId);
+        verify(imageRepository).saveAll(session.getImages(), sessionId);
     }
 
 

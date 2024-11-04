@@ -21,7 +21,7 @@ public class CourseService {
     @Transactional
     public long create(Course course, Session session) {
         long courseId = courseRepository.save(course);
-        sessionService.create(courseId, session, session.getImage());
+        sessionService.create(courseId, session, session.getImages());
 
         return courseId;
     }

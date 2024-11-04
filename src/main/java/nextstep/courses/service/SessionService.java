@@ -54,9 +54,9 @@ public class SessionService {
     }
 
     @Transactional
-    public long create(Long courseId, Session session, Image image) {
+    public long create(Long courseId, Session session, List<Image> images) {
         long saveSessionId = sessionRepository.save(session, courseId);
-        imageRepository.save(image, saveSessionId);
+        imageRepository.saveAll(images, saveSessionId);
 
         return saveSessionId;
     }

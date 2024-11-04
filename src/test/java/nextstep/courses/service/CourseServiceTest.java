@@ -51,7 +51,7 @@ public class CourseServiceTest {
         long courseId = courseService.create(course, freeSession);
 
         verify(courseRepository).save(course);
-        verify(sessionService).create(courseId, freeSession, freeSession.getImage());
+        verify(sessionService).create(courseId, freeSession, freeSession.getImages());
     }
 
     @Test

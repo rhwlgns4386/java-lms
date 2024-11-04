@@ -23,17 +23,6 @@ public class FreeSession extends Session {
         this(id, title, sessionDate, images, SessionType.FREE, SessionStatus.PREPARING, new ArrayList<>());
     }
 
-    public FreeSession(Image image,
-                       SessionDate sessionDate,
-                       Long id,
-                       String title,
-                       SessionStatus sessionStatus,
-                       SessionType sessionType,
-                       List<Student> students
-    ) {
-        super(image, sessionDate, id, title, sessionStatus, sessionType, students);
-    }
-
     public FreeSession(Long id,
                        String title,
                        SessionDate sessionDate,
@@ -45,9 +34,6 @@ public class FreeSession extends Session {
         super(id, title, sessionDate, images, sessionType, sessionStatus, students);
     }
 
-    public static FreeSession of(FreeSession session, Image image, List<Student> students) {
-        return new FreeSession(image, session.getSessionDate(), session.getId(), session.getTitle(), session.getSessionStatus(), session.getSessionType(), students);
-    }
 
     public static FreeSession of(FreeSession session, List<Image> images, List<Student> students) {
         return new FreeSession(session.getId(), session.getTitle(), session.getSessionDate(), images, session.getSessionType(), session.getSessionStatus(), students);
