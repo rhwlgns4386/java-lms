@@ -31,8 +31,11 @@ public class AnswerTest {
     }
 
     @Test
-    void toDeleteHistory() {
-        DeleteHistory deleteHistory = A1.toDeleteHistory();
+    @DisplayName("답변 삭제 시 삭제 히스토리를 반환한다")
+    void delete_toDeleteHistory() throws CannotDeleteException {
+        NsUser loginUser = NsUserTest.JAVAJIGI;
+        DeleteHistory deleteHistory = A1.delete(loginUser);
+
         Assertions.assertThat(deleteHistory).isNotNull();
     }
 }

@@ -76,20 +76,22 @@ public class Question {
         return writer.equals(loginUser);
     }
 
-    public void delete(NsUser loginUser) throws CannotDeleteException {
+    public List<DeleteHistory> delete(NsUser loginUser) throws CannotDeleteException {
         if (!isOwner(loginUser)) {
             throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
         }
 
         this.deleted = true;
-        answers.delete(loginUser);
+        List<DeleteHistory> deleteAnswerHistories = answers.delete(loginUser);
+
+        return toDeleteHistories(deleteAnswerHistories);
     }
 
-    public List<DeleteHistory> toDeleteHistories() {
+    private List<DeleteHistory> toDeleteHistories(List<DeleteHistory> deleteAnswerHistories) {
         List<DeleteHistory> deleteHistories = new ArrayList<>();
         deleteHistories.add(new DeleteHistory(ContentType.QUESTION, id, writer, LocalDateTime.now()));
 
-        return Stream.of(deleteHistories, answers.toDeleteHistories())
+        return Stream.of(deleteHistories, deleteAnswerHistories)
                      .flatMap(Collection::stream)
                      .collect(Collectors.toList());
     }

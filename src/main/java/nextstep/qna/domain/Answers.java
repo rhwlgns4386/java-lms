@@ -22,23 +22,18 @@ public class Answers {
         answers.add(answer);
     }
 
-    public void delete(NsUser loginUser) throws CannotDeleteException {
+    public List<DeleteHistory> delete(NsUser loginUser) throws CannotDeleteException {
+        List<DeleteHistory> deleteHistories = new ArrayList<>();
+
         for (Answer answer : answers) {
-            answer.delete(loginUser);
+            deleteHistories.add(answer.delete(loginUser));
         }
+
+        return deleteHistories;
     }
 
     public List<Answer> getAnswers() {
         return Collections.unmodifiableList(answers);
     }
 
-    public List<DeleteHistory> toDeleteHistories() {
-        List<DeleteHistory> deleteHistories = new ArrayList<>();
-
-        for (Answer answer : answers) {
-            deleteHistories.add(answer.toDeleteHistory());
-        }
-
-        return deleteHistories;
-    }
 }

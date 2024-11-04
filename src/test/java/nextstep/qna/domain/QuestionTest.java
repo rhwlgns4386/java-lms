@@ -24,7 +24,7 @@ public class QuestionTest {
 
     @Test
     @DisplayName("질문자와 로그인 유저가 다른 경우 질문을 삭제할 수 없다")
-    void delete_질문자와_로그인_유저가_다른경우() throws CannotDeleteException {
+    void delete_질문자와_로그인_유저가_다른경우() {
         NsUser loginUser = NsUserTest.JAVAJIGI;
 
         Assertions.assertThatThrownBy(() -> {
@@ -33,8 +33,10 @@ public class QuestionTest {
     }
 
     @Test
-    void toDeleteHistory() {
-        List<DeleteHistory> deleteHistories = Q1.toDeleteHistories();
+    @DisplayName("질문 삭제 시 삭제 히스토리를 반환한다")
+    void delete_toDeleteHistories() throws CannotDeleteException {
+        NsUser loginUser = NsUserTest.JAVAJIGI;
+        List<DeleteHistory> deleteHistories = Q1.delete(loginUser);
 
         Assertions.assertThat(deleteHistories).isNotNull();
         Assertions.assertThat(deleteHistories.size()).isEqualTo(1);

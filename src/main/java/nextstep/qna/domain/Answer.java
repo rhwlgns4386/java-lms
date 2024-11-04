@@ -48,15 +48,16 @@ public class Answer {
         return id;
     }
 
-    public void delete(NsUser loginUser) throws CannotDeleteException {
+    public DeleteHistory delete(NsUser loginUser) throws CannotDeleteException {
         if (!isOwner(loginUser)) {
             throw new CannotDeleteException("답변을 삭제할 수 있는 권한이 없습니다.");
         }
 
         this.deleted = true;
+        return toDeleteHistory();
     }
 
-    public DeleteHistory toDeleteHistory() {
+    private DeleteHistory toDeleteHistory() {
         return new DeleteHistory(ContentType.ANSWER, id, writer, LocalDateTime.now());
     }
 
