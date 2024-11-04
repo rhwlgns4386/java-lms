@@ -1,7 +1,9 @@
 package nextstep.courses.domain;
 
+import java.util.Optional;
+
 public interface StudentRepository {
     int save(Student student);
 
-    Student findById(Long id);
+    Optional<Student> findById(Long id);
 }

@@ -35,7 +35,7 @@ class SessionRepositoryTest {
         Session session = Session.paidSession(0L, 0L, PERIOD, COVER_IMAGE, AMOUNT, 1, SessionStatus.RECRUITING);
         int count = sessionRepository.save(session);
         assertThat(count).isEqualTo(1);
-        Session savedSession = sessionRepository.findById(1L);
+        Session savedSession = sessionRepository.findById(1L).get();
         assertThat(savedSession.getCoverImage()).isEqualTo(COVER_IMAGE);
         LOGGER.debug("Session: {}", savedSession);
     }

@@ -12,7 +12,8 @@ public class SessionService {
     }
 
     public void apply(Long nsUserId, Long sessionId) {
-        Session session = sessionRepository.findById(sessionId);
+        Session session = sessionRepository.findById(sessionId)
+                .orElseThrow(() -> new IllegalArgumentException("Session not found"));
         Student student = session.apply(new SessionAddInfo(nsUserId, sessionId));
         studentRepository.save(student);
     }

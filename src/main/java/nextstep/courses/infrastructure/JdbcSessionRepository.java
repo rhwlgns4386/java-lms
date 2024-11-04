@@ -5,6 +5,8 @@ import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository("sessionRepository")
 public class JdbcSessionRepository implements SessionRepository {
     public static final RowMapper<Session> SESSION_ROW_MAPPER = (rs, rowNum) -> new Session(
@@ -30,8 +32,8 @@ public class JdbcSessionRepository implements SessionRepository {
     }
 
     @Override
-    public Session findById(Long id) {
+    public Optional<Session> findById(Long id) {
         String sql = "select id, course_id, start_date, end_date, file_size, file_type, width, height, fee_type, amount, max_personnel, status from session where id = ?";
-        return jdbcTemplate.queryForObject(sql, SESSION_ROW_MAPPER, id);
+        return Optional.ofNullable(jdbcTemplate.queryForObject(sql, SESSION_ROW_MAPPER, id));
     }
 }

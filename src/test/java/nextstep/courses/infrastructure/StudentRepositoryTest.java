@@ -31,7 +31,7 @@ public class StudentRepositoryTest {
         Student student = new Student(1L, 1L);
         int count = studentRepository.save(student);
         assertThat(count).isEqualTo(1);
-        Student savedStudent = studentRepository.findById(1L);
+        Student savedStudent = studentRepository.findById(1L).get();
         assertThat(savedStudent.getSessionId()).isEqualTo(student.getSessionId());
         LOGGER.debug("Student: {}", savedStudent);
     }
