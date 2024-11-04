@@ -56,7 +56,7 @@ public class SessionService {
 
     @Transactional
     public void enroll(EnrollDto dto) {
-        Session session = sessionRepository.findById(dto.getId());
+        Session session = findById(dto.getId());
 
         session.enroll(dto.getNsUser(), dto.getPrice(), new PaymentStrategyImpl());
         Set<EnrollUserInfo> enrollUserInfos = session.getEnrollUserInfos();
