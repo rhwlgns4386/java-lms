@@ -11,7 +11,7 @@ public class EnrolledUserInfos {
     private List<SessionRegistrationInfo> infos;
 
     public EnrolledUserInfos() {
-        this.infos = new ArrayList<>();
+        this(new ArrayList<>());
     }
 
     public EnrolledUserInfos(List<SessionRegistrationInfo> infos) {
@@ -34,5 +34,11 @@ public class EnrolledUserInfos {
         return infos.stream()
                 .map(SessionRegistrationInfo::getUser)
                 .anyMatch(u -> u.equals(user));
+    }
+
+    public int getCountOfApproved() {
+        return (int) infos.stream()
+                .filter(info -> info.getRegistrationStatus().isApproved())
+                .count();
     }
 }

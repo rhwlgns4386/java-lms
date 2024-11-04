@@ -1,6 +1,9 @@
 package nextstep.users.domain;
 
 import nextstep.qna.UnAuthorizedException;
+import nextstep.registration.domain.SessionRegistrationInfo;
+import nextstep.sessions.domain.EnrolledUserInfos;
+import nextstep.sessions.domain.Session;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -119,6 +122,20 @@ public class NsUser {
 
     public boolean isGuestUser() {
         return false;
+    }
+
+    public void approveSessionStudent(SessionRegistrationInfo info) {
+        if (!Objects.equals(info.getSession().getCreatorId(), this.id)) {
+            throw new UnAuthorizedException();
+        }
+        info.approve();
+    }
+
+    public void rejectSessionStudent(SessionRegistrationInfo info) {
+        if (!Objects.equals(info.getSession().getCreatorId(), this.id)) {
+            throw new UnAuthorizedException();
+        }
+        info.reject();
     }
 
     private static class GuestNsUser extends NsUser {

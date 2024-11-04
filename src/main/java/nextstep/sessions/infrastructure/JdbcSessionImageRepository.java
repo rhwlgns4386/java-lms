@@ -1,7 +1,7 @@
 package nextstep.sessions.infrastructure;
 
 import nextstep.sessions.domain.ImageType;
-import nextstep.sessions.domain.SessionImage;
+import nextstep.sessions.domain.CoverImage;
 import nextstep.sessions.domain.SessionImageRepository;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.util.List;
 
 @Repository("sessionImageRepository")
 public class JdbcSessionImageRepository implements SessionImageRepository {
@@ -21,7 +22,7 @@ public class JdbcSessionImageRepository implements SessionImageRepository {
     }
 
     @Override
-    public SessionImage save(SessionImage image) {
+    public CoverImage save(CoverImage image) {
         String imageSql = "insert into session_image (size, type, width, height) values (?, ?, ?, ?)";
         KeyHolder keyHolderForImage = new GeneratedKeyHolder();
         jdbcTemplate.update(conn -> {
@@ -38,9 +39,17 @@ public class JdbcSessionImageRepository implements SessionImageRepository {
     }
 
     @Override
-    public SessionImage findById(Long imageId) {
+    public CoverImage saveWithSessionId(CoverImage image, Long sessionId) {
+        image = this.save(image);
+        String sql = "insert into session_cover_image (session_id, cover_image_id) values (?, ?)";
+        jdbcTemplate.update(sql, sessionId, image.getId());
+        return image;
+    }
+
+    @Override
+    public CoverImage findById(Long imageId) {
         String sql = "select id, size, type, width, height from session_image where id = ?";
-        RowMapper<SessionImage> rowMapper = (rs, rowNum) -> new SessionImage(
+        RowMapper<CoverImage> rowMapper = (rs, rowNum) -> new CoverImage(
                 rs.getLong(1)
                 , rs.getInt(2)
                 , ImageType.of(rs.getString(3))
@@ -48,5 +57,23 @@ public class JdbcSessionImageRepository implements SessionImageRepository {
                 , rs.getDouble(5));
 
         return jdbcTemplate.queryForObject(sql, rowMapper, imageId);
+    }
+
+    @Override
+    public List<CoverImage> findAllBySessionId(Long sessionId) {
+        String sql = "select c.id, c.size, c.width, c.type, c.height" +
+                " from session_cover_image sci" +
+                " join cover_image c on sci.cover_image_id = c.id" +
+                " where sci.session_id = ?";
+
+        RowMapper<CoverImage> mapper = (rs, rowNum) -> new CoverImage(
+                rs.getLong(1),
+                rs.getInt(2),
+                ImageType.of(rs.getString(3)),
+                rs.getDouble(4),
+                rs.getDouble(5)
+        );
+
+        return jdbcTemplate.query(sql, mapper, sessionId);
     }
 }

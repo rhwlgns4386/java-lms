@@ -2,12 +2,14 @@ package nextstep.sessions.infrastructure;
 
 import nextstep.courses.domain.CourseTest;
 import nextstep.payments.domain.PaymentTest;
+import nextstep.registration.infrastructure.JdbcSessionRegistrationInfoRepository;
 import nextstep.sessions.domain.EnrolledUserInfos;
 import nextstep.sessions.domain.PeriodTest;
+import nextstep.sessions.domain.RecruitmentStatus;
 import nextstep.sessions.domain.Session;
 import nextstep.sessions.domain.SessionImageRepository;
-import nextstep.sessions.domain.SessionImageTest;
-import nextstep.sessions.domain.SessionRegistrationInfoRepository;
+import nextstep.sessions.domain.CoverImageTest;
+import nextstep.registration.domain.SessionRegistrationInfoRepository;
 import nextstep.sessions.domain.SessionRepository;
 import nextstep.sessions.domain.SessionStatus;
 import nextstep.sessions.domain.SessionTypeTest;
@@ -46,9 +48,9 @@ public class SessionRepositoryTest {
 
     @Test
     void create_read_test() {
-        sessionImageRepository.save(SessionImageTest.IMAGE);
-        Session session = new Session(1L, SessionImageTest.IMAGE, PeriodTest.PERIOD, SessionTypeTest.PAID_TYPE
-                , SessionStatus.PREPARING, CourseTest.COURSE, LocalDateTime.now(), LocalDateTime.now());
+        sessionImageRepository.save(CoverImageTest.IMAGE);
+        Session session = new Session(1L, PeriodTest.PERIOD, SessionTypeTest.PAID_TYPE
+                , SessionStatus.PREPARING, RecruitmentStatus.NOT_RECRUITING, CourseTest.COURSE, LocalDateTime.now(), LocalDateTime.now());
         int count = sessionRepository.save(session);
         assertThat(count).isEqualTo(1);
         Session savedSession = sessionRepository.findById(1L).get();
@@ -58,9 +60,9 @@ public class SessionRepositoryTest {
 
     @Test
     void update_test() {
-        sessionImageRepository.save(SessionImageTest.IMAGE);
-        Session session = new Session(1L, SessionImageTest.IMAGE, PeriodTest.PERIOD, SessionTypeTest.PAID_TYPE
-                , SessionStatus.PREPARING, CourseTest.COURSE, LocalDateTime.now(), LocalDateTime.now());
+        sessionImageRepository.save(CoverImageTest.IMAGE);
+        Session session = new Session(1L, PeriodTest.PERIOD, SessionTypeTest.PAID_TYPE
+                , SessionStatus.PREPARING,RecruitmentStatus.NOT_RECRUITING, CourseTest.COURSE, LocalDateTime.now(), LocalDateTime.now());
         sessionRepository.save(session);
         session.updateToRecruiting();
         sessionRepository.update(session);
@@ -71,9 +73,9 @@ public class SessionRepositoryTest {
     @Test
     void lazy_loading_test() {
         // data 생성
-        sessionImageRepository.save(SessionImageTest.IMAGE);
-        Session session = new Session(1L, SessionImageTest.IMAGE, PeriodTest.PERIOD, SessionTypeTest.FREE_TYPE
-                , SessionStatus.PREPARING, CourseTest.COURSE, LocalDateTime.now(), LocalDateTime.now());
+        sessionImageRepository.save(CoverImageTest.IMAGE);
+        Session session = new Session(1L, PeriodTest.PERIOD, SessionTypeTest.FREE_TYPE
+                , SessionStatus.PREPARING, RecruitmentStatus.NOT_RECRUITING, CourseTest.COURSE, LocalDateTime.now(), LocalDateTime.now());
         session.updateToRecruiting();
         session.enroll(NsUserTest.JAVAJIGI, PaymentTest.PAYMENT1);
         sessionRepository.save(session);
