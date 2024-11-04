@@ -1,12 +1,16 @@
 package nextstep.courses.domain.session;
 
 import nextstep.courses.domain.strategy.PaymentStrategy;
+import nextstep.courses.exception.CannotEnrollmentException;
 import nextstep.payments.domain.Payment;
+import nextstep.users.domain.NsUser;
 
 import java.time.LocalDate;
 import java.util.Objects;
 
 public class Session {
+
+    public static final String ENROLLMENT_EXCEPT_MESSAGE = "수강신청이 불가능합니다!";
 
     private final SessionImage sessionImage;
     private final SessionState sessionState;
@@ -24,10 +28,12 @@ public class Session {
         this.sessionDate = sessionDate;
     }
 
-    public boolean applyForCourse(Payment payment, LocalDate date) {
-        if (canApplyForCourse(payment, date)) return false;
+    public Enrollment applyForCourse(NsUser user, Payment payment, LocalDate date) {
+        if (!canApplyForCourse(payment, date)) {
+            throw new CannotEnrollmentException(ENROLLMENT_EXCEPT_MESSAGE);
+        };
 
-        return true;
+        return new Enrollment(user, this);
     }
 
     private boolean canApplyForCourse(Payment payment, LocalDate date) {
