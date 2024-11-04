@@ -38,14 +38,14 @@ public class SessionStatus {
         return recruitmentStatus;
     }
 
-    public void isValidStatusForApplication() {
-        if (status.isStatusAvailableForApplication()) {
-            return;
-        }
-        throw new RuntimeException("상태 : " + status + "수강이 불가한 상태입니다");
-    }
+//    public void isValidStatusForApplication() {
+//        if (status.isStatusAvailableForApplication()) {
+//            return;
+//        }
+//        throw new RuntimeException("상태 : " + status + "수강이 불가한 상태입니다");
+//    }
 
-    public void isValidStatusForApplicationNew() {
+    public void isValidStatusForApplication() {
         if (recruitmentStatus == SessionRecruitmentStatusEnum.RECRUITING) {
             return;
         }

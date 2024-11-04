@@ -46,7 +46,7 @@ public class Session {
     }
 
     public void apply(NsUser nsUser, Optional<Payment> payment) {
-        sessionStatus.isValidStatusForApplicationNew();
+        sessionStatus.isValidStatusForApplication();
 
         sessionType.checkMaxNumber(applicationDetails.size());
         if (payment.isPresent()) {
