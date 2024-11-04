@@ -11,22 +11,22 @@ public class PaidSession extends Session {
     private Money fee;
 
     public PaidSession(String title,
-                       Image image,
+                       List<Image> images,
                        SessionDate sessionDate,
                        SessionCapacity capacity,
                        Money fee
     ) {
-        this(image, sessionDate, null, title, SessionStatus.PREPARING, SessionType.PAID, capacity, fee, new ArrayList<>());
+        this(null, title, sessionDate, images, SessionType.PAID, SessionStatus.PREPARING, new ArrayList<>(), capacity, fee);
     }
 
     public PaidSession(Long id,
                        String title,
-                       Image image,
+                       List<Image> images,
                        SessionDate sessionDate,
                        SessionCapacity capacity,
                        Money fee
     ) {
-        this(image, sessionDate, id, title, SessionStatus.PREPARING, SessionType.PAID, capacity, fee, new ArrayList<>());
+        this(id, title, sessionDate, images, SessionType.PAID, SessionStatus.PREPARING, new ArrayList<>(), capacity, fee);
     }
 
     public PaidSession(Image image,
@@ -44,8 +44,27 @@ public class PaidSession extends Session {
         this.fee = fee;
     }
 
+    public PaidSession(Long id,
+                       String title,
+                       SessionDate sessionDate,
+                       List<Image> images,
+                       SessionType sessionType,
+                       SessionStatus sessionStatus,
+                       List<Student> students,
+                       SessionCapacity capacity,
+                       Money fee
+    ) {
+        super(id, title, sessionDate, images, sessionType, sessionStatus, students);
+        this.capacity = capacity;
+        this.fee = fee;
+    }
+
     public static PaidSession of(PaidSession session, Image image, List<Student> students) {
         return new PaidSession(image, session.getSessionDate(), session.getId(), session.getTitle(), session.getSessionStatus(), session.getSessionType(), session.getCapacity(), session.getFee(), students);
+    }
+
+    public static PaidSession of(PaidSession session, List<Image> images, List<Student> students) {
+        return new PaidSession(session.getId(), session.getTitle(), session.getSessionDate(), images, session.getSessionType(), session.getSessionStatus(), students, session.getCapacity(), session.getFee());
     }
 
     public SessionCapacity getCapacity() {

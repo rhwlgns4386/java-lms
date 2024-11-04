@@ -14,6 +14,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PaidSessionTest {
@@ -40,7 +41,7 @@ public class PaidSessionTest {
         SessionCapacity sessionCapacity = new SessionCapacity(10);
         Money fee = new Money(200_000L);
 
-        PaidSession paidSession = new PaidSession(id, title, image, sessionDate, sessionCapacity, fee);
+        PaidSession paidSession = new PaidSession(id, title, new ArrayList<>(List.of(image)), sessionDate, sessionCapacity, fee);
 
         Assertions.assertThat(paidSession).isNotNull();
         Assertions.assertThat(paidSession.getId()).isEqualTo(id);
@@ -52,7 +53,7 @@ public class PaidSessionTest {
         SessionCapacity sessionCapacity = new SessionCapacity(1);
         Money fee = new Money(200_000L);
 
-        PaidSession paidSession = new PaidSession(id, title, image, sessionDate, sessionCapacity, fee);
+        PaidSession paidSession = new PaidSession(id, title, new ArrayList<>(List.of(image)), sessionDate, sessionCapacity, fee);
 
         paidSession.open();
 
@@ -70,7 +71,7 @@ public class PaidSessionTest {
         SessionCapacity sessionCapacity = new SessionCapacity(1);
         Money fee = new Money(200_000L);
 
-        PaidSession paidSession = new PaidSession(id, title, image, sessionDate, sessionCapacity, fee);
+        PaidSession paidSession = new PaidSession(id, title, new ArrayList<>(List.of(image)), sessionDate, sessionCapacity, fee);
 
         Payment payment = new Payment("1", id, NsUserTest.JAVAJIGI.getId(), fee.getPrice());
 
@@ -84,7 +85,7 @@ public class PaidSessionTest {
         SessionCapacity sessionCapacity = new SessionCapacity(1);
         Money fee = new Money(200_000L);
 
-        PaidSession paidSession = new PaidSession(id, title, image, sessionDate, sessionCapacity, fee);
+        PaidSession paidSession = new PaidSession(id, title, new ArrayList<>(List.of(image)), sessionDate, sessionCapacity, fee);
         paidSession.open();
 
         Assertions.assertThatThrownBy(() -> paidSession.register(null))
@@ -97,7 +98,7 @@ public class PaidSessionTest {
         SessionCapacity sessionCapacity = new SessionCapacity(1);
         Money fee = new Money(200_000L);
 
-        PaidSession paidSession = new PaidSession(id, title, image, sessionDate, sessionCapacity, fee);
+        PaidSession paidSession = new PaidSession(id, title, new ArrayList<>(List.of(image)), sessionDate, sessionCapacity, fee);
         paidSession.open();
         Payment payment = new Payment("1", id, NsUserTest.JAVAJIGI.getId(), fee.getPrice() - 1);
         Registration registration = new Registration(1L, NsUserTest.JAVAJIGI, payment);
@@ -112,7 +113,7 @@ public class PaidSessionTest {
         SessionCapacity sessionCapacity = new SessionCapacity(1);
         Money fee = new Money(200_000L);
 
-        PaidSession paidSession = new PaidSession(id, title, image, sessionDate, sessionCapacity, fee);
+        PaidSession paidSession = new PaidSession(id, title, new ArrayList<>(List.of(image)), sessionDate, sessionCapacity, fee);
         paidSession.open();
         Payment payment = new Payment("1", id, NsUserTest.JAVAJIGI.getId(), fee.getPrice() + 1);
         Registration registration = new Registration(1L, NsUserTest.JAVAJIGI, payment);
@@ -127,7 +128,7 @@ public class PaidSessionTest {
         SessionCapacity sessionCapacity = new SessionCapacity(1);
         Money fee = new Money(200_000L);
 
-        PaidSession paidSession = new PaidSession(id, title, image, sessionDate, sessionCapacity, fee);
+        PaidSession paidSession = new PaidSession(id, title, new ArrayList<>(List.of(image)), sessionDate, sessionCapacity, fee);
 
         paidSession.open();
 
@@ -140,7 +141,7 @@ public class PaidSessionTest {
         SessionCapacity sessionCapacity = new SessionCapacity(1);
         Money fee = new Money(200_000L);
 
-        PaidSession paidSession = new PaidSession(id, title, image, sessionDate, sessionCapacity, fee);
+        PaidSession paidSession = new PaidSession(id, title, new ArrayList<>(List.of(image)), sessionDate, sessionCapacity, fee);
 
         paidSession.close();
 

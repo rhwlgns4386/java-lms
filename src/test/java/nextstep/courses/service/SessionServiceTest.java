@@ -53,7 +53,7 @@ public class SessionServiceTest {
         sessionDate = new SessionDate(start, end);
         sessionCapacity = new SessionCapacity(10);
 
-        session = new PaidSession(title, image, sessionDate, sessionCapacity, fee);
+        session = new PaidSession(title, new ArrayList<>(List.of(image)), sessionDate, sessionCapacity, fee);
     }
 
     @Test
@@ -72,7 +72,7 @@ public class SessionServiceTest {
         NsUser nsUser = NsUserTest.JAVAJIGI;
         Long amount = 200_000L;
         Payment payment = new Payment("1234", sessionId, nsUser.getId(), amount);
-        PaidSession paidSession = new PaidSession(sessionId, title, image, sessionDate, sessionCapacity, fee);
+        PaidSession paidSession = new PaidSession(sessionId, title, new ArrayList<>(List.of(image)), sessionDate, sessionCapacity, fee);
 
         Student student = new Student(amount, nsUser.getId());
         Student student2 = new Student(amount, NsUserTest.SANJIGI.getId());
@@ -98,7 +98,7 @@ public class SessionServiceTest {
         Long sessionId = 2L;
         NsUser nsUser = NsUserTest.JAVAJIGI;
         Long amount = 200_000L;
-        PaidSession paidSession = new PaidSession(sessionId, title, image, sessionDate, sessionCapacity, fee);
+        PaidSession paidSession = new PaidSession(sessionId, title, new ArrayList<>(List.of(image)), sessionDate, sessionCapacity, fee);
         paidSession.open();
 
         Student student = new Student(amount, nsUser.getId());

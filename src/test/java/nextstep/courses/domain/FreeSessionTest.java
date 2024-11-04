@@ -13,16 +13,19 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FreeSessionTest {
-    private Image image;
+    private List<Image> images;
     private SessionDate sessionDate;
     private Long id;
     private String title;
 
     @BeforeEach
     void init() {
-        this.image = new Image(1L, new ImageSize(1024), ImageType.GIF, new ImagePixel(300, 200));
+        Image newImage = new Image(1L, new ImageSize(1024), ImageType.GIF, new ImagePixel(300, 200));
+        this.images = new ArrayList<>(List.of(newImage));
 
         LocalDateTime start = LocalDateTime.of(2024, 10, 10, 10, 10);
         LocalDateTime end = LocalDateTime.of(2024, 10, 10, 10, 11);
@@ -35,7 +38,7 @@ public class FreeSessionTest {
     @Test
     @DisplayName("FreeSession 생성")
     void createFreeSessionTest() {
-        FreeSession freeSession = new FreeSession(id, title, sessionDate, image);
+        FreeSession freeSession = new FreeSession(id, title, sessionDate, images);
 
         Assertions.assertThat(freeSession).isNotNull();
         Assertions.assertThat(freeSession.getId()).isEqualTo(id);
@@ -44,7 +47,7 @@ public class FreeSessionTest {
     @Test
     @DisplayName("FreeSession 수강 신청")
     void registerFreeSessionTest() {
-        FreeSession freeSession = new FreeSession(id, title, sessionDate, image);
+        FreeSession freeSession = new FreeSession(id, title, sessionDate, images);
 
         freeSession.open();
 
@@ -57,7 +60,7 @@ public class FreeSessionTest {
     @Test
     @DisplayName("FreeSession 수강 신청 - 모집중이 아닌 강좌 신청 체크")
     void checkRegisterNotOpenFreeSessionTest() {
-        FreeSession freeSession = new FreeSession(id, title, sessionDate, image);
+        FreeSession freeSession = new FreeSession(id, title, sessionDate, images);
 
         Assertions.assertThatThrownBy(() -> freeSession.register(RegistrationTest.REGISTRATION))
                 .isInstanceOf(IllegalStateException.class);
@@ -66,7 +69,7 @@ public class FreeSessionTest {
     @Test
     @DisplayName("강의 모집중")
     void openFreeSessionTest() {
-        FreeSession freeSession = new FreeSession(id, title, sessionDate, image);
+        FreeSession freeSession = new FreeSession(id, title, sessionDate, images);
 
         freeSession.open();
 
@@ -76,7 +79,7 @@ public class FreeSessionTest {
     @Test
     @DisplayName("강의 종료")
     void closeFreeSessionTest() {
-        FreeSession freeSession = new FreeSession(id, title, sessionDate, image);
+        FreeSession freeSession = new FreeSession(id, title, sessionDate, images);
 
         freeSession.close();
 

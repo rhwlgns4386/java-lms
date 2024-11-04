@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @TestMethodOrder(value = MethodOrderer.OrderAnnotation.class)
@@ -41,11 +42,11 @@ public class SessionRepositoryTest {
         SessionDate sessionDate = new SessionDate(start, end);
         String title = "TDD";
 
-        PaidSession paidSession = new PaidSession(title, image, sessionDate, new SessionCapacity(10), new Money(200_000L));
+        PaidSession paidSession = new PaidSession(title, new ArrayList<>(List.of(image)), sessionDate, new SessionCapacity(10), new Money(200_000L));
         long id1 = sessionRepository.save(paidSession, courseId);
         Assertions.assertThat(id1).isEqualTo(1);
 
-        FreeSession freeSession = new FreeSession(title, sessionDate, image);
+        FreeSession freeSession = new FreeSession(title, sessionDate, new ArrayList<>(List.of(image)));
         long id2 = sessionRepository.save(freeSession, courseId);
         Assertions.assertThat(id2).isEqualTo(2);
 
@@ -65,10 +66,10 @@ public class SessionRepositoryTest {
         SessionDate sessionDate = new SessionDate(start, end);
         String title = "TDD";
 
-        PaidSession paidSession = new PaidSession(title, image, sessionDate, new SessionCapacity(10), new Money(200_000L));
+        PaidSession paidSession = new PaidSession(title, new ArrayList<>(List.of(image)), sessionDate, new SessionCapacity(10), new Money(200_000L));
         sessionRepository.save(paidSession, courseId);
 
-        FreeSession freeSession = new FreeSession(title, sessionDate, image);
+        FreeSession freeSession = new FreeSession(title, sessionDate, new ArrayList<>(List.of(image)));
         sessionRepository.save(freeSession, courseId);
 
         List<Session> sessions = sessionRepository.findAllByCourseId(courseId);

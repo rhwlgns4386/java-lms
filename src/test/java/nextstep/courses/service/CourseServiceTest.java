@@ -18,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,7 +41,7 @@ public class CourseServiceTest {
         Image image = new Image(new ImageSize(1024), ImageType.GIF, new ImagePixel(300, 200));
         SessionDate sessionDate = new SessionDate(LocalDateTime.of(2024, 10, 10, 10, 10), LocalDateTime.of(2024, 10, 10, 10, 11));
         String title = "TDD";
-        freeSession = new FreeSession(title, sessionDate, image);
+        freeSession = new FreeSession(title, sessionDate, new ArrayList<>(List.of(image)));
     }
 
     @Test

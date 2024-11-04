@@ -34,6 +34,23 @@ public abstract class Session {
         this.students = students;
     }
 
+    public Session(Long id,
+                   String title,
+                   SessionDate sessionDate,
+                   List<Image> images,
+                   SessionType sessionType,
+                   SessionStatus sessionStatus,
+                   List<Student> students
+    ) {
+        this.id = id;
+        this.title = title;
+        this.sessionDate = sessionDate;
+        this.images = images;
+        this.sessionType = sessionType;
+        this.sessionStatus = sessionStatus;
+        this.students = students;
+    }
+
     public Long getId() {
         return id;
     }
