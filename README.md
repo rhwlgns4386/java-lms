@@ -102,3 +102,51 @@
 - [X] SessionEntity 추가 (디비 접근용)
 - [X] CourseSession select, save 구현
 - [X] Course에서 포함되어있는 Session 같이 조회 
+- [X] Entity 내부 메소드 이름 from으로 변경 (엔티티에서 호출하므로)
+
+## Step4. 요구사항
+* 강의 진행 상태 (준비중, 진행중, 종료)와 모집 상태 (비모집, 모집) 으로 상태 분리
+* 강의는 하나 이상의 커버이미지 가질 수 있음.
+* 강사가 수강 신청한 사람 중 선발된 인원에 대해서만 수강 승인 가능
+* 강사가 수강 신청한 사람 중 선발되지 않은 인원은 수강 취소
+* 컴파일 에러 최소화하면서 점진적인 리팩토링
+* DB 테이블에 데이터가 존재한다는 가정하에 리팩토링 (기존에 쌓인 데이터 제거하지 않은 상태로 리팩토링)
+
+## Step4. 기능구현
+- [X] 강의 진행상태, 모집상태 구분 
+  - [X] 컴파일 에러 적게끔 기존 상태를 모집 상태로 변경, 신규 진행상태 추가
+  - [X] Session, PaidSession, FreeSession에 생성자 별도로 추가 (기존 에러 방지)
+- [X] 데이터베이스 컬럼 추가 (progress_status, recruiting_status)
+  - 기존 status 컬럼에 있던 값은 recruiting_status에 업데이트했다고 가정
+  - 디비가 비어있을 경우 entity에서 예외처리
+- [X] saveNew, findByIdNew 메소드 추가해서 스트랭글러 패턴 적용
+  - 사용하지 않을 경우 삭제 예정
+- [X] 세션 이미지 매핑 테이블 추가 (session_session_image)
+- [X] 세션 이미지 select, save 구현
+- [X] session 객체 생성자에 List<SessionImage> 추가
+- [X] FreeSession Builder 추가
+- [X] session select할 때, session_session_image 테이블 같이 조회
+- [X] entity에 toDomainNew 메소드 추가 (기존거 병행)
+- [X] paidSessionBuilder 생성 및 테스트 수정
+- [X] 강의,학생 매핑 테이블에 상태 추가
+- [X] 상태값 추가한 select, save 기능 추가
+- [X] 강의 조회 시 승인된 사람만 수강생으로 조회
+- [X] 강의 학생 매핑 테이블 update 기능 구현
+- [X] session 에 applyStudents 추가,  approve, cancel 메소드 구현
+- [X] 데이터 베이스 저장 시, approve, apply 구분해서 저장
+- [X] 데이터 베이스 조회 시, approve, apply 구분해서 조회
+
+## Step4. 피드백 구현
+- [X] 기존 session_session_image 삭제 및 로직 삭제
+- [X] SessionImageEntity 생성
+- [X] SessionImage에서 sessionId 추가 및 select, save 구현
+- [X] Selection Strategy 추가
+- [X] enum으로 Selection 전략 관리
+- [X] 선발 전략을 세팅하면, 수강신청 시 선발 과정을 거쳐 선발
+  - Session에 sessionSelection 인스턴스 변수 추가
+- [X] sesison 스키마에 session_selection 추가
+- [X] select, save에 session_selection 추가 
+
+## Step4. 리팩토링
+- [X] 불필요한 생성자 제거
+- [X] students -> approvedStudents 변경

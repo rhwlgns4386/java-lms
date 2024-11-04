@@ -3,33 +3,87 @@ package nextstep.courses.domain;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public abstract class Session {
 
-    protected final Long sessionId;
-    protected final SessionDate date;
-    protected final SessionImage image;
-    protected final SessionStatus status;
-    protected List<Long> students;
+    protected Long sessionId;
+    protected SessionDate date;
+    protected SessionImage image;
+    protected List<SessionImage> images;
+    protected RecruitingStatus recruitingStatus;
+    protected ProgressStatus progressStatus;
+    protected List<Long> approvedStudents;
+    protected List<Long> applyStudents = new ArrayList<>();
+    protected SessionSelection sessionSelection;
 
-    public Session(Long sessionId, SessionDate date, SessionImage image, SessionStatus status, List<Long> numOfStudents) {
+    public Session(Long sessionId, SessionDate date, SessionImage image, RecruitingStatus recruitingStatus, List<Long> numOfStudents) {
         this.sessionId = sessionId;
         this.date = date;
         this.image = image;
-        this.status = status;
-        this.students = numOfStudents;
+        this.recruitingStatus = recruitingStatus;
+        this.approvedStudents = numOfStudents;
+    }
+
+    public Session(Long sessionId, SessionDate date, SessionImage image, RecruitingStatus recruitingStatus, ProgressStatus progressStatus, List<Long> approvedStudents) {
+        this.sessionId = sessionId;
+        this.date = date;
+        this.image = image;
+        this.recruitingStatus = recruitingStatus;
+        this.progressStatus = progressStatus;
+        this.approvedStudents = approvedStudents;
+    }
+
+    public Session(Long sessionId, SessionDate date, List<SessionImage> images, RecruitingStatus recruitingStatus, ProgressStatus progressStatus, List<Long> approvedStudents, List<Long> applyStudents) {
+        this.sessionId = sessionId;
+        this.date = date;
+        this.images = images;
+        this.recruitingStatus = recruitingStatus;
+        this.progressStatus = progressStatus;
+        this.approvedStudents = approvedStudents;
+        this.applyStudents = applyStudents;
+    }
+
+    public Session(Long sessionId, SessionDate date, List<SessionImage> images, RecruitingStatus recruitingStatus, ProgressStatus progressStatus, List<Long> approvedStudents, List<Long> applyStudents, SessionSelection sessionSelection) {
+        this.sessionId = sessionId;
+        this.date = date;
+        this.images = images;
+        this.recruitingStatus = recruitingStatus;
+        this.progressStatus = progressStatus;
+        this.approvedStudents = approvedStudents;
+        this.applyStudents = applyStudents;
+        this.sessionSelection = sessionSelection;
     }
 
     public void enroll(Payment payment) {
-        if (!status.canEnroll()) {
+        if (!recruitingStatus.canEnroll()) {
             throw new IllegalStateException("강의가 모집 상태가 아닙니다.");
         }
-        this.students.add(payment.getNsUserId());
+        if (sessionSelection != null && !sessionSelection.select()) {
+            throw new IllegalStateException("모집에서 선발되지 않았습니다.");
+        }
+        this.applyStudents.add(payment.getNsUserId());
+    }
+
+    public void approve(Long id) {
+        if (!applyStudents.contains(id)) {
+            throw new IllegalArgumentException("수강신청을 하지 않았습니다.");
+        }
+        applyStudents.remove(id);
+        approvedStudents.add(id);
+    }
+
+    public void cancel(Long id) {
+        if (!applyStudents.contains(id)) {
+            throw new IllegalArgumentException("수강신청을 하지 않았습니다.");
+        }
+        applyStudents.remove(id);
     }
 
     public boolean isContainUser(NsUser user) {
-        return students.contains(user.getId());
+        return approvedStudents.contains(user.getId());
     }
 
     public Long getSessionId() {
@@ -44,12 +98,27 @@ public abstract class Session {
         return image;
     }
 
-    public SessionStatus getStatus() {
-        return status;
+    public RecruitingStatus getRecruitingStatus() {
+        return recruitingStatus;
     }
 
-    public List<Long> getStudents() {
-        return students;
+    public ProgressStatus getProgressStatus() {
+        return progressStatus;
     }
 
+    public List<Long> getApprovedStudents() {
+        return Collections.unmodifiableList(approvedStudents);
+    }
+
+    public List<SessionImage> getImages() {
+        return Collections.unmodifiableList(images);
+    }
+
+    public List<Long> getApplyStudents() {
+        return applyStudents;
+    }
+
+    public SessionSelection getSessionSelection() {
+        return sessionSelection;
+    }
 }

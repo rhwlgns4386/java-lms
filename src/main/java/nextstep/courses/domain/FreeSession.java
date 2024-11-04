@@ -7,16 +7,28 @@ import java.util.List;
 
 public class FreeSession extends Session {
 
-    public FreeSession(SessionDate date, SessionImage image, SessionStatus status, List<Long> numOfStudents) {
-        this(1L, date, image, status, numOfStudents);
+    public FreeSession(long id, Timestamp sessionStartAt, Timestamp sessionEndAt, SessionImage sessionImage, RecruitingStatus recruitingStatus, ProgressStatus progressStatus, List<Long> numOfStudents) {
+        this(id, new SessionDate(sessionStartAt, sessionEndAt), sessionImage, recruitingStatus, progressStatus, numOfStudents);
     }
 
-    public FreeSession(long id, Timestamp sessionStartAt, Timestamp sessionEndAt, SessionImage sessionImage, String status, List<Long> numOfStudents) {
-        this(id, new SessionDate(sessionStartAt, sessionEndAt), sessionImage, SessionStatus.valueOf(status), numOfStudents);
+    public FreeSession(long id, Timestamp sessionStartAt, Timestamp sessionEndAt, List<SessionImage> sessionImages, RecruitingStatus recruitingStatus, ProgressStatus progressStatus, List<Long> approvedStudents, List<Long> applyStudents, SessionSelection sessionSelection) {
+        this(id, new SessionDate(sessionStartAt, sessionEndAt), sessionImages, recruitingStatus, progressStatus, approvedStudents, applyStudents);
     }
 
-    public FreeSession(Long sessionId, SessionDate date, SessionImage image, SessionStatus status, List<Long> numOfStudents) {
+    public FreeSession(Long sessionId, SessionDate date, SessionImage image, RecruitingStatus status, List<Long> numOfStudents) {
         super(sessionId, date, image, status, numOfStudents);
+    }
+
+    public FreeSession(Long sessionId, SessionDate date, SessionImage image, RecruitingStatus recruitingStatus, ProgressStatus progressStatus, List<Long> numOfStudents) {
+        super(sessionId, date, image, recruitingStatus, progressStatus, numOfStudents);
+    }
+
+    public FreeSession(Long sessionId, SessionDate date, List<SessionImage> images, RecruitingStatus recruitingStatus, ProgressStatus progressStatus, List<Long> numOfStudents, List<Long> applyStudents) {
+        super(sessionId, date, images, recruitingStatus, progressStatus, numOfStudents, applyStudents);
+    }
+
+    public FreeSession(Long sessionId, SessionDate date, List<SessionImage> images, RecruitingStatus recruitingStatus, ProgressStatus progressStatus, List<Long> numOfStudents, List<Long> applyStudents, SessionSelection sessionSelection) {
+        super(sessionId, date, images, recruitingStatus, progressStatus, numOfStudents, applyStudents, sessionSelection);
     }
 
     @Override
@@ -33,8 +45,9 @@ public class FreeSession extends Session {
                 "sessionId=" + sessionId +
                 ", date=" + date +
                 ", image=" + image +
-                ", status=" + status +
-                ", students=" + students +
+                ", recruitingStatus=" + recruitingStatus +
+                ", progressStatus=" + progressStatus +
+                ", students=" + approvedStudents +
                 '}';
     }
 }
