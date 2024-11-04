@@ -140,3 +140,7 @@
 - [X] 기존 session_session_image 삭제 및 로직 삭제
 - [X] SessionImageEntity 생성
 - [X] SessionImage에서 sessionId 추가 및 select, save 구현
+- [X] Selection Strategy 추가
+
+## Step4. 리팩토링
+- [X] 불필요한 생성자 제거
