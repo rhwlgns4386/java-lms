@@ -5,10 +5,19 @@ import nextstep.courses.domain.session.Registration;
 public class Student {
     private Long nsUserId;
     private Long amount;
+    private StudentStatus status;
 
     public Student(Long amount, Long nsUserId) {
-        this.amount = amount;
+        this(nsUserId, amount, StudentStatus.APPLIED);
+    }
+
+    public Student(Long nsUserId, Long amount, StudentStatus status) {
+        if (status == null) {
+            throw new NullPointerException("status must not be null");
+        }
         this.nsUserId = nsUserId;
+        this.amount = amount;
+        this.status = status;
     }
 
     public static Student of(Registration registration) {
@@ -21,6 +30,18 @@ public class Student {
 
     public Long getNsUserId() {
         return nsUserId;
+    }
+
+    public StudentStatus getStatus() {
+        return status;
+    }
+
+    public void accept() {
+        this.status = StudentStatus.ACCEPTED;
+    }
+
+    public void reject() {
+        this.status = StudentStatus.REJECTED;
     }
 
     @Override

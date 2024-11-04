@@ -45,6 +45,7 @@ create table student
     ns_user_id bigint,
     session_id bigint,
     amount     bigint,
+    status     varchar(10),
     primary key (ns_user_id, session_id)
 );
 

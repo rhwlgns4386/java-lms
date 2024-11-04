@@ -58,7 +58,7 @@
     * 모든 로직에서 진행 상태, 모집 상태 사용하도록 변경 [X]
     * Session class에서 SessionStatus field 제거 [X]
 * NsUser에 role 추가 [X]
-* Student에 수강 상태(신청,승인,취소) 추가 []
+* Student에 수강 상태(신청,승인,취소) 추가 [X]
 * 강사가 수강 신청한 학생들을 승인할 수 있는 로직 추가 []
 * 기존 수강신청 로직 변경 []
 
