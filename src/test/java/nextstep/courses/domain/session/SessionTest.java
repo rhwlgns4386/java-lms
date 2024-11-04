@@ -9,6 +9,7 @@ import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -16,19 +17,17 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class SessionTest {
     @Test
     void 유료강의_수강신청_성공() {
-        PaidPaymentStrategy paidSessionStrategy = new PaidPaymentStrategy(1000, 10);
-        Session session = new Session(1000000, "jpg", 300, 200, SessionState.RECRUITING, paidSessionStrategy, LocalDate.now(), LocalDate.now().plusDays(3));
+        PaidPaymentStrategy paidSessionStrategy = new PaidPaymentStrategy(1000);
+        Session session = new Session(1000000, "jpg", 300, 200, SessionState.RECRUITING, paidSessionStrategy, 10, LocalDate.now(), LocalDate.now().plusDays(3));
         Payment payment = new Payment("1L", 1L, 1L, 1000l);
 
-        Enrollment expected = session.applyForCourse(NsUserTest.JAVAJIGI, payment, LocalDate.now());
-
-        assertThat(expected).isEqualTo(new Enrollment(NsUserTest.JAVAJIGI, session));
+        session.applyForCourse(NsUserTest.JAVAJIGI, payment, LocalDate.now());
     }
 
     @Test
     void 유료강의_수강신청_실패() {
-        PaymentStrategy paymentStrategy = new PaidPaymentStrategy(1000, 10);
-        Session session = new Session(1000000, "jpg", 300, 200, SessionState.RECRUITING, paymentStrategy, LocalDate.now(), LocalDate.now().plusDays(3));
+        PaymentStrategy paymentStrategy = new PaidPaymentStrategy(1000);
+        Session session = new Session(1000000, "jpg", 300, 200, SessionState.RECRUITING, paymentStrategy, 10, LocalDate.now(), LocalDate.now().plusDays(3));
         Payment payment = new Payment("1L", 1L, 1L, 10000l);
 
         assertThatThrownBy(() -> {
@@ -39,11 +38,9 @@ public class SessionTest {
     @Test
     void 무료강의_수강신청_성공() {
         PaymentStrategy paymentStrategy = new FreePaymentStrategy();
-        Session session = new Session(1000000, "jpg", 300, 200, SessionState.RECRUITING, paymentStrategy, LocalDate.now(), LocalDate.now().plusDays(3));
+        Session session = new Session(1000000, "jpg", 300, 200, SessionState.RECRUITING, paymentStrategy, 10, LocalDate.now(), LocalDate.now().plusDays(3));
         Payment payment = new Payment("1L", 1L, 1L, 0L);
 
-        Enrollment expected = session.applyForCourse(NsUserTest.JAVAJIGI, payment, LocalDate.now());
-
-        assertThat(expected).isEqualTo(new Enrollment(NsUserTest.JAVAJIGI, session));
+        session.applyForCourse(NsUserTest.JAVAJIGI, payment, LocalDate.now());
     }
 }

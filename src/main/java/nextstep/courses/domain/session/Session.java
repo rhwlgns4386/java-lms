@@ -6,6 +6,7 @@ import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 public class Session {
@@ -15,25 +16,27 @@ public class Session {
     private final SessionImage sessionImage;
     private final SessionState sessionState;
     private final PaymentStrategy sessionStrategy;
+    private final Enrollment enrollment;
     private final SessionDate sessionDate;
 
-    public Session(int size, String imageType, int width, int height, SessionState sessionState, PaymentStrategy sessionStrategy, LocalDate startDate, LocalDate endDate) {
-        this(new SessionImage(size, imageType, width, height), sessionState, sessionStrategy, new SessionDate(startDate, endDate));
+    public Session(int size, String imageType, int width, int height, SessionState sessionState, PaymentStrategy sessionStrategy, int capacity, LocalDate startDate, LocalDate endDate) {
+        this(new SessionImage(size, imageType, width, height), sessionState, sessionStrategy, new Enrollment(capacity), new SessionDate(startDate, endDate));
     }
 
-    public Session(SessionImage sessionImage, SessionState sessionState, PaymentStrategy sessionStrategy, SessionDate sessionDate) {
+    public Session(SessionImage sessionImage, SessionState sessionState, PaymentStrategy sessionStrategy, Enrollment enrollment, SessionDate sessionDate) {
         this.sessionImage = sessionImage;
         this.sessionState = sessionState;
         this.sessionStrategy = sessionStrategy;
+        this.enrollment = enrollment;
         this.sessionDate = sessionDate;
     }
 
-    public Enrollment applyForCourse(NsUser user, Payment payment, LocalDate date) {
+    public void applyForCourse(NsUser user, Payment payment, LocalDate date) {
         if (!canApplyForCourse(payment, date)) {
             throw new CannotEnrollmentException(ENROLLMENT_EXCEPT_MESSAGE);
-        };
+        }
 
-        return new Enrollment(user, this);
+        this.enrollment.enroll(user);
     }
 
     private boolean canApplyForCourse(Payment payment, LocalDate date) {
