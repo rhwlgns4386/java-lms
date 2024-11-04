@@ -14,7 +14,7 @@ public class SessionStatusTest {
     }
 
     @Test
-    void isValidStatusForApplicationNew_invaliddStatus() {
+    void isValidStatusForApplicationNew_invalidStatus() {
         SessionStatus sessionStatus = new SessionStatus(SessionProgressStatusEnum.PROGRESSING, SessionRecruitmentStatusEnum.RECRUITING);
         assertThatCode(()-> sessionStatus.isValidStatusForApplication()).doesNotThrowAnyException();
     }

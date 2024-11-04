@@ -6,12 +6,14 @@ import nextstep.users.domain.NsUser;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 public class Session {
     private Long id;
     private Course course;
+    private List<SessionImage> sessionImages;
     private SessionImage sessionImage;
     private SessionPeriod sessionPeriod;
     private SessionType sessionType;
@@ -32,12 +34,15 @@ public class Session {
                    SessionStatus sessionStatus,
                    SessionType sessionType,
                    LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this(sessionId, null, sessionPeriod, sessionType, sessionStatus, createdAt, updatedAt);
+        this(sessionId, (List<SessionImage>) null, sessionPeriod, sessionType, sessionStatus, createdAt, updatedAt);
     }
 
     public Session(Long sessionId, SessionImage sessionImage, SessionPeriod sessionPeriod, SessionType sessionType, SessionStatus sessionStatus, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this(sessionId, Arrays.asList(sessionImage), sessionPeriod, sessionType, sessionStatus, createdAt, updatedAt);
+    }
+    public Session(Long sessionId, List<SessionImage> sessionImages, SessionPeriod sessionPeriod, SessionType sessionType, SessionStatus sessionStatus, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = sessionId;
-        this.sessionImage = sessionImage;
+        this.sessionImages = sessionImages;
         this.sessionPeriod = sessionPeriod;
         this.sessionType = sessionType;
         this.sessionStatus = sessionStatus;
@@ -111,6 +116,10 @@ public class Session {
 
     public ApplicationDetail getApplicationDetail(Long userId, long sessionId) {
         return applicationDetails.getMatch(sessionId, userId);
+    }
+
+    public void addSessionImages(List<SessionImage> sessionImages) {
+        this.sessionImages = sessionImages;
     }
 
     public boolean isFree() {
