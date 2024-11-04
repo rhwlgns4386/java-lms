@@ -19,7 +19,7 @@ public class PaidSession extends Session {
 
     public PaidSession(Long sessionId, SessionDate date, SessionImage image, RecruitingStatus status, List<Long> numOfStudents, int maxNumOfStudents, int sessionFee) {
         super(sessionId, date, image, status, numOfStudents);
-        if (maxNumOfStudents < students.size()) {
+        if (maxNumOfStudents < approvedStudents.size()) {
             throw new IllegalArgumentException("수강 정원이 초과됐습니다.");
         }
         this.maxNumOfStudents = maxNumOfStudents;
@@ -28,7 +28,7 @@ public class PaidSession extends Session {
 
     public PaidSession(Long sessionId, SessionDate date, SessionImage image, RecruitingStatus recruitingStatus, ProgressStatus progressStatus, List<Long> numOfStudents, int maxNumOfStudents, int sessionFee) {
         super(sessionId, date, image, recruitingStatus, progressStatus, numOfStudents);
-        if (maxNumOfStudents < students.size()) {
+        if (maxNumOfStudents < approvedStudents.size()) {
             throw new IllegalArgumentException("수강 정원이 초과됐습니다.");
         }
         this.maxNumOfStudents = maxNumOfStudents;
@@ -37,7 +37,7 @@ public class PaidSession extends Session {
 
     public PaidSession(Long sessionId, SessionDate date, List<SessionImage> images, RecruitingStatus recruitingStatus, ProgressStatus progressStatus, List<Long> numOfStudents, List<Long> applyStudents, int maxNumOfStudents, int sessionFee) {
         super(sessionId, date, images, recruitingStatus, progressStatus, numOfStudents, applyStudents);
-        if (maxNumOfStudents < students.size()) {
+        if (maxNumOfStudents < approvedStudents.size()) {
             throw new IllegalArgumentException("수강 정원이 초과됐습니다.");
         }
         this.maxNumOfStudents = maxNumOfStudents;
@@ -46,7 +46,7 @@ public class PaidSession extends Session {
 
     @Override
     public void enroll(Payment payment) {
-        if (maxNumOfStudents <= students.size()) {
+        if (maxNumOfStudents <= approvedStudents.size()) {
             throw new IllegalStateException("수강 정원이 초과됐습니다.");
         }
         if (!payment.isPaid(sessionFee)) {
@@ -73,7 +73,7 @@ public class PaidSession extends Session {
                 ", image=" + image +
                 ", recruitingStatus=" + recruitingStatus +
                 ", progressStatus=" + progressStatus +
-                ", students=" + students +
+                ", students=" + approvedStudents +
                 '}';
     }
 }

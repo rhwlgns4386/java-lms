@@ -43,7 +43,7 @@ public class FreeSession extends Session {
                 ", image=" + image +
                 ", recruitingStatus=" + recruitingStatus +
                 ", progressStatus=" + progressStatus +
-                ", students=" + students +
+                ", students=" + approvedStudents +
                 '}';
     }
 }

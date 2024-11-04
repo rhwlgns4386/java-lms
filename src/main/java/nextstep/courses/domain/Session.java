@@ -15,7 +15,7 @@ public abstract class Session {
     protected List<SessionImage> images;
     protected RecruitingStatus recruitingStatus;
     protected ProgressStatus progressStatus;
-    protected List<Long> students;
+    protected List<Long> approvedStudents;
     protected List<Long> applyStudents = new ArrayList<>();
 
     public Session(Long sessionId, SessionDate date, SessionImage image, RecruitingStatus recruitingStatus, List<Long> numOfStudents) {
@@ -23,25 +23,25 @@ public abstract class Session {
         this.date = date;
         this.image = image;
         this.recruitingStatus = recruitingStatus;
-        this.students = numOfStudents;
+        this.approvedStudents = numOfStudents;
     }
 
-    public Session(Long sessionId, SessionDate date, SessionImage image, RecruitingStatus recruitingStatus, ProgressStatus progressStatus, List<Long> students) {
+    public Session(Long sessionId, SessionDate date, SessionImage image, RecruitingStatus recruitingStatus, ProgressStatus progressStatus, List<Long> approvedStudents) {
         this.sessionId = sessionId;
         this.date = date;
         this.image = image;
         this.recruitingStatus = recruitingStatus;
         this.progressStatus = progressStatus;
-        this.students = students;
+        this.approvedStudents = approvedStudents;
     }
 
-    public Session(Long sessionId, SessionDate date, List<SessionImage> images, RecruitingStatus recruitingStatus, ProgressStatus progressStatus, List<Long> students, List<Long> applyStudents) {
+    public Session(Long sessionId, SessionDate date, List<SessionImage> images, RecruitingStatus recruitingStatus, ProgressStatus progressStatus, List<Long> approvedStudents, List<Long> applyStudents) {
         this.sessionId = sessionId;
         this.date = date;
         this.images = images;
         this.recruitingStatus = recruitingStatus;
         this.progressStatus = progressStatus;
-        this.students = students;
+        this.approvedStudents = approvedStudents;
         this.applyStudents = applyStudents;
     }
 
@@ -57,7 +57,7 @@ public abstract class Session {
             throw new IllegalArgumentException("수강신청을 하지 않았습니다.");
         }
         applyStudents.remove(id);
-        students.add(id);
+        approvedStudents.add(id);
     }
 
     public void cancel(Long id) {
@@ -68,7 +68,7 @@ public abstract class Session {
     }
 
     public boolean isContainUser(NsUser user) {
-        return students.contains(user.getId());
+        return approvedStudents.contains(user.getId());
     }
 
     public Long getSessionId() {
@@ -91,8 +91,8 @@ public abstract class Session {
         return progressStatus;
     }
 
-    public List<Long> getStudents() {
-        return Collections.unmodifiableList(students);
+    public List<Long> getApprovedStudents() {
+        return Collections.unmodifiableList(approvedStudents);
     }
 
     public List<SessionImage> getImages() {

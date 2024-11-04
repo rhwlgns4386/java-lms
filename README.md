@@ -144,3 +144,4 @@
 
 ## Step4. 리팩토링
 - [X] 불필요한 생성자 제거
+- [X] students -> approvedStudents 변경

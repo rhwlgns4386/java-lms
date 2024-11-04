@@ -37,7 +37,7 @@ public class SessionTest {
         session.cancel(NsUserTest.JAVAJIGI.getId());
         Assertions.assertAll(
                 () -> assertThat(session.getApplyStudents()).isEqualTo(new ArrayList<>()),
-                () -> assertThat(session.getStudents()).isEqualTo(new ArrayList<>())
+                () -> assertThat(session.getApprovedStudents()).isEqualTo(new ArrayList<>())
         );
     }
 
@@ -62,7 +62,7 @@ public class SessionTest {
         session.approve(NsUserTest.JAVAJIGI.getId());
         Assertions.assertAll(
                 () -> assertThat(session.getApplyStudents()).isEqualTo(new ArrayList<>()),
-                () -> assertThat(session.getStudents()).isEqualTo(List.of(1L))
+                () -> assertThat(session.getApprovedStudents()).isEqualTo(List.of(1L))
         );
     }
 

@@ -28,7 +28,7 @@ public class JdbcSessionRepository implements SessionRepository {
     public int save(Session session) {
         SessionEntity entity = SessionEntity.from(session);
         String sql = "insert into session (session_start_date, session_end_date, status, image_id, session_type, max_student, session_fee) values (? ,? ,? ,? ,? ,? ,?)";
-        sessionStudentRepository.save(session.getSessionId(), session.getStudents());
+        sessionStudentRepository.save(session.getSessionId(), session.getApprovedStudents());
         return jdbcTemplate.update(sql, entity.getSessionStartAt(), entity.getSessionEndAt(), entity.getStatus(), entity.getImageId(), entity.getSessionType(), entity.getSessionFee(), entity.getMaxStudent());
     }
 
@@ -36,7 +36,7 @@ public class JdbcSessionRepository implements SessionRepository {
     public int saveNew(Session session) {
         SessionEntity entity = SessionEntity.from(session);
         String sql = "insert into session (session_start_date, session_end_date, status, recruiting_status, progress_status, image_id, session_type, max_student, session_fee) values (? ,? ,? ,? ,? ,? ,?, ?, ?)";
-        sessionStudentRepository.saveNew(session.getSessionId(), session.getStudents(), session.getApplyStudents());
+        sessionStudentRepository.saveNew(session.getSessionId(), session.getApprovedStudents(), session.getApplyStudents());
         return jdbcTemplate.update(sql, entity.getSessionStartAt(), entity.getSessionEndAt(), entity.getStatus(), entity.getRecruitingStatus(), entity.getProgressStatus(), entity.getImageId(), entity.getSessionType(), entity.getSessionFee(), entity.getMaxStudent());
     }
 
