@@ -64,7 +64,7 @@ public class SessionEntity {
         return entity;
     }
 
-    public Session toDomain(SessionImage sessionImage, List<Long> sessionStudents) {
+    public Session to(SessionImage sessionImage, List<Long> sessionStudents) {
         if (!StringUtils.hasText(recruitingStatus)) {
             recruitingStatus = NON_RECRUITING.name();
         }
@@ -77,7 +77,7 @@ public class SessionEntity {
         return new FreeSession(id, sessionStartAt, sessionEndAt, sessionImage, RecruitingStatus.valueOf(recruitingStatus), ProgressStatus.valueOf(progressStatus), sessionStudents);
     }
 
-    public Session toDomainNew(List<SessionImage> sessionImages, List<Long> approvedStudents, List<Long> applyStudents) {
+    public Session toNew(List<SessionImage> sessionImages, List<Long> approvedStudents, List<Long> applyStudents) {
         if (!StringUtils.hasText(recruitingStatus)) {
             recruitingStatus = NON_RECRUITING.name();
         }
