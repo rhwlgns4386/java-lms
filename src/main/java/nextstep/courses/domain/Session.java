@@ -3,6 +3,7 @@ package nextstep.courses.domain;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -15,7 +16,7 @@ public abstract class Session {
     protected RecruitingStatus recruitingStatus;
     protected ProgressStatus progressStatus;
     protected List<Long> students;
-    protected List<Long> applyStudents;
+    protected List<Long> applyStudents = new ArrayList<>();
 
     public Session(Long sessionId, SessionDate date, SessionImage image, RecruitingStatus recruitingStatus, List<Long> numOfStudents) {
         this.sessionId = sessionId;
