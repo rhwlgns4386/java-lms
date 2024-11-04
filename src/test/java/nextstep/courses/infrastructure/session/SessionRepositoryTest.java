@@ -3,6 +3,7 @@ package nextstep.courses.infrastructure.session;
 import nextstep.courses.entity.SessionEntity;
 import nextstep.courses.entity.SessionEntityTest;
 import nextstep.courses.infrastructure.cover.JdbcCoverImageRepository;
+import nextstep.courses.infrastructure.enrollment.JdbcStudentRepository;
 import nextstep.courses.type.RecruitState;
 import nextstep.courses.type.SessionState;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,7 +28,8 @@ public class SessionRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        sessionRepository = new JdbcSessionRepository(jdbcTemplate, new JdbcCoverImageRepository(jdbcTemplate));
+        sessionRepository = new JdbcSessionRepository(jdbcTemplate, new JdbcCoverImageRepository(jdbcTemplate),
+                new JdbcStudentRepository(jdbcTemplate));
     }
 
     @Test

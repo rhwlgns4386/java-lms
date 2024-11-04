@@ -21,7 +21,8 @@ public class SessionService {
     private final StudentRepository studentRepository;
     private final UserService userService;
 
-    public SessionService(SessionRepository sessionRepository, StudentRepository studentRepository, UserService userService) {
+    public SessionService(SessionRepository sessionRepository, StudentRepository studentRepository,
+                          UserService userService) {
         this.sessionRepository = sessionRepository;
         this.studentRepository = studentRepository;
         this.userService = userService;
@@ -47,7 +48,6 @@ public class SessionService {
     private Session getSession(Long sessionId) {
         SessionEntity entity = Optional.ofNullable(sessionRepository.findById(sessionId))
                 .orElseThrow(() -> new IllegalArgumentException("해당 강의를 찾을 수 없습니다"));
-        entity.addStudentEntities(studentRepository.findBySessionId(entity.getId()));
 
         return entity.toDomain();
     }

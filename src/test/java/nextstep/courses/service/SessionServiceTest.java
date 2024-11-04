@@ -30,7 +30,8 @@ public class SessionServiceTest {
 
     @BeforeEach
     void init() {
-        sessionService = new SessionService(new JdbcSessionRepository(jdbcOperations, new JdbcCoverImageRepository(jdbcOperations)),
+        sessionService = new SessionService(
+                new JdbcSessionRepository(jdbcOperations, new JdbcCoverImageRepository(jdbcOperations), new JdbcStudentRepository(jdbcOperations)),
                 new JdbcStudentRepository(jdbcOperations), new UserService(new JdbcUserRepository(jdbcOperations)));
         studentRepository = new JdbcStudentRepository(jdbcOperations);
     }

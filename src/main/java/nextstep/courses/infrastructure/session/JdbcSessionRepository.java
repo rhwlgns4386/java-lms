@@ -2,10 +2,11 @@ package nextstep.courses.infrastructure.session;
 
 import nextstep.courses.entity.CoverImageEntity;
 import nextstep.courses.entity.SessionEntity;
-import nextstep.courses.entity.StudentEntity;
 import nextstep.courses.infrastructure.cover.CoverImageRepository;
+import nextstep.courses.infrastructure.enrollment.StudentRepository;
 import nextstep.courses.type.RecruitState;
 import nextstep.courses.type.SessionState;
+import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -28,10 +29,13 @@ public class JdbcSessionRepository implements SessionRepository {
 
     private final JdbcOperations jdbcTemplate;
     private final CoverImageRepository coverImageRepository;
+    private final StudentRepository studentRepository;
 
-    public JdbcSessionRepository(JdbcOperations jdbcTemplate, CoverImageRepository coverImageRepository) {
+    public JdbcSessionRepository(JdbcOperations jdbcTemplate, CoverImageRepository coverImageRepository,
+                                 StudentRepository studentRepository) {
         this.jdbcTemplate = jdbcTemplate;
         this.coverImageRepository = coverImageRepository;
+        this.studentRepository = studentRepository;
     }
 
     @Override
@@ -47,7 +51,10 @@ public class JdbcSessionRepository implements SessionRepository {
                 .map(CoverImageEntity::getFilePath)
                 .collect(Collectors.toList());
 
-        Optional.ofNullable(sessionEntity).ifPresent(entity -> entity.addCover(coverFilePaths));
+        if (sessionEntity != null) {
+            sessionEntity.addCover(coverFilePaths);
+            sessionEntity.addStudentEntities(studentRepository.findBySessionId(sessionId));
+        }
         return sessionEntity;
     }
 
@@ -68,7 +75,7 @@ public class JdbcSessionRepository implements SessionRepository {
         int result = jdbcTemplate.update(connection -> insert(connection, sql, courseId, session), keyHolder);
 
         long sessionId = Optional.ofNullable(keyHolder.getKey())
-                .orElseThrow(() -> new IllegalStateException("강의 저장 실패"))
+                .orElseThrow(() -> new DataRetrievalFailureException("강의 저장 실패"))
                 .longValue();
 
         session.getCoverImageEntities().forEach(coverImageEntity ->
