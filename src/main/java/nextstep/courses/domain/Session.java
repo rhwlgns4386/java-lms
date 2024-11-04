@@ -17,6 +17,7 @@ public abstract class Session {
     protected ProgressStatus progressStatus;
     protected List<Long> approvedStudents;
     protected List<Long> applyStudents = new ArrayList<>();
+    protected SessionSelection sessionSelection;
 
     public Session(Long sessionId, SessionDate date, SessionImage image, RecruitingStatus recruitingStatus, List<Long> numOfStudents) {
         this.sessionId = sessionId;
@@ -45,9 +46,23 @@ public abstract class Session {
         this.applyStudents = applyStudents;
     }
 
+    public Session(Long sessionId, SessionDate date, List<SessionImage> images, RecruitingStatus recruitingStatus, ProgressStatus progressStatus, List<Long> approvedStudents, List<Long> applyStudents, SessionSelection sessionSelection) {
+        this.sessionId = sessionId;
+        this.date = date;
+        this.images = images;
+        this.recruitingStatus = recruitingStatus;
+        this.progressStatus = progressStatus;
+        this.approvedStudents = approvedStudents;
+        this.applyStudents = applyStudents;
+        this.sessionSelection = sessionSelection;
+    }
+
     public void enroll(Payment payment) {
         if (!recruitingStatus.canEnroll()) {
             throw new IllegalStateException("강의가 모집 상태가 아닙니다.");
+        }
+        if (sessionSelection != null && !sessionSelection.select()) {
+            throw new IllegalStateException("모집에서 선발되지 않았습니다.");
         }
         this.applyStudents.add(payment.getNsUserId());
     }

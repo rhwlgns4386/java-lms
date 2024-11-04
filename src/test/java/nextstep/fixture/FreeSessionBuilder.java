@@ -4,6 +4,7 @@ import nextstep.courses.domain.FreeSession;
 import nextstep.courses.domain.ProgressStatus;
 import nextstep.courses.domain.RecruitingStatus;
 import nextstep.courses.domain.SessionImage;
+import nextstep.courses.domain.SessionSelection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ public class FreeSessionBuilder {
     private ProgressStatus progressStatus;
     private List<SessionImage> images;
     private List<Long> applyStudents;
+    private SessionSelection sessionSelection;
 
     public FreeSessionBuilder withId(Long id) {
         this.id = id;
@@ -40,8 +42,13 @@ public class FreeSessionBuilder {
         return this;
     }
 
+    public FreeSessionBuilder withSessionSelection(SessionSelection sessionSelection) {
+        this.sessionSelection = sessionSelection;
+        return this;
+    }
+
 
     public FreeSession build() {
-        return new FreeSession(id, SessionDateCreator.standard(), images, recruitingStatus, progressStatus, new ArrayList<>(), applyStudents);
+        return new FreeSession(id, SessionDateCreator.standard(), images, recruitingStatus, progressStatus, new ArrayList<>(), applyStudents, sessionSelection);
     }
 }

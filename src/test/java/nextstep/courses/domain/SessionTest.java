@@ -11,10 +11,46 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static nextstep.courses.domain.SessionSelection.ALL_SELECT;
+import static nextstep.courses.domain.SessionSelection.ALL_UNSELECT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class SessionTest {
+
+    @Test
+    @DisplayName("선발전략을 별도로 세팅하지 않은 경우, 정상적으로 강의신청이 가능하다.")
+    void 수강신청_선발_세팅안함() {
+        Session session = new FreeSessionBuilder()
+                .withRecruitingStatus(RecruitingStatus.RECRUITING)
+                .withApplyStudents(new ArrayList<>())
+                .build();
+        session.enroll(PaymentCreator.pay(0L));
+    }
+
+    @Test
+    @DisplayName("수강신청에서 선발된 경우, 정상적으로 강의신청이 가능하다.")
+    void 수강신청_선발() {
+        Session session = new FreeSessionBuilder()
+                .withRecruitingStatus(RecruitingStatus.RECRUITING)
+                .withSessionSelection(ALL_SELECT)
+                .withApplyStudents(new ArrayList<>())
+                .build();
+        session.enroll(PaymentCreator.pay(0L));
+    }
+
+
+    @Test
+    @DisplayName("수강 신청에서 선발되지 않을 경우, 예외를 발생시킨다.")
+    void 수강신청_선발_실패() {
+        Session session = new FreeSessionBuilder()
+                .withRecruitingStatus(RecruitingStatus.RECRUITING)
+                .withSessionSelection(ALL_UNSELECT)
+                .withApplyStudents(new ArrayList<>())
+                .build();
+        assertThatThrownBy(() -> session.enroll(PaymentCreator.pay(0L)))
+                .isInstanceOf(IllegalStateException.class);
+    }
 
     @Test
     @DisplayName("수강신청 하지 않은 유저를 취소하려고 하는 경우, 예외를 발생시킨다.")
