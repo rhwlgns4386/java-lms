@@ -10,8 +10,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
 class ImageTest {
-
-
     @DisplayName("이미지 크기가 1MB 초과할 시 IllegalArgumentException 예외가 발생한다.")
     @Test
     void create_fail_when_size_is_under_1MB() {

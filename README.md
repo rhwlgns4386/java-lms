@@ -1,5 +1,31 @@
 # 학습 관리 시스템(Learning Management System)
-## Step2. ### 수강 신청 기능 요구사항
+## Step3. 수강 신청(DB 적용)
+### 구현 내용 정리
+- `SessionService` 추상 클래스를 extends하는 `FreeSessionService`, `PaidSessionService` 구현체와 <br>`SessionRepository` 인터페이스를 implements하는 `FreeSessionRepository`, `PaidSessionRepository` 구현체를 추가하였습니다.
+- `SessionService`를 호출하는 클라이언트에서 `SessionFeeStatus` 필드에 따라 `SessionService` 구현체를 주입받을 수 있도록 `SessionFactory`를 추가하였습니다.
+- `schema.sql` :
+  - `Session` 추상 클래스와 하위 클래스의 상속 관계를 테이블에서는 조인 전략으로 구성하였습니다.
+  - `Course`와 `Session` 간 1:N 관계는 sessions 테이블에 course_id (FK)를 두도록 구성하였습니다.
+  - `Image`와 `Session` 간 1:1 관계는 image 테이블에 session_id (FK)를 두도록 구성하였습니다.
+
+> 핵심 학습 목표
+- 2단계에서 구현한 객체 구조를 가능한 유지하면서 DB 테이블과 매핑한다.
+- 성능보다 도메인 객체에 로직 구현하는 것을 목표로 연습한다.
+  - 객체 구조를 유지하기 위해 여러 번의 DB 쿼리를 실행해도 괜찮다.
+
+> 프로그래밍 요구사항
+- DB 테이블과 매핑하고, 데이터를 저장한다.
+  - CRUD 쿼리/코드를 구현하는 것보다 테이블을 설계하고 객체 매핑하는 부분에 집중한다.
+- Payment는 테이블 매핑 시 고려하지 않는다.
+
+> 참고<br>
+샘플 데이터를 추가하고 싶다면 src/main/resources/data.sql 파일에 추가한다.<br>
+CRUD 코드는 JdbcCourseRepository 참고하기<br>
+CRUD 코드의 테스트 코드는 CourseRepositoryTest.
+
+
+## Step2. 수강 신청(도메인 모델)
+### 기능 요구사항 
 - 과정 (Course)
   - 과정은 기수 단위로 운영한다.  -> 기수 `Integer cohort` 필드 생성
   - 여러 개의 강의(Session)를 가질 수 있다.  -> N개의 강의 `List<Session> sessions` 필드 생성
