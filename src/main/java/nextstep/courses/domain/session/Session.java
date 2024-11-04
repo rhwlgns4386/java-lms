@@ -11,8 +11,26 @@ public abstract class Session {
     private SessionDate sessionDate;
     private List<Image> images;
     private SessionType sessionType;
+    private LegacySessionStatus legacySessionStatus;
     private SessionStatus sessionStatus;
     private List<Student> students;
+
+    public Session(Long id,
+                   String title,
+                   SessionDate sessionDate,
+                   List<Image> images,
+                   SessionType sessionType,
+                   LegacySessionStatus legacySessionStatus,
+                   List<Student> students
+    ) {
+        this.id = id;
+        this.title = title;
+        this.sessionDate = sessionDate;
+        this.images = images;
+        this.sessionType = sessionType;
+        this.legacySessionStatus = legacySessionStatus;
+        this.students = students;
+    }
 
     public Session(Long id,
                    String title,
@@ -62,23 +80,23 @@ public abstract class Session {
     public abstract void register(Registration registration);
 
     public void open() {
-        updateStatus(SessionStatus.RECRUITING);
+        updateStatus(LegacySessionStatus.RECRUITING);
     }
 
     public void close() {
-        updateStatus(SessionStatus.CLOSE);
+        updateStatus(LegacySessionStatus.CLOSE);
     }
 
     protected boolean isAvailableForRegistration() {
-        return this.sessionStatus.isOpen();
+        return this.legacySessionStatus.isOpen();
     }
 
-    protected void updateStatus(SessionStatus sessionStatus) {
-        this.sessionStatus = sessionStatus;
+    protected void updateStatus(LegacySessionStatus legacySessionStatus) {
+        this.legacySessionStatus = legacySessionStatus;
     }
 
-    public SessionStatus getSessionStatus() {
-        return sessionStatus;
+    public LegacySessionStatus getSessionStatus() {
+        return legacySessionStatus;
     }
 
     @Override

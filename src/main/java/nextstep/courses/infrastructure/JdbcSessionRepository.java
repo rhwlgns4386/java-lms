@@ -23,7 +23,7 @@ public class JdbcSessionRepository implements SessionRepository {
         Timestamp endAt = rs.getTimestamp(4);
         SessionDate date = new SessionDate(startAt.toLocalDateTime(), endAt.toLocalDateTime());
         SessionType type = SessionType.of(rs.getString(5));
-        SessionStatus status = SessionStatus.valueOf(rs.getString(6));
+        LegacySessionStatus status = LegacySessionStatus.valueOf(rs.getString(6));
         if (type.equals(SessionType.FREE)) {
             return new FreeSession(sessionId, title, date, new ArrayList<>(), type, status, new ArrayList<>());
         }

@@ -1,11 +1,19 @@
 package nextstep.courses.domain.session;
 
-public enum SessionStatus {
-    PREPARING,
-    RECRUITING,
-    CLOSE;
+public class SessionStatus {
+    private SessionProgressStatus sessionProgressStatus;
+    private SessionRecruitStatus sessionRecruitStatus;
 
-    public boolean isOpen() {
-        return this == RECRUITING;
+    public SessionStatus(SessionProgressStatus sessionProgressStatus, SessionRecruitStatus sessionRecruitStatus) {
+        this.sessionProgressStatus = sessionProgressStatus;
+        this.sessionRecruitStatus = sessionRecruitStatus;
+    }
+
+    public SessionProgressStatus getSessionProgressStatus() {
+        return sessionProgressStatus;
+    }
+
+    public SessionRecruitStatus getSessionRecruitStatus() {
+        return sessionRecruitStatus;
     }
 }

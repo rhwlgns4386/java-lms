@@ -12,7 +12,7 @@ public class FreeSession extends Session {
                        SessionDate sessionDate,
                        List<Image> images
     ) {
-        this(null, title, sessionDate, images, SessionType.FREE, SessionStatus.PREPARING, new ArrayList<>());
+        this(null, title, sessionDate, images, SessionType.FREE, LegacySessionStatus.PREPARING, new ArrayList<>());
     }
 
     public FreeSession(Long id,
@@ -20,7 +20,7 @@ public class FreeSession extends Session {
                        SessionDate sessionDate,
                        List<Image> images
     ) {
-        this(id, title, sessionDate, images, SessionType.FREE, SessionStatus.PREPARING, new ArrayList<>());
+        this(id, title, sessionDate, images, SessionType.FREE, LegacySessionStatus.PREPARING, new ArrayList<>());
     }
 
     public FreeSession(Long id,
@@ -28,10 +28,10 @@ public class FreeSession extends Session {
                        SessionDate sessionDate,
                        List<Image> images,
                        SessionType sessionType,
-                       SessionStatus sessionStatus,
+                       LegacySessionStatus legacySessionStatus,
                        List<Student> students
     ) {
-        super(id, title, sessionDate, images, sessionType, sessionStatus, students);
+        super(id, title, sessionDate, images, sessionType, legacySessionStatus, students);
     }
 
 

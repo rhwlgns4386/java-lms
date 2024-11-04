@@ -59,7 +59,7 @@ public class PaidSessionTest {
 
         paidSession.register(RegistrationTest.REGISTRATION);
 
-        Assertions.assertThat(paidSession.getSessionStatus()).isEqualTo(SessionStatus.RECRUITING);
+        Assertions.assertThat(paidSession.getSessionStatus()).isEqualTo(LegacySessionStatus.RECRUITING);
         Assertions.assertThat(paidSession.getStudents()).hasSize(1);
         Assertions.assertThat(paidSession.getStudents()).hasSameElementsAs(List.of(Student.of(RegistrationTest.REGISTRATION)));
 
@@ -132,7 +132,7 @@ public class PaidSessionTest {
 
         paidSession.open();
 
-        Assertions.assertThat(paidSession.getSessionStatus()).isEqualTo(SessionStatus.RECRUITING);
+        Assertions.assertThat(paidSession.getSessionStatus()).isEqualTo(LegacySessionStatus.RECRUITING);
     }
 
     @Test
@@ -145,6 +145,6 @@ public class PaidSessionTest {
 
         paidSession.close();
 
-        Assertions.assertThat(paidSession.getSessionStatus()).isEqualTo(SessionStatus.CLOSE);
+        Assertions.assertThat(paidSession.getSessionStatus()).isEqualTo(LegacySessionStatus.CLOSE);
     }
 }
