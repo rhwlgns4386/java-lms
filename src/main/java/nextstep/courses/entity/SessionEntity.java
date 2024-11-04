@@ -1,6 +1,12 @@
 package nextstep.courses.entity;
 
-import nextstep.courses.domain.*;
+import nextstep.courses.domain.FreeSession;
+import nextstep.courses.domain.PaidSession;
+import nextstep.courses.domain.ProgressStatus;
+import nextstep.courses.domain.RecruitingStatus;
+import nextstep.courses.domain.Session;
+import nextstep.courses.domain.SessionImage;
+import nextstep.courses.domain.SessionSelection;
 import org.springframework.util.StringUtils;
 
 import java.sql.Timestamp;
@@ -25,6 +31,7 @@ public class SessionEntity {
     private String sessionType = FREE_SESSION;
     private Integer sessionFee = FREE_FEE;
     private Integer maxStudent = FREE_MAX_STUDENTS;
+    private String sessionSelection;
 
     public SessionEntity() {
     }
@@ -45,6 +52,19 @@ public class SessionEntity {
         this.maxStudent = maxStudent;
     }
 
+    public SessionEntity(Long id, Timestamp sessionStartAt, Timestamp sessionEndAt, String status, String recruitingStatus, String progressStatus, String sessionType, Integer sessionFee, Integer maxStudent, String sessionSelection) {
+        this.id = id;
+        this.sessionStartAt = sessionStartAt;
+        this.sessionEndAt = sessionEndAt;
+        this.status = status;
+        this.recruitingStatus = recruitingStatus;
+        this.progressStatus = progressStatus;
+        this.sessionType = sessionType;
+        this.sessionFee = sessionFee;
+        this.maxStudent = maxStudent;
+        this.sessionSelection = sessionSelection;
+    }
+
     public static SessionEntity from(Session session) {
         SessionEntity entity = new SessionEntity();
         if (session instanceof PaidSession) {
@@ -60,6 +80,9 @@ public class SessionEntity {
         entity.progressStatus = session.getProgressStatus().name();
         if (session.getImage() != null) {
             entity.imageId = session.getImage().getId();
+        }
+        if (session.getSessionSelection() != null) {
+            entity.sessionSelection = session.getSessionSelection().name();
         }
         return entity;
     }
@@ -84,10 +107,14 @@ public class SessionEntity {
         if (!StringUtils.hasText(progressStatus)) {
             progressStatus = PREPARING.name();
         }
-        if (sessionType.equals(PAID_SESSION)) {
-            return new PaidSession(id, sessionStartAt, sessionEndAt, sessionImages, RecruitingStatus.valueOf(recruitingStatus), ProgressStatus.valueOf(progressStatus), approvedStudents, applyStudents, maxStudent, sessionFee);
+        SessionSelection sessionSelection = null;
+        if (StringUtils.hasText(this.sessionSelection)) {
+            sessionSelection = SessionSelection.valueOf(this.sessionSelection);
         }
-        return new FreeSession(id, sessionStartAt, sessionEndAt, sessionImages, RecruitingStatus.valueOf(recruitingStatus), ProgressStatus.valueOf(progressStatus), approvedStudents, applyStudents);
+        if (sessionType.equals(PAID_SESSION)) {
+            return new PaidSession(id, sessionStartAt, sessionEndAt, sessionImages, RecruitingStatus.valueOf(recruitingStatus), ProgressStatus.valueOf(progressStatus), approvedStudents, applyStudents, maxStudent, sessionFee, sessionSelection);
+        }
+        return new FreeSession(id, sessionStartAt, sessionEndAt, sessionImages, RecruitingStatus.valueOf(recruitingStatus), ProgressStatus.valueOf(progressStatus), approvedStudents, applyStudents, sessionSelection);
     }
 
     public Long getId() {
@@ -128,5 +155,9 @@ public class SessionEntity {
 
     public String getProgressStatus() {
         return progressStatus;
+    }
+
+    public String getSessionSelection() {
+        return sessionSelection;
     }
 }

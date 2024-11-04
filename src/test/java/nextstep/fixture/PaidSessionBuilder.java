@@ -4,6 +4,7 @@ import nextstep.courses.domain.PaidSession;
 import nextstep.courses.domain.ProgressStatus;
 import nextstep.courses.domain.RecruitingStatus;
 import nextstep.courses.domain.SessionImage;
+import nextstep.courses.domain.SessionSelection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ public class PaidSessionBuilder {
     private ProgressStatus progressStatus;
     private List<SessionImage> images;
     private List<Long> applyStudents;
+    private SessionSelection sessionSelection;
 
     public PaidSessionBuilder withId(Long id) {
         this.id = id;
@@ -40,7 +42,12 @@ public class PaidSessionBuilder {
         return this;
     }
 
+    public PaidSessionBuilder withSessionSelection(SessionSelection sessionSelection){
+        this.sessionSelection = sessionSelection;
+        return this;
+    }
+
     public PaidSession build() {
-        return new PaidSession(id, SessionDateCreator.standard(), images, recruitingStatus, progressStatus, new ArrayList<>(), applyStudents, 80, 25000);
+        return new PaidSession(id, SessionDateCreator.standard(), images, recruitingStatus, progressStatus, new ArrayList<>(), applyStudents, 80, 25000, sessionSelection);
     }
 }

@@ -117,4 +117,8 @@ public abstract class Session {
     public List<Long> getApplyStudents() {
         return applyStudents;
     }
+
+    public SessionSelection getSessionSelection() {
+        return sessionSelection;
+    }
 }

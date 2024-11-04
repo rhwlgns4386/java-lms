@@ -60,7 +60,8 @@ public class SessionRepositoryTest {
                 () -> assertThat(freeSession.getImages()).isEqualTo(savedSession.getImages()),
                 () -> assertThat(freeSession.getRecruitingStatus()).isEqualTo(savedSession.getRecruitingStatus()),
                 () -> assertThat(freeSession.getProgressStatus()).isEqualTo(savedSession.getProgressStatus()),
-                () -> assertThat(freeSession.getApprovedStudents()).isEqualTo(savedSession.getApprovedStudents())
+                () -> assertThat(freeSession.getApprovedStudents()).isEqualTo(savedSession.getApprovedStudents()),
+                () -> assertThat(freeSession.getSessionSelection()).isEqualTo(savedSession.getSessionSelection())
         );
         LOGGER.debug("Session: {}", savedSession);
     }
@@ -90,7 +91,8 @@ public class SessionRepositoryTest {
                 () -> assertThat(paidSession.getSessionFee()).isEqualTo(savedSession.getSessionFee()),
                 () -> assertThat(paidSession.getMaxNumOfStudents()).isEqualTo(savedSession.getMaxNumOfStudents()),
                 () -> assertThat(paidSession.getApprovedStudents()).isEqualTo(savedSession.getApprovedStudents()),
-                () -> assertThat(paidSession.getApplyStudents()).isEqualTo(savedSession.getApplyStudents())
+                () -> assertThat(paidSession.getApplyStudents()).isEqualTo(savedSession.getApplyStudents()),
+                () -> assertThat(paidSession.getSessionSelection()).isEqualTo(savedSession.getSessionSelection())
         );
         LOGGER.debug("Session: {}", savedSession);
     }

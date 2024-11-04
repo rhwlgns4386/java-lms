@@ -144,6 +144,8 @@
 - [X] enum으로 Selection 전략 관리
 - [X] 선발 전략을 세팅하면, 수강신청 시 선발 과정을 거쳐 선발
   - Session에 sessionSelection 인스턴스 변수 추가
+- [X] sesison 스키마에 session_selection 추가
+- [X] select, save에 session_selection 추가 
 
 ## Step4. 리팩토링
 - [X] 불필요한 생성자 제거

@@ -35,9 +35,9 @@ public class JdbcSessionRepository implements SessionRepository {
     @Override
     public int saveNew(Session session) {
         SessionEntity entity = SessionEntity.from(session);
-        String sql = "insert into session (session_start_date, session_end_date, status, recruiting_status, progress_status, image_id, session_type, max_student, session_fee) values (? ,? ,? ,? ,? ,? ,?, ?, ?)";
+        String sql = "insert into session (session_start_date, session_end_date, status, recruiting_status, progress_status, image_id, session_type, max_student, session_fee, session_selection) values (? ,? ,? ,? ,? ,? ,?, ?, ?, ?)";
         sessionStudentRepository.saveNew(session.getSessionId(), session.getApprovedStudents(), session.getApplyStudents());
-        return jdbcTemplate.update(sql, entity.getSessionStartAt(), entity.getSessionEndAt(), entity.getStatus(), entity.getRecruitingStatus(), entity.getProgressStatus(), entity.getImageId(), entity.getSessionType(), entity.getSessionFee(), entity.getMaxStudent());
+        return jdbcTemplate.update(sql, entity.getSessionStartAt(), entity.getSessionEndAt(), entity.getStatus(), entity.getRecruitingStatus(), entity.getProgressStatus(), entity.getImageId(), entity.getSessionType(), entity.getSessionFee(), entity.getMaxStudent(), entity.getSessionSelection());
     }
 
     @Override
@@ -60,7 +60,7 @@ public class JdbcSessionRepository implements SessionRepository {
 
     @Override
     public Session findByIdNew(Long id) {
-        String sql = "select id, session_start_date, session_end_date, status, recruiting_status, progress_status, image_id, session_type, max_student, session_fee from session where id = ?";
+        String sql = "select id, session_start_date, session_end_date, status, recruiting_status, progress_status, image_id, session_type, max_student, session_fee, session_selection from session where id = ?";
         List<Long> approvedStudents = sessionStudentRepository.findBySessionIdAndStatus(id, APPROVED);
         List<Long> applyStudents = sessionStudentRepository.findBySessionIdAndStatus(id, APPLY);
         RowMapper<Session> rowMapper = (rs, rowNum) -> {
@@ -73,7 +73,8 @@ public class JdbcSessionRepository implements SessionRepository {
                     rs.getString("progress_status"),
                     rs.getString("session_type"),
                     rs.getInt("max_student"),
-                    rs.getInt("session_fee"))
+                    rs.getInt("session_fee"),
+                    rs.getString("session_selection"))
                     .toNew(sessionImages, approvedStudents, applyStudents);
         };
         return jdbcTemplate.queryForObject(sql, rowMapper, id);
