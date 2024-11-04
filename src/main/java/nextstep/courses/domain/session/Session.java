@@ -5,6 +5,7 @@ import nextstep.courses.domain.cover.CoverImages;
 import nextstep.courses.domain.enrollment.Enrollment;
 import nextstep.courses.domain.enrollment.Student;
 import nextstep.courses.type.RecruitState;
+import nextstep.courses.type.SelectionType;
 import nextstep.courses.type.SessionState;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
@@ -26,29 +27,30 @@ public abstract class Session {
     protected final SessionDuration sessionDuration;
 
     protected Session(Long id, CoverImage coverImage, int maxEnrollment, int enrollment, SessionState sessionState,
-                      RecruitState recruitState, LocalDateTime startDate, LocalDateTime endDate) {
+                      RecruitState recruitState, SelectionType selectionType, LocalDateTime startDate, LocalDateTime endDate) {
         this(id, coverImage, CoverImages.of(coverImage), maxEnrollment, enrollment, sessionState, recruitState,
-                startDate, endDate);
+                selectionType, startDate, endDate);
     }
 
     protected Session(Long id, CoverImage coverImage, CoverImages coverImages, int maxEnrollment, int enrollment,
-                      SessionState sessionState, RecruitState recruitState, LocalDateTime startDate, LocalDateTime endDate) {
+                      SessionState sessionState, RecruitState recruitState, SelectionType selectionType,
+                      LocalDateTime startDate, LocalDateTime endDate) {
         this.id = id;
         this.sessionStatus = new SessionStatus(sessionState, recruitState);
         this.coverImage = coverImage;
         this.coverImages = coverImages;
-        this.enrollment = new Enrollment(enrollment, maxEnrollment);
+        this.enrollment = new Enrollment(enrollment, maxEnrollment, selectionType);
         this.sessionDuration = new SessionDuration(startDate, endDate);
     }
 
     protected Session(Long id, CoverImage coverImage, CoverImages coverImages, int maxEnrollment,
-                      int enrollment, SessionState sessionState, RecruitState recruitState, LocalDateTime startDate,
-                      LocalDateTime endDate, List<Student> students) {
+                      int enrollment, SessionState sessionState, RecruitState recruitState, SelectionType selectionType,
+                      LocalDateTime startDate, LocalDateTime endDate, List<Student> students) {
         this.id = id;
         this.sessionStatus = new SessionStatus(sessionState, recruitState);
         this.coverImage = coverImage;
         this.coverImages = coverImages;
-        this.enrollment = new Enrollment(enrollment, maxEnrollment, students);
+        this.enrollment = new Enrollment(enrollment, maxEnrollment, students, selectionType);
         this.sessionDuration = new SessionDuration(startDate, endDate);
     }
 
@@ -75,6 +77,10 @@ public abstract class Session {
 
     public Student reject(NsUser student) {
         return enrollment.reject(student);
+    }
+
+    public Student select(NsUser student) {
+        return enrollment.select(student);
     }
 
     public final boolean register(Payment payment) {
@@ -127,6 +133,10 @@ public abstract class Session {
 
     public final int getMaxEnrollment() {
         return enrollment.getMaxEnrollment();
+    }
+
+    public final SelectionType getSelectionType() {
+        return enrollment.getSelectionType();
     }
 
     public final LocalDateTime getStartDate() {

@@ -35,8 +35,16 @@ public class Student {
         enrollmentState = enrollmentState.reject();
     }
 
+    public void select() {
+        enrollmentState = enrollmentState.select();
+    }
+
     public boolean isRegistered() {
         return enrollmentState.isRegistered();
+    }
+
+    public boolean isSelected() {
+        return enrollmentState.isSelected();
     }
 
     @Override

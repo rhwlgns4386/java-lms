@@ -2,6 +2,7 @@ package nextstep.courses.domain.session;
 
 import nextstep.courses.domain.enrollment.Student;
 import nextstep.courses.type.RecruitState;
+import nextstep.courses.type.SelectionType;
 import nextstep.courses.type.SessionState;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUserTest;
@@ -110,5 +111,30 @@ public class SessionTest {
         paidSession.apply(new Student(NsUserTest.JAVAJIGI), paidPayment);
 
         assertThat(paidSession.reject(NsUserTest.JAVAJIGI).isRegistered()).isFalse();
+    }
+
+    @Test
+    void register_select_student() {
+        Session paidSession = SessionBuilderTest.paidSessionBuilder()
+                .sessionState(SessionState.PROGRESS)
+                .recruitState(RecruitState.RECRUIT)
+                .selectionType(SelectionType.SELECTION)
+                .build();
+        paidSession.apply(new Student(NsUserTest.JAVAJIGI), paidPayment);
+        paidSession.select(NsUserTest.JAVAJIGI);
+
+        assertThat(paidSession.register(NsUserTest.JAVAJIGI).isRegistered()).isTrue();
+    }
+
+    @Test
+    void throw_exception_if_register_non_select_student() {
+        Session paidSession = SessionBuilderTest.paidSessionBuilder()
+                .sessionState(SessionState.PROGRESS)
+                .recruitState(RecruitState.RECRUIT)
+                .selectionType(SelectionType.SELECTION)
+                .build();
+        paidSession.apply(new Student(NsUserTest.JAVAJIGI), paidPayment);
+
+        assertThatIllegalStateException().isThrownBy(() -> paidSession.register(NsUserTest.JAVAJIGI));
     }
 }

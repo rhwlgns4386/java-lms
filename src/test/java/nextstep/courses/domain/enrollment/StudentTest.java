@@ -37,6 +37,13 @@ public class StudentTest {
     }
 
     @Test
+    void select() {
+        student.select();
+
+        assertThat(student.isSelected()).isTrue();
+    }
+
+    @Test
     void throw_exception_if_try_reject_if_state_is_not_apply() {
         Student approvedStudent = new Student(NsUserTest.JAVAJIGI, EnrollmentState.APPROVE);
         assertThatIllegalStateException().isThrownBy(approvedStudent::approve);

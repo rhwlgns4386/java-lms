@@ -1,16 +1,12 @@
 package nextstep.courses.type;
 
 public enum EnrollmentState {
-    APPLY("신청중"), APPROVE("승인"), REJECT("수강신청 불가");
+    APPLY("신청중"), SELECT("선발"), APPROVE("승인"), REJECT("수강신청 불가");
 
     private final String desc;
 
     EnrollmentState(String desc) {
         this.desc = desc;
-    }
-
-    public boolean canChange() {
-        return this == APPLY;
     }
 
     public EnrollmentState approve() {
@@ -19,7 +15,7 @@ public enum EnrollmentState {
     }
 
     private void validateState() {
-        if (this != APPLY) {
+        if (this == APPROVE || this == REJECT) {
             throw new IllegalStateException(desc + " 상태에서는 수강 신청 승인할 수 없습니다");
         }
     }
@@ -29,8 +25,17 @@ public enum EnrollmentState {
         return REJECT;
     }
 
+    public EnrollmentState select() {
+        validateState();
+        return SELECT;
+    }
+
     public boolean isRegistered() {
         return this == APPROVE || this == APPLY;
+    }
+
+    public boolean isSelected() {
+        return this == SELECT;
     }
 
     public String getDesc() {

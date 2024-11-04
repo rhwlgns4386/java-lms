@@ -4,6 +4,7 @@ import nextstep.courses.domain.cover.CoverImage;
 import nextstep.courses.domain.cover.CoverImages;
 import nextstep.courses.domain.enrollment.Student;
 import nextstep.courses.type.RecruitState;
+import nextstep.courses.type.SelectionType;
 import nextstep.courses.type.SessionState;
 import nextstep.courses.type.SessionType;
 
@@ -27,6 +28,7 @@ public class SessionBuilder {
     private long sessionFee = NOT_ASSIGNED;
     private SessionState sessionState = SessionState.PREPARING;
     private RecruitState recruitState = RecruitState.NOT_RECRUIT;
+    private SelectionType selectionType = SelectionType.NON_SELECTION;
     private SessionType sessionType;
     private CoverImage coverImage;
     private final Set<CoverImage> coverImages = new HashSet<>();
@@ -68,6 +70,11 @@ public class SessionBuilder {
 
     public SessionBuilder recruitState(RecruitState recruitState) {
         this.recruitState = recruitState;
+        return this;
+    }
+
+    public SessionBuilder selectionType(SelectionType selectionType) {
+        this.selectionType = selectionType;
         return this;
     }
 
@@ -136,12 +143,12 @@ public class SessionBuilder {
         validateEmpty(sessionType, "강의 타입이 입력되지 않았습니다");
 
         if (sessionType == SessionType.FREE) {
-            return new FreeSession(getId(), getCoverImage(), toCoverImages(), sessionState, recruitState,
+            return new FreeSession(getId(), getCoverImage(), toCoverImages(), sessionState, recruitState, selectionType,
                     enrollment, startDate, endDate, students);
         }
         validateValueAssignment(maxEnrollment, "유료 강의는 수강 인원이 필수 값입니다");
         validateValueAssignment(sessionFee, "유료 강의는 수강료가 필수 값입니다");
-        return new PaidSession(getId(), getCoverImage(), toCoverImages(), sessionState, recruitState,
+        return new PaidSession(getId(), getCoverImage(), toCoverImages(), sessionState, recruitState, selectionType,
                 maxEnrollment, enrollment, sessionFee, startDate, endDate, students);
     }
 

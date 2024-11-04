@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 @Service
 public class SessionService {
@@ -53,17 +54,26 @@ public class SessionService {
     }
 
     @Transactional
-    public void register(String userId, Long sessionId) {
+    public void select(String userId, Long sessionId) {
         Session foundSession = getSession(sessionId);
-        Student registeredStudent = foundSession.register(userService.getUser(userId));
-        sessionRepository.save(SessionEntity.from(foundSession), Session.NOT_ASSIGNED);
+        executeRegistrationProcess(foundSession, userId, foundSession::select);
+    }
+
+    private void executeRegistrationProcess(Session session, String userId, Function<NsUser, Student> executor) {
+        Student registeredStudent = executor.apply(userService.getUser(userId));
+        sessionRepository.save(SessionEntity.from(session), Session.NOT_ASSIGNED);
         studentRepository.update(StudentEntity.from(registeredStudent));
     }
 
+    @Transactional
+    public void register(String userId, Long sessionId) {
+        Session foundSession = getSession(sessionId);
+        executeRegistrationProcess(foundSession, userId, foundSession::register);
+    }
+
+    @Transactional
     public void reject(String userId, Long sessionId) {
         Session foundSession = getSession(sessionId);
-        Student rejectedStudent = foundSession.reject(userService.getUser(userId));
-        sessionRepository.save(SessionEntity.from(foundSession), Session.NOT_ASSIGNED);
-        studentRepository.update(StudentEntity.from(rejectedStudent));
+        executeRegistrationProcess(foundSession, userId, foundSession::reject);
     }
 }

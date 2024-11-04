@@ -1,5 +1,6 @@
 package nextstep.courses.domain.enrollment;
 
+import nextstep.courses.type.SelectionType;
 import nextstep.users.domain.NsUser;
 import org.junit.jupiter.api.Test;
 
@@ -35,6 +36,16 @@ public class EnrollmentTest {
         assertThat(enrollment.getEnrollment()).isEqualTo(5);
         assertThatIllegalStateException()
                 .isThrownBy(() -> enrollment.apply(new Student(getNsUser(10L, "10"))));
+    }
+
+    @Test
+    void throw_exception_if_register_selection_enrollment_from_non_select_student() {
+        Student student = new Student(getNsUser(1L, String.valueOf(1)));
+        Enrollment enrollment = new Enrollment(Enrollment.INFINITE_ENROLLMENT, SelectionType.SELECTION);
+        enrollment.apply(student);
+
+        assertThatIllegalStateException().isThrownBy(() ->
+                enrollment.register(student.getStudent()));
     }
 
     private void registerStudent(int endExclusive, Enrollment enrollment) {
