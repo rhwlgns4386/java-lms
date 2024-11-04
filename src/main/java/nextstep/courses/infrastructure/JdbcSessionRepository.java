@@ -7,6 +7,16 @@ import org.springframework.stereotype.Repository;
 
 @Repository("sessionRepository")
 public class JdbcSessionRepository implements SessionRepository {
+    public static final RowMapper<Session> SESSION_ROW_MAPPER = (rs, rowNum) -> new Session(
+            rs.getLong(1),
+            rs.getLong(2),
+            new SessionPeriod(rs.getDate(3).toLocalDate(), rs.getDate(4).toLocalDate()),
+            new SessionCoverImage(rs.getLong(5), rs.getString(6), rs.getInt(7), rs.getInt(8)),
+            SessionFeeType.valueOf(rs.getString(9)),
+            new SessionAmount(rs.getInt(10)),
+            rs.getInt(11),
+            SessionStatus.valueOf(rs.getString(12)));
+
     private JdbcOperations jdbcTemplate;
 
     public JdbcSessionRepository(JdbcOperations jdbcTemplate) {
@@ -22,15 +32,6 @@ public class JdbcSessionRepository implements SessionRepository {
     @Override
     public Session findById(Long id) {
         String sql = "select id, course_id, start_date, end_date, file_size, file_type, width, height, fee_type, amount, max_personnel, status from session where id = ?";
-        RowMapper<Session> rowMapper = (rs, rowNum) -> new Session(
-                rs.getLong(1),
-                rs.getLong(2),
-                new SessionPeriod(rs.getDate(3).toLocalDate(), rs.getDate(4).toLocalDate()),
-                new SessionCoverImage(rs.getLong(5), rs.getString(6), rs.getInt(7), rs.getInt(8)),
-                SessionFeeType.valueOf(rs.getString(9)),
-                new SessionAmount(rs.getInt(10)),
-                rs.getInt(11),
-                SessionStatus.valueOf(rs.getString(12)));
-        return jdbcTemplate.queryForObject(sql, rowMapper, id);
+        return jdbcTemplate.queryForObject(sql, SESSION_ROW_MAPPER, id);
     }
 }
