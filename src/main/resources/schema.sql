@@ -71,6 +71,7 @@ create table session
     session_type       varchar(20),
     session_fee        int,
     max_student        int,
+    session_selection  varchar(20),
     primary key (id)
 );
 
