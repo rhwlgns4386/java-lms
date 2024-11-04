@@ -28,27 +28,27 @@ public class SessionService {
     @Transactional(readOnly = true)
     public Session findById(long sessionId) {
         Session session = sessionRepository.findById(sessionId).orElseThrow();
-        Image image = imageRepository.findBySessionId(sessionId).orElse(null);
+        List<Image> images = imageRepository.findAllBySessionId(sessionId);
         List<Student> students = studentRepository.findAllBySessionId(sessionId);
 
-        return getSession(session, image, students);
+        return getSession(session, images, students);
     }
 
-    private static Session getSession(Session session, Image image, List<Student> students) {
+    private static Session getSession(Session session, List<Image> images, List<Student> students) {
         if (session.getSessionType().equals(SessionType.FREE)) {
-            return FreeSession.of((FreeSession) session, image, students);
+            return FreeSession.of((FreeSession) session, images, students);
         }
-        return PaidSession.of((PaidSession) session, image, students);
+        return PaidSession.of((PaidSession) session, images, students);
     }
 
     @Transactional(readOnly = true)
     public List<Session> findAllByCourseId(long courseId) {
         return sessionRepository.findAllByCourseId(courseId).stream()
                 .map(it -> {
-                    Image image = imageRepository.findBySessionId(it.getId()).orElse(null);
+                    List<Image> images = imageRepository.findAllBySessionId(it.getId());
                     List<Student> students = studentRepository.findAllBySessionId(it.getId());
 
-                    return getSession(it, image, students);
+                    return getSession(it, images, students);
                 })
                 .collect(Collectors.toList());
     }

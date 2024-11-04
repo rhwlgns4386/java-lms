@@ -78,7 +78,7 @@ public class SessionServiceTest {
         Student student2 = new Student(amount, NsUserTest.SANJIGI.getId());
 
         when(sessionRepository.findById(anyLong())).thenReturn(Optional.of(paidSession));
-        when(imageRepository.findBySessionId(anyLong())).thenReturn(Optional.of(image));
+        when(imageRepository.findAllBySessionId(anyLong())).thenReturn(new ArrayList<>(List.of(image)));
         when(studentRepository.findAllBySessionId(anyLong())).thenReturn(new ArrayList<>(List.of(student2)));
         when(studentRepository.saveAll(anyList(), anyLong())).thenReturn(new int[]{1});
 
@@ -105,14 +105,14 @@ public class SessionServiceTest {
         Student student2 = new Student(amount, NsUserTest.SANJIGI.getId());
 
         when(sessionRepository.findById(anyLong())).thenReturn(Optional.of(paidSession));
-        when(imageRepository.findBySessionId(anyLong())).thenReturn(Optional.of(image));
+        when(imageRepository.findAllBySessionId(anyLong())).thenReturn(new ArrayList<>(List.of(image)));
         when(studentRepository.findAllBySessionId(anyLong())).thenReturn(Arrays.asList(student, student2));
 
         Session foundSession = sessionService.findById(sessionId);
 
         assertThat(foundSession.getStudents()).hasSameElementsAs(Arrays.asList(student, student2));
         assertThat(foundSession.getId()).isEqualTo(sessionId);
-        assertThat(foundSession.getImage()).isEqualTo(image);
+        assertThat(foundSession.getImages()).hasSameElementsAs(List.of(image));
         assertThat(foundSession.getSessionType()).isEqualTo(SessionType.PAID);
     }
 }

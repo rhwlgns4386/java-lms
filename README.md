@@ -50,7 +50,7 @@
 * 강의가 하나 이상의 이미지를 가질 수 있도록 변경 []
     * Course class에 List<Image> images field 추가 [X]
     * 한개의 image가 아니라 여러개의 image들을 받아서 PaidSession, FreeSession 생성하도록 변경 [X]
-    * ImageRepository에서 여러개의 image들을 반환 받도록 변경 []
+    * ImageRepository에서 여러개의 image들을 반환 받도록 변경 [X]
     * Course class에서 Image image field 제거 []
 * 강의 상태를 진행 상태(준비중,진행중,종료)와 모집 상태(비모집중,모집중)으로 분리 []
     * Session class에 진행 상태, 모집 상태 field 추가 []

@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -58,5 +59,13 @@ public class JdbcImageRepository implements ImageRepository {
         MapSqlParameterSource param = new MapSqlParameterSource();
         param.addValue("sessionId", sessionId);
         return Optional.ofNullable(namedParameterJdbcTemplate.queryForObject(sql, param, IMAGE_ROW_MAPPER));
+    }
+
+    @Override
+    public List<Image> findAllBySessionId(long sessionId) {
+        String sql = "select id, size, image_type, width, height from image where session_id = :sessionId";
+        MapSqlParameterSource param = new MapSqlParameterSource();
+        param.addValue("sessionId", sessionId);
+        return namedParameterJdbcTemplate.query(sql, param, IMAGE_ROW_MAPPER);
     }
 }

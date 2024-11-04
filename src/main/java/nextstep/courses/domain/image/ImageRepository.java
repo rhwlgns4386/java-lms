@@ -1,5 +1,6 @@
 package nextstep.courses.domain.image;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ImageRepository {
@@ -8,4 +9,6 @@ public interface ImageRepository {
     Optional<Image> findById(long id);
 
     Optional<Image> findBySessionId(long sessionId);
+
+    List<Image> findAllBySessionId(long sessionId);
 }
