@@ -97,7 +97,7 @@ public class SessionRegistrations {
     }
 
     public boolean isFull() {
-        return getApprovedRegistrations().size() >= maxStudents;
+        return getCurrentStudentCount() >= maxStudents;
     }
 
     public boolean isAlreadyRegistered(NsUser user) {
@@ -107,7 +107,9 @@ public class SessionRegistrations {
     public boolean isAlreadyRegistered(Long userId) {
         return registrations.containsKey(userId);
     }
-
+    public int getCurrentStudentCount() {
+        return registrations.values().size();
+    }
     public List<SessionRegistration> getApprovedRegistrations() {
         return registrations.values().stream()
                 .filter(SessionRegistration::isApproved)

@@ -27,7 +27,7 @@ public class PaidSession extends DefaultSession {
     }
 
     private void validateCapacity() {
-        if (capacity.isFull()) {
+        if (registrations.isFull()) {
             throw new IllegalArgumentException("수강 인원이 꽉 찼습니다.");
         }
     }

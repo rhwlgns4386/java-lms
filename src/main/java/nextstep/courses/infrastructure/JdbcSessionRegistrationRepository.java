@@ -60,50 +60,6 @@ public class JdbcSessionRegistrationRepository implements SessionRegistrationRep
         }
     }
 
-    @Override
-    public List<SessionRegistration> findBySessionId(Long sessionId) {
-        String sql = "SELECT * FROM session_registration WHERE session_id = ?";
-        return jdbcTemplate.query(sql, this::mapRowToSessionRegistration, sessionId);
-    }
-
-    @Override
-    public List<SessionRegistration> findPendingBySessionId(Long sessionId) {
-        String sql = "SELECT * FROM session_registration " +
-                "WHERE session_id = ? AND selection_status = ?";
-
-        return jdbcTemplate.query(
-                sql,
-                this::mapRowToSessionRegistration,
-                sessionId,
-                StudentSelectionStatus.PENDING.getCode()
-        );
-    }
-
-    @Override
-    public List<SessionRegistration> findSelectedBySessionId(Long sessionId) {
-        String sql = "SELECT * FROM session_registration " +
-                "WHERE session_id = ? AND selection_status = ?";
-
-        return jdbcTemplate.query(
-                sql,
-                this::mapRowToSessionRegistration,
-                sessionId,
-                StudentSelectionStatus.SELECTED.getCode()
-        );
-    }
-
-    @Override
-    public List<SessionRegistration> findNotSelectedBySessionId(Long sessionId) {
-        String sql = "SELECT * FROM session_registration " +
-                "WHERE session_id = ? AND selection_status = ?";
-
-        return jdbcTemplate.query(
-                sql,
-                this::mapRowToSessionRegistration,
-                sessionId,
-                StudentSelectionStatus.NOT_SELECTED.getCode()
-        );
-    }
 
     @Override
     public void update(SessionRegistration registration) {
