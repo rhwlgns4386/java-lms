@@ -1,5 +1,6 @@
 package nextstep.courses.service;
 
+import nextstep.courses.domain.Lecturer.Lecturer;
 import nextstep.courses.domain.course.Course;
 import nextstep.courses.domain.course.CourseRepository;
 import nextstep.courses.domain.session.Session;
@@ -19,9 +20,9 @@ public class CourseService {
     }
 
     @Transactional
-    public long create(Course course, Session session) {
+    public long create(Course course, Session session, Lecturer lecturer) {
         long courseId = courseRepository.save(course);
-        sessionService.create(courseId, session, session.getImages());
+        sessionService.create(courseId, session, session.getImages(), lecturer);
 
         return courseId;
     }

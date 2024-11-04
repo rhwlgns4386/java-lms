@@ -12,8 +12,6 @@ public class NsUser {
 
     private String userId;
 
-    private UserType userType;
-
     private String password;
 
     private String name;
@@ -36,13 +34,8 @@ public class NsUser {
     }
 
     public NsUser(Long id, String userId, String password, String name, String email, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this(id, userId, UserType.STUDENT, password, name, email, createdAt, updatedAt);
-    }
-
-    public NsUser(Long id, String userId, UserType userType, String password, String name, String email, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.userId = userId;
-        this.userType = userType;
         this.password = password;
         this.name = name;
         this.email = email;
@@ -126,10 +119,6 @@ public class NsUser {
 
     public boolean isGuestUser() {
         return false;
-    }
-
-    public boolean isStudent() {
-        return this.userType == UserType.STUDENT;
     }
 
     private static class GuestNsUser extends NsUser {

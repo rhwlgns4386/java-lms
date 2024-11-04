@@ -17,9 +17,6 @@ public class Registration {
         if (!user.getId().equals(payment.getNsUserId())) {
             throw new IllegalArgumentException("Payment user_id does not match User");
         }
-        if (!user.isStudent()) {
-            throw new IllegalArgumentException("user is not a student");
-        }
         this.sessionId = sessionId;
         this.nsUserId = user.getId();
         this.amount = payment.getAmount();

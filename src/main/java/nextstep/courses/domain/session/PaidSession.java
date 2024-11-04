@@ -1,5 +1,6 @@
 package nextstep.courses.domain.session;
 
+import nextstep.courses.domain.Lecturer.Lecturer;
 import nextstep.courses.domain.image.Image;
 import nextstep.courses.domain.student.Student;
 
@@ -34,11 +35,12 @@ public class PaidSession extends Session {
                        SessionDate sessionDate,
                        List<Image> images,
                        SessionType sessionType,
+                       SessionStatus sessionStatus,
                        List<Student> students,
                        SessionCapacity capacity,
                        Money fee
     ) {
-        super(id, title, sessionDate, images, sessionType, SessionStatus.init(), students);
+        super(id, title, sessionDate, images, sessionType, sessionStatus, students);
         this.capacity = capacity;
         this.fee = fee;
     }
@@ -50,10 +52,11 @@ public class PaidSession extends Session {
                        SessionType sessionType,
                        SessionStatus sessionStatus,
                        List<Student> students,
+                       Lecturer lecturer,
                        SessionCapacity capacity,
                        Money fee
     ) {
-        super(id, title, sessionDate, images, sessionType, sessionStatus, students);
+        super(id, title, sessionDate, images, sessionType, sessionStatus, students, lecturer);
         this.capacity = capacity;
         this.fee = fee;
     }
@@ -67,6 +70,7 @@ public class PaidSession extends Session {
                 session.getSessionType(),
                 session.getSessionStatus(),
                 students,
+                session.getLecturer(),
                 session.getCapacity(),
                 session.getFee()
         );

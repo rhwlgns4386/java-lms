@@ -67,4 +67,18 @@ public class JdbcStudentRepository implements StudentRepository {
         param.addValue("sessionId", sessionId);
         return namedParameterJdbcTemplate.query(sql, param, STUDENT_ROW_MAPPER);
     }
+
+    @Override
+    public Student updateStatus(Student student, Long sessionId) {
+        String sql = "update student set status = :status where ns_user_id = :nsUserId and session_id = :sessionId";
+        MapSqlParameterSource param = new MapSqlParameterSource();
+        param.addValue("status", student.getStatus().name());
+        param.addValue("nsUserId", student.getNsUserId());
+        param.addValue("sessionId", sessionId);
+        int update = namedParameterJdbcTemplate.update(sql, param);
+        if (update != 1) {
+            throw new RuntimeException("Update failed");
+        }
+        return student;
+    }
 }

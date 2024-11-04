@@ -1,5 +1,6 @@
 package nextstep.courses.domain.session;
 
+import nextstep.courses.domain.Lecturer.Lecturer;
 import nextstep.courses.domain.image.Image;
 import nextstep.courses.domain.student.Student;
 
@@ -12,7 +13,7 @@ public class FreeSession extends Session {
                        SessionDate sessionDate,
                        List<Image> images
     ) {
-        this(null, title, sessionDate, images, SessionType.FREE, SessionStatus.init(), new ArrayList<>());
+        this(null, title, sessionDate, images, SessionType.FREE, SessionStatus.init(), new ArrayList<>(), null);
     }
 
     public FreeSession(Long id,
@@ -20,7 +21,7 @@ public class FreeSession extends Session {
                        SessionDate sessionDate,
                        List<Image> images
     ) {
-        this(id, title, sessionDate, images, SessionType.FREE, SessionStatus.init(), new ArrayList<>());
+        this(id, title, sessionDate, images, SessionType.FREE, SessionStatus.init(), new ArrayList<>(), null);
     }
 
     public FreeSession(Long id,
@@ -31,7 +32,11 @@ public class FreeSession extends Session {
                        SessionStatus sessionStatus,
                        List<Student> students
     ) {
-        super(id, title, sessionDate, images, sessionType, sessionStatus, students);
+        super(id, title, sessionDate, images, sessionType, sessionStatus, students, null);
+    }
+
+    public FreeSession(Long id, String title, SessionDate sessionDate, List<Image> images, SessionType sessionType, SessionStatus sessionStatus, List<Student> students, Lecturer lecturer) {
+        super(id, title, sessionDate, images, sessionType, sessionStatus, students, lecturer);
     }
 
     public static FreeSession of(FreeSession session, List<Image> images, List<Student> students) {
@@ -42,7 +47,8 @@ public class FreeSession extends Session {
                 images,
                 session.getSessionType(),
                 session.getSessionStatus(),
-                students
+                students,
+                session.getLecturer()
         );
     }
 

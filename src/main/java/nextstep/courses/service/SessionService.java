@@ -1,5 +1,7 @@
 package nextstep.courses.service;
 
+import nextstep.courses.domain.Lecturer.Lecturer;
+import nextstep.courses.domain.Lecturer.LecturerRepository;
 import nextstep.courses.domain.image.Image;
 import nextstep.courses.domain.image.ImageRepository;
 import nextstep.courses.domain.session.*;
@@ -18,11 +20,16 @@ public class SessionService {
     private final SessionRepository sessionRepository;
     private final ImageRepository imageRepository;
     private final StudentRepository studentRepository;
+    private final LecturerRepository lecturerRepository;
 
-    public SessionService(SessionRepository sessionRepository, ImageRepository imageRepository, StudentRepository studentRepository) {
+    public SessionService(SessionRepository sessionRepository,
+                          ImageRepository imageRepository,
+                          StudentRepository studentRepository,
+                          LecturerRepository lecturerRepository) {
         this.sessionRepository = sessionRepository;
         this.imageRepository = imageRepository;
         this.studentRepository = studentRepository;
+        this.lecturerRepository = lecturerRepository;
     }
 
     @Transactional(readOnly = true)
@@ -53,9 +60,10 @@ public class SessionService {
     }
 
     @Transactional
-    public long create(Long courseId, Session session, List<Image> images) {
+    public long create(Long courseId, Session session, List<Image> images, Lecturer lecturer) {
         long saveSessionId = sessionRepository.save(session, courseId);
         imageRepository.saveAll(images, saveSessionId);
+        lecturerRepository.save(lecturer, saveSessionId);
 
         return saveSessionId;
     }
@@ -71,6 +79,24 @@ public class SessionService {
             return session;
         }
         registerPaidSession((PaidSession) session, registration);
+        return session;
+    }
+
+    @Transactional
+    public Session accept(Long sessionId, Lecturer lecturer, List<Student> students) {
+        Session session = findById(sessionId);
+        session.acceptStudents(lecturer, students.stream().map(Student::getNsUserId).collect(Collectors.toList()));
+
+        studentRepository.saveAll(students, sessionId);
+        return session;
+    }
+
+    @Transactional
+    public Session reject(Long sessionId, Lecturer lecturer, List<Student> students) {
+        Session session = findById(sessionId);
+        session.rejectStudents(lecturer, students.stream().map(Student::getNsUserId).collect(Collectors.toList()));
+
+        studentRepository.saveAll(students, sessionId);
         return session;
     }
 

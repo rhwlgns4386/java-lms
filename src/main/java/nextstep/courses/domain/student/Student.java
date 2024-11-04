@@ -2,6 +2,9 @@ package nextstep.courses.domain.student;
 
 import nextstep.courses.domain.session.Registration;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class Student {
     private Long nsUserId;
     private Long amount;
@@ -22,6 +25,12 @@ public class Student {
 
     public static Student of(Registration registration) {
         return new Student(registration.getAmount(), registration.getNsUserId());
+    }
+
+    public static List<Student> of(List<Registration> registrations) {
+        return registrations.stream()
+                .map(it -> new Student(it.getAmount(), it.getNsUserId()))
+                .collect(Collectors.toList());
     }
 
     public Long getAmount() {

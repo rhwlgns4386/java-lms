@@ -1,5 +1,6 @@
 package nextstep.courses.service;
 
+import nextstep.courses.domain.LecturerTest;
 import nextstep.courses.domain.course.Course;
 import nextstep.courses.domain.course.CourseRepository;
 import nextstep.courses.domain.image.Image;
@@ -48,10 +49,10 @@ public class CourseServiceTest {
     void createTest() {
         Course course = new Course("TDD, 클린 코드 with Java", NsUserTest.SANJIGI.getId());
 
-        long courseId = courseService.create(course, freeSession);
+        long courseId = courseService.create(course, freeSession, LecturerTest.testLecturer);
 
         verify(courseRepository).save(course);
-        verify(sessionService).create(courseId, freeSession, freeSession.getImages());
+        verify(sessionService).create(courseId, freeSession, freeSession.getImages(), LecturerTest.testLecturer);
     }
 
     @Test

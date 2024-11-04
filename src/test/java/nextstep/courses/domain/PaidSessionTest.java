@@ -6,6 +6,7 @@ import nextstep.courses.domain.image.ImageSize;
 import nextstep.courses.domain.image.ImageType;
 import nextstep.courses.domain.session.*;
 import nextstep.courses.domain.student.Student;
+import nextstep.courses.domain.student.StudentStatus;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUserTest;
 import org.assertj.core.api.Assertions;
@@ -48,12 +49,27 @@ public class PaidSessionTest {
     }
 
     @Test
+    @DisplayName("PaidSession 생성 - 강사 추가")
+    void createPaidSessionTest_WithLecturer() {
+        SessionCapacity sessionCapacity = new SessionCapacity(10);
+        Money fee = new Money(200_000L);
+
+        PaidSession paidSession = new PaidSession(id, title, new ArrayList<>(List.of(image)), sessionDate, sessionCapacity, fee);
+        paidSession.addLecturer(LecturerTest.testLecturer);
+
+        Assertions.assertThat(paidSession).isNotNull();
+        Assertions.assertThat(paidSession.getId()).isEqualTo(id);
+        Assertions.assertThat(paidSession.getLecturer()).isEqualTo(LecturerTest.testLecturer);
+    }
+
+    @Test
     @DisplayName("PaidSession 수강 신청")
     void registerPaidSessionTest() {
         SessionCapacity sessionCapacity = new SessionCapacity(1);
         Money fee = new Money(200_000L);
 
         PaidSession paidSession = new PaidSession(id, title, new ArrayList<>(List.of(image)), sessionDate, sessionCapacity, fee);
+        paidSession.addLecturer(LecturerTest.testLecturer);
 
         paidSession.open();
 
@@ -65,12 +81,47 @@ public class PaidSessionTest {
     }
 
     @Test
+    @DisplayName("PaidSession 학생 선발")
+    void acceptStudentsPaidSessionTest() {
+        SessionCapacity sessionCapacity = new SessionCapacity(2);
+        Money fee = new Money(200_000L);
+        List<Student> students = new ArrayList<>(Student.of(List.of(RegistrationTest.REGISTRATION, RegistrationTest.REGISTRATION2)));
+        PaidSession paidSession = new PaidSession(id, title, new ArrayList<>(List.of(image)), sessionDate, sessionCapacity, fee);
+        paidSession.addLecturer(LecturerTest.testLecturer);
+
+        paidSession.open();
+
+        paidSession.register(RegistrationTest.REGISTRATION);
+        paidSession.register(RegistrationTest.REGISTRATION2);
+
+        paidSession.acceptStudents(LecturerTest.testLecturer, List.of(students.get(0).getNsUserId()));
+        paidSession.rejectStudents(LecturerTest.testLecturer, List.of(students.get(1).getNsUserId()));
+
+        Assertions.assertThat(paidSession.getStudents()).hasSize(2);
+
+        Student student1 = paidSession.getStudents().stream()
+                .filter(it -> it.getNsUserId().equals(students.get(0).getNsUserId()))
+                .findFirst()
+                .orElseThrow();
+        Assertions.assertThat(student1.getNsUserId()).isEqualTo(students.get(0).getNsUserId());
+        Assertions.assertThat(student1.getStatus()).isEqualTo(StudentStatus.ACCEPTED);
+
+        Student student2 = paidSession.getStudents().stream()
+                .filter(it -> it.getNsUserId().equals(students.get(1).getNsUserId()))
+                .findFirst()
+                .orElseThrow();
+        Assertions.assertThat(student2.getNsUserId()).isEqualTo(students.get(1).getNsUserId());
+        Assertions.assertThat(student2.getStatus()).isEqualTo(StudentStatus.REJECTED);
+    }
+
+    @Test
     @DisplayName("PaidSession 수강 신청 - 걍의가 모집중이 아닐때 수간신청 체크")
     void checkRegisterNotOpenPaidSessionTest() {
         SessionCapacity sessionCapacity = new SessionCapacity(1);
         Money fee = new Money(200_000L);
 
         PaidSession paidSession = new PaidSession(id, title, new ArrayList<>(List.of(image)), sessionDate, sessionCapacity, fee);
+        paidSession.addLecturer(LecturerTest.testLecturer);
 
         Payment payment = new Payment("1", id, NsUserTest.JAVAJIGI.getId(), fee.getPrice());
 
@@ -85,6 +136,8 @@ public class PaidSessionTest {
         Money fee = new Money(200_000L);
 
         PaidSession paidSession = new PaidSession(id, title, new ArrayList<>(List.of(image)), sessionDate, sessionCapacity, fee);
+        paidSession.addLecturer(LecturerTest.testLecturer);
+
         paidSession.open();
 
         Assertions.assertThatThrownBy(() -> paidSession.register(null))
@@ -98,7 +151,10 @@ public class PaidSessionTest {
         Money fee = new Money(200_000L);
 
         PaidSession paidSession = new PaidSession(id, title, new ArrayList<>(List.of(image)), sessionDate, sessionCapacity, fee);
+        paidSession.addLecturer(LecturerTest.testLecturer);
+
         paidSession.open();
+
         Payment payment = new Payment("1", id, NsUserTest.JAVAJIGI.getId(), fee.getPrice() - 1);
         Registration registration = new Registration(1L, NsUserTest.JAVAJIGI, payment);
 
@@ -113,6 +169,7 @@ public class PaidSessionTest {
         Money fee = new Money(200_000L);
 
         PaidSession paidSession = new PaidSession(id, title, new ArrayList<>(List.of(image)), sessionDate, sessionCapacity, fee);
+        paidSession.addLecturer(LecturerTest.testLecturer);
         paidSession.open();
         Payment payment = new Payment("1", id, NsUserTest.JAVAJIGI.getId(), fee.getPrice() + 1);
         Registration registration = new Registration(1L, NsUserTest.JAVAJIGI, payment);
@@ -128,6 +185,7 @@ public class PaidSessionTest {
         Money fee = new Money(200_000L);
 
         PaidSession paidSession = new PaidSession(id, title, new ArrayList<>(List.of(image)), sessionDate, sessionCapacity, fee);
+        paidSession.addLecturer(LecturerTest.testLecturer);
 
         paidSession.open();
 
@@ -141,6 +199,7 @@ public class PaidSessionTest {
         Money fee = new Money(200_000L);
 
         PaidSession paidSession = new PaidSession(id, title, new ArrayList<>(List.of(image)), sessionDate, sessionCapacity, fee);
+        paidSession.addLecturer(LecturerTest.testLecturer);
 
         paidSession.close();
 
