@@ -96,6 +96,7 @@ public class Session {
         return sessionCoverImage.getFilePath();
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

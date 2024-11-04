@@ -28,9 +28,9 @@ public class EnrollUserInfoRepositoryTest {
     @Test
     void 강의_등록_이력_저장_테스트() {
 
-        EnrollUserInfo enrollUserInfo = new EnrollUserInfo(1L, 1L);
+        EnrollUserInfo enrollUserInfo = new EnrollUserInfo(2L, 2L);
         int count = enrollUserInfoRepository.save(enrollUserInfo);
-        EnrollUserInfo savedEnrollUserInfo = enrollUserInfoRepository.findBySessionIdAndNsUserId(1L, 1L);
+        EnrollUserInfo savedEnrollUserInfo = enrollUserInfoRepository.findBySessionIdAndNsUserId(2L, 2L);
 
         assertThat(enrollUserInfo.getSessionId()).isEqualTo(savedEnrollUserInfo.getSessionId());
         assertThat(enrollUserInfo.getNsUserId()).isEqualTo(savedEnrollUserInfo.getNsUserId());

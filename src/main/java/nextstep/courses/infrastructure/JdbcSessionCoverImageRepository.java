@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.PreparedStatement;
 import java.util.Objects;
 
-@Repository("jdbcSessionCoverImageRepository")
+@Repository("sessionCoverImageRepository")
 public class JdbcSessionCoverImageRepository implements SessionCoverImageRepository {
 
     private JdbcOperations jdbcTemplate;

@@ -11,15 +11,15 @@ public class SessionCoverImageTest {
 
     @Test
     void 이미지_타입_제한_성공_테스트_코드() {
-        SessionCoverImage sessionCoverImage = new SessionCoverImage.SessionCoverImageBuilder().id(1L).fileName("leo.png").filePath("/home/lms/image/cover/leo.png").volume(150).width(300).height(200).build();
+        SessionCoverImage sessionCoverImage = new SessionCoverImage.SessionCoverImageBuilder().id(1L).fileName("leo.png").filePath("/home/lms/image/cover/leo.png").volume(150).width(200).height(300).build();
 
-        assertThat(sessionCoverImage).isEqualTo(new SessionCoverImage(1L, 1L, "leo.png", new CoverImageVolume(150), CoverImageExtensionType.valueOfExtension("leo.png"), new CoverImageFileSize(300, 200), "/home/lms/image/cover/leo.png"));
+        assertThat(sessionCoverImage).isEqualTo(new SessionCoverImage(1L, 1L, "leo.png", new CoverImageVolume(150), CoverImageExtensionType.valueOfExtension("leo.png"), new CoverImageFileSize(200, 300), "/home/lms/image/cover/leo.png"));
     }
 
 
     @Test
     void 이미지_타입_제한_실패_테스트_코드() {
-        assertThatThrownBy(() -> new SessionCoverImageBuilder().id(1L).sessionId(1L).fileName("leo.pdf").volume(150).width(300).height(200).build()).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> new SessionCoverImageBuilder().id(1L).sessionId(1L).fileName("leo.pdf").volume(150).width(200).height(300).build()).isInstanceOf(IllegalArgumentException.class);
 
     }
 

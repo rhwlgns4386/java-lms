@@ -9,9 +9,9 @@ public class CoverImageFileSizeTest {
 
     @Test
     void 이미지_사이즈_저장_성공_테스트() {
-        CoverImageFileSize coverImageFileSize = new CoverImageFileSize(300,200);
+        CoverImageFileSize coverImageFileSize = new CoverImageFileSize(200,300);
 
-        assertThat(coverImageFileSize).isEqualTo(new CoverImageFileSize(300,200));
+        assertThat(coverImageFileSize).isEqualTo(new CoverImageFileSize(200,300));
     }
 
     @Test

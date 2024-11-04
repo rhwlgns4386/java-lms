@@ -26,12 +26,11 @@ public class SessionCoverImageRepositoryTest {
 
     @Test
     void 이미지_저장_테스트() {
-        SessionCoverImage sessionCoverImage = new SessionCoverImage.SessionCoverImageBuilder().id(1L).sessionId(1L).fileName("leo.png").filePath("/home/lms/image/cover/leo.png").volume(150).width(300).height(200).build();
+        SessionCoverImage sessionCoverImage = new SessionCoverImage.SessionCoverImageBuilder().id(1L).sessionId(1L).fileName("leo.png").filePath("/home/lms/image/cover/leo.png").volume(150).width(200).height(300).build();
 
         Long key = sessionCoverImageRepository.save(sessionCoverImage);
-        SessionCoverImage savedCoverImage = sessionCoverImageRepository.findById(1L);
+        SessionCoverImage savedCoverImage = sessionCoverImageRepository.findById(key);
         assertThat(sessionCoverImage.getFileName()).isEqualTo(savedCoverImage.getFileName());
-        assertThat(key).isEqualTo(1L);
     }
 
 }

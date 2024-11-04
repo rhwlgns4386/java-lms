@@ -6,7 +6,7 @@ import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-@Repository("jdbcEnrollUserInfoRepository")
+@Repository("enrollUserInfoRepository")
 public class JdbcEnrollUserInfoRepository implements EnrollUserInfoRepository {
 
     private JdbcOperations jdbcTemplate;

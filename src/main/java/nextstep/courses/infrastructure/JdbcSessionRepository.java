@@ -16,7 +16,7 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.Objects;
 
-@Repository("jdbcSessionRepository")
+@Repository("sessionRepository")
 public class JdbcSessionRepository implements SessionRepository {
 
     private JdbcOperations jdbcTemplate;

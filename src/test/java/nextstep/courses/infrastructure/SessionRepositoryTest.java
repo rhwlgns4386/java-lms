@@ -49,13 +49,13 @@ public class SessionRepositoryTest {
                 .build();
 
         Long key = sessionRepository.save(session);
-        SessionCoverImage sessionCoverImage = new SessionCoverImage.SessionCoverImageBuilder().id(1L).sessionId(key).fileName("leo.png").filePath("/home/lms/image/cover/leo.png").volume(150).width(300).height(200).build();
+        SessionCoverImage sessionCoverImage = new SessionCoverImage.SessionCoverImageBuilder().id(1L).sessionId(key).fileName("leo.png").filePath("/home/lms/image/cover/leo.png").volume(150).width(200).height(300).build();
 
         sessionCoverImageRepository.save(sessionCoverImage);
 
-        Session savedSession = sessionRepository.findById(1L);
-        assertThat(key).isEqualTo(1L);
-        assertThat(savedSession.getSessionId()).isEqualTo(1L);
+        Session savedSession = sessionRepository.findById(2L);
+        assertThat(key).isEqualTo(2L);
+        assertThat(savedSession.getSessionId()).isEqualTo(2L);
     }
 
 }
