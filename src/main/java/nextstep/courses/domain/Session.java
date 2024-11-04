@@ -1,6 +1,8 @@
 package nextstep.courses.domain;
 
-import nextstep.courses.CannotRegisteSessionException;
+import nextstep.courses.exception.CannotRegisteSessionException;
+import nextstep.courses.request.RequestOrderParam;
+import nextstep.courses.collection.Students;
 import nextstep.users.domain.NsUser;
 
 import java.time.LocalDateTime;
@@ -58,8 +60,8 @@ public class Session {
         return salePrice;
     }
 
-    public StateCode getStateCode() {
-        return stateCode;
+    public int getStateCode() {
+        return stateCode.getStatusCode();
     }
 
     public int getStudentsSize() {
@@ -80,5 +82,37 @@ public class Session {
 
     public void orderSession(RequestOrderParam param) throws CannotRegisteSessionException {
         this.orderSession(param);
+    }
+
+    public String getTitle() {
+        return sessionInfo.getTitle();
+    }
+
+    public String getCreatorId() {
+        return sessionInfo.getCreatorId();
+    }
+
+    public LocalDateTime getApplyStartDate() {
+        return sessionInfo.getApplyStartDate();
+    }
+
+    public LocalDateTime getApplyEndDate() {
+        return sessionInfo.getApplyEndDate();
+    }
+
+    public String getSessionTypeCode() {
+        return sessionType.getTypeCode();
+    }
+
+    public void addStudents(Students students) {
+        this.students = new Students(students.getStudents());
+    }
+
+    public NsUser getStudentIdx(int idx) {
+        return students.getStudentIdx(idx);
+    }
+
+    public long getSessionId() {
+        return sessionInfo.getSessionId();
     }
 }

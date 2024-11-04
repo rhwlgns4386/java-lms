@@ -1,4 +1,4 @@
-package nextstep.courses.domain;
+package nextstep.courses.collection;
 
 import nextstep.users.domain.NsUser;
 
@@ -29,5 +29,9 @@ public class Students {
             return true;
         }
         return false;
+    }
+
+    public NsUser getStudentIdx(int idx) {
+        return students.get(idx);
     }
 }

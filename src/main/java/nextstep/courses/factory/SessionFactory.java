@@ -1,4 +1,12 @@
-package nextstep.courses.domain;
+package nextstep.courses.factory;
+
+import nextstep.courses.domain.FreeSession;
+import nextstep.courses.domain.PaidSession;
+import nextstep.courses.domain.Session;
+import nextstep.courses.domain.SessionImage;
+import nextstep.courses.domain.SessionInfo;
+import nextstep.courses.domain.SessionType;
+import nextstep.courses.domain.StateCode;
 
 public class SessionFactory {
 

@@ -1,15 +1,13 @@
 package nextstep.courses.domain;
 
-import nextstep.courses.CannotRegisteSessionException;
+import nextstep.courses.exception.CannotRegisteSessionException;
+import nextstep.courses.request.RequestOrderParam;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
 import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

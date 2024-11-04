@@ -1,26 +1,27 @@
 package nextstep.courses.domain;
 
-import nextstep.courses.CannotRegisteSessionException;
-
-import java.time.LocalDateTime;
+import nextstep.courses.exception.CannotRegisteSessionException;
+import nextstep.courses.request.RequestOrderParam;
+import nextstep.courses.strategy.SessionStrategy;
+import nextstep.users.domain.NsUser;
 
 public class FreeSession extends Session implements SessionStrategy {
     // private Session session;//구성이 필요한 관계는 이렇게 합성
 
-    public FreeSession(SessionInfo sessionInfo,SessionImage sessionImage,
+    public FreeSession(SessionInfo sessionInfo, SessionImage sessionImage,
                        long salePrice, StateCode stateCode) {
-        super(sessionInfo, sessionImage, salePrice, stateCode);
-        validateRegistSession(salePrice);
+        super(sessionInfo, sessionImage, 0, stateCode);
     }
 
-    private void validateRegistSession(long salePrice) {
-        if(salePrice > 0) {
-            throw new IllegalArgumentException("무료강의는 판매가가 0원이어야 합니다.");
-        }
-    }
-
-    public void validateOrderSession(RequestOrderParam requestOrderParam) {
+    public void validateOrderSession(RequestOrderParam requestOrderParam) throws CannotRegisteSessionException {
         validateOrderSessionStatus();
+        validateDuplicateStudent(requestOrderParam.getStudent());
+    }
+
+    private void validateDuplicateStudent(NsUser student) throws CannotRegisteSessionException {
+        if (isDuplicateStudent(student)) {
+            throw new CannotRegisteSessionException("강의는 중복 신청할 수 없습니다.");
+        }
     }
 
     @Override
