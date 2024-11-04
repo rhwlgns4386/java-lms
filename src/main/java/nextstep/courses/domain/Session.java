@@ -12,19 +12,21 @@ public abstract class Session {
     private final String title;
     private final SessionDate sessionDate;
     private final Students students;
+    private final SessionImage sessionImage;
     private SessionStatus sessionStatus;
 
-    public Session(String title, LocalDate startDay, LocalDate endDay) {
-        this(0L, title, startDay, endDay, SessionStatus.READY, new Students());
+    public Session(String title, LocalDate startDay, LocalDate endDay, SessionImage sessionImage) {
+        this(0L, title, startDay, endDay, SessionStatus.READY, new Students(), sessionImage);
     }
 
-    public Session(String title, LocalDate startDay, LocalDate endDay, SessionStatus sessionStatus, Students students) {
-        this(0L, title, startDay, endDay, sessionStatus, students);
+    public Session(String title, LocalDate startDay, LocalDate endDay, SessionStatus sessionStatus, Students students, SessionImage sessionImage) {
+        this(0L, title, startDay, endDay, sessionStatus, students, sessionImage);
     }
 
-    public Session(Long id, String title, LocalDate startDay, LocalDate endDay, SessionStatus sessionStatus, Students students) {
+    public Session(Long id, String title, LocalDate startDay, LocalDate endDay, SessionStatus sessionStatus, Students students, SessionImage sessionImage) {
         this.id = id;
         this.title = title;
+        this.sessionImage = sessionImage;
         this.sessionDate = new SessionDate(startDay, endDay);
         this.sessionStatus = sessionStatus;
         this.students = students;
@@ -54,20 +56,49 @@ public abstract class Session {
         if (this.sessionStatus != SessionStatus.OPEN) {
             throw new IllegalArgumentException(CAN_NOT_REGISTER_SESSION);
         }
-
         validateRegistration(student, payment);
-        
+
         students.addStudent(student);
     }
 
     protected abstract void validateRegistration(NsUser student, Payment payment);
 
-    protected abstract boolean requiresPayment();
-
     protected abstract Long getFee();
 
     public Long getId() {
         return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public LocalDate getSessionStart() {
+        return sessionDate.getSessionStart();
+    }
+
+    public LocalDate getSessionEnd() {
+        return sessionDate.getSessionEnd();
+    }
+
+    public int getImageSize() {
+        return sessionImage.getImageSize();
+    }
+
+    public int getImageHeight() {
+        return sessionImage.getImageHeight();
+    }
+
+    public int getImageWidth() {
+        return sessionImage.getImageWidth();
+    }
+
+    public String getImageType() {
+        return sessionImage.getImageType();
+    }
+
+    public int getMaxCapacity() {
+        return students.getMaxCapacity();
     }
 
     @Override

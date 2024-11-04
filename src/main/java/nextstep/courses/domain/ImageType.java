@@ -34,4 +34,9 @@ public enum ImageType {
     public static boolean isValidType(String extension) {
         return ALLOWED_EXTENSIONS.contains(extension.toLowerCase());
     }
+
+    @Override
+    public String toString() {
+        return this.extension;
+    }
 }

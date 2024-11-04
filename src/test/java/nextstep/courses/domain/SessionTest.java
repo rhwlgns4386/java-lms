@@ -15,7 +15,7 @@ class SessionTest {
     @Test
     void 세션_준비중() {
         Session session = new FreeSession("세션", LocalDate.of(2024, 10, 28),
-                LocalDate.of(2024, 11, 28));
+                LocalDate.of(2024, 11, 28), new SessionImage(600, 300, 200, "jpg"));
         session.readySession();
         assertThat(session.getSessionStatus()).isEqualTo(SessionStatus.READY);
     }
@@ -24,7 +24,7 @@ class SessionTest {
     @Test
     void 세션_모집중() {
         Session session = new FreeSession("세션", LocalDate.of(2024, 10, 28),
-                LocalDate.of(2024, 11, 28));
+                LocalDate.of(2024, 11, 28), new SessionImage(600, 300, 200, "jpg"));
         session.openSession();
         assertThat(session.getSessionStatus()).isEqualTo(SessionStatus.OPEN);
     }
@@ -33,7 +33,7 @@ class SessionTest {
     @Test
     void 세션_종료() {
         Session session = new FreeSession("세션", LocalDate.of(2024, 10, 28),
-                LocalDate.of(2024, 11, 28));
+                LocalDate.of(2024, 11, 28), new SessionImage(600, 300, 200, "jpg"));
         session.closeSession();
         assertThat(session.getSessionStatus()).isEqualTo(SessionStatus.CLOSED);
     }
@@ -42,7 +42,7 @@ class SessionTest {
     @Test
     void 수강생_등록_에러() {
         Session session = new FreeSession("세션", LocalDate.of(2024, 10, 28),
-                LocalDate.of(2024, 11, 28));
+                LocalDate.of(2024, 11, 28), new SessionImage(600, 300, 200, "jpg"));
         assertThatThrownBy(() -> {
             session.register(JAVAJIGI, new Payment());
         }).isInstanceOf(IllegalArgumentException.class);

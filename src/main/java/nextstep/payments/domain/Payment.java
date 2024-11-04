@@ -44,4 +44,8 @@ public class Payment {
     public Long getAmount() {
         return amount;
     }
+
+    public long getSessionId() {
+        return sessionId;
+    }
 }

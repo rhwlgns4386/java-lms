@@ -14,7 +14,7 @@ class PaidSessionTest {
     @Test
     void 최대_수강인원_초과_에러() {
         Session session = new PaidSession("세션", LocalDate.of(2024, 10, 28),
-                LocalDate.of(2024, 11, 28), SessionStatus.OPEN, 0, 10000L);
+                LocalDate.of(2024, 11, 28), SessionStatus.OPEN, 0, 10000L, new SessionImage(600, 300, 200, "jpg"));
         assertThatThrownBy(() -> {
             session.register(JAVAJIGI, new Payment(session.getId(), JAVAJIGI.getId(), 10000L));
         }).isInstanceOf(IllegalArgumentException.class);
@@ -24,7 +24,7 @@ class PaidSessionTest {
     @Test
     void 강의_금액_에러() {
         Session session = new PaidSession("세션", LocalDate.of(2024, 10, 28),
-                LocalDate.of(2024, 11, 28), SessionStatus.OPEN, 0, 10000L);
+                LocalDate.of(2024, 11, 28), SessionStatus.OPEN, 0, 10000L, new SessionImage(600, 300, 200, "jpg"));
         assertThatThrownBy(() -> {
             session.register(JAVAJIGI, new Payment(session.getId(), JAVAJIGI.getId(), 20000L));
         }).isInstanceOf(IllegalArgumentException.class);

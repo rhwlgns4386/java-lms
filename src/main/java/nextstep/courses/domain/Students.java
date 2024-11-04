@@ -34,4 +34,8 @@ public class Students {
         }
         students.add(student);
     }
+
+    public int getMaxCapacity() {
+        return maxCapacity.orElse(0);
+    }
 }

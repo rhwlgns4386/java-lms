@@ -14,4 +14,12 @@ public class SessionDate {
         this.sessionStart = sessionStart;
         this.sessionEnd = sessionEnd;
     }
+
+    public LocalDate getSessionStart() {
+        return sessionStart;
+    }
+
+    public LocalDate getSessionEnd() {
+        return sessionEnd;
+    }
 }
