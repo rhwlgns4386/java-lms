@@ -38,8 +38,12 @@ class PaidSessionTest {
 
         course.register(NsUserTest.GREEN, payment);
 
-        assertThat(course.getRegisteredStudentIds())
-                .isEqualTo(List.of(NsUserTest.GREEN.getId()));
+        assertAll(
+                () -> assertThat(course.getRegistrations())
+                        .extracting("sessionId", "maxStudents")
+                        .containsExactly(course.getId(), 10),
+                () -> assertThat(course.getRegistrations().contains(NsUserTest.GREEN.getId())).isTrue()
+        );
     }
 
     @DisplayName("모집 상태가 아닌 강의는 수강신청을 할 수 없다.")

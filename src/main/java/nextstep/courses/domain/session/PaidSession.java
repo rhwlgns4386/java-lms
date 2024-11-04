@@ -11,8 +11,8 @@ public class PaidSession extends DefaultSession {
         super(0L, status, period, coverImages, courseFee, capacity);
     }
 
-    public PaidSession(Long id, SessionStatus status, Period period, List<CoverImage> coverImages, Money courseFee, Capacity capacity) {
-        super(id, status, period, coverImages, courseFee, capacity);
+    public PaidSession(Long id, SessionStatus sessionStatus, Period period, List<CoverImage> images, Money courseFee, SessionRegistrations registrations) {
+        super(id, sessionStatus, period, images, courseFee, registrations);
     }
 
     @Override
@@ -23,7 +23,7 @@ public class PaidSession extends DefaultSession {
 
     @Override
     protected void doRegister(NsUser student, Payment payment) {
-        capacity = capacity.register(student);
+        registrations.register(student);
     }
 
     private void validateCapacity() {

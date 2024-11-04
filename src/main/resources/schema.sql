@@ -83,26 +83,28 @@ create table session_registration
     session_id    bigint    not null,
     user_id       bigint    not null,
     registered_at timestamp not null,
+    registration_status varchar(20) not null default 'PENDING',
+    selection_status varchar(20) not null default 'PENDING',
     primary key (session_id, user_id)
 );
 
-CREATE TABLE course_session
+create table course_session
 (
-    course_id  BIGINT NOT NULL,
-    session_id BIGINT NOT NULL,
-    PRIMARY KEY (course_id, session_id)
+    course_id  bigint not null,
+    session_id bigint not null,
+    primary key (course_id, session_id)
 );
 
-CREATE TABLE session_cover_images
+create table session_cover_images
 (
-    session_id     BIGINT NOT NULL,
-    cover_image_id BIGINT NOT NULL,
-    PRIMARY KEY (session_id, cover_image_id)
+    session_id     bigint not null,
+    cover_image_id bigint not null,
+    primary key (session_id, cover_image_id)
 );
 
-CREATE TABLE session_status
+create table session_status
 (
-    session_id         BIGINT PRIMARY KEY,
-    progress_status    VARCHAR(20) NOT NULL,
-    recruitment_status VARCHAR(20) NOT NULL
+    session_id         bigint primary key,
+    progress_status    varchar(20) not null,
+    recruitment_status varchar(20) not null
 );

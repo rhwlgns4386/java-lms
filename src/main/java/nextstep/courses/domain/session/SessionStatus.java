@@ -30,30 +30,7 @@ public class SessionStatus {
     }
 
     public boolean canRegister() {
-        if (recruitment == RecruitmentStatus.NOT_RECRUITING || progress == SessionProgress.FINISHED) {
-            return false;
-        }
-        return true;
-    }
-
-    public boolean isRecruiting() {
-        return recruitment == RecruitmentStatus.RECRUITING;
-    }
-
-    public boolean isInProgress() {
-        return progress == SessionProgress.IN_PROGRESS;
-    }
-
-    public boolean isFinished() {
-        return progress == SessionProgress.FINISHED;
-    }
-
-    public SessionProgress getProgress() {
-        return progress;
-    }
-
-    public RecruitmentStatus getRecruitment() {
-        return recruitment;
+        return recruitment != RecruitmentStatus.NOT_RECRUITING && progress != SessionProgress.FINISHED;
     }
 
     public String getProgressCode() {

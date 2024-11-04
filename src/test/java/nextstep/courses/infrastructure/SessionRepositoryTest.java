@@ -1,12 +1,6 @@
 package nextstep.courses.infrastructure;
 
-import nextstep.courses.domain.cover.CoverImageRepository;
-import nextstep.courses.domain.session.SessionRegistrationRepository;
-import nextstep.courses.domain.session.SessionRepository;
-import nextstep.courses.domain.cover.CoverImage;
-import nextstep.courses.domain.cover.CoverImageFile;
-import nextstep.courses.domain.cover.CoverImageSize;
-import nextstep.courses.domain.cover.CoverImageType;
+import nextstep.courses.domain.cover.*;
 import nextstep.courses.domain.session.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -65,6 +59,7 @@ class SessionRepositoryTest {
         );
     }
 
+
     @DisplayName("무료 세션을 조회할 수 있다.")
     @Test
     void findFreeSession() {
@@ -78,7 +73,7 @@ class SessionRepositoryTest {
         // then
         FreeSession foundFreeSession = (FreeSession) foundSession;
         assertThat(foundFreeSession)
-                .extracting("status.progress", "status.recruitment", "period.startDate", "period.endDate", "courseFee.amount", "capacity.maxStudents")
+                .extracting("status.progress", "status.recruitment", "period.startDate", "period.endDate", "courseFee.amount", "registrations.maxStudents")
                 .containsExactly(SessionProgress.READY, RecruitmentStatus.RECRUITING, period.getStartDate(), period.getEndDate(), 0L, Integer.MAX_VALUE);
     }
 
@@ -96,7 +91,7 @@ class SessionRepositoryTest {
         // then
         PaidSession foundPaidSession = (PaidSession) foundSession;
         assertThat(foundPaidSession)
-                .extracting("status.progress", "status.recruitment", "period.startDate", "period.endDate", "courseFee.amount", "capacity.maxStudents")
+                .extracting("status.progress", "status.recruitment", "period.startDate", "period.endDate", "courseFee.amount", "registrations.maxStudents")
                 .containsExactly(SessionProgress.READY, RecruitmentStatus.RECRUITING, period.getStartDate(), period.getEndDate(), 50000L, 20);
     }
 

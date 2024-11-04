@@ -23,17 +23,10 @@ public abstract class DefaultSession {
     protected final CoverImage coverImage;
     @Column(name = "course_fee")
     protected final Money courseFee;
+    protected final SessionRegistrations registrations;
     private final List<CoverImage> coverImages;
     @Column(name = "max_students", subField = "maxStudents")
     protected Capacity capacity;
-
-    protected DefaultSession(Long id, Period period, CoverImage coverImage, Money courseFee, Capacity capacity) {
-        this(id, period, List.of(coverImage), courseFee, capacity);
-    }
-
-    protected DefaultSession(Long id, Period period, List<CoverImage> coverImages, Money courseFee, Capacity capacity) {
-        this(id, SessionStatus.ready(), period, coverImages, courseFee, capacity);
-    }
 
     protected DefaultSession(Long id, SessionStatus status, Period period, List<CoverImage> coverImages, Money courseFee, Capacity capacity) {
         this.id = id;
@@ -43,6 +36,17 @@ public abstract class DefaultSession {
         this.coverImages = coverImages;
         this.courseFee = courseFee;
         this.capacity = capacity;
+        this.registrations = new SessionRegistrations(id, capacity.getMaxStudentsSize());
+    }
+
+    protected DefaultSession(Long id, SessionStatus status, Period period, List<CoverImage> coverImages, Money courseFee, SessionRegistrations registrations) {
+        this.id = id;
+        this.status = status;
+        this.period = period;
+        this.coverImage = coverImages.get(0);
+        this.coverImages = coverImages;
+        this.courseFee = courseFee;
+        this.registrations = registrations;
     }
 
     public void register(NsUser student, Payment payment) {
@@ -66,21 +70,20 @@ public abstract class DefaultSession {
         return id;
     }
 
-
     public CoverImage getCoverImage() {
         return coverImage;
     }
 
     public List<Long> getRegisteredStudentIds() {
-        return capacity.getRegisteredStudentIds();
+        return registrations.getApprovedUserIds();
     }
 
     public Period getPeriod() {
         return period;
     }
 
-    public Capacity getCapacity() {
-        return capacity;
+    public SessionRegistrations getRegistrations() {
+        return registrations;
     }
 
     public List<CoverImage> getCoverImages() {

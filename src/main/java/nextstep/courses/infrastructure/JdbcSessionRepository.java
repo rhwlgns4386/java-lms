@@ -11,9 +11,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,12 +27,10 @@ public class JdbcSessionRepository implements SessionRepository {
         this.coverImageRepository = coverImageRepository;
     }
 
-    private static Capacity createCapacity(ResultSet rs, List<Long> registeredUserIds) throws SQLException {
-        int maxStudents = SessionType.PAID.getCode().equals(rs.getString("session_type"))
-                ? rs.getInt("max_students")
-                : Integer.MAX_VALUE;
-
-        return new Capacity(new HashSet<>(registeredUserIds), maxStudents);
+    private static SessionRegistrations createRegistrations(Long sessionId, int maxStudents, List<Long> registeredUserIds) {
+        SessionRegistrations registrations = new SessionRegistrations(sessionId, maxStudents);
+        registeredUserIds.forEach(registrations::register); // 초기 등록 사용자 설정
+        return registrations;
     }
 
     @Override
@@ -109,17 +104,21 @@ public class JdbcSessionRepository implements SessionRepository {
                 Period period = new Period(rs.getDate("start_date").toLocalDate(), rs.getDate("end_date").toLocalDate());
                 List<CoverImage> images = coverImageRepository.findBySessionId(id);
 
+                int maxStudents = SessionType.PAID.getCode().equals(sessionType)
+                        ? rs.getInt("max_students")
+                        : Integer.MAX_VALUE;
+
                 List<Long> registeredUserIds = sessionRegistrationRepository.findRegisteredUserIds(id);
-                Capacity capacity = createCapacity(rs, registeredUserIds);
+                SessionRegistrations registrations = createRegistrations(id, maxStudents, registeredUserIds);
                 SessionStatus sessionStatus = findSessionStatusById(id);
 
 
                 if (SessionType.PAID.getCode().equals(sessionType)) {
                     Money courseFee = new Money(rs.getLong("course_fee"));
-                    return new PaidSession(id, sessionStatus, period, images, courseFee, capacity);
+                    return new PaidSession(id, sessionStatus, period, images, courseFee, registrations);
                 }
 
-                return new FreeSession(id, sessionStatus, period, images, capacity);
+                return new FreeSession(id, sessionStatus, period, images, registrations);
             }, id);
 
         } catch (EmptyResultDataAccessException e) {

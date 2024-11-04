@@ -10,9 +10,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 
 class FreeSessionTest {
@@ -33,7 +33,11 @@ class FreeSessionTest {
 
         freeCourse.register(NsUserTest.GREEN);
 
-        assertThat(freeCourse.getCapacity().getRegisteredStudentIds())
-                .isEqualTo(List.of(NsUserTest.GREEN.getId()));
+        assertAll(
+                () -> assertThat(freeCourse.getRegistrations())
+                        .extracting("sessionId", "maxStudents")
+                        .containsExactly(freeCourse.getId(), Integer.MAX_VALUE),
+                () -> assertThat(freeCourse.getRegistrations().contains(NsUserTest.GREEN.getId())).isTrue()
+        );
     }
 }
