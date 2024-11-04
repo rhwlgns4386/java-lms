@@ -3,6 +3,7 @@ package nextstep.sessions.domain;
 import nextstep.courses.domain.Course;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,11 @@ public class Session {
     private LocalDateTime updatedAt;
 
     public Session(SessionPeriod period, SessionImage image, SessionType sessionType) {
-        this(0L, image, period, sessionType, new SessionStatus(SessionStatusEnum.PREPARING), LocalDateTime.now(), null);
+        this(0L, image, period, sessionType, new SessionStatus(), LocalDateTime.now(), null);
+    }
+
+    public Session(SessionPeriod period, SessionImage image, SessionType sessionType, SessionStatus sessionStatus) {
+        this(0L, image, period, sessionType, sessionStatus, LocalDateTime.now(), null);
     }
 
     public Session(Long sessionId, SessionPeriod sessionPeriod,
@@ -41,7 +46,7 @@ public class Session {
     }
 
     public void apply(NsUser nsUser, Optional<Payment> payment) {
-        sessionStatus.isValidStatusForApplication();
+        sessionStatus.isValidStatusForApplicationNew();
 
         sessionType.checkMaxNumber(applicationDetails.size());
         if (payment.isPresent()) {
@@ -52,12 +57,13 @@ public class Session {
         applicationDetails.add(new ApplicationDetail(this.id, nsUser.getId()));
     }
 
-    public void modifyStatus(SessionStatusEnum statusEnum) {
-        SessionStatus updatedSessionStatus = new SessionStatus(statusEnum);
-        if (this.sessionStatus.equals(updatedSessionStatus)) {
-            throw new IllegalArgumentException("변경 하려는 상태가 기존 상태와 동일합니다.");
-        }
+    public void startRecruiting() {
+        SessionStatus updatedSessionStatus = sessionStatus.startRecruiting();
         this.sessionStatus = updatedSessionStatus;
+    }
+
+    public boolean isRecruiting() {
+        return sessionStatus.isRecruiting();
     }
 
     public void modifyPeriod(SessionPeriod period) {
@@ -69,6 +75,10 @@ public class Session {
 
     public String getStartDate() {
         return this.sessionPeriod.getStartDate();
+    }
+
+    public SessionStatus getSessionStatus() {
+        return sessionStatus;
     }
 
     public String getEndDate() {

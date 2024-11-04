@@ -40,9 +40,9 @@ public class SessionServiceTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        recruiting_session = new Session(1L, null, new SessionPeriod("20250101", "20250301"), new SessionType(), new SessionStatus(SessionStatusEnum.RECRUITING), LocalDateTime.now(), null);
-        recruiting_paid_session = new Session(3L, null, new SessionPeriod("20250101", "20250301"), new SessionType(Long.valueOf(200000), 1), new SessionStatus(SessionStatusEnum.RECRUITING), LocalDateTime.now(), null);
-        preparing_session = new Session(2L, null, new SessionPeriod("20250101", "20250301"), new SessionType(), new SessionStatus(SessionStatusEnum.PREPARING), LocalDateTime.now(), null);
+        recruiting_session = new Session(1L, null, new SessionPeriod("20250101", "20250301"), new SessionType(), new SessionStatus(SessionProgressStatusEnum.PROGRESSING, SessionRecruitmentStatusEnum.RECRUITING), LocalDateTime.now(), null);
+        recruiting_paid_session = new Session(3L, null, new SessionPeriod("20250101", "20250301"), new SessionType(Long.valueOf(200000), 1), new SessionStatus(SessionProgressStatusEnum.PROGRESSING, SessionRecruitmentStatusEnum.RECRUITING), LocalDateTime.now(), null);
+        preparing_session = new Session(2L, null, new SessionPeriod("20250101", "20250301"), new SessionType(), new SessionStatus(SessionProgressStatusEnum.PROGRESSING, SessionRecruitmentStatusEnum.NON_RECRUITING), LocalDateTime.now(), null);
     }
 
 
@@ -51,7 +51,7 @@ public class SessionServiceTest {
     void apply_normal() throws Exception {
         when(sessionRepository.findById(recruiting_session.getId())).thenReturn(Optional.of(recruiting_session));
 
-        assertThat(recruiting_session.getStatusCode()).isEqualTo(SessionStatusEnum.RECRUITING.getValue());
+        assertThat(recruiting_session.isRecruiting()).isTrue();
 
         sessionService.apply(NsUserTest.JAVAJIGI, 1L);
 
@@ -86,7 +86,7 @@ public class SessionServiceTest {
 
         when(sessionRepository.findById(preparing_session.getId())).thenReturn(Optional.of(preparing_session));
 
-        assertThat(preparing_session.getStatusCode()).isEqualTo(SessionStatusEnum.PREPARING.getValue());
+        assertThat(preparing_session.isRecruiting()).isFalse();
 
         assertThatThrownBy(() -> sessionService.apply(NsUserTest.JAVAJIGI, 1L)).isInstanceOf(RuntimeException.class);
     }

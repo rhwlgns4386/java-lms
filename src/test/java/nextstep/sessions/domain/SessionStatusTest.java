@@ -20,4 +20,16 @@ public class SessionStatusTest {
         SessionStatus sessionStatus = new SessionStatus(SessionStatusEnum.RECRUITING);
         assertThatCode(()-> sessionStatus.isValidStatusForApplication()).doesNotThrowAnyException();
     }
+
+    @Test
+    void isValidStatusForApplicationNew_validStatus() {
+        SessionStatus sessionStatus = new SessionStatus(SessionProgressStatusEnum.PREPARING, SessionRecruitmentStatusEnum.NON_RECRUITING);
+        assertThatThrownBy(() -> sessionStatus.isValidStatusForApplicationNew()).isInstanceOf(RuntimeException.class);
+    }
+
+    @Test
+    void isValidStatusForApplicationNew_invaliddStatus() {
+        SessionStatus sessionStatus = new SessionStatus(SessionProgressStatusEnum.PROGRESSING, SessionRecruitmentStatusEnum.RECRUITING);
+        assertThatCode(()-> sessionStatus.isValidStatusForApplicationNew()).doesNotThrowAnyException();
+    }
 }

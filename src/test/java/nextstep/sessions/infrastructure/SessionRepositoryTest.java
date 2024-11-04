@@ -33,6 +33,7 @@ public class SessionRepositoryTest {
     @Test
     void crud() {
         Session session = new Session(new SessionPeriod("20250101", "20250501"), null, new SessionType(Long.valueOf(220000), 100));
+
         session.toCourse(new Course(1L, "TDD Clean Code", 1L, LocalDateTime.now(), null));
         int count = sessionRepository.save(session);
         assertThat(count).isEqualTo(1);
@@ -44,10 +45,11 @@ public class SessionRepositoryTest {
 
         assertThat(savedSession.getCourseId()).isEqualTo(1L);
 
-        savedSession.modifyStatus(SessionStatusEnum.RECRUITING);
+        savedSession.startRecruiting();
         sessionRepository.modifyStatus(savedSession);
         Session statusModifiedSession = sessionRepository.findById(1L).orElse(null);
-        assertThat(statusModifiedSession.getStatusCode()).isEqualTo(SessionStatusEnum.RECRUITING.getValue());
+        assertThat(statusModifiedSession.getSessionStatus()).isEqualTo
+                (new SessionStatus(SessionProgressStatusEnum.PROGRESSING, SessionRecruitmentStatusEnum.RECRUITING));
 
         statusModifiedSession.modifyPeriod(new SessionPeriod("20250201", "20250501"));
         sessionRepository.modifyPeriod(statusModifiedSession);
