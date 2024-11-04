@@ -35,29 +35,9 @@ public abstract class Session {
         this.students = students;
     }
 
-    public Session(Long sessionId, SessionDate date, List<SessionImage> images, RecruitingStatus recruitingStatus, ProgressStatus progressStatus, List<Long> students) {
-        this.sessionId = sessionId;
-        this.date = date;
-        this.images = images;
-        this.recruitingStatus = recruitingStatus;
-        this.progressStatus = progressStatus;
-        this.students = students;
-    }
-
     public Session(Long sessionId, SessionDate date, List<SessionImage> images, RecruitingStatus recruitingStatus, ProgressStatus progressStatus, List<Long> students, List<Long> applyStudents) {
         this.sessionId = sessionId;
         this.date = date;
-        this.images = images;
-        this.recruitingStatus = recruitingStatus;
-        this.progressStatus = progressStatus;
-        this.students = students;
-        this.applyStudents = applyStudents;
-    }
-
-    public Session(Long sessionId, SessionDate date, SessionImage image, List<SessionImage> images, RecruitingStatus recruitingStatus, ProgressStatus progressStatus, List<Long> students, List<Long> applyStudents) {
-        this.sessionId = sessionId;
-        this.date = date;
-        this.image = image;
         this.images = images;
         this.recruitingStatus = recruitingStatus;
         this.progressStatus = progressStatus;
