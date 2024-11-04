@@ -21,7 +21,7 @@ class SessionTest {
 
     @BeforeEach
     void setUp() {
-        paidSession = Session.paidSession(0L, PERIOD, COVER_IMAGE, AMOUNT, 1, SessionStatus.RECRUITING);
+        paidSession = Session.paidSession(0L, 0L, PERIOD, COVER_IMAGE, AMOUNT, 1, SessionStatus.RECRUITING);
     }
 
     @Test
@@ -39,11 +39,11 @@ class SessionTest {
 
     @Test
     void 수강상태_모집중_아닐때_예외발생() {
-        Session preparingSession = Session.freeSession(0L, PERIOD, COVER_IMAGE, SessionStatus.PREPARING);
+        Session preparingSession = Session.freeSession(0L, 0L, PERIOD, COVER_IMAGE, SessionStatus.PREPARING);
         Exception exception1 = assertThrows(IllegalArgumentException.class, () -> preparingSession.apply(ADD_INFO));
         assertEquals(exception1.getMessage(), "Session is not recruiting.");
 
-        Session closedSession = Session.freeSession(0L, PERIOD, COVER_IMAGE, SessionStatus.CLOSED);
+        Session closedSession = Session.freeSession(0L, 0L, PERIOD, COVER_IMAGE, SessionStatus.CLOSED);
         Exception exception2 = assertThrows(IllegalArgumentException.class, () -> closedSession.apply(ADD_INFO));
         assertEquals(exception2.getMessage(), "Session is not recruiting.");
     }

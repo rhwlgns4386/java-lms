@@ -7,6 +7,8 @@ import java.util.Objects;
 public class Session {
     private final Long id;
 
+    private final Long courseId;
+
     private final SessionPeriod period;
 
     private final SessionCoverImage coverImage;
@@ -21,8 +23,9 @@ public class Session {
 
     private final List<Long> nsUserIds = new ArrayList<>();
 
-    public Session(Long id, SessionPeriod period, SessionCoverImage coverImage, SessionFeeType feeType, SessionAmount amount, int maxPersonnel, SessionStatus status) {
+    public Session(Long id, Long courseId, SessionPeriod period, SessionCoverImage coverImage, SessionFeeType feeType, SessionAmount amount, int maxPersonnel, SessionStatus status) {
         this.id = id;
+        this.courseId = courseId;
         this.period = period;
         this.coverImage = coverImage;
         this.feeType = feeType;
@@ -31,9 +34,9 @@ public class Session {
         this.status = status;
     }
 
-    public static Session paidSession(Long id, SessionPeriod period, SessionCoverImage coverImage, SessionAmount amount, int maxPersonnel, SessionStatus status) {
+    public static Session paidSession(Long id, Long courseId, SessionPeriod period, SessionCoverImage coverImage, SessionAmount amount, int maxPersonnel, SessionStatus status) {
         validPaidSessionAmount(amount);
-        return new Session(id, period, coverImage, SessionFeeType.PAID, amount, maxPersonnel, status);
+        return new Session(id, courseId, period, coverImage, SessionFeeType.PAID, amount, maxPersonnel, status);
     }
 
     private static void validPaidSessionAmount(SessionAmount amount) {
@@ -42,8 +45,8 @@ public class Session {
         }
     }
 
-    public static Session freeSession(Long id, SessionPeriod period, SessionCoverImage coverImage, SessionStatus status) {
-        return new Session(id, period, coverImage, SessionFeeType.FREE, new SessionAmount(0L), 0, status);
+    public static Session freeSession(Long id, Long courseId, SessionPeriod period, SessionCoverImage coverImage, SessionStatus status) {
+        return new Session(id, courseId, period, coverImage, SessionFeeType.FREE, new SessionAmount(0L), 0, status);
     }
 
     public Student apply(SessionAddInfo addInfo) {
@@ -74,6 +77,10 @@ public class Session {
 
     public int sizeNsUsers() {
         return nsUserIds.size();
+    }
+
+    public Long getCourseId() {
+        return courseId;
     }
 
     public SessionPeriod getPeriod() {

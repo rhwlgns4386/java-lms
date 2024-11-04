@@ -15,21 +15,22 @@ public class JdbcSessionRepository implements SessionRepository {
 
     @Override
     public int save(Session session) {
-        String sql = "insert into session (start_date, end_date, file_size, file_type, width, height, fee_type, amount, max_personnel, status) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        return jdbcTemplate.update(sql, session.getPeriod().getStartDate(), session.getPeriod().getEndDate(), session.getCoverImage().getFileSize(), session.getCoverImage().getFileType(), session.getCoverImage().getWidth(), session.getCoverImage().getHeight(), session.getFeeType().name(), session.getAmount().getAmount(), session.getMaxPersonnel(), session.getStatus().name());
+        String sql = "insert into session (course_id, start_date, end_date, file_size, file_type, width, height, fee_type, amount, max_personnel, status) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        return jdbcTemplate.update(sql, session.getCourseId(), session.getPeriod().getStartDate(), session.getPeriod().getEndDate(), session.getCoverImage().getFileSize(), session.getCoverImage().getFileType(), session.getCoverImage().getWidth(), session.getCoverImage().getHeight(), session.getFeeType().name(), session.getAmount().getAmount(), session.getMaxPersonnel(), session.getStatus().name());
     }
 
     @Override
     public Session findById(Long id) {
-        String sql = "select id, start_date, end_date, file_size, file_type, width, height, fee_type, amount, max_personnel, status from session where id = ?";
+        String sql = "select id, course_id, start_date, end_date, file_size, file_type, width, height, fee_type, amount, max_personnel, status from session where id = ?";
         RowMapper<Session> rowMapper = (rs, rowNum) -> new Session(
                 rs.getLong(1),
-                new SessionPeriod(rs.getDate(2).toLocalDate(), rs.getDate(3).toLocalDate()),
-                new SessionCoverImage(rs.getLong(4), rs.getString(5), rs.getInt(6), rs.getInt(7)),
-                SessionFeeType.valueOf(rs.getString(8)),
-                new SessionAmount(rs.getInt(9)),
-                rs.getInt(10),
-                SessionStatus.valueOf(rs.getString(11)));
+                rs.getLong(2),
+                new SessionPeriod(rs.getDate(3).toLocalDate(), rs.getDate(4).toLocalDate()),
+                new SessionCoverImage(rs.getLong(5), rs.getString(6), rs.getInt(7), rs.getInt(8)),
+                SessionFeeType.valueOf(rs.getString(9)),
+                new SessionAmount(rs.getInt(10)),
+                rs.getInt(11),
+                SessionStatus.valueOf(rs.getString(12)));
         return jdbcTemplate.queryForObject(sql, rowMapper, id);
     }
 }
