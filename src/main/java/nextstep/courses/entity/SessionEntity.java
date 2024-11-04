@@ -4,6 +4,7 @@ import lombok.Getter;
 import nextstep.courses.domain.session.Session;
 import nextstep.courses.domain.session.SessionBuilder;
 import nextstep.courses.type.RecruitState;
+import nextstep.courses.type.SelectionType;
 import nextstep.courses.type.SessionState;
 import nextstep.courses.type.SessionType;
 
@@ -24,6 +25,7 @@ public class SessionEntity {
     private List<CoverImageEntity> coverImageEntities;
     private final SessionState sessionState;
     private final RecruitState recruitState;
+    private final SelectionType selectionType;
     private final int enrollment;
     private final int maxEnrollment;
     private final long sessionFee;
@@ -32,25 +34,27 @@ public class SessionEntity {
     private final List<StudentEntity> studentEntities = new ArrayList<>();
 
     public SessionEntity(Long id, String coverFilePath, SessionState sessionState, RecruitState recruitState,
-                         int enrollment, int maxEnrollment, long sessionFee, Timestamp startDate, Timestamp endDate) {
-        this(id, coverFilePath, null, sessionState, recruitState, enrollment, maxEnrollment,
-                sessionFee, toLocalDateTime(startDate), toLocalDateTime(endDate));
+                         SelectionType selectionType, int enrollment, int maxEnrollment, long sessionFee,
+                         Timestamp startDate, Timestamp endDate) {
+        this(id, coverFilePath, null, sessionState, recruitState, selectionType, enrollment,
+                maxEnrollment, sessionFee, toLocalDateTime(startDate), toLocalDateTime(endDate));
     }
 
     public SessionEntity(String coverFilePath, List<String> coverFilePaths, SessionState sessionState,
-                         RecruitState recruitState, int enrollment, int maxEnrollment, long sessionFee,
-                         LocalDateTime startDate, LocalDateTime endDate) {
-        this(null, coverFilePath, coverFilePaths, sessionState, recruitState, enrollment, maxEnrollment,
-                sessionFee, startDate, endDate);
+                         RecruitState recruitState, SelectionType selectionType, int enrollment, int maxEnrollment,
+                         long sessionFee, LocalDateTime startDate, LocalDateTime endDate) {
+        this(null, coverFilePath, coverFilePaths, sessionState, recruitState, selectionType, enrollment,
+                maxEnrollment, sessionFee, startDate, endDate);
     }
 
     public SessionEntity(Long id, String coverFilePath, List<String> coverFilePaths, SessionState sessionState,
-                         RecruitState recruitState, int enrollment, int maxEnrollment, long sessionFee,
-                         LocalDateTime startDate, LocalDateTime endDate) {
+                         RecruitState recruitState, SelectionType selectionType, int enrollment, int maxEnrollment,
+                         long sessionFee, LocalDateTime startDate, LocalDateTime endDate) {
         this.id = id;
         this.coverFilePath = coverFilePath;
         this.sessionState = sessionState;
         this.recruitState = recruitState;
+        this.selectionType = selectionType;
         this.enrollment = enrollment;
         this.maxEnrollment = maxEnrollment;
         this.sessionFee = sessionFee;
@@ -71,8 +75,8 @@ public class SessionEntity {
 
     public static SessionEntity from(Session session) {
         return new SessionEntity(session.getId(), session.getCoverFilePath(), session.getCoverFilePaths(),
-                session.getSessionState(), session.getRecruitState(), session.getEnrollment(), session.getMaxEnrollment(),
-                session.getSessionFee(), session.getStartDate(), session.getEndDate());
+                session.getSessionState(), session.getRecruitState(), session.getSelectionType(), session.getEnrollment(),
+                session.getMaxEnrollment(), session.getSessionFee(), session.getStartDate(), session.getEndDate());
     }
 
     public Session toDomain() {
@@ -80,6 +84,7 @@ public class SessionEntity {
                 .id(id)
                 .sessionState(sessionState)
                 .recruitState(recruitState)
+                .selectionType(selectionType)
                 .coverImage(coverFilePath)
                 .coverImages(coverImageEntities.stream().map(CoverImageEntity::toDomain).collect(Collectors.toList()))
                 .enrollment(enrollment)

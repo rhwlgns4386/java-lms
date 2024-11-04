@@ -3,6 +3,7 @@ package nextstep.courses.entity;
 import nextstep.courses.domain.enrollment.Student;
 import nextstep.courses.domain.session.Session;
 import nextstep.courses.type.RecruitState;
+import nextstep.courses.type.SelectionType;
 import nextstep.courses.type.SessionState;
 import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.Test;
@@ -34,7 +35,7 @@ public class SessionEntityTest {
     public static SessionEntity getEntity(RecruitState recruitState) {
         List<String> coverFilePaths = List.of("src/test/java/nextstep/courses/domain/session/file/image.png");
         return new SessionEntity("src/test/java/nextstep/courses/domain/session/file/image.png",
-                coverFilePaths, SessionState.PROGRESS, recruitState, 0, 30,
-                10000, LocalDateTime.now(), LocalDateTime.now());
+                coverFilePaths, SessionState.PROGRESS, recruitState, SelectionType.SELECTION, 0,
+                30, 10000, LocalDateTime.now(), LocalDateTime.now());
     }
 }

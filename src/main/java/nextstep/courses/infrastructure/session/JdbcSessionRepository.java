@@ -5,6 +5,7 @@ import nextstep.courses.entity.SessionEntity;
 import nextstep.courses.infrastructure.cover.CoverImageRepository;
 import nextstep.courses.infrastructure.enrollment.StudentRepository;
 import nextstep.courses.type.RecruitState;
+import nextstep.courses.type.SelectionType;
 import nextstep.courses.type.SessionState;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.jdbc.core.JdbcOperations;
@@ -41,7 +42,7 @@ public class JdbcSessionRepository implements SessionRepository {
     @Override
     public SessionEntity findById(Long sessionId) {
         String sql = "select "
-                + "id, session_state, recruit_state, cover_file_path, session_fee, enrollment, max_enrollment, start_date, end_date "
+                + "id, session_state, recruit_state, selection_type, cover_file_path, session_fee, enrollment, max_enrollment, start_date, end_date "
                 + "from session s "
                 + "where id = ?";
 
@@ -68,8 +69,8 @@ public class JdbcSessionRepository implements SessionRepository {
 
     private int insert(SessionEntity session, long courseId) {
         String sql = "insert into session "
-                + "(course_id, session_state, recruit_state, cover_file_path, session_fee, max_enrollment, start_date, end_date) "
-                + "values(?, ?, ?, ?, ?, ?, ?, ?)";
+                + "(course_id, session_state, recruit_state, selection_type, cover_file_path, session_fee, max_enrollment, start_date, end_date) "
+                + "values(?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         int result = jdbcTemplate.update(connection -> insert(connection, sql, courseId, session), keyHolder);
@@ -91,6 +92,7 @@ public class JdbcSessionRepository implements SessionRepository {
             ps.setLong(i++, courseId);
             ps.setString(i++, sessionEntity.getSessionState().name());
             ps.setString(i++, sessionEntity.getRecruitState().name());
+            ps.setString(i++, sessionEntity.getSelectionType().name());
             ps.setString(i++, sessionEntity.getCoverFilePath());
             ps.setLong(i++, sessionEntity.getSessionFee());
             ps.setInt(i++, sessionEntity.getMaxEnrollment());
@@ -107,7 +109,7 @@ public class JdbcSessionRepository implements SessionRepository {
     @Override
     public List<SessionEntity> findByCourseId(long courseId) {
         String sql = "select "
-                + "id, session_state, recruit_state, cover_file_path, session_fee, enrollment, max_enrollment, start_date, end_date "
+                + "id, session_state, recruit_state, selection_type, cover_file_path, session_fee, enrollment, max_enrollment, start_date, end_date "
                 + "from session "
                 + "where course_id = ?";
         return jdbcTemplate.query(sql, SESSION_ENTITY_ROW_MAPPER, courseId);
@@ -122,6 +124,7 @@ public class JdbcSessionRepository implements SessionRepository {
                     rs.getString("cover_file_path"),
                     SessionState.valueOf(rs.getString("session_state")),
                     RecruitState.valueOf(rs.getString("recruit_state")),
+                    SelectionType.valueOf(rs.getString("selection_type")),
                     rs.getInt("enrollment"),
                     rs.getInt("max_enrollment"),
                     rs.getLong("session_fee"),

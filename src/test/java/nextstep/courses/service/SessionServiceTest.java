@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
@@ -37,25 +38,29 @@ public class SessionServiceTest {
     }
 
     @Test
+    @Transactional
     void throw_exception_if_apply_not_recruit_session() {
         assertThatIllegalStateException().isThrownBy(() -> sessionService.apply(NsUserTest.JAVAJIGI.getUserId(),
                 1L, new Payment("테스트", 1L, NsUserTest.JAVAJIGI.getId(), 0L)));
     }
 
     @Test
+    @Transactional
     void throw_exception_if_apply_not_invalid_session_id() {
         assertThatIllegalStateException().isThrownBy(() -> sessionService.apply(NsUserTest.JAVAJIGI.getUserId(),
                 2L, new Payment("테스트", 1L, NsUserTest.JAVAJIGI.getId(), 10000L)));
     }
 
     @Test
+    @Transactional
     void throw_exception_if_apply_invalid_session_fee() {
         assertThatIllegalStateException().isThrownBy(() -> sessionService.apply(NsUserTest.JAVAJIGI.getUserId(),
                 2L, new Payment("테스트", 2L, NsUserTest.JAVAJIGI.getId(), 0L)));
     }
 
     @Test
-    void test_register_with_db() {
+    @Transactional
+    void register_non_selection_session_with_db() {
         NsUser user = new NsUser(3L, "test");
         Payment payment = new Payment("test", 2L, 3L, 10000L);
 
@@ -73,6 +78,7 @@ public class SessionServiceTest {
     }
 
     @Test
+    @Transactional
     void reject_with_db() {
         Payment payment = new Payment("test", 2L, NsUserTest.JAVAJIGI.getId(), 10000L);
 
@@ -87,5 +93,34 @@ public class SessionServiceTest {
                 .getEnrollmentState();
 
         assertThat(enrollmentState).isEqualTo(EnrollmentState.REJECT);
+    }
+
+    @Test
+    @Transactional
+    void register_select_student_with_db() {
+        Payment payment = new Payment("test", 100L, NsUserTest.JAVAJIGI.getId(), 10000L);
+
+        sessionService.apply(NsUserTest.JAVAJIGI.getUserId(), 100L, payment);
+        sessionService.select(NsUserTest.JAVAJIGI.getUserId(), 100L);
+        sessionService.register(NsUserTest.JAVAJIGI.getUserId(), 100L);
+
+        EnrollmentState enrollmentState = studentRepository.findBySessionId(100L)
+                .stream()
+                .filter(entity -> entity.getStudent().matchUser(NsUserTest.JAVAJIGI))
+                .findFirst()
+                .orElseThrow()
+                .getEnrollmentState();
+
+        assertThat(enrollmentState).isEqualTo(EnrollmentState.APPROVE);
+    }
+
+    @Test
+    @Transactional
+    void throw_exception_if_register_not_selected_student() {
+        Payment payment = new Payment("test", 100L, NsUserTest.JAVAJIGI.getId(), 10000L);
+
+        sessionService.apply(NsUserTest.JAVAJIGI.getUserId(), 100L, payment);
+        assertThatIllegalStateException().isThrownBy(() ->
+                sessionService.register(NsUserTest.JAVAJIGI.getUserId(), 100L));
     }
 }

@@ -5,6 +5,7 @@ import nextstep.courses.entity.SessionEntityTest;
 import nextstep.courses.infrastructure.cover.JdbcCoverImageRepository;
 import nextstep.courses.infrastructure.enrollment.JdbcStudentRepository;
 import nextstep.courses.type.RecruitState;
+import nextstep.courses.type.SelectionType;
 import nextstep.courses.type.SessionState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,6 +44,7 @@ public class SessionRepositoryTest {
 
         SessionEntity updatedSessionEntity = sessionRepository.findById(3L);
         assertThat(updatedSessionEntity.getEnrollment()).isEqualTo(1);
+        assertThat(updatedSessionEntity.getSelectionType()).isEqualTo(SelectionType.SELECTION);
         assertThat(updatedSessionEntity.getCoverImageEntities()).hasSize(1);
         assertThat(updatedSessionEntity.getCoverImageEntities().get(0).getFilePath())
                 .isEqualTo("src/test/java/nextstep/courses/domain/session/file/image.png");
@@ -51,7 +53,7 @@ public class SessionRepositoryTest {
     private SessionEntity getUpdateEntity() {
         List<String> coverFilePaths = List.of("src/test/java/nextstep/courses/domain/session/file/image.png");
         return new SessionEntity(3L, "src/test/java/nextstep/courses/domain/session/file/image.png",
-                coverFilePaths, SessionState.PROGRESS, RecruitState.RECRUIT, 1, 30,
-                10000, LocalDateTime.now(), LocalDateTime.now());
+                coverFilePaths, SessionState.PROGRESS, RecruitState.RECRUIT, SelectionType.SELECTION, 1,
+                30, 10000, LocalDateTime.now(), LocalDateTime.now());
     }
 }
