@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,7 +35,7 @@ public class SessionImageRepositoryTest {
     @Test
     void crud() {
         SessionImage image = new SessionImage("image/test.jpg", new ImageSize(Long.valueOf(1024 * 1024)), SessionImageTypeEnum.JPG, new SessionImagePixel(new ImageWidth(300), new ImageHeight(200)));
-        image.toSession(new Session(1L, null, new SessionPeriod("20250101", "20250301"), new SessionType(), new SessionStatus(SessionStatusEnum.PREPARING), LocalDateTime.now(), null));
+        image.toSession(new Session(1L, (List<SessionImage>) null, new SessionPeriod("20250101", "20250301"), new SessionType(), new SessionStatus(SessionStatusEnum.PREPARING), LocalDateTime.now(), null));
         int count = sessionImageRepository.save(image);
         assertThat(count).isEqualTo(1);
         Optional<SessionImage> savedimage = sessionImageRepository.findBySession(1L);
