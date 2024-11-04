@@ -25,6 +25,12 @@ public class Session {
     }
 
     public boolean applyForCourse(Payment payment, LocalDate date) {
+        if (canApplyForCourse(payment, date)) return false;
+
+        return true;
+    }
+
+    private boolean canApplyForCourse(Payment payment, LocalDate date) {
         if (!this.sessionState.isOpen()) {
             return false;
         }
@@ -36,7 +42,6 @@ public class Session {
         if (!this.sessionStrategy.payable(payment)) {
             return false;
         }
-
         return true;
     }
 
