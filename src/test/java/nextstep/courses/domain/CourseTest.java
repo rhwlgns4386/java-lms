@@ -39,4 +39,5 @@ public class CourseTest {
         actual.addSession(PAID_SESSION1);
         assertThat(actual).isEqualTo(course);
     }
+
 }

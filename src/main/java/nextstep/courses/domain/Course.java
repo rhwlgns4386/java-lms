@@ -10,13 +10,14 @@ public class Course {
 
     private String title;
 
+    private Sessions sessions = new Sessions();
+
     private Long creatorId;
 
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
 
-    private Sessions sessions = new Sessions();
 
     public Course() {
     }
@@ -48,17 +49,6 @@ public class Course {
         return createdAt;
     }
 
-    @Override
-    public String toString() {
-        return "Course{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", creatorId=" + creatorId +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                '}';
-    }
-
     public void addSession(Session session) {
         this.sessions.add(session);
     }
@@ -68,11 +58,22 @@ public class Course {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Course course = (Course) o;
-        return Objects.equals(id, course.id) && Objects.equals(title, course.title) && Objects.equals(creatorId, course.creatorId) && Objects.equals(sessions, course.sessions);
+        return Objects.equals(id, course.id) && Objects.equals(title, course.title) && Objects.equals(sessions, course.sessions) && Objects.equals(creatorId, course.creatorId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, creatorId, sessions);
+        return Objects.hash(id, title, sessions, creatorId);
+    }
+
+    @Override
+    public String toString() {
+        return "Course{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", creatorId=" + creatorId +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
     }
 }

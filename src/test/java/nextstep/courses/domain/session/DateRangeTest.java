@@ -13,6 +13,8 @@ public class DateRangeTest {
 
     public static final LocalDateTime START = LocalDateTime.of(2024, 10, 26, 10, 0);
     public static final LocalDateTime END = LocalDateTime.of(2024, 11, 26, 10, 0);
+
+    public static final DateRange DATE_RANGE1 = new DateRange(START, END);
     private LocalDateTime start;
     private LocalDateTime end;
 
