@@ -25,7 +25,7 @@ public class Session {
     }
 
     public boolean applyForCourse(Payment payment, LocalDate date) {
-        if (!SessionState.isOpen(this.sessionState)) {
+        if (!this.sessionState.isOpen()) {
             return false;
         }
 
