@@ -1,5 +1,7 @@
 package nextstep.courses.domain.session;
 
+import java.util.Arrays;
+
 public enum SessionProgressStatus {
     PREPARING("준비중"),
     ON_GOING("진행중"),
@@ -13,5 +15,12 @@ public enum SessionProgressStatus {
 
     public String getValue() {
         return value;
+    }
+
+    public static SessionProgressStatus of(String name) {
+        return Arrays.stream(values())
+                .filter(it -> it.name().equalsIgnoreCase(name))
+                .findFirst()
+                .orElse(null);
     }
 }

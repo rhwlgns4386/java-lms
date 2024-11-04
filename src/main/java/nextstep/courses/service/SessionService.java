@@ -47,7 +47,6 @@ public class SessionService {
                 .map(it -> {
                     List<Image> images = imageRepository.findAllBySessionId(it.getId());
                     List<Student> students = studentRepository.findAllBySessionId(it.getId());
-
                     return getSession(it, images, students);
                 })
                 .collect(Collectors.toList());

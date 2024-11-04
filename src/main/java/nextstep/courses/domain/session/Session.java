@@ -100,14 +100,18 @@ public abstract class Session {
 
     public void open() {
         updateStatus(LegacySessionStatus.RECRUITING);
+        this.sessionStatus.openSession();
+        this.sessionStatus.startRecruiting();
     }
 
     public void close() {
         updateStatus(LegacySessionStatus.CLOSE);
+        this.sessionStatus.endSession();
+        this.sessionStatus.finishRecruiting();
     }
 
-    protected boolean isAvailableForRegistration() {
-        return this.legacySessionStatus.isOpen();
+    protected boolean isRegistrationAvailable() {
+        return this.sessionStatus.isApplicationAvailable();
     }
 
     protected void updateStatus(LegacySessionStatus legacySessionStatus) {

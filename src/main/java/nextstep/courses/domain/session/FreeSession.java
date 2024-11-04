@@ -31,7 +31,7 @@ public class FreeSession extends Session {
                        LegacySessionStatus legacySessionStatus,
                        List<Student> students
     ) {
-        super(id, title, sessionDate, images, sessionType, legacySessionStatus, students);
+        super(id, title, sessionDate, images, sessionType, legacySessionStatus, SessionStatus.init(), students);
     }
 
     public FreeSession(Long id,
@@ -58,12 +58,20 @@ public class FreeSession extends Session {
     }
 
     public static FreeSession of(FreeSession session, List<Image> images, List<Student> students) {
-        return new FreeSession(session.getId(), session.getTitle(), session.getSessionDate(), images, session.getSessionType(), session.getSessionStatus(), students);
+        return new FreeSession(
+                session.getId(),
+                session.getTitle(),
+                session.getSessionDate(),
+                images,
+                session.getSessionType(),
+                session.getSessionStatus(),
+                students
+        );
     }
 
     @Override
     public void register(Registration registration) {
-        if (!isAvailableForRegistration()) {
+        if (!isRegistrationAvailable()) {
             throw new IllegalStateException("Can't register session");
         }
 

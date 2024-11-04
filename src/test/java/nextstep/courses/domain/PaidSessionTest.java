@@ -133,6 +133,7 @@ public class PaidSessionTest {
         paidSession.open();
 
         Assertions.assertThat(paidSession.getLegacySessionStatus()).isEqualTo(LegacySessionStatus.RECRUITING);
+        Assertions.assertThat(paidSession.getSessionStatus()).isEqualTo(new SessionStatus(SessionProgressStatus.ON_GOING, SessionRecruitStatus.RECRUITMENT));
     }
 
     @Test
@@ -146,5 +147,6 @@ public class PaidSessionTest {
         paidSession.close();
 
         Assertions.assertThat(paidSession.getLegacySessionStatus()).isEqualTo(LegacySessionStatus.CLOSE);
+        Assertions.assertThat(paidSession.getSessionStatus()).isEqualTo(new SessionStatus(SessionProgressStatus.END, SessionRecruitStatus.NON_RECRUITMENT));
     }
 }

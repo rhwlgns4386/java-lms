@@ -85,7 +85,7 @@ public class PaidSession extends Session {
 
     @Override
     public void register(Registration registration) {
-        if (!isAvailableForRegistration()) {
+        if (!isRegistrationAvailable()) {
             throw new IllegalStateException("Can't register session");
         }
         if (registration == null) {
