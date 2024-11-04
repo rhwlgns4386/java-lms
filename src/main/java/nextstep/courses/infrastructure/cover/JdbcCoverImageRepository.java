@@ -47,7 +47,8 @@ public class JdbcCoverImageRepository implements CoverImageRepository {
         public CoverImageEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
             return new CoverImageEntity(
                     rs.getLong("id"),
-                    rs.getString("file_path"));
+                    rs.getString("file_path"),
+                    rs.getString("session_id"));
         }
     }
 }

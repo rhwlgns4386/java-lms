@@ -6,14 +6,20 @@ public class CoverImageEntity {
 
     private final Long id;
     private final String filePath;
+    private final String sessionId;
 
     public CoverImageEntity(String filePath) {
-        this(null, filePath);
+        this(null, filePath, null);
     }
 
     public CoverImageEntity(Long id, String filePath) {
+        this(id, filePath, null);
+    }
+
+    public CoverImageEntity(Long id, String filePath, String sessionId) {
         this.id = id;
         this.filePath = filePath;
+        this.sessionId = sessionId;
     }
 
     public CoverImage toDomain() {
