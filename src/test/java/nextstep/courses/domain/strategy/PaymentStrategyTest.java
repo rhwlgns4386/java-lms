@@ -9,14 +9,14 @@ public class PaymentStrategyTest {
 
     @Test
     void create() {
-         PaymentStrategy expected = new PaidPaymentStrategy(1000, 10);
+         PaymentStrategy expected = new PaidPaymentStrategy(1000);
 
-         assertThat(expected).isEqualTo(new PaidPaymentStrategy(1000, 10));
+         assertThat(expected).isEqualTo(new PaidPaymentStrategy(1000));
     }
 
     @Test
     void 유료_수강신청() {
-        PaymentStrategy paymentStrategy = new PaidPaymentStrategy(1000, 10);
+        PaymentStrategy paymentStrategy = new PaidPaymentStrategy(1000);
 
         boolean expected = paymentStrategy.payable(new Payment("1L", 1L, 1L, 1000L));
 

@@ -8,21 +8,14 @@ import java.util.Objects;
 public class PaidPaymentStrategy implements PaymentStrategy {
 
     private final int price;
-    private final SessionCapacity capacity;
 
-    public PaidPaymentStrategy(int price, int capacity) {
-        this(price, new SessionCapacity(capacity));
-    }
-
-    public PaidPaymentStrategy(int price, SessionCapacity capacity) {
+    public PaidPaymentStrategy(int price) {
         this.price = price;
-        this.capacity = capacity;
     }
 
     @Override
     public boolean payable(Payment payment) {
         if (payment.isSamePrice(price)) {
-            capacity.increase();
             return true;
         }
         return false;
