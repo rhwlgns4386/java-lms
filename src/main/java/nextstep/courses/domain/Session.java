@@ -20,26 +20,63 @@ public abstract class Session {
 
     private CoverImage image;
 
+    protected Long price;
+
     private List<NsUser> students = new ArrayList<>();
 
     private LocalDateTime startDate;
 
     private LocalDateTime endDate;
 
-    public Session(Long id, String title, SessionType type, LocalDateTime startDate, LocalDateTime endDate) {
+    public Session(Long id, String title, SessionType type, SessionStatus status, Long price, LocalDateTime startDate, LocalDateTime endDate) {
         this.id = id;
         this.title = title;
         this.type = type;
+        this.status = status;
+        this.price = price;
         this.startDate = startDate;
         this.endDate = endDate;
     }
 
-    public Session(String title, SessionType type, LocalDateTime startDate, LocalDateTime endDate) {
-        this(1L, title, type, startDate, endDate);
+    public Session(Long id, String title, SessionType type, Long price, LocalDateTime startDate, LocalDateTime endDate) {
+        this.id = id;
+        this.title = title;
+        this.type = type;
+        this.price = price;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
+    public Session(String title, SessionType type, Long price, LocalDateTime startDate, LocalDateTime endDate) {
+        this.title = title;
+        this.type = type;
+        this.price = price;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
     public Long getId() {
         return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public SessionType getType() {
+        return type;
+    }
+
+    public SessionStatus getStatus() {
+        return status;
+    }
+
+    public LocalDateTime getStartDate() {
+        return startDate;
+    }
+
+    public LocalDateTime getEndDate() {
+        return endDate;
     }
 
     public void openEnrollment() {
@@ -50,7 +87,11 @@ public abstract class Session {
         this.image = image;
     }
 
-    public abstract void enroll(NsUser user, Payment payment);
+    public boolean isFreeSession() {
+        return type == SessionType.FREE;
+    }
+
+    public abstract void enroll(List<NsUser> students, Payment payment);
 
     protected void validateRecruitingStatus() {
         if (!SessionStatus.canEnroll(status)) {
@@ -58,12 +99,8 @@ public abstract class Session {
         }
     }
 
-    protected int getCurrentStudentCount() {
-        return students.size();
-    }
-
-    protected void addStudent(NsUser user) {
-        students.add(user);
+    public Long getPrice() {
+        return price;
     }
 
     @Override
@@ -77,5 +114,14 @@ public abstract class Session {
     @Override
     public int hashCode() {
         return Objects.hash(id, startDate, endDate);
+    }
+
+    @Override
+    public String toString() {
+        return "Session{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", price=" + price +
+                '}';
     }
 }
