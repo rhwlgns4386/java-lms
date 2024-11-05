@@ -1,13 +1,13 @@
 package nextstep.courses.infrastructure;
 
-import nextstep.courses.collection.Students;
+import nextstep.courses.domain.Students;
 import nextstep.courses.domain.PaidSession;
 import nextstep.courses.domain.Session;
 import nextstep.courses.domain.SessionImage;
 import nextstep.courses.domain.SessionInfo;
 import nextstep.courses.domain.SessionType;
 import nextstep.courses.domain.StateCode;
-import nextstep.courses.factory.SessionFactory;
+import nextstep.courses.domain.SessionFactory;
 import nextstep.courses.strategy.FreeSessionRepositoryStrategy;
 import nextstep.courses.strategy.PaidSessionRepositoryStrategy;
 import nextstep.courses.strategy.SessionRepositoryStrategy;
@@ -24,7 +24,7 @@ import java.util.List;
 @Repository("sessionRepository")
 public class JdbcSessionRepository implements SessionRepository {
     private final JdbcOperations jdbcTemplate;
-
+    private static RowMapper<Session> session;
     public JdbcSessionRepository(JdbcOperations jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
@@ -50,7 +50,7 @@ public class JdbcSessionRepository implements SessionRepository {
                 "LEFT JOIN session_image si ON s.SESSION_ID = si.IMAGE_ID " +
                 "WHERE s.SESSION_ID = ?";
 
-        RowMapper<Session> session = (rs, rownum) -> {
+        session = (rs, rownum) -> {
             String title = rs.getString(1);
             LocalDateTime applyStartDate = toLocalDateTime(rs.getTimestamp(2));
             LocalDateTime applyEndDate = toLocalDateTime(rs.getTimestamp(3));
@@ -94,9 +94,6 @@ public class JdbcSessionRepository implements SessionRepository {
 
     @Override
     public int saveOrderSession(NsUser user, Session session) {
-        System.out.println("session.getSessionId()=" + session.getSessionId());
-        System.out.println("user.getId()=" + user.getId());
-        System.out.println("sale_price" + session.getSalePrice());
         String sql = "insert into SESSION_ORDER(session_id, ns_user_id, sale_price) values (?, ?, ?)";
         return jdbcTemplate.update(sql, session.getSessionId(), user.getId(), session.getSalePrice());
     }

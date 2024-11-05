@@ -1,6 +1,6 @@
 package nextstep.courses.infrastructure;
 
-import nextstep.courses.collection.Students;
+import nextstep.courses.domain.Students;
 import nextstep.courses.domain.Session;
 import nextstep.users.domain.NsUser;
 
