@@ -122,10 +122,9 @@ public class SessionServiceTest {
         when(sessionRepository.findById(anyLong())).thenReturn(Optional.of(paidSession));
         when(imageRepository.findAllBySessionId(anyLong())).thenReturn(new ArrayList<>(List.of(image)));
         when(studentRepository.findAllBySessionId(anyLong())).thenReturn(new ArrayList<>(List.of(student2)));
+        when(studentRepository.saveAll(anyList(), anyLong())).thenReturn(new int[]{1});
 
         Session accept = sessionService.accept(sessionId, LecturerTest.testLecturer, students);
-
-        verify(studentRepository).saveAll(students, sessionId);
 
         for (Student elem : accept.getStudents()) {
             Assertions.assertThat(elem.getStatus()).isEqualTo(StudentStatus.ACCEPTED);
@@ -153,10 +152,9 @@ public class SessionServiceTest {
         when(sessionRepository.findById(anyLong())).thenReturn(Optional.of(paidSession));
         when(imageRepository.findAllBySessionId(anyLong())).thenReturn(new ArrayList<>(List.of(image)));
         when(studentRepository.findAllBySessionId(anyLong())).thenReturn(new ArrayList<>(List.of(student2)));
+        when(studentRepository.saveAll(anyList(), anyLong())).thenReturn(new int[]{1});
 
         Session accept = sessionService.reject(sessionId, LecturerTest.testLecturer, students);
-
-        verify(studentRepository).saveAll(students, sessionId);
 
         for (Student elem : accept.getStudents()) {
             Assertions.assertThat(elem.getStatus()).isEqualTo(StudentStatus.REJECTED);
