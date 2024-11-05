@@ -1,4 +1,4 @@
-package nextstep.courses.domain.Lecturer;
+package nextstep.courses.domain.lecturer;
 
 import java.util.Optional;
 

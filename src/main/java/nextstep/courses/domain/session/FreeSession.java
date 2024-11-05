@@ -1,7 +1,7 @@
 package nextstep.courses.domain.session;
 
-import nextstep.courses.domain.Lecturer.Lecturer;
 import nextstep.courses.domain.image.Image;
+import nextstep.courses.domain.lecturer.Lecturer;
 import nextstep.courses.domain.student.Student;
 
 import java.util.ArrayList;

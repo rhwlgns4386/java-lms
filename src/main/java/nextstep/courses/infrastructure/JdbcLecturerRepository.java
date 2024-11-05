@@ -1,7 +1,7 @@
 package nextstep.courses.infrastructure;
 
-import nextstep.courses.domain.Lecturer.Lecturer;
-import nextstep.courses.domain.Lecturer.LecturerRepository;
+import nextstep.courses.domain.lecturer.Lecturer;
+import nextstep.courses.domain.lecturer.LecturerRepository;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;

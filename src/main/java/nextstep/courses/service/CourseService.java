@@ -1,8 +1,8 @@
 package nextstep.courses.service;
 
-import nextstep.courses.domain.Lecturer.Lecturer;
 import nextstep.courses.domain.course.Course;
 import nextstep.courses.domain.course.CourseRepository;
+import nextstep.courses.domain.lecturer.Lecturer;
 import nextstep.courses.domain.session.Session;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
