@@ -50,6 +50,10 @@ public class Session {
         sessionInfo.validateOrderSessionStatus();
     }
 
+    public void validateOrderSessionProgressCode() {
+        sessionInfo.validateOrderSessionProgressCode();
+    }
+
     public void updateStudent(NsUser student) {
         students.updateStudent(student);
     }
@@ -93,4 +97,9 @@ public class Session {
     public long getSessionId() {
         return sessionInfo.getSessionId();
     }
+
+    public int getProgressCode() {
+        return sessionInfo.getProgressCode();
+    }
+
 }

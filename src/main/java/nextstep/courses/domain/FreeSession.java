@@ -14,6 +14,7 @@ public class FreeSession extends Session implements SessionStrategy {
 
     public void validateOrderSession(RequestOrderParam requestOrderParam) throws CannotRegisteSessionException {
         validateOrderSessionStatus();
+        validateOrderSessionProgressCode();
         validateDuplicateStudent(requestOrderParam.getStudent());
     }
 

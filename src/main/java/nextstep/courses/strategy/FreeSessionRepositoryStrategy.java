@@ -13,9 +13,9 @@ public class FreeSessionRepositoryStrategy implements SessionRepositoryStrategy 
 
     @Override
     public int saveRegisterSession(Session session) {
-        String sql = "insert into session (title, apply_start_date, apply_end_date, sale_price, state_code, creator_id, session_type, student_max_count) " +
-                "values(?,?,?,?,?,?,?,?)";
+        String sql = "insert into session (title, apply_start_date, apply_end_date, sale_price, state_code, creator_id, session_type, student_max_count, PROGRESS_CODE) " +
+                "values(?,?,?,?,?,?,?,?,?)";
         return jdbcTemplate.update(sql, session.getTitle(), session.getApplyStartDate(), session.getApplyEndDate(), session.getSalePrice(),
-                session.getStateCode(), session.getCreatorId(), session.getSessionTypeCode(), -1);
+                session.getStateCode(), session.getCreatorId(), session.getSessionTypeCode(), -1, session.getProgressCode());
     }
 }

@@ -70,11 +70,12 @@ public class JdbcSessionRepository implements SessionRepository {
             String fileName = rs.getString(11);
             int studentMaxCount = rs.getInt(13);
             long sessionId = rs.getLong(14);
+            ProgressCode progressCode = ProgressCode.fromCode(rs.getInt(15));
 
             SessionMetaData sessionMetaData = new SessionMetaData(title, creatorId);
             SessionPeriod sessionPeriod = new SessionPeriod(applyStartDate, applyEndDate);
             SessionPrice sessionPrice = new SessionPrice(salePrice);
-            SessionInfo sessionInfo = new SessionInfo(sessionId, sessionMetaData, sessionPeriod, stateCode);
+            SessionInfo sessionInfo = new SessionInfo(sessionId, sessionMetaData, sessionPeriod, stateCode, progressCode);
             SessionImage sessionImage = new SessionImage(fileSize, type, width, height, fileName);
 
             return SessionFactory.createSession(sessionInfo, sessionImage, sessionPrice, studentMaxCount, sessionType);

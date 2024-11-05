@@ -21,10 +21,11 @@ public class PaidSession extends Session implements SessionStrategy {
     }
 
     public void validateOrderSession(RequestOrderParam requestOrderParam) throws CannotRegisteSessionException {
+        validateOrderSessionStatus();
+        validateOrderSessionProgressCode();
         validateSalePrice(requestOrderParam.getPayment());
         validateMaxStudentCount();
         validateDuplicateStudent(requestOrderParam.getStudent());
-        validateOrderSessionStatus();
     }
 
     private void validateDuplicateStudent(NsUser student) throws CannotRegisteSessionException {

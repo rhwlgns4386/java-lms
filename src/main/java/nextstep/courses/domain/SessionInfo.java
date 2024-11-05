@@ -11,16 +11,20 @@ public class SessionInfo {
 
     private StateCode stateCode;
 
+    private ProgressCode progressCode; //새로 추가됨
 
-    public SessionInfo(SessionMetaData sessionMetaData, SessionPeriod sessionPeriod, StateCode stateCode) {
-        this(-1, sessionMetaData, sessionPeriod, stateCode);
+    public SessionInfo(SessionMetaData sessionMetaData, SessionPeriod sessionPeriod,
+                       StateCode stateCode, ProgressCode progressCode) {
+        this(-1, sessionMetaData, sessionPeriod, stateCode, progressCode);
     }
 
-    public SessionInfo(long sessionId, SessionMetaData sessionMetaData, SessionPeriod sessionPeriod, StateCode stateCode) {
+    public SessionInfo(long sessionId, SessionMetaData sessionMetaData, SessionPeriod sessionPeriod,
+                       StateCode stateCode, ProgressCode progressCode) {
         this.sessionId = sessionId;
         this.sessionPeriod = sessionPeriod;
-        this.sessionMetaData = sessionMetaData;
+        this.sessionMetaData =  sessionMetaData;
         this.stateCode = stateCode;
+        this.progressCode = progressCode;
     }
 
     public String getTitle() {
@@ -51,6 +55,12 @@ public class SessionInfo {
         return stateCode.getStatusCode();
     }
 
+    public int getProgressCode() {
+        return progressCode.getProgressCode();
+    }
+
+    public void validateOrderSessionProgressCode() {
+        progressCode.validateOrderSessionProgressCode();
+    }
+
 }
-
-
