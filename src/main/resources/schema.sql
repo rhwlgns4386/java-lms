@@ -54,6 +54,7 @@ create table session (
     title varchar(255) not null,
     sale_price bigint not null,
     state_code bigint not null,
+    progress_code bigint not null,
     student_max_count bigint not null,
     creator_id varchar(30) not null,
     apply_start_date timestamp not null,
@@ -84,7 +85,11 @@ create table session_order (
     foreign key (ns_user_id) references ns_user(id)
 );
 
---drop table session;
---drop table session_image;
---drop table session_order;
+/*
+drop table session;
+
+drop table session_image;
+drop table session_order;
+
 --drop table ns_user;
+ */
