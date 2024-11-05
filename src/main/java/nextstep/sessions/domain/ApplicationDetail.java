@@ -15,7 +15,7 @@ public class ApplicationDetail {
     }
 
     public ApplicationDetail(Long sessionId, Long nsUserId,  LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this(sessionId, nsUserId, new ApplicationStatus(ApplicationStatusEnum.apply), createdAt, updatedAt);
+        this(sessionId, nsUserId, new ApplicationStatus(ApplicationStatusType.APPLY), createdAt, updatedAt);
     }
 
     public ApplicationDetail(Long sessionId, Long nsUserId, ApplicationStatus status,  LocalDateTime createdAt, LocalDateTime updatedAt) {

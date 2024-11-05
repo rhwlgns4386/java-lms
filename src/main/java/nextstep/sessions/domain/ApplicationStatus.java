@@ -1,16 +1,23 @@
 package nextstep.sessions.domain;
 
 public class ApplicationStatus {
-    private ApplicationStatusEnum applicationStatusEnum;
+    private ApplicationStatusType applicationStatusEnum;
 
 
-    public ApplicationStatus(ApplicationStatusEnum applicationStatusEnum) {
+    public ApplicationStatus(String applicationStatus) {
+        this(ApplicationStatusType.getByValue(applicationStatus));
+    }
+
+    public ApplicationStatus(ApplicationStatusType applicationStatusEnum) {
+        if (applicationStatusEnum == null) {
+            throw new RuntimeException("신청상태 값이 누락되었습니다.");
+        }
         this.applicationStatusEnum = applicationStatusEnum;
     }
 
     public ApplicationStatus approve() {
         if (isApplied()) {
-            return new ApplicationStatus(ApplicationStatusEnum.approve);
+            return new ApplicationStatus(ApplicationStatusType.APPROVE);
         }
         throw new RuntimeException("승인 가능한 상태가 아닙니다");
     }
@@ -18,21 +25,21 @@ public class ApplicationStatus {
 
     public ApplicationStatus cancel() {
         if (isApplied()) {
-            return new ApplicationStatus(ApplicationStatusEnum.cancel);
+            return new ApplicationStatus(ApplicationStatusType.CANCEL);
         }
         throw new RuntimeException("취소가능한 상태가 아닙니다");
     }
 
     public boolean isApplied() {
-        return this.applicationStatusEnum == ApplicationStatusEnum.apply;
+        return this.applicationStatusEnum == ApplicationStatusType.APPLY;
     }
 
 
     public boolean isValidStatusToAttend() {
-        return this.applicationStatusEnum == ApplicationStatusEnum.approve;
+        return this.applicationStatusEnum == ApplicationStatusType.APPROVE;
     }
 
-    public ApplicationStatusEnum getApplicationStatusEnum() {
+    public ApplicationStatusType getApplicationStatusEnum() {
         return applicationStatusEnum;
     }
 }

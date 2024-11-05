@@ -23,11 +23,7 @@ public class Session {
     private LocalDateTime updatedAt;
 
     public Session(SessionPeriod period, SessionImage image, SessionType sessionType) {
-        this(0L, image, period, sessionType, new SessionStatus(), LocalDateTime.now(), null);
-    }
-
-    public Session(SessionPeriod period, SessionImage image, SessionType sessionType, SessionStatus sessionStatus) {
-        this(0L, image, period, sessionType, sessionStatus, LocalDateTime.now(), null);
+        this(0L, image, period, sessionType, SessionStatus.ofInitInstance(), LocalDateTime.now(), null);
     }
 
     public Session(Long sessionId, SessionPeriod sessionPeriod,
@@ -63,12 +59,15 @@ public class Session {
     }
 
     public void startRecruiting() {
-        SessionStatus updatedSessionStatus = sessionStatus.startRecruiting();
-        this.sessionStatus = updatedSessionStatus;
+        sessionStatus.startRecruiting();
     }
 
     public boolean isRecruiting() {
         return sessionStatus.isRecruiting();
+    }
+
+    public boolean isPreparing() {
+        return sessionStatus.isPreparing();
     }
 
     public void modifyPeriod(SessionPeriod period) {

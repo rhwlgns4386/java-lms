@@ -2,13 +2,13 @@ package nextstep.sessions.domain;
 
 import java.util.Arrays;
 
-public enum SessionProgressStatusEnum {
+public enum SessionProgressStatusType {
     PREPARING("01"),
     PROGRESSING("02"),
     END("03");
 
     private String statusCode ;
-    SessionProgressStatusEnum(String statusCode) {
+    SessionProgressStatusType(String statusCode) {
         this.statusCode = statusCode;
     }
 
@@ -16,7 +16,7 @@ public enum SessionProgressStatusEnum {
         return statusCode;
     }
 
-    public static SessionProgressStatusEnum getByStatusCode(String statusCode) {
+    public static SessionProgressStatusType getByStatusCode(String statusCode) {
         return Arrays.stream(values()).filter(e -> e.statusCode.equals(statusCode)).findFirst().orElseThrow();
     }
 }
