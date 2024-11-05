@@ -25,9 +25,4 @@ public class PaidSessionPolicy implements SessionPolicy {
         }
     }
 
-    @Override
-    public SessionPaymentType getSessionPaymentType() {
-        return SessionPaymentType.PAID;
-    }
-
 }

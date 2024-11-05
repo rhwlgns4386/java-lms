@@ -6,32 +6,39 @@ import java.util.Set;
 
 public class Session {
     private final Long id;
+    private final Long sessionId;
+    private final String title;
     private final LocalDate startAt;
     private final LocalDate endAt;
     private final CoverImage image;
     private final Long sessionFee;
+    private final SessionType sessionType;
     private final SessionPolicy sessionPolicy;
-    private SessionStatus sessionStatus;
+    private SessionStatus sessionStatus = SessionStatus.PENDING;
     private final Set<Enrollment> enrollments = new HashSet<>();
 
-    public Session(Long id, LocalDate startAt, LocalDate endAt, CoverImage image, Long sessionFee,
-        SessionPolicy sessionPolicy) {
+    public Session(Long id, Long sessionId, String title, LocalDate startAt, LocalDate endAt, CoverImage image,
+        Long sessionFee, SessionType sessionType, SessionPolicy sessionPolicy) {
         this.id = id;
+        this.sessionId = sessionId;
+        this.title = title;
         this.startAt = startAt;
         this.endAt = endAt;
         this.image = image;
-        this.sessionPolicy = sessionPolicy;
         this.sessionFee = sessionFee;
-        this.sessionStatus = SessionStatus.PENDING;
+        this.sessionType = sessionType;
+        this.sessionPolicy = sessionPolicy;
     }
 
-    public static Session createFreeSession(LocalDate startAt, LocalDate endAt, CoverImage image) {
-        return new Session(1L, startAt, endAt, image, 0L, new FreeSessionPolicy());
+    public static Session createFreeSession(Long sessionId, String title, LocalDate startAt, LocalDate endAt,
+        CoverImage image) {
+        return new Session(1L, sessionId, title, startAt, endAt, image, 0L, SessionType.FREE, new FreeSessionPolicy());
     }
 
-    public static Session createPaidSession(LocalDate startAt, LocalDate endAt, CoverImage image,
-        int studentCapacity, Long sessionFee) {
-        return new Session(1L, startAt, endAt, image, sessionFee, new PaidSessionPolicy(studentCapacity, sessionFee));
+    public static Session createPaidSession(Long sessionId, String title, LocalDate startAt, LocalDate endAt,
+        CoverImage image, int studentCapacity, Long sessionFee) {
+        return new Session(1L, sessionId, title, startAt, endAt, image, sessionFee, SessionType.PAID,
+            new PaidSessionPolicy(studentCapacity, sessionFee));
     }
 
     public void open() {
@@ -51,7 +58,7 @@ public class Session {
     }
 
     public boolean isFree() {
-        return sessionPolicy.getSessionPaymentType() == SessionPaymentType.FREE;
+        return sessionType == SessionType.FREE;
     }
 
     public Long getId() {
