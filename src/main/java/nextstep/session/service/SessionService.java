@@ -26,8 +26,9 @@ public class SessionService {
 
         if (session.isFree()) {
             session.enroll(Enrollment.free(1L, session, user));
-        } else {
-            Payment payment = paymentService.payment("결제 id"); // 결제에 대한 정책이 없으므로 ID를 임시 하드코딩함
+        }
+        if (session.isPaid()) {
+            Payment payment = paymentService.getPaymentHistory(user, session.getId());
             session.enroll(Enrollment.paid(1L, session, user, payment));
         }
     }

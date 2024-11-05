@@ -61,6 +61,10 @@ public class Session {
         return sessionType == SessionType.FREE;
     }
 
+    public boolean isPaid() {
+        return sessionType == SessionType.PAID;
+    }
+
     public Long getId() {
         return id;
     }
