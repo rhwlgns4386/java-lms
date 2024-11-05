@@ -42,7 +42,7 @@ class SessionTest {
             null, 1,
             10_000L);
         Payment payment = new Payment("payment_id", session.getId(), NsUserTest.JAVAJIGI.getId(), 10_000L);
-        Enrollment enrollment = new Enrollment(1L, session, NsUserTest.JAVAJIGI, payment);
+        Enrollment enrollment = Enrollment.paid(1L, session, NsUserTest.JAVAJIGI, payment);
 
         session.open();
         session.enroll(enrollment);
@@ -58,7 +58,7 @@ class SessionTest {
             null, 1,
             10_000L);
         Payment payment = new Payment("payment_id", session.getId(), NsUserTest.JAVAJIGI.getId(), 2_000L);
-        Enrollment enrollment = new Enrollment(1L, session, NsUserTest.JAVAJIGI, payment);
+        Enrollment enrollment = Enrollment.paid(1L, session, NsUserTest.JAVAJIGI, payment);
 
         session.open();
 
@@ -69,11 +69,9 @@ class SessionTest {
     @Test
     @DisplayName("수강신청 시 수강인원이 증가한다.")
     void incrementEnrollStudentCountWhenEnrollTest() {
-        Session session = Session.createPaidSession(1L, "title", LocalDate.of(2024, 1, 1), LocalDate.of(2024, 12, 1),
-            null, 1,
-            10_000L);
-        Payment payment = new Payment("payment_id", session.getId(), NsUserTest.JAVAJIGI.getId(), 10_000L);
-        Enrollment enrollment = new Enrollment(1L, session, NsUserTest.JAVAJIGI, payment);
+        Session session = Session.createFreeSession(1L, "title", LocalDate.of(2024, 1, 1), LocalDate.of(2024, 12, 1),
+            null);
+        Enrollment enrollment = Enrollment.free(1L, session, NsUserTest.JAVAJIGI);
 
         session.open();
         session.enroll(enrollment);
@@ -87,8 +85,7 @@ class SessionTest {
         Session session = Session.createPaidSession(1L, "title", LocalDate.of(2024, 1, 1), LocalDate.of(2024, 12, 1),
             null, 1,
             10_000L);
-        Payment payment = new Payment("payment_id", session.getId(), NsUserTest.JAVAJIGI.getId(), 10_000L);
-        Enrollment enrollment = new Enrollment(1L, session, NsUserTest.JAVAJIGI, payment);
+        Enrollment enrollment = Enrollment.free(1L, session, NsUserTest.JAVAJIGI);
 
         assertThatThrownBy(() -> session.enroll(enrollment)).isInstanceOf(IllegalArgumentException.class)
             .hasMessage("모집중 상태의 강의가 아닙니다.");

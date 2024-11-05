@@ -54,7 +54,7 @@ public class Session {
         if (sessionStatus != SessionStatus.OPEN) {
             throw new IllegalArgumentException("모집중 상태의 강의가 아닙니다.");
         }
-        sessionPolicy.validatePolicy(getEnrolledUserCount(), enrollment.getPaymentAmount());
+        sessionPolicy.validatePolicy(getEnrolledUserCount(), enrollment);
     }
 
     public boolean isFree() {

@@ -25,10 +25,10 @@ public class SessionService {
             .orElseThrow(() -> new IllegalArgumentException("강의를 찾을 수 없습니다."));
 
         if (session.isFree()) {
-            session.enroll(new Enrollment(1L, session, user, null));
+            session.enroll(Enrollment.free(1L, session, user));
         } else {
             Payment payment = paymentService.payment("결제 id"); // 결제에 대한 정책이 없으므로 ID를 임시 하드코딩함
-            session.enroll(new Enrollment(1L, session, user, payment));
+            session.enroll(Enrollment.paid(1L, session, user, payment));
         }
     }
 }

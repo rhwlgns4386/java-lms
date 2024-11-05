@@ -12,12 +12,20 @@ public class Enrollment {
     private final LocalDateTime enrollmentDate;
     private final Payment payment;
 
-    public Enrollment(Long id, Session session, NsUser nsUser, Payment payment) {
+    private Enrollment(Long id, Session session, NsUser nsUser, Payment payment) {
         this.id = id;
         this.session = session;
         this.nsUser = nsUser;
         this.enrollmentDate = LocalDateTime.now();
         this.payment = payment;
+    }
+
+    public static Enrollment free(Long id, Session session, NsUser nsUser) {
+        return new Enrollment(id, session, nsUser, null);
+    }
+
+    public static Enrollment paid(Long id, Session session, NsUser nsUser, Payment payment) {
+        return new Enrollment(id, session, nsUser, payment);
     }
 
     public Long getPaymentAmount() {
