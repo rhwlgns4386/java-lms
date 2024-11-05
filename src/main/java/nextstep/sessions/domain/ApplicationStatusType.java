@@ -3,9 +3,9 @@ package nextstep.sessions.domain;
 import java.util.Arrays;
 
 public enum ApplicationStatusEnum {
-    apply("00"),
-    approve("01"),
-    cancel("99");
+    APPLY("00"),
+    APPROVE("01"),
+    CANCEL("99");
     private String statusCode ;
 
     ApplicationStatusEnum(String statusCode) {
