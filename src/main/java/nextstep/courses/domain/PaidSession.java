@@ -11,10 +11,13 @@ public class PaidSession extends Session implements SessionStrategy {
 
     private int studentMaxCount;
 
-    public PaidSession(SessionInfo sessionInfo, SessionImage sessionImage,
-                       long salePrice, StateCode stateCode, int studentMaxCount) {
-        super(sessionInfo, sessionImage, salePrice, stateCode, SessionType.PAID);
+    public PaidSession(SessionInfo sessionInfo, SessionImage sessionImage, SessionPrice sessionPrice, int studentMaxCount) {
+        super(sessionInfo, sessionImage, sessionPrice, SessionType.PAID);
         this.studentMaxCount = studentMaxCount;
+
+        if(sessionPrice.getSalePrice() <= 0 ){
+            throw new IllegalArgumentException("유료강의는 0원 이하가 될 수 없습니다.");
+        }
     }
 
     public void validateOrderSession(RequestOrderParam requestOrderParam) throws CannotRegisteSessionException {

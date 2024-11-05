@@ -1,7 +1,7 @@
 package nextstep.courses.service;
 
+import nextstep.courses.domain.SessionPrice;
 import nextstep.courses.domain.Students;
-import nextstep.courses.domain.ProgressCode;
 import nextstep.courses.exception.CannotRegisteSessionException;
 import nextstep.courses.infrastructure.SessionRepository;
 import nextstep.courses.request.RequestOrderParam;
@@ -10,7 +10,6 @@ import nextstep.courses.domain.SessionFactory;
 import nextstep.courses.domain.SessionImage;
 import nextstep.courses.domain.SessionInfo;
 import nextstep.courses.domain.SessionType;
-import nextstep.courses.domain.StateCode;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
 import org.springframework.stereotype.Service;
@@ -24,8 +23,8 @@ public class SessionService {
         this.sessionRepository = sessionRepository;
     }
 
-    public void registerPaidSession(SessionInfo sessionInfo, SessionImage sessionImage, long salePrice, StateCode stateCode, int studentMaxCount, SessionType sessionType) {
-        Session session = SessionFactory.createSession(sessionInfo, sessionImage, salePrice, stateCode, studentMaxCount, sessionType);
+    public void registerPaidSession(SessionInfo sessionInfo, SessionImage sessionImage, SessionPrice salePrice, int studentMaxCount, SessionType sessionType) {
+        Session session = SessionFactory.createSession(sessionInfo, sessionImage, salePrice, studentMaxCount, sessionType);
 
         sessionRepository.saveRegisterSession(session);
     }

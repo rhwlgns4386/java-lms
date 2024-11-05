@@ -3,32 +3,32 @@ package nextstep.courses.domain;
 import java.time.LocalDateTime;
 
 public class SessionInfo {
-    long sessionId;
+    private final long sessionId;
 
-    private String title;
+    SessionMetaData sessionMetaData;
 
     private SessionPeriod sessionPeriod;
 
-    private String creatorId;
+    private StateCode stateCode;
 
-    public SessionInfo(String title, LocalDateTime applyStartDate, LocalDateTime applyEndDate,
-                       String creatorId) {
-        this(-1, title, applyStartDate, applyEndDate, creatorId);
+
+    public SessionInfo(SessionMetaData sessionMetaData, SessionPeriod sessionPeriod, StateCode stateCode) {
+        this(-1, sessionMetaData, sessionPeriod, stateCode);
     }
 
-    public SessionInfo(long sessionId, String title, LocalDateTime applyStartDate, LocalDateTime applyEndDate, String creatorId) {
+    public SessionInfo(long sessionId, SessionMetaData sessionMetaData, SessionPeriod sessionPeriod, StateCode stateCode) {
         this.sessionId = sessionId;
-        this.title = title;
-        this.sessionPeriod = new SessionPeriod(applyStartDate, applyEndDate);
-        this.creatorId = creatorId;
+        this.sessionPeriod = sessionPeriod;
+        this.sessionMetaData = sessionMetaData;
+        this.stateCode = stateCode;
     }
 
     public String getTitle() {
-        return title;
+        return sessionMetaData.getTitle();
     }
 
     public String getCreatorId() {
-        return creatorId;
+        return sessionMetaData.getCreatorId();
     }
 
     public LocalDateTime getApplyStartDate() {
@@ -42,6 +42,15 @@ public class SessionInfo {
     public long getSessionId() {
         return sessionId;
     }
+
+    public void validateOrderSessionStatus() {
+        stateCode.validateOrderSessionStatus();
+    }
+
+    public int getStatusCode() {
+        return stateCode.getStatusCode();
+    }
+
 }
 
 
