@@ -1,6 +1,5 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.session;
 
-import nextstep.courses.domain.session.Registration;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUserTest;
 import org.assertj.core.api.Assertions;

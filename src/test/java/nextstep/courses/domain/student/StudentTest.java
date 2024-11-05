@@ -1,7 +1,5 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.student;
 
-import nextstep.courses.domain.student.Student;
-import nextstep.courses.domain.student.StudentStatus;
 import nextstep.users.domain.NsUser;
 import nextstep.users.domain.NsUserTest;
 import org.assertj.core.api.Assertions;

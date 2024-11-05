@@ -1,10 +1,10 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.session;
 
 import nextstep.courses.domain.image.Image;
 import nextstep.courses.domain.image.ImagePixel;
 import nextstep.courses.domain.image.ImageSize;
 import nextstep.courses.domain.image.ImageType;
-import nextstep.courses.domain.session.*;
+import nextstep.courses.domain.lecturer.LecturerTest;
 import nextstep.courses.domain.student.Student;
 import nextstep.courses.domain.student.StudentStatus;
 import nextstep.payments.domain.Payment;

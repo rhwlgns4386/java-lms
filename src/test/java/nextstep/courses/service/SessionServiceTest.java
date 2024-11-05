@@ -1,8 +1,8 @@
 package nextstep.courses.service;
 
-import nextstep.courses.domain.LecturerTest;
 import nextstep.courses.domain.image.*;
 import nextstep.courses.domain.lecturer.LecturerRepository;
+import nextstep.courses.domain.lecturer.LecturerTest;
 import nextstep.courses.domain.session.*;
 import nextstep.courses.domain.student.Student;
 import nextstep.courses.domain.student.StudentRepository;

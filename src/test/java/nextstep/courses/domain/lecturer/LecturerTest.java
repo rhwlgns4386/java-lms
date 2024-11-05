@@ -1,6 +1,5 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.lecturer;
 
-import nextstep.courses.domain.lecturer.Lecturer;
 import nextstep.users.domain.NsUserTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

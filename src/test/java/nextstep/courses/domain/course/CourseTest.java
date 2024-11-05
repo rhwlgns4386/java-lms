@@ -1,6 +1,5 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.course;
 
-import nextstep.courses.domain.course.Course;
 import nextstep.courses.domain.image.Image;
 import nextstep.courses.domain.image.ImagePixel;
 import nextstep.courses.domain.image.ImageSize;
