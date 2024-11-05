@@ -16,6 +16,8 @@ public class Payment {
 
     private LocalDateTime createdAt;
 
+    private boolean isCompleted;
+
     public Payment() {
     }
 
@@ -25,5 +27,9 @@ public class Payment {
         this.nsUserId = nsUserId;
         this.amount = amount;
         this.createdAt = LocalDateTime.now();
+    }
+
+    public boolean isPaymentCompleted() {
+        return isCompleted;
     }
 }
