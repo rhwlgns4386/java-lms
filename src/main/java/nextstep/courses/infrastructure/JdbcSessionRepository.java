@@ -1,10 +1,7 @@
 package nextstep.courses.infrastructure;
 
 import nextstep.courses.domain.SessionRepository;
-import nextstep.courses.domain.session.Session;
-import nextstep.courses.domain.session.SessionPay;
-import nextstep.courses.domain.session.SessionPeriod;
-import nextstep.courses.domain.session.SessionStudents;
+import nextstep.courses.domain.session.*;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -28,15 +25,16 @@ public class JdbcSessionRepository implements SessionRepository {
         StringBuilder sb = new StringBuilder();
 
         sb.append("insert into course_session");
-        sb.append(" (course_id, session_status, maximum_number_people, session_pay, session_pay_type, start_date, end_date) ");
+        sb.append(" (course_id, session_status, maximum_number_people, session_pay, session_pay_type, start_date, end_date, progress_status, recruit_status) ");
         sb.append("values");
-        sb.append(" (?, ?, ?, ?, ?, ?, ?);");
+        sb.append(" (?, ?, ?, ?, ?, ?, ?, ?, ?);");
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         SessionPay sessionPay = session.getSessionPay();
         SessionStudents students = session.getStudents();
         SessionPeriod period = session.getPeriod();
+        SessionApplyStatus applyStatus = session.getApplyStatus();
 
         jdbcTemplate.update(connect -> {
             PreparedStatement ps = connect.prepareStatement(sb.toString(), new String[]{"id"});
@@ -47,6 +45,8 @@ public class JdbcSessionRepository implements SessionRepository {
             ps.setString(5, sessionPay.getSessionPayType().toString());
             ps.setTimestamp(6, toTimeStamp(period.getStartDate()));
             ps.setTimestamp(7, toTimeStamp(period.getEndDate()));
+            ps.setString(8, applyStatus.getProgressStatus().toString());
+            ps.setString(9, applyStatus.getRecruitStatus().toString());
             return ps;
         }, keyHolder);
 
@@ -59,7 +59,7 @@ public class JdbcSessionRepository implements SessionRepository {
 
         sb.append("select ");
         sb.append(" id, course_id, session_status, session_pay, session_pay_type, ");
-        sb.append(" start_date, end_date, maximum_number_people ");
+        sb.append(" start_date, end_date, maximum_number_people, progress_status, recruit_status ");
         sb.append("from course_session ");
         sb.append("where id = ? ");
 
@@ -75,8 +75,11 @@ public class JdbcSessionRepository implements SessionRepository {
                         toLocalDateTime(rs.getTimestamp(6)),
                         toLocalDateTime(rs.getTimestamp(7))
                 ),
-                rs.getInt(8)
-
+                rs.getInt(8),
+                new SessionApplyStatus(
+                        SessionProgressStatus.search(rs.getString(9)),
+                        SessionRecruitStatus.search(rs.getString(10))
+                )
         ));
         return jdbcTemplate.queryForObject(sb.toString(), rowMapper, id);
     }

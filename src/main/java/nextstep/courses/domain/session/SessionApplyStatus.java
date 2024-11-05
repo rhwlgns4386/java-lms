@@ -11,9 +11,25 @@ public class SessionApplyStatus {
         this.recruitStatus = recruitStatus;
     }
 
-    void validate(){
-        if(!progressStatus.isApply() && !recruitStatus.isApply()){
+    void validate() {
+        if (!progressStatus.isApply() && !recruitStatus.isApply()) {
             throw new SessionException("수강 신청을 할 수 없습니다.");
         }
+    }
+
+    public SessionProgressStatus getProgressStatus() {
+        return progressStatus;
+    }
+
+    public SessionRecruitStatus getRecruitStatus() {
+        return recruitStatus;
+    }
+
+    public void recruiting() {
+        this.recruitStatus = SessionRecruitStatus.RECRUITING;
+    }
+
+    public void finish() {
+        this.progressStatus = SessionProgressStatus.FINISH;
     }
 }

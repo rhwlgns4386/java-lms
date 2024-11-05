@@ -11,7 +11,7 @@
 ### SessionApplyStatus (강의 지원 상태)
 - [x] 검증(진행중, 모집중)둘 다 아니면 예외
 - [x] SessionStatus유지 하고(SessionProgressStatus, SessionRecruitStatus - null 허용하여 컬럼생성)
-- [ ] 수강 신청시 모집중 or 진행중 상태에서만 가능
+- [x] 수강 신청시 모집중 or 진행중 상태에서만 가능
 
 ---
 
