@@ -1,28 +1,49 @@
 package nextstep.session.domain;
 
-import nextstep.payments.domain.Payment;
-import nextstep.users.domain.NsUser;
+import java.time.LocalDateTime;
 
 public class SessionUser {
-    private final NsUser user;
-    private final Session session;
-    private final Payment payment;
+    private final Long sessionId;
+    private final Long userId;
+    private final LocalDateTime createdAt;
+    private final LocalDateTime updatedAt;
 
-    public SessionUser(final NsUser user, final Session session) {
-        this(user, session, null);
+    public SessionUser(final Long sessionId, final Long userId) {
+        this(sessionId, userId, LocalDateTime.now(), null);
     }
 
-    public SessionUser(final NsUser user, final Session session, final Payment payment) {
-        this.user = user;
-        this.session = session;
-        this.payment = payment;
+    public SessionUser(final Long sessionId, final Long userId, final LocalDateTime createdAt, final LocalDateTime updatedAt) {
+        this.sessionId = sessionId;
+        this.userId = userId;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
-    public boolean hasPaidFee(final Money fee) {
-        if (payment == null) {
-            return false;
-        }
+    public boolean matchSessionUser(final SessionUser sessionUser) {
+        return matchUser(sessionUser.userId) && matchSession(sessionUser.sessionId);
+    }
 
-        return payment.isEqualsFee(fee);
+    private boolean matchUser(final Long targetId) {
+        return userId.equals(targetId);
+    }
+
+    private boolean matchSession(final Long targetId) {
+        return sessionId.equals(targetId);
+    }
+
+    public Long getSessionId() {
+        return sessionId;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 }
