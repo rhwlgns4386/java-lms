@@ -2,13 +2,11 @@ package nextstep.payments.domain;
 
 import java.time.LocalDateTime;
 
-import nextstep.courses.utils.UUIDGenerator;
-
 public class Payment {
     private String id;
 
     // 결제한 강의 아이디
-    private String sessionId;
+    private Long sessionId;
 
     // 결제한 사용자 아이디
     private Long nsUserId;
@@ -21,8 +19,8 @@ public class Payment {
     public Payment() {
     }
 
-    public Payment(String sessionId, Long nsUserId, Long amount) {
-        this.id = UUIDGenerator.getUUID();
+    public Payment(String id, Long sessionId, Long nsUserId, Long amount) {
+        this.id = id;
         this.sessionId = sessionId;
         this.nsUserId = nsUserId;
         this.amount = amount;

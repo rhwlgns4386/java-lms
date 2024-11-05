@@ -38,51 +38,39 @@ class SessionTest {
     @Test
     @DisplayName("유료강의 수강신청 시 인원이 초과된 경우 예외가 발생한다.")
     void throwExceptionWhenOverCapacity() {
-        Session session = Session.createPaidSession(
-            LocalDate.of(2024, 1, 1),
-            LocalDate.of(2024, 12, 1),
-            null,
-            1,
+        Session session = Session.createPaidSession(LocalDate.of(2024, 1, 1), LocalDate.of(2024, 12, 1), null, 1,
             10_000L);
-        Payment payment = new Payment(session.getId(), NsUserTest.JAVAJIGI.getId(), 10_000L);
-        Enrollment enrollment = new Enrollment(session, NsUserTest.JAVAJIGI, payment);
+        Payment payment = new Payment("payment_id", session.getId(), NsUserTest.JAVAJIGI.getId(), 10_000L);
+        Enrollment enrollment = new Enrollment(1L, session, NsUserTest.JAVAJIGI, payment);
 
         session.open();
         session.enroll(enrollment);
 
-        assertThatThrownBy(() -> session.enroll(enrollment))
-            .isInstanceOf(IllegalArgumentException.class)
+        assertThatThrownBy(() -> session.enroll(enrollment)).isInstanceOf(IllegalArgumentException.class)
             .hasMessage("정원을 초과했습니다.");
     }
 
     @Test
     @DisplayName("유료강의 수강신청 시 수강료와 결제금액이 일치하지 않는 경우 예외가 발생한다.")
     void throwExceptionWhenSessionFeeDoesNotMatchPaymentAmount() {
-        Session session = Session.createPaidSession(
-            LocalDate.of(2024, 1, 1),
-            LocalDate.of(2024, 12, 1),
-            null,
-            1, 10_000L);
-        Payment payment = new Payment(session.getId(), NsUserTest.JAVAJIGI.getId(), 2_000L);
-        Enrollment enrollment = new Enrollment(session, NsUserTest.JAVAJIGI, payment);
+        Session session = Session.createPaidSession(LocalDate.of(2024, 1, 1), LocalDate.of(2024, 12, 1), null, 1,
+            10_000L);
+        Payment payment = new Payment("payment_id", session.getId(), NsUserTest.JAVAJIGI.getId(), 2_000L);
+        Enrollment enrollment = new Enrollment(1L, session, NsUserTest.JAVAJIGI, payment);
 
         session.open();
 
-        assertThatThrownBy(() -> session.enroll(enrollment))
-            .isInstanceOf(IllegalArgumentException.class)
+        assertThatThrownBy(() -> session.enroll(enrollment)).isInstanceOf(IllegalArgumentException.class)
             .hasMessage("결제금액이 수강료와 일치하지 않습니다.");
     }
 
     @Test
     @DisplayName("수강신청 시 수강인원이 증가한다.")
     void incrementEnrollStudentCountWhenEnrollTest() {
-        Session session = Session.createPaidSession(
-            LocalDate.of(2024, 1, 1),
-            LocalDate.of(2024, 12, 1),
-            null,
-            1, 10_000L);
-        Payment payment = new Payment(session.getId(), NsUserTest.JAVAJIGI.getId(), 10_000L);
-        Enrollment enrollment = new Enrollment(session, NsUserTest.JAVAJIGI, payment);
+        Session session = Session.createPaidSession(LocalDate.of(2024, 1, 1), LocalDate.of(2024, 12, 1), null, 1,
+            10_000L);
+        Payment payment = new Payment("payment_id", session.getId(), NsUserTest.JAVAJIGI.getId(), 10_000L);
+        Enrollment enrollment = new Enrollment(1L, session, NsUserTest.JAVAJIGI, payment);
 
         session.open();
         session.enroll(enrollment);
@@ -93,16 +81,12 @@ class SessionTest {
     @Test
     @DisplayName("수강신청 시 모집중 상태가 아닐 경우 예외가 발생한다.")
     void resTest() {
-        Session session = Session.createPaidSession(
-            LocalDate.of(2024, 1, 1),
-            LocalDate.of(2024, 12, 1),
-            null,
-            1, 10_000L);
-        Payment payment = new Payment(session.getId(), NsUserTest.JAVAJIGI.getId(), 10_000L);
-        Enrollment enrollment = new Enrollment(session, NsUserTest.JAVAJIGI, payment);
+        Session session = Session.createPaidSession(LocalDate.of(2024, 1, 1), LocalDate.of(2024, 12, 1), null, 1,
+            10_000L);
+        Payment payment = new Payment("payment_id", session.getId(), NsUserTest.JAVAJIGI.getId(), 10_000L);
+        Enrollment enrollment = new Enrollment(1L, session, NsUserTest.JAVAJIGI, payment);
 
-        assertThatThrownBy(() -> session.enroll(enrollment))
-            .isInstanceOf(IllegalArgumentException.class)
+        assertThatThrownBy(() -> session.enroll(enrollment)).isInstanceOf(IllegalArgumentException.class)
             .hasMessage("모집중 상태의 강의가 아닙니다.");
     }
 

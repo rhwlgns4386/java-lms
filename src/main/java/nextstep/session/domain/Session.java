@@ -4,21 +4,19 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-import nextstep.courses.utils.UUIDGenerator;
-
 public class Session {
-    private final String id;
+    private final Long id;
     private final LocalDate startAt;
     private final LocalDate endAt;
     private final CoverImage image;
-    private final Set<Enrollment> enrollments = new HashSet<>();
     private final Long sessionFee;
     private final SessionPolicy sessionPolicy;
     private SessionStatus sessionStatus;
+    private final Set<Enrollment> enrollments = new HashSet<>();
 
-    public Session(LocalDate startAt, LocalDate endAt, CoverImage image, Long sessionFee,
+    public Session(Long id, LocalDate startAt, LocalDate endAt, CoverImage image, Long sessionFee,
         SessionPolicy sessionPolicy) {
-        this.id = UUIDGenerator.getUUID();
+        this.id = id;
         this.startAt = startAt;
         this.endAt = endAt;
         this.image = image;
@@ -27,25 +25,13 @@ public class Session {
         this.sessionStatus = SessionStatus.PENDING;
     }
 
-    public String getId() {
-        return id;
-    }
-
     public static Session createFreeSession(LocalDate startAt, LocalDate endAt, CoverImage image) {
-        return new Session(startAt, endAt, image, 0L, new FreeSessionPolicy());
+        return new Session(1L, startAt, endAt, image, 0L, new FreeSessionPolicy());
     }
 
     public static Session createPaidSession(LocalDate startAt, LocalDate endAt, CoverImage image,
         int studentCapacity, Long sessionFee) {
-        return new Session(startAt, endAt, image, sessionFee, new PaidSessionPolicy(studentCapacity, sessionFee));
-    }
-
-    public SessionStatus getCourseStatus() {
-        return sessionStatus;
-    }
-
-    public int getEnrolledUserCount() {
-        return enrollments.size();
+        return new Session(1L, startAt, endAt, image, sessionFee, new PaidSessionPolicy(studentCapacity, sessionFee));
     }
 
     public void open() {
@@ -66,5 +52,17 @@ public class Session {
 
     public boolean isFree() {
         return sessionPolicy.getSessionPaymentType() == SessionPaymentType.FREE;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public SessionStatus getCourseStatus() {
+        return sessionStatus;
+    }
+
+    public int getEnrolledUserCount() {
+        return enrollments.size();
     }
 }
