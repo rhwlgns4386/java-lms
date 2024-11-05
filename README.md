@@ -1,11 +1,16 @@
 # 기능 구현 및 도메인 정리
 
-## 4단계 요구사항 및 TODO
+## 4단계 요구사항
 - 강의 수강신청은 강의 상태가 모집중일 때만 가능하다.
     - 강의가 진행 중인 상태에서도 수강신청이 가능해야 한다.
     - 강의 진행 상태(준비중, 진행중, 종료)와 모집 상태(비모집중, 모집중)로 상태 값을 분리해야 한다.
 
-- [ ] SessionStatus유지 하고(SessionProgressStatus, SessionRecruitStatus - null 허용하여 컬럼생성)
+### SessionProgressStatus(강의 진행 상태), SessionRecruitStatus(모집 상태)
+- [x] 문자열로 검색, 지원 가능한지 여부 반환 
+
+### SessionApplyStatus (강의 지원 상태)
+- [x] 검증(진행중, 모집중)둘 다 아니면 예외
+- [x] SessionStatus유지 하고(SessionProgressStatus, SessionRecruitStatus - null 허용하여 컬럼생성)
 - [ ] 수강 신청시 모집중 or 진행중 상태에서만 가능
 
 ---
@@ -34,6 +39,9 @@
 - [ ] GUEST가 아니면(선발된 회원) 수강 취소 시 예외
 - [ ] GUEST가 아니면(선발된 회원)면 수강 가능
 
+
+---
+# 이전 STEP
 
 ## DONE
 - [x] 서비스 구현
