@@ -1,48 +1,86 @@
 package nextstep.courses.domain.session;
 
+import nextstep.courses.domain.cover.CoverImage;
+import nextstep.courses.domain.cover.CoverImages;
+import nextstep.courses.domain.enrollment.Enrollment;
+import nextstep.courses.domain.enrollment.Student;
+import nextstep.courses.type.RecruitState;
+import nextstep.courses.type.SelectionType;
 import nextstep.courses.type.SessionState;
 import nextstep.payments.domain.Payment;
+import nextstep.users.domain.NsUser;
 
+import java.io.File;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 public abstract class Session {
 
     public static final int NOT_ASSIGNED = -1;
-    static final int INIT_ENROLLMENT = 0;
 
     protected final Long id;
     private CoverImage coverImage;
-    private SessionState sessionState;
+    private CoverImages coverImages;
+    private SessionStatus sessionStatus;
     protected final Enrollment enrollment;
     protected final SessionDuration sessionDuration;
 
-    protected Session(CoverImage coverImage, int maxEnrollment, SessionState sessionState,
+    protected Session(Long id, CoverImage coverImage, int maxEnrollment, int enrollment, SessionState sessionState,
+                      RecruitState recruitState, SelectionType selectionType, LocalDateTime startDate, LocalDateTime endDate) {
+        this(id, coverImage, CoverImages.of(coverImage), maxEnrollment, enrollment, sessionState, recruitState,
+                selectionType, startDate, endDate);
+    }
+
+    protected Session(Long id, CoverImage coverImage, CoverImages coverImages, int maxEnrollment, int enrollment,
+                      SessionState sessionState, RecruitState recruitState, SelectionType selectionType,
                       LocalDateTime startDate, LocalDateTime endDate) {
-        this((long) NOT_ASSIGNED, coverImage, maxEnrollment, INIT_ENROLLMENT, sessionState, startDate, endDate);
-    }
-
-    protected Session(CoverImage coverImage, int maxEnrollment, int enrollment,
-                      SessionState sessionState, LocalDateTime startDate, LocalDateTime endDate) {
-        this((long) NOT_ASSIGNED, coverImage, maxEnrollment, enrollment, sessionState, startDate, endDate);
-    }
-
-    protected Session(Long id, CoverImage coverImage, int maxEnrollment, int enrollment,
-                      SessionState sessionState, LocalDateTime startDate, LocalDateTime endDate) {
         this.id = id;
-        this.sessionState = sessionState;
+        this.sessionStatus = new SessionStatus(sessionState, recruitState);
         this.coverImage = coverImage;
-        this.enrollment = new Enrollment(enrollment, maxEnrollment);
+        this.coverImages = coverImages;
+        this.enrollment = new Enrollment(enrollment, maxEnrollment, selectionType);
         this.sessionDuration = new SessionDuration(startDate, endDate);
     }
 
-    protected Session(Long id, CoverImage coverImage, int maxEnrollment,
-                      SessionState sessionState, LocalDateTime startDate, LocalDateTime endDate) {
+    protected Session(Long id, CoverImage coverImage, CoverImages coverImages, int maxEnrollment,
+                      int enrollment, SessionState sessionState, RecruitState recruitState, SelectionType selectionType,
+                      LocalDateTime startDate, LocalDateTime endDate, List<Student> students) {
         this.id = id;
-        this.sessionState = sessionState;
+        this.sessionStatus = new SessionStatus(sessionState, recruitState);
         this.coverImage = coverImage;
-        this.enrollment = new Enrollment(maxEnrollment);
+        this.coverImages = coverImages;
+        this.enrollment = new Enrollment(enrollment, maxEnrollment, students, selectionType);
         this.sessionDuration = new SessionDuration(startDate, endDate);
+    }
+
+    public final boolean apply(Student user, Payment payment) {
+        validateSessionState();
+        if (isValidPayment(payment)) {
+            enrollment.apply(user);
+            return true;
+        }
+        throw new IllegalStateException("결제 내역(금액 등)과 강의 수강 조건이 일치하지 않습니다");
+    }
+
+    private void validateSessionState() {
+        if (!sessionStatus.canRegister()) {
+            throw new IllegalStateException("모집 중 상태가 아니기 때문에 강의 신청할 수 없습니다");
+        }
+    }
+
+    public final Student register(NsUser user) {
+        return enrollment.register(user);
+    }
+
+    protected abstract boolean isValidPayment(Payment payment);
+
+    public Student reject(NsUser student) {
+        return enrollment.reject(student);
+    }
+
+    public Student select(NsUser student) {
+        return enrollment.select(student);
     }
 
     public final boolean register(Payment payment) {
@@ -55,20 +93,16 @@ public abstract class Session {
         throw new IllegalStateException("결제 내역(금액 등)과 강의 수강 조건이 일치하지 않습니다");
     }
 
-    private void validateSessionState() {
-        if (!sessionState.canRegister()) {
-            throw new IllegalStateException(sessionState.getDesc() + " 상태이기 때문에 강의 신청할 수 없습니다");
-        }
+    public final void addCoverImage(String coverFilePath) {
+        coverImages.add(coverFilePath);
     }
 
-    protected abstract boolean isValidPayment(Payment payment);
-
-    public final boolean isSameId(Payment payment) {
-        return payment.isSameSessionId(id);
+    public final void addCoverImage(File coverFile) {
+        coverImages.add(coverFile);
     }
 
-    public final boolean isPersisted() {
-        return !id.equals((long) NOT_ASSIGNED);
+    public final void addCoverImage(CoverImage coverImage) {
+        coverImages.add(coverImage);
     }
 
     public abstract long getSessionFee();
@@ -78,11 +112,19 @@ public abstract class Session {
     }
 
     public final SessionState getSessionState() {
-        return sessionState;
+        return sessionStatus.getSessionState();
+    }
+
+    public final RecruitState getRecruitState() {
+        return sessionStatus.getRecruitState();
     }
 
     public final String getCoverFilePath() {
         return coverImage.getFilePath();
+    }
+
+    public final List<String> getCoverFilePaths() {
+        return coverImages.coverImagePaths();
     }
 
     public final int getEnrollment() {
@@ -91,6 +133,10 @@ public abstract class Session {
 
     public final int getMaxEnrollment() {
         return enrollment.getMaxEnrollment();
+    }
+
+    public final SelectionType getSelectionType() {
+        return enrollment.getSelectionType();
     }
 
     public final LocalDateTime getStartDate() {

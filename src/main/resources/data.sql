@@ -1,5 +1,6 @@
 INSERT INTO ns_user (id, user_id, password, name, email, created_at) values (1, 'javajigi', 'test', '자바지기', 'javajigi@slipp.net', CURRENT_TIMESTAMP());
 INSERT INTO ns_user (id, user_id, password, name, email, created_at) values (2, 'sanjigi', 'test', '산지기', 'sanjigi@slipp.net', CURRENT_TIMESTAMP());
+INSERT INTO ns_user (id, user_id, password, name, email, created_at) values (3, 'test', 'test', '테스터', 'sanjigi@slipp.net', CURRENT_TIMESTAMP());
 
 INSERT INTO question (id, writer_id, title, contents, created_at, deleted) VALUES (1, 1, '국내에서 Ruby on Rails와 Play가 활성화되기 힘든 이유는 뭘까?', 'Ruby on Rails(이하 RoR)는 2006년 즈음에 정말 뜨겁게 달아올랐다가 금방 가라 앉았다. Play 프레임워크는 정말 한 순간 잠시 눈에 뜨이다가 사라져 버렸다. RoR과 Play 기반으로 개발을 해보면 정말 생산성이 높으며, 웹 프로그래밍이 재미있기까지 하다. Spring MVC + JPA(Hibernate) 기반으로 진행하면 설정할 부분도 많고, 기본으로 지원하지 않는 기능도 많아 RoR과 Play에서 기본적으로 지원하는 기능을 서비스하려면 추가적인 개발이 필요하다.', CURRENT_TIMESTAMP(), false);
 
@@ -12,5 +13,12 @@ INSERT INTO question (id, writer_id, title, contents, created_at, deleted) VALUE
 
 INSERT INTO course (creator_id, title, created_at) VALUES ('1', '테스트기수', CURRENT_TIMESTAMP());
 
-INSERT INTO session (course_id, session_state, cover_file_path, session_fee, enrollment, max_enrollment, start_date, end_date) VALUES (1, 'OPEN', '/Users/byungilsohn/Documents/programming/nextstep/java-lms/src/test/java/nextstep/courses/domain/session/file/image.png', 0, 0, -1, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
-INSERT INTO session (course_id, session_state, cover_file_path, session_fee, enrollment, max_enrollment, start_date, end_date) VALUES (1, 'PREPARING', '/Users/byungilsohn/Documents/programming/nextstep/java-lms/src/test/java/nextstep/courses/domain/session/file/image.png', 10000, 0, 30, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+INSERT INTO session (course_id, session_state, cover_file_path, session_fee, enrollment, max_enrollment, start_date, end_date) VALUES (1, 'PROGRESS', 'src/test/java/nextstep/courses/domain/session/file/image.png', 0, 0, -1, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+INSERT INTO session (course_id, session_state, recruit_state, cover_file_path, session_fee, enrollment, max_enrollment, start_date, end_date) VALUES (1, 'PREPARING', 'RECRUIT', 'src/test/java/nextstep/courses/domain/session/file/image.png', 10000, 0, 30, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+INSERT INTO session (id, course_id, session_state, recruit_state, selection_type, cover_file_path, session_fee, enrollment, max_enrollment, start_date, end_date) VALUES (100, 1, 'PREPARING', 'RECRUIT', 'SELECTION', 'src/test/java/nextstep/courses/domain/session/file/image.png', 10000, 0, 30, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+
+INSERT INTO cover_file (file_path, session_id) values('src/test/java/nextstep/courses/domain/session/file/image.png', 1);
+INSERT INTO cover_file (file_path, session_id) values('src/test/java/nextstep/courses/domain/session/file/image.png', 2);
+
+INSERT INTO student (session_id, ns_user_id, enrollment_state) values(1, 1, 'APPLY');
+INSERT INTO student (session_id, ns_user_id, enrollment_state) values(1, 2, 'APPLY');

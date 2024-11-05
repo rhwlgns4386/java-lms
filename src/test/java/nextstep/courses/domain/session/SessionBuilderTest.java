@@ -1,5 +1,6 @@
 package nextstep.courses.domain.session;
 
+import nextstep.courses.type.RecruitState;
 import nextstep.courses.type.SessionType;
 import org.junit.jupiter.api.Test;
 
@@ -13,9 +14,10 @@ public class SessionBuilderTest {
 
     @Test
     void create_free_session() {
-        Session freeSession = freeSessionBuilder().build();
+        Session freeSession = freeSessionBuilder().recruitState(RecruitState.RECRUIT).build();
 
         assertThat(freeSession).isInstanceOf(FreeSession.class);
+        assertThat(freeSession.getRecruitState()).isEqualTo(RecruitState.RECRUIT);
     }
 
     public static SessionBuilder freeSessionBuilder() {
@@ -28,9 +30,10 @@ public class SessionBuilderTest {
 
     @Test
     void create_paid_session() {
-        Session paidSession = paidSessionBuilder().build();
+        Session paidSession = paidSessionBuilder().recruitState(RecruitState.RECRUIT).build();
 
         assertThat(paidSession).isInstanceOf(PaidSession.class);
+        assertThat(paidSession.getRecruitState()).isEqualTo(RecruitState.RECRUIT);
     }
 
     public static SessionBuilder paidSessionBuilder() {

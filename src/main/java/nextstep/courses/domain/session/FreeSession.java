@@ -1,30 +1,24 @@
 package nextstep.courses.domain.session;
 
+import nextstep.courses.domain.cover.CoverImage;
+import nextstep.courses.domain.cover.CoverImages;
+import nextstep.courses.domain.enrollment.Enrollment;
+import nextstep.courses.domain.enrollment.Student;
+import nextstep.courses.type.RecruitState;
+import nextstep.courses.type.SelectionType;
 import nextstep.courses.type.SessionState;
 import nextstep.payments.domain.Payment;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class FreeSession extends Session {
 
-    protected FreeSession(CoverImage coverImage, SessionState sessionState,
-                          LocalDateTime startDate, LocalDateTime endDate) {
-        this((long) NOT_ASSIGNED, coverImage, sessionState, startDate, endDate);
-    }
-
-    protected FreeSession(CoverImage coverImage, SessionState sessionState, int enrollment,
-                          LocalDateTime startDate, LocalDateTime endDate) {
-        this((long) NOT_ASSIGNED, coverImage, sessionState, enrollment, startDate, endDate);
-    }
-
-    protected FreeSession(Long id, CoverImage coverImage, SessionState sessionState,
-                          LocalDateTime startDate, LocalDateTime endDate) {
-        this(id, coverImage, sessionState, INIT_ENROLLMENT, startDate, endDate);
-    }
-
-    protected FreeSession(Long id, CoverImage coverImage, SessionState sessionState, int enrollment,
-                          LocalDateTime startDate, LocalDateTime endDate) {
-        super(id, coverImage, Enrollment.INFINITE_ENROLLMENT, enrollment, sessionState, startDate, endDate);
+    protected FreeSession(Long id, CoverImage coverImage, CoverImages coverImages, SessionState sessionState,
+                          RecruitState recruitState, SelectionType selectionType, int enrollment,
+                          LocalDateTime startDate, LocalDateTime endDate, List<Student> students) {
+        super(id, coverImage, coverImages, Enrollment.INFINITE_ENROLLMENT, enrollment, sessionState,
+                recruitState, selectionType, startDate, endDate, students);
     }
 
     @Override

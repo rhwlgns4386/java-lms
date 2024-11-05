@@ -1,7 +1,6 @@
 package nextstep.courses.domain.course;
 
 import nextstep.courses.domain.session.Session;
-import nextstep.payments.domain.Payment;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -31,18 +30,6 @@ public class Course {
 
     public void add(Session session) {
         sessions.add(session);
-    }
-
-    public boolean has(Session session) {
-        return sessions.contains(session);
-    }
-
-    public Session registerSession(Payment payment) {
-        return sessions.stream()
-                .filter(session -> session.isSameId(payment))
-                .peek(session -> session.register(payment))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("결제 정보에 대한 강의를 찾을 수 없습니다"));
     }
 
     public Long getId() {

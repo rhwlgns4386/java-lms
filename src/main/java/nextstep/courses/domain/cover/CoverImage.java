@@ -1,4 +1,4 @@
-package nextstep.courses.domain.session;
+package nextstep.courses.domain.cover;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
