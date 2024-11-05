@@ -1,5 +1,6 @@
 package nextstep.courses.domain;
 
+import java.util.Objects;
 import nextstep.users.domain.NsUser;
 
 public class Session {
@@ -24,8 +25,8 @@ public class Session {
         this.sessionId = sessionId;
         this.image = image;
         sessionType.validate(price, maxStudents);
-        this.sessionInfo = new SessionInfo(sessionType, price, maxStudents);
-        this.sessionRegisterInfo = new SessionRegisterInfo(sessionStatus, Students.from(), Payments.from());
+        this.sessionInfo = new SessionInfo(sessionId, sessionType, price, maxStudents);
+        this.sessionRegisterInfo = new SessionRegisterInfo(sessionId,sessionStatus, Students.from(), Payments.from());
         this.sessionDuration = sessionDuration;
     }
 
@@ -63,4 +64,41 @@ public class Session {
         return sessionRegisterInfo.getNumberOfPayments();
     }
 
+    public Long getSessionId() {
+        return sessionId;
+    }
+
+    public Image getImage() {
+        return image;
+    }
+
+    public SessionDuration getSessionDuration() {
+        return sessionDuration;
+    }
+
+    public SessionInfo getSessionInfo() {
+        return sessionInfo;
+    }
+
+    public SessionRegisterInfo getSessionRegisterInfo() {
+        return sessionRegisterInfo;
+    }
+
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Session)) {
+            return false;
+        }
+
+        Session session = (Session) o;
+        return Objects.equals(sessionId, session.sessionId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(sessionId);
+    }
 }
