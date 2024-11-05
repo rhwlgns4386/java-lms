@@ -1,14 +1,11 @@
 package nextstep.sessions.infrastructure;
 
 import nextstep.courses.domain.Course;
-import nextstep.courses.domain.CourseRepository;
 import nextstep.sessions.domain.*;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -34,9 +31,9 @@ public class JdbcSessionRepository implements SessionRepository {
             Session session = new Session(
                     rs.getLong("id"),
                     new SessionPeriod(rs.getString("start_date"),rs.getString("end_date")),
-                    new SessionStatus(rs.getString("status_code")==null ? null : SessionStatusEnum.getEnumByStatus(rs.getString("status_code")),
-                            SessionProgressStatusEnum.getByStatusCode(rs.getString("progress_status_code")),
-                            SessionRecruitmentStatusEnum.getByStatusCode(rs.getString("recruitment_status_code"))),
+                    new SessionStatus(rs.getString("status_code"),
+                            rs.getString("progress_status_code"),
+                            rs.getString("recruitment_status_code")),
                     new SessionType(rs.getLong("fee_amount"),
                             rs.getInt("maximum_number_of_applicants")),
                     toLocalDateTime(rs.getTimestamp("created_at")),
@@ -64,9 +61,9 @@ public class JdbcSessionRepository implements SessionRepository {
         RowMapper<Session> rowMapper = (rs, rowNum) -> new Session(
                 rs.getLong("id"),
                 new SessionPeriod(rs.getString("start_date"),rs.getString("end_date")),
-                new SessionStatus(SessionStatusEnum.getEnumByStatus(rs.getString("status_code")),
-                        SessionProgressStatusEnum.getByStatusCode(rs.getString("progress_status_code")),
-                        SessionRecruitmentStatusEnum.getByStatusCode(rs.getString("recruitment_status_code"))),
+                new SessionStatus(rs.getString("status_code"),
+                        rs.getString("progress_status_code"),
+                        rs.getString("recruitment_status_code")),
                 new SessionType(rs.getLong("fee_amount"),
                         rs.getInt("maximum_number_of_applicants")),
                 toLocalDateTime(rs.getTimestamp("created_at")),
@@ -90,7 +87,7 @@ public class JdbcSessionRepository implements SessionRepository {
     public int modifyStatus(Session session) {
         String sql = "update ns_session set status_code=?, progress_status_code = ? ,recruitment_status_code =? " +
                 " where id=?";
-        return this.jdbcTemplate.update(sql, null,session.getSessionStatus().getProgressStatus().getStatusCode(),
+        return this.jdbcTemplate.update(sql, session.getSessionStatus().getStatus(),session.getSessionStatus().getProgressStatus().getStatusCode(),
                 session.getSessionStatus().getRecruitmentStatus().getStatusCode(), session.getId());
     }
 

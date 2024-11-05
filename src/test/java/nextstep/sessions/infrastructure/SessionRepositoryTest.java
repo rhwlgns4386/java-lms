@@ -1,8 +1,6 @@
 package nextstep.sessions.infrastructure;
 
 import nextstep.courses.domain.Course;
-import nextstep.courses.domain.CourseRepository;
-import nextstep.courses.infrastructure.JdbcCourseRepository;
 import nextstep.sessions.domain.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,6 +13,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @JdbcTest
 public class SessionRepositoryTest {
@@ -41,15 +40,13 @@ public class SessionRepositoryTest {
         Session savedSession = sessionRepository.findById(1L).orElse(null);
         assertThat(savedSession.getId()).isEqualTo(1L);
         assertThat(savedSession.getTypeCode()).isEqualTo(SessionTypeEnum.PAID.getTypeCode());
-        assertThat(savedSession.getStatusCode()).isEqualTo(SessionStatusEnum.PREPARING.getValue());
-
+        assertTrue(savedSession.isPreparing());
         assertThat(savedSession.getCourseId()).isEqualTo(1L);
 
         savedSession.startRecruiting();
         sessionRepository.modifyStatus(savedSession);
         Session statusModifiedSession = sessionRepository.findById(1L).orElse(null);
-        assertThat(statusModifiedSession.getSessionStatus()).isEqualTo
-                (new SessionStatus(SessionProgressStatusEnum.PROGRESSING, SessionRecruitmentStatusEnum.RECRUITING));
+        assertTrue(statusModifiedSession.isRecruiting());
 
         statusModifiedSession.modifyPeriod(new SessionPeriod("20250201", "20250501"));
         sessionRepository.modifyPeriod(statusModifiedSession);

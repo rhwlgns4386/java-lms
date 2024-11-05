@@ -1,11 +1,9 @@
 package nextstep.sessions.infrastructure;
 
-import nextstep.courses.domain.Course;
-import nextstep.courses.domain.CourseRepository;
 import nextstep.sessions.domain.ApplicationDetail;
 import nextstep.sessions.domain.ApplicationDetailRepository;
 import nextstep.sessions.domain.ApplicationStatus;
-import nextstep.sessions.domain.ApplicationStatusEnum;
+import nextstep.sessions.domain.ApplicationStatusType;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -35,7 +33,7 @@ public class JdbcApplicationDetailRepository implements ApplicationDetailReposit
         RowMapper<ApplicationDetail> rowMapper = (rs, rowNum)  -> new ApplicationDetail(
                 rs.getLong("session_id"),
                 rs.getLong("user_id"),
-                new ApplicationStatus(ApplicationStatusEnum.getByValue(rs.getString("status_code"))),
+                new ApplicationStatus(rs.getString("status_code")),
                 toLocalDateTime(rs.getTimestamp("created_at")),
                 toLocalDateTime(rs.getTimestamp("updated_at")));
         return Optional.of(jdbcTemplate.queryForObject(sql,rowMapper,sessionId,nsUserId));
@@ -47,7 +45,7 @@ public class JdbcApplicationDetailRepository implements ApplicationDetailReposit
         RowMapper<ApplicationDetail> rowMapper = (rs, rowNum) -> new ApplicationDetail(
                 rs.getLong("session_id"),
                 rs.getLong("user_id"),
-                new ApplicationStatus(ApplicationStatusEnum.getByValue(rs.getString("status_code"))),
+                new ApplicationStatus(rs.getString("status_code")),
                 toLocalDateTime(rs.getTimestamp("created_at")),
                 toLocalDateTime(rs.getTimestamp("updated_at")));
         return jdbcTemplate.query(sql, rowMapper, sessionId);

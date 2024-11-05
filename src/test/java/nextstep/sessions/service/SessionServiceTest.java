@@ -41,9 +41,9 @@ public class SessionServiceTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        recruiting_session = new Session(1L, (List<SessionImage>) null, new SessionPeriod("20250101", "20250301"), new SessionType(), new SessionStatus(SessionProgressStatusEnum.PROGRESSING, SessionRecruitmentStatusEnum.RECRUITING), LocalDateTime.now(), null);
-        recruiting_paid_session = new Session(3L, (List<SessionImage>) null, new SessionPeriod("20250101", "20250301"), new SessionType(Long.valueOf(200000), 1), new SessionStatus(SessionProgressStatusEnum.PROGRESSING, SessionRecruitmentStatusEnum.RECRUITING), LocalDateTime.now(), null);
-        preparing_session = new Session(2L, (List<SessionImage>) null, new SessionPeriod("20250101", "20250301"), new SessionType(), new SessionStatus(SessionProgressStatusEnum.PROGRESSING, SessionRecruitmentStatusEnum.NON_RECRUITING), LocalDateTime.now(), null);
+        recruiting_session = new Session(1L, (List<SessionImage>) null, new SessionPeriod("20250101", "20250301"), new SessionType(), new SessionStatus(SessionProgressStatusType.PROGRESSING.getStatusCode(), SessionRecruitmentStatusType.RECRUITING.getStatusCode()), LocalDateTime.now(), null);
+        recruiting_paid_session = new Session(3L, (List<SessionImage>) null, new SessionPeriod("20250101", "20250301"), new SessionType(Long.valueOf(200000), 1), new SessionStatus(SessionProgressStatusType.PROGRESSING.getStatusCode(), SessionRecruitmentStatusType.RECRUITING.getStatusCode()), LocalDateTime.now(), null);
+        preparing_session = new Session(2L, (List<SessionImage>) null, new SessionPeriod("20250101", "20250301"), new SessionType(), new SessionStatus(SessionProgressStatusType.PROGRESSING.getStatusCode(), SessionRecruitmentStatusType.NON_RECRUITING.getStatusCode()), LocalDateTime.now(), null);
     }
 
 
