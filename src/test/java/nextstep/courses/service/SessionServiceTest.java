@@ -1,18 +1,19 @@
 package nextstep.courses.service;
 
-import nextstep.courses.domain.SessionMetaData;
-import nextstep.courses.domain.SessionPeriod;
-import nextstep.courses.domain.SessionPrice;
-import nextstep.courses.domain.Students;
-import nextstep.courses.exception.CannotRegisteSessionException;
 import nextstep.courses.domain.FreeSession;
 import nextstep.courses.domain.PaidSession;
+import nextstep.courses.domain.ProgressCode;
 import nextstep.courses.domain.Session;
 import nextstep.courses.domain.SessionFactory;
 import nextstep.courses.domain.SessionImage;
 import nextstep.courses.domain.SessionInfo;
+import nextstep.courses.domain.SessionMetaData;
+import nextstep.courses.domain.SessionPeriod;
+import nextstep.courses.domain.SessionPrice;
 import nextstep.courses.domain.SessionType;
 import nextstep.courses.domain.StateCode;
+import nextstep.courses.domain.Students;
+import nextstep.courses.exception.CannotRegisteSessionException;
 import nextstep.courses.infrastructure.SessionRepository;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
@@ -52,7 +53,10 @@ public class SessionServiceTest {
     void setUp() {
         sessionInfo = new SessionInfo(new SessionMetaData("제목", "작성자"),
                 new SessionPeriod(LocalDateTime.now(), LocalDateTime.now().plus(10, ChronoUnit.HALF_DAYS)),
-                StateCode.RECRUITING);
+                StateCode.RECRUITING, ProgressCode.PROGRESS);
+        sessionInfoReady = new SessionInfo(new SessionMetaData("제목", "작성자"),
+                new SessionPeriod(LocalDateTime.now(), LocalDateTime.now().plus(10, ChronoUnit.HALF_DAYS)),
+                StateCode.RECRUITING, ProgressCode.PROGRESS);
         sessionImage = new SessionImage(100, "jpg", 300, 200, "imageFileName1");
     }
 

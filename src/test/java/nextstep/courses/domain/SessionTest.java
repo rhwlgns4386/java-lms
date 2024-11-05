@@ -13,45 +13,54 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class SessionTest {
 
-    public final static SessionInfo SESSION_INFO_RECRUIT = new SessionInfo(new SessionMetaData("모집중_진행중","작성자1"),
-                                                                   new SessionPeriod(LocalDateTime.now(), LocalDateTime.now().plus(10, ChronoUnit.HALF_DAYS)),
-                                                                   StateCode.RECRUITING);
-
-    public final static SessionInfo SESSION_INFO_NO_RECRUIT = new SessionInfo(new SessionMetaData("비모집_진행중", "createorId"),
-                                                                       new SessionPeriod(LocalDateTime.now(), LocalDateTime.now().plus(10, ChronoUnit.HALF_DAYS)),
-                                                                       StateCode.NO_RECRUITING);
-
     public final static SessionImage SESSION_IMAGE = new SessionImage(200, "png", 600, 400, "imageFileName");
 
-    public final static Session SESSION_RECRUITING = new Session(SESSION_INFO_RECRUIT, SESSION_IMAGE, new SessionPrice(1000), SessionType.PAID);
-    public final static Session SESSION_NO = new Session(SESSION_INFO_NO_RECRUIT, SESSION_IMAGE, new SessionPrice(3000), SessionType.PAID);
+    public final static Session SESSION_RECRUITING_READY = new Session(SessionInfoTest.SESSION_INFO_RECRUIT_READY, SESSION_IMAGE, new SessionPrice(2000), SessionType.PAID);
+    public final static Session SESSION_RECRUITING_PRORESS = new Session(SessionInfoTest.SESSION_INFO_RECRUIT_PROGRESS, SESSION_IMAGE, new SessionPrice(1000), SessionType.PAID);
+    public final static Session SESSION_RECRUITING_END = new Session(SessionInfoTest.SESSION_INFO_RECRUIT_END, SESSION_IMAGE, new SessionPrice(1000), SessionType.PAID);
+
+    public final static Session SESSION_NO_RECRUITING_READY = new Session(SessionInfoTest.SESSION_INFO_NO_RECRUIT_READY, SESSION_IMAGE, new SessionPrice(3000), SessionType.PAID);
+    public final static Session SESSION_NO_RECRUITING_PROGRESS = new Session(SessionInfoTest.SESSION_INFO_NO_RECRUIT_PROGRESS, SESSION_IMAGE, new SessionPrice(3000), SessionType.PAID);
+    public final static Session SESSION_NO_RECRUITING_END = new Session(SessionInfoTest.SESSION_INFO_NO_RECRUIT_END, SESSION_IMAGE, new SessionPrice(3000), SessionType.PAID);
 
 
     @Test
-    @DisplayName("강의는 모집중에만 등록이 가능 pass")
+    @DisplayName("강의상태체크 호출하여 강의가 모집중이면 수강신청이 가능 pass")
     void validateOrderSessionStatus() {
-       // SESSION_RECRUITING.validateOrderSessionStatus();
+        SESSION_RECRUITING_PRORESS.validateOrderSessionStatus();
+        SESSION_RECRUITING_READY.validateOrderSessionStatus();
     }
 
     @Test
-    @DisplayName("강의는 모집중이 아닌 경우 오류")
+    @DisplayName("강의상태체크 호출하여 강의가 모집중이 아닌 경우 오류")
     void validateRegistSessionStatus_IllegalArgumentException() {
         assertThatThrownBy(() -> {
-            SESSION_INFO_NO_RECRUIT.validateOrderSessionStatus();
-        }).isInstanceOf(IllegalArgumentException.class);
+            SESSION_NO_RECRUITING_READY.validateOrderSessionStatus();
+            SESSION_NO_RECRUITING_PROGRESS.validateOrderSessionStatus();
+            SESSION_NO_RECRUITING_END.validateOrderSessionStatus();
+        }).isInstanceOf(IllegalArgumentException.class).hasMessageStartingWith("모집하지 않는 강의입니다.");
+    }
+
+    @Test
+    @DisplayName("강의진행상태체크 호출하여 강의가 종료된 경우 모집중이어도 오류")
+    void validateOrderSessionProgressCode_IllegalArgumentException() {
+        assertThatThrownBy(() -> {
+            SESSION_RECRUITING_END.validateOrderSessionProgressCode();
+            SESSION_NO_RECRUITING_END.validateOrderSessionProgressCode();
+        }).isInstanceOf(IllegalArgumentException.class).hasMessageStartingWith("종료된 강의입니다.");
     }
 
     @Test
     @DisplayName("처음 강의를 신청하면 false")
     void isDuplicateStudent_false() {
-        assertThat(SESSION_RECRUITING.isDuplicateStudent(NsUserTest.JAVAJIGI)).isFalse();
+        assertThat(SESSION_RECRUITING_PRORESS.isDuplicateStudent(NsUserTest.JAVAJIGI)).isFalse();
     }
 
     @Test
     @DisplayName("중복으로 강의를 신청하면 true")
     void isDuplicateStudent_true() {
-        SESSION_RECRUITING.updateStudent(NsUserTest.SANJIGI);
+        SESSION_RECRUITING_PRORESS.updateStudent(NsUserTest.SANJIGI);
 
-        assertThat(SESSION_RECRUITING.isDuplicateStudent(NsUserTest.SANJIGI)).isTrue();
+        assertThat(SESSION_RECRUITING_PRORESS.isDuplicateStudent(NsUserTest.SANJIGI)).isTrue();
     }
 }

@@ -1,5 +1,6 @@
 package nextstep.courses.infrastructure;
 
+import nextstep.courses.domain.ProgressCode;
 import nextstep.courses.domain.Students;
 import nextstep.courses.domain.PaidSession;
 import nextstep.courses.domain.Session;
@@ -36,12 +37,13 @@ public class SessionRepositoryTest {
     @Test
     @DisplayName("강의 등록 / 찾기")
     void sessionRegisterCRUD() {
-        int count = sessionRepository.saveRegisterSession(SessionTest.SESSION_NO);
+        int count = sessionRepository.saveRegisterSession(SessionTest.SESSION_NO_RECRUITING_PROGRESS);
         assertThat(count).isEqualTo(1);
 
         Session session = sessionRepository.findSessionInfoById(1L);
         assertThat(session.getSessionTypeCode()).isEqualTo(SessionType.PAID.getTypeCode());
         assertThat(session.getStateCode()).isEqualTo(StateCode.NO_RECRUITING.getStatusCode());
+        assertThat(session.getProgressCode()).isEqualTo(ProgressCode.READY.getProgressCode());
         assertThat(session).isInstanceOf(PaidSession.class);
 
         LOGGER.debug("=====================");

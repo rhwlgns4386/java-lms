@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class PaidSessionTest {
 
-    public final static PaidSession PAID_SESSION = new PaidSession(SessionTest.SESSION_INFO, SessionTest.SESSION_IMAGE, 1000,  StateCode.RECRUITING, 2);
+    public final static PaidSession PAID_SESSION = new PaidSession(SessionInfoTest.SESSION_INFO_RECRUIT_PROGRESS, SessionTest.SESSION_IMAGE, new SessionPrice(1000), 2);
 
     private PaidSession paidSession;
     private PaidSession maxStudentTwoSession;
@@ -22,30 +22,40 @@ public class PaidSessionTest {
 
     @BeforeEach
     void setUp() {
-        paidSession = new PaidSession(SessionTest.SESSION_INFO, SessionTest.SESSION_IMAGE, 1000L,  StateCode.RECRUITING, 1);
-        maxStudentTwoSession = new PaidSession( SessionTest.MAX_STUDENT_INFO, SessionTest.SESSION_IMAGE,1000,  StateCode.RECRUITING, 2);
+        paidSession = new PaidSession(SessionInfoTest.SESSION_INFO_RECRUIT_PROGRESS, SessionTest.SESSION_IMAGE, new SessionPrice(1000L),  1);
+        maxStudentTwoSession = new PaidSession( SessionInfoTest.SESSION_INFO_RECRUIT_PROGRESS, SessionTest.SESSION_IMAGE,new SessionPrice(1000L), 2);
     }
 
     @Test
-    @DisplayName("결제한 금액과 수강료가 일치 / 상태가 모집중일 경우 pass")
+    @DisplayName("강의신청가능여부 호출하여 결제한 금액과 수강료가 일치 / 모집중일 경우 / 종료된 강의가 아닌 경우 pass")
     void validateRegisterSession() throws CannotRegisteSessionException {
         paidSession.validateOrderSession(new RequestOrderParam(payment));
     }
 
     @Test
-    @DisplayName("상태가 모집중이 아닌경우 오류")
+    @DisplayName("강의신청가능여부 호출하여 모집중이 아닌경우 오류")
     void validateStateCode_IllegalArgumentException() {
-        PaidSession paidSession = new PaidSession(SessionTest.SESSION_INFO, SessionTest.SESSION_IMAGE,
-                1000L, StateCode.READY, 4);
+        PaidSession paidSession = new PaidSession(SessionInfoTest.SESSION_INFO_NO_RECRUIT_PROGRESS, SessionTest.SESSION_IMAGE,
+                new SessionPrice(1000L), 4);
 
         assertThatThrownBy(() -> {
             paidSession.validateOrderSession(new RequestOrderParam(payment));
         }).isInstanceOf(IllegalArgumentException.class).hasMessageStartingWith("모집하지 않는 강의입니다.");
-
     }
 
     @Test
-    @DisplayName("결제한 금액과 수강료가 일치하지 않을 경우")
+    @DisplayName("강의신청가능여부 호출하여 모집중이어도 강의가 종료된 경우 오류")
+    void validateProgressCode_IllegalArgumentException() {
+        PaidSession paidSession = new PaidSession(SessionInfoTest.SESSION_INFO_RECRUIT_END, SessionTest.SESSION_IMAGE,
+                new SessionPrice(1000L), 4);
+
+        assertThatThrownBy(() -> {
+            paidSession.validateOrderSession(new RequestOrderParam(payment));
+        }).isInstanceOf(IllegalArgumentException.class).hasMessageStartingWith("종료된 강의입니다.");
+    }
+
+    @Test
+    @DisplayName("강의신청가능여부 호출하여 결제한 금액과 수강료가 일치하지 않을 경우 오류")
     void validateRegisterSession_CannotRegisteSessionException() {
         Payment paymentFail = new Payment("id", 1L, 1L, 2000L);
 
@@ -61,7 +71,7 @@ public class PaidSessionTest {
     }
 
     @Test
-    @DisplayName("최대 수강 인원 초과 오류")
+    @DisplayName("강의신청가능여부 호출하여 최대 수강 인원 초과 오류")
     void validateMaxStudentCount_CannotRegisteSessionException() throws CannotRegisteSessionException {
         paidSession.validateOrderSession(new RequestOrderParam(payment));
         paidSession.orderSession(new RequestOrderParam(payment, NsUser.GUEST_USER));
@@ -84,7 +94,7 @@ public class PaidSessionTest {
     }
 
     @Test
-    @DisplayName("강의 중복 신청 오류")
+    @DisplayName("강의 신청 호출하여 중복 신청 오류")
     void validateDuplicate() throws CannotRegisteSessionException {
         maxStudentTwoSession.orderSession(new RequestOrderParam(payment, NsUserTest.SANJIGI));//1명짜리
         assertThatThrownBy(() -> {
@@ -93,7 +103,7 @@ public class PaidSessionTest {
     }
 
     @Test
-    @DisplayName("강의 주문시 최대 수강 인원 초과 오류")
+    @DisplayName("강의 신청 호출하여 최대 수강 인원 초과 오류")
     void orderSession_CannotRegisteSessionException() throws CannotRegisteSessionException {
         paidSession.orderSession(new RequestOrderParam(payment, NsUser.GUEST_USER));//1명짜리
 
