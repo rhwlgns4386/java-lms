@@ -115,7 +115,7 @@ public class PaidSessionTest {
     }
 
     @Test
-    @DisplayName("PaidSession 수강 신청 - 걍의가 모집중이 아닐때 수간신청 체크")
+    @DisplayName("PaidSession 수강 신청 - 강의가 모집중이 아닐때 수간신청 체크")
     void checkRegisterNotOpenPaidSessionTest() {
         SessionCapacity sessionCapacity = new SessionCapacity(1);
         Money fee = new Money(200_000L);
