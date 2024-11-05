@@ -1,7 +1,11 @@
 package nextstep.courses.infrastructure;
 
+import nextstep.courses.domain.SessionMetaData;
+import nextstep.courses.domain.SessionPeriod;
+import nextstep.courses.domain.SessionPrice;
 import nextstep.courses.domain.Students;
 import nextstep.courses.domain.PaidSession;
+import nextstep.courses.domain.ProgressCode;
 import nextstep.courses.domain.Session;
 import nextstep.courses.domain.SessionImage;
 import nextstep.courses.domain.SessionInfo;
@@ -45,7 +49,7 @@ public class JdbcSessionRepository implements SessionRepository {
     @Override
     public Session findSessionInfoById(long id) {
         String sql = "SELECT s.title, s.apply_start_date, s.apply_end_date, s.sale_price, s.state_code, s.creator_id, " +
-                "si.file_size, si.type, si.width, si.height, si.file_name, s.session_type, s.student_max_count, s.SESSION_ID " +
+                "si.file_size, si.type, si.width, si.height, si.file_name, s.session_type, s.student_max_count, s.SESSION_ID, s.PROGRESS_CODE " +
                 "FROM session s " +
                 "LEFT JOIN session_image si ON s.SESSION_ID = si.IMAGE_ID " +
                 "WHERE s.SESSION_ID = ?";
@@ -67,9 +71,13 @@ public class JdbcSessionRepository implements SessionRepository {
             int studentMaxCount = rs.getInt(13);
             long sessionId = rs.getLong(14);
 
-            return SessionFactory.createSession(new SessionInfo(sessionId, title, applyStartDate, applyEndDate, creatorId),
-                    new SessionImage(fileSize, type, width, height, fileName),
-                    salePrice, stateCode,studentMaxCount, sessionType);
+            SessionMetaData sessionMetaData = new SessionMetaData(title, creatorId);
+            SessionPeriod sessionPeriod = new SessionPeriod(applyStartDate, applyEndDate);
+            SessionPrice sessionPrice = new SessionPrice(salePrice);
+            SessionInfo sessionInfo = new SessionInfo(sessionId, sessionMetaData, sessionPeriod, stateCode);
+            SessionImage sessionImage = new SessionImage(fileSize, type, width, height, fileName);
+
+            return SessionFactory.createSession(sessionInfo, sessionImage, sessionPrice, studentMaxCount, sessionType);
         };
         return jdbcTemplate.queryForObject(sql, session, id);
     }
