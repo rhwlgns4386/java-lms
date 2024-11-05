@@ -102,7 +102,7 @@ public abstract class Session {
         checkAcceptApplicants(applicants);
 
         this.students.stream()
-                .filter(it -> applicants.contains(it))
+                .filter(applicants::contains)
                 .forEach(Student::accept);
     }
 
@@ -120,7 +120,7 @@ public abstract class Session {
         checkRejectApplicants(applicants);
 
         this.students.stream()
-                .filter(it -> applicants.contains(it))
+                .filter(applicants::contains)
                 .forEach(Student::reject);
     }
 
