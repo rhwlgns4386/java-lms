@@ -85,7 +85,7 @@ public class SessionService {
     @Transactional
     public Session accept(Long sessionId, Lecturer lecturer, List<Student> students) {
         Session session = findById(sessionId);
-        session.acceptStudents(lecturer, students.stream().map(Student::getNsUserId).collect(Collectors.toList()));
+        session.acceptStudents(lecturer, students);
 
         studentRepository.saveAll(students, sessionId);
         return session;
@@ -94,7 +94,7 @@ public class SessionService {
     @Transactional
     public Session reject(Long sessionId, Lecturer lecturer, List<Student> students) {
         Session session = findById(sessionId);
-        session.rejectStudents(lecturer, students.stream().map(Student::getNsUserId).collect(Collectors.toList()));
+        session.rejectStudents(lecturer, students);
 
         studentRepository.saveAll(students, sessionId);
         return session;

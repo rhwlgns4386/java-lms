@@ -3,6 +3,7 @@ package nextstep.courses.domain.session;
 import nextstep.courses.domain.image.Image;
 import nextstep.courses.domain.lecturer.Lecturer;
 import nextstep.courses.domain.student.Student;
+import nextstep.courses.domain.student.StudentStatus;
 
 import java.util.List;
 
@@ -78,7 +79,7 @@ public abstract class Session {
         this.students.add(student);
     }
 
-    public void addLecturer(Lecturer lecturer) {
+    public void assignLecturer(Lecturer lecturer) {
         this.lecturer = lecturer;
     }
 
@@ -94,24 +95,40 @@ public abstract class Session {
         this.sessionStatus.finishRecruiting();
     }
 
-    public void acceptStudents(Lecturer lecturer, List<Long> studentUserIds) {
+    public void acceptStudents(Lecturer lecturer, List<Student> applicants) {
         checkStudents();
         checkLecturer(lecturer);
         checkStatus();
+        checkAcceptApplicants(applicants);
 
         this.students.stream()
-                .filter(it -> studentUserIds.contains(it.getNsUserId()))
+                .filter(it -> applicants.contains(it))
                 .forEach(Student::accept);
     }
 
-    public void rejectStudents(Lecturer lecturer, List<Long> studentUserIds) {
+    private void checkAcceptApplicants(List<Student> applicants) {
+        boolean match = applicants.stream().anyMatch(it -> it.getStatus().equals(StudentStatus.REJECTED));
+        if (match) {
+            throw new IllegalArgumentException("Applicants already are rejected");
+        }
+    }
+
+    public void rejectStudents(Lecturer lecturer, List<Student> applicants) {
         checkStudents();
         checkLecturer(lecturer);
         checkStatus();
+        checkRejectApplicants(applicants);
 
         this.students.stream()
-                .filter(it -> studentUserIds.contains(it.getNsUserId()))
+                .filter(it -> applicants.contains(it))
                 .forEach(Student::reject);
+    }
+
+    private void checkRejectApplicants(List<Student> applicants) {
+        boolean match = applicants.stream().anyMatch(it -> it.getStatus().equals(StudentStatus.ACCEPTED));
+        if (match) {
+            throw new IllegalArgumentException("Applicants already are accepted");
+        }
     }
 
     private void checkStudents() {

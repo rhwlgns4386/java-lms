@@ -55,7 +55,7 @@ public class PaidSessionTest {
         Money fee = new Money(200_000L);
 
         PaidSession paidSession = new PaidSession(id, title, new ArrayList<>(List.of(image)), sessionDate, sessionCapacity, fee);
-        paidSession.addLecturer(LecturerTest.testLecturer);
+        paidSession.assignLecturer(LecturerTest.testLecturer);
 
         Assertions.assertThat(paidSession).isNotNull();
         Assertions.assertThat(paidSession.getId()).isEqualTo(id);
@@ -69,7 +69,7 @@ public class PaidSessionTest {
         Money fee = new Money(200_000L);
 
         PaidSession paidSession = new PaidSession(id, title, new ArrayList<>(List.of(image)), sessionDate, sessionCapacity, fee);
-        paidSession.addLecturer(LecturerTest.testLecturer);
+        paidSession.assignLecturer(LecturerTest.testLecturer);
 
         paidSession.open();
 
@@ -87,15 +87,15 @@ public class PaidSessionTest {
         Money fee = new Money(200_000L);
         List<Student> students = new ArrayList<>(Student.of(List.of(RegistrationTest.REGISTRATION, RegistrationTest.REGISTRATION2)));
         PaidSession paidSession = new PaidSession(id, title, new ArrayList<>(List.of(image)), sessionDate, sessionCapacity, fee);
-        paidSession.addLecturer(LecturerTest.testLecturer);
+        paidSession.assignLecturer(LecturerTest.testLecturer);
 
         paidSession.open();
 
         paidSession.register(RegistrationTest.REGISTRATION);
         paidSession.register(RegistrationTest.REGISTRATION2);
 
-        paidSession.acceptStudents(LecturerTest.testLecturer, List.of(students.get(0).getNsUserId()));
-        paidSession.rejectStudents(LecturerTest.testLecturer, List.of(students.get(1).getNsUserId()));
+        paidSession.acceptStudents(LecturerTest.testLecturer, List.of(students.get(0)));
+        paidSession.rejectStudents(LecturerTest.testLecturer, List.of(students.get(1)));
 
         Assertions.assertThat(paidSession.getStudents()).hasSize(2);
 
@@ -121,7 +121,7 @@ public class PaidSessionTest {
         Money fee = new Money(200_000L);
 
         PaidSession paidSession = new PaidSession(id, title, new ArrayList<>(List.of(image)), sessionDate, sessionCapacity, fee);
-        paidSession.addLecturer(LecturerTest.testLecturer);
+        paidSession.assignLecturer(LecturerTest.testLecturer);
 
         Payment payment = new Payment("1", id, NsUserTest.JAVAJIGI.getId(), fee.getPrice());
 
@@ -136,7 +136,7 @@ public class PaidSessionTest {
         Money fee = new Money(200_000L);
 
         PaidSession paidSession = new PaidSession(id, title, new ArrayList<>(List.of(image)), sessionDate, sessionCapacity, fee);
-        paidSession.addLecturer(LecturerTest.testLecturer);
+        paidSession.assignLecturer(LecturerTest.testLecturer);
 
         paidSession.open();
 
@@ -151,7 +151,7 @@ public class PaidSessionTest {
         Money fee = new Money(200_000L);
 
         PaidSession paidSession = new PaidSession(id, title, new ArrayList<>(List.of(image)), sessionDate, sessionCapacity, fee);
-        paidSession.addLecturer(LecturerTest.testLecturer);
+        paidSession.assignLecturer(LecturerTest.testLecturer);
 
         paidSession.open();
 
@@ -169,7 +169,7 @@ public class PaidSessionTest {
         Money fee = new Money(200_000L);
 
         PaidSession paidSession = new PaidSession(id, title, new ArrayList<>(List.of(image)), sessionDate, sessionCapacity, fee);
-        paidSession.addLecturer(LecturerTest.testLecturer);
+        paidSession.assignLecturer(LecturerTest.testLecturer);
         paidSession.open();
         Payment payment = new Payment("1", id, NsUserTest.JAVAJIGI.getId(), fee.getPrice() + 1);
         Registration registration = new Registration(1L, NsUserTest.JAVAJIGI, payment);
@@ -185,7 +185,7 @@ public class PaidSessionTest {
         Money fee = new Money(200_000L);
 
         PaidSession paidSession = new PaidSession(id, title, new ArrayList<>(List.of(image)), sessionDate, sessionCapacity, fee);
-        paidSession.addLecturer(LecturerTest.testLecturer);
+        paidSession.assignLecturer(LecturerTest.testLecturer);
 
         paidSession.open();
 
@@ -199,7 +199,7 @@ public class PaidSessionTest {
         Money fee = new Money(200_000L);
 
         PaidSession paidSession = new PaidSession(id, title, new ArrayList<>(List.of(image)), sessionDate, sessionCapacity, fee);
-        paidSession.addLecturer(LecturerTest.testLecturer);
+        paidSession.assignLecturer(LecturerTest.testLecturer);
 
         paidSession.close();
 

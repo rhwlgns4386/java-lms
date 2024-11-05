@@ -60,7 +60,7 @@ public class SessionServiceTest {
         sessionCapacity = new SessionCapacity(10);
 
         session = new PaidSession(title, new ArrayList<>(List.of(image)), sessionDate, sessionCapacity, fee);
-        session.addLecturer(LecturerTest.testLecturer);
+        session.assignLecturer(LecturerTest.testLecturer);
     }
 
     @Test
@@ -109,7 +109,7 @@ public class SessionServiceTest {
         Payment payment = new Payment("1234", sessionId, nsUser.getId(), amount);
         Payment payment2 = new Payment("1235", sessionId, NsUserTest.SANJIGI.getId(), amount);
         PaidSession paidSession = new PaidSession(sessionId, title, new ArrayList<>(List.of(image)), sessionDate, sessionCapacity, fee);
-        paidSession.addLecturer(LecturerTest.testLecturer);
+        paidSession.assignLecturer(LecturerTest.testLecturer);
 
         Student student = new Student(amount, nsUser.getId());
         Student student2 = new Student(amount, NsUserTest.SANJIGI.getId());
@@ -139,7 +139,7 @@ public class SessionServiceTest {
         Payment payment = new Payment("1234", sessionId, nsUser.getId(), amount);
         Payment payment2 = new Payment("1235", sessionId, NsUserTest.SANJIGI.getId(), amount);
         PaidSession paidSession = new PaidSession(sessionId, title, new ArrayList<>(List.of(image)), sessionDate, sessionCapacity, fee);
-        paidSession.addLecturer(LecturerTest.testLecturer);
+        paidSession.assignLecturer(LecturerTest.testLecturer);
 
         Student student = new Student(amount, nsUser.getId());
         Student student2 = new Student(amount, NsUserTest.SANJIGI.getId());

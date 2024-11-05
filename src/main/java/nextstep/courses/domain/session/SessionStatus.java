@@ -41,7 +41,7 @@ public class SessionStatus {
     }
 
     public boolean isApplicationAvailable() {
-        return this.sessionRecruitStatus == SessionRecruitStatus.RECRUITMENT;
+        return this.sessionRecruitStatus == SessionRecruitStatus.RECRUITMENT && this.sessionProgressStatus != SessionProgressStatus.END;
     }
 
     public boolean isEnd() {
