@@ -30,8 +30,8 @@ public class SessionService {
         sessionRepository.saveRegisterSession(session);
     }
 
-    public Session findSessionInfoById(long idx) {
-        return sessionRepository.findSessionInfoById(idx);
+    public Session findSessionInfoById(long sessionId) {
+        return sessionRepository.findSessionInfoById(sessionId);
     }
 
     public Session orderSession(Payment payment, NsUser user, long sessionId) throws CannotRegisteSessionException {
