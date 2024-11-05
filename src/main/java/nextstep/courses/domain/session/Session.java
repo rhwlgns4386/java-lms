@@ -30,7 +30,6 @@ public class Session {
         this.applyStatus = applyStatus;
     }
 
-
     public static Session createFree(Long courseId, SessionPeriod sessionPeriod) {
         return new Session(0L, courseId, SessionStatus.READY, new SessionPay(0L, SessionPayType.PAID), sessionPeriod, 0, new SessionApplyStatus(SessionProgressStatus.READY, SessionRecruitStatus.NON_RECRUITMENT));
     }

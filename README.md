@@ -18,7 +18,7 @@
 - 강의는 강의 커버 이미지 정보를 가진다.
     - 강의는 하나 이상의 커버 이미지를 가질 수 있다.
 
-- [ ] SessionCoverImages 도메인 추가 하여 처리
+- [x] SessionCoverImages 도메인 추가 하여 처리
 
 ---
 

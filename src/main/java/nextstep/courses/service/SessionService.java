@@ -7,6 +7,7 @@ import nextstep.courses.domain.SessionStudentRepository;
 import nextstep.courses.domain.coverimage.SessionCoverImage;
 import nextstep.courses.domain.coverimage.SessionCoverImagePath;
 import nextstep.courses.domain.coverimage.SessionCoverImageSize;
+import nextstep.courses.domain.coverimage.SessionCoverImages;
 import nextstep.courses.domain.session.Session;
 import nextstep.courses.domain.session.SessionPayType;
 import nextstep.courses.domain.session.SessionPeriod;
@@ -36,19 +37,23 @@ public class SessionService {
     @Transactional
     public void saveSession(SessionDto dto) {
 
-        MultipartFile multipartFile = dto.getMultipartFile();
+        List<MultipartFile> multipartFiles = dto.getMultipartFiles();
 
         Session createdSession = createSessionPayType(dto);
         Long sessionId = sessionRepository.save(createdSession);
 
-        SessionCoverImage image = SessionCoverImage.create(
-                sessionId,
-                multipartFile.getSize(),
-                SessionCoverImagePath.create("/", multipartFile.getOriginalFileName()),
-                new SessionCoverImageSize(multipartFile.getWidth(), multipartFile.getHeight())
-        );
 
-        sessionCoverImageRepository.save(image);
+        SessionCoverImages sessionCoverImages = SessionCoverImages.create(sessionId, multipartFiles);
+//        SessionCoverImage image = SessionCoverImage.create(
+//                sessionId,
+//                multipartFile.getSize(),
+//                SessionCoverImagePath.create("/", multipartFile.getOriginalFileName()),
+//                new SessionCoverImageSize(multipartFile.getWidth(), multipartFile.getHeight())
+//        );
+
+//        sessionCoverImageRepository.save(image);
+
+        sessionCoverImageRepository.saveAll(sessionCoverImages);
     }
 
     private Session createSessionPayType(SessionDto dto) {

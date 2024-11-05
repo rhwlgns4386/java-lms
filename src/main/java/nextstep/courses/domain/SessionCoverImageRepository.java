@@ -1,6 +1,7 @@
 package nextstep.courses.domain;
 
 import nextstep.courses.domain.coverimage.SessionCoverImage;
+import nextstep.courses.domain.coverimage.SessionCoverImages;
 
 public interface SessionCoverImageRepository {
 
@@ -8,4 +9,5 @@ public interface SessionCoverImageRepository {
 
     SessionCoverImage findById(Long id);
 
+    void saveAll(SessionCoverImages sessionCoverImages);
 }

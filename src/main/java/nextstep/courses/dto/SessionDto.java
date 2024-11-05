@@ -1,6 +1,7 @@
 package nextstep.courses.dto;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class SessionDto {
     private Long courseId;
@@ -9,7 +10,7 @@ public class SessionDto {
     private LocalDateTime endDate;
     private Long sessionPay;
     private Integer maximumNumberPeople;
-    private MultipartFile multipartFile;
+    private List<MultipartFile> multipartFiles;
 
     public SessionDto(Long courseId, String payType, LocalDateTime startDate, LocalDateTime endDate, Integer maximumNumberPeople, Long sessionPay) {
         this.payType = payType;
@@ -43,8 +44,8 @@ public class SessionDto {
         return maximumNumberPeople;
     }
 
-    public MultipartFile getMultipartFile() {
-        return multipartFile;
+    public List<MultipartFile> getMultipartFiles() {
+        return multipartFiles;
     }
 
     public void setCourseId(Long courseId) {
@@ -67,7 +68,7 @@ public class SessionDto {
         this.maximumNumberPeople = maximumNumberPeople;
     }
 
-    public void setMultipartFile(MultipartFile multipartFile) {
-        this.multipartFile = multipartFile;
+    public void setMultipartFiles(List<MultipartFile> multipartFiles) {
+        this.multipartFiles = multipartFiles;
     }
 }
