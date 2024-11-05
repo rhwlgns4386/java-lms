@@ -10,14 +10,14 @@ import java.util.Optional;
 @Repository("sessionRepository")
 public class JdbcSessionRepository implements SessionRepository {
     public static final RowMapper<Session> SESSION_ROW_MAPPER = (rs, rowNum) -> new Session(
-            rs.getLong(1),
-            rs.getLong(2),
-            new SessionPeriod(rs.getDate(3).toLocalDate(), rs.getDate(4).toLocalDate()),
-            new SessionCoverImage(rs.getLong(5), rs.getString(6), rs.getInt(7), rs.getInt(8)),
-            SessionFeeType.valueOf(rs.getString(9)),
-            new SessionAmount(rs.getInt(10)),
-            rs.getInt(11),
-            SessionStatus.valueOf(rs.getString(12)));
+            rs.getLong("id"),
+            rs.getLong("course_id"),
+            new SessionPeriod(rs.getDate("start_date").toLocalDate(), rs.getDate("end_date").toLocalDate()),
+            new SessionCoverImage(rs.getLong("file_size"), rs.getString("file_type"), rs.getInt("width"), rs.getInt("height")),
+            SessionFeeType.valueOf(rs.getString("fee_type")),
+            new SessionAmount(rs.getInt("amount")),
+            rs.getInt("max_personnel"),
+            SessionStatus.valueOf(rs.getString("status")));
 
     private JdbcOperations jdbcTemplate;
 

@@ -11,9 +11,9 @@ import java.util.Optional;
 @Repository("studentRepository")
 public class JdbcStudentRepository implements StudentRepository {
     public static final RowMapper<Student> STUDENT_ROW_MAPPER = (rs, rowNum) -> new Student(
-            rs.getLong(1),
-            rs.getLong(2),
-            rs.getLong(3));
+            rs.getLong("id"),
+            rs.getLong("ns_user_id"),
+            rs.getLong("session_id"));
 
     private JdbcOperations jdbcTemplate;
 

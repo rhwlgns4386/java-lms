@@ -13,12 +13,12 @@ import java.util.Optional;
 @Repository("courseRepository")
 public class JdbcCourseRepository implements CourseRepository {
     public static final RowMapper<Course> COURSE_ROW_MAPPER = (rs, rowNum) -> new Course(
-            rs.getLong(1),
-            rs.getString(2),
-            rs.getLong(3),
-            rs.getInt(4),
-            toLocalDateTime(rs.getTimestamp(5)),
-            toLocalDateTime(rs.getTimestamp(6)));
+            rs.getLong("id"),
+            rs.getString("title"),
+            rs.getLong("cardinal_number"),
+            rs.getInt("creator_id"),
+            toLocalDateTime(rs.getTimestamp("created_at")),
+            toLocalDateTime(rs.getTimestamp("updated_at")));
 
     private JdbcOperations jdbcTemplate;
 
