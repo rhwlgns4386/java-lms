@@ -39,7 +39,7 @@ public class FreeSession extends Session {
         super(id, title, sessionDate, images, sessionType, sessionStatus, students, lecturer);
     }
 
-    public static FreeSession of(FreeSession session, List<Image> images, List<Student> students) {
+    public static FreeSession of(FreeSession session, List<Image> images, List<Student> students, Lecturer lecturer) {
         return new FreeSession(
                 session.getId(),
                 session.getTitle(),
@@ -48,7 +48,7 @@ public class FreeSession extends Session {
                 session.getSessionType(),
                 session.getSessionStatus(),
                 students,
-                session.getLecturer()
+                lecturer
         );
     }
 

@@ -35,4 +35,12 @@ public class JdbcLecturerRepository implements LecturerRepository {
         param.addValue("nsUserId", userId);
         return Optional.ofNullable(namedParameterJdbcTemplate.queryForObject(sql, param, LECTURER_ROW_MAPPER));
     }
+
+    @Override
+    public Optional<Lecturer> findBySessionId(Long sessionId) {
+        String sql = "select ns_user_id from lecturer where session_id = :sessionId";
+        MapSqlParameterSource param = new MapSqlParameterSource();
+        param.addValue("sessionId", sessionId);
+        return Optional.ofNullable(namedParameterJdbcTemplate.queryForObject(sql, param, LECTURER_ROW_MAPPER));
+    }
 }

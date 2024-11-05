@@ -61,7 +61,7 @@ public class PaidSession extends Session {
         this.fee = fee;
     }
 
-    public static PaidSession of(PaidSession session, List<Image> images, List<Student> students) {
+    public static PaidSession of(PaidSession session, List<Image> images, List<Student> students, Lecturer lecturer) {
         return new PaidSession(
                 session.getId(),
                 session.getTitle(),
@@ -70,7 +70,7 @@ public class PaidSession extends Session {
                 session.getSessionType(),
                 session.getSessionStatus(),
                 students,
-                session.getLecturer(),
+                lecturer,
                 session.getCapacity(),
                 session.getFee()
         );

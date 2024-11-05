@@ -85,10 +85,7 @@ public class SessionServiceTest {
         Student student = new Student(amount, nsUser.getId());
         Student student2 = new Student(amount, NsUserTest.SANJIGI.getId());
 
-        when(sessionRepository.findById(anyLong())).thenReturn(Optional.of(paidSession));
-        when(imageRepository.findAllBySessionId(anyLong())).thenReturn(new ArrayList<>(List.of(image)));
-        when(studentRepository.findAllBySessionId(anyLong())).thenReturn(new ArrayList<>(List.of(student2)));
-        when(studentRepository.saveAll(anyList(), anyLong())).thenReturn(new int[]{1});
+        mockSetup(paidSession, student2);
 
         paidSession.open();
 
@@ -119,16 +116,21 @@ public class SessionServiceTest {
         paidSession.register(Registration.of(sessionId, nsUser, payment));
         paidSession.register(Registration.of(sessionId, NsUserTest.SANJIGI, payment2));
 
-        when(sessionRepository.findById(anyLong())).thenReturn(Optional.of(paidSession));
-        when(imageRepository.findAllBySessionId(anyLong())).thenReturn(new ArrayList<>(List.of(image)));
-        when(studentRepository.findAllBySessionId(anyLong())).thenReturn(new ArrayList<>(List.of(student2)));
-        when(studentRepository.saveAll(anyList(), anyLong())).thenReturn(new int[]{1});
+        mockSetup(paidSession, student2);
 
         Session accept = sessionService.accept(sessionId, LecturerTest.testLecturer, students);
 
         for (Student elem : accept.getStudents()) {
             Assertions.assertThat(elem.getStatus()).isEqualTo(StudentStatus.ACCEPTED);
         }
+    }
+
+    private void mockSetup(PaidSession paidSession, Student student) {
+        when(sessionRepository.findById(anyLong())).thenReturn(Optional.of(paidSession));
+        when(imageRepository.findAllBySessionId(anyLong())).thenReturn(new ArrayList<>(List.of(image)));
+        when(studentRepository.findAllBySessionId(anyLong())).thenReturn(new ArrayList<>(List.of(student)));
+        when(lecturerRepository.findBySessionId(anyLong())).thenReturn(Optional.of(LecturerTest.testLecturer));
+        when(studentRepository.saveAll(anyList(), anyLong())).thenReturn(new int[]{1});
     }
 
     @Test
@@ -149,10 +151,7 @@ public class SessionServiceTest {
         paidSession.register(Registration.of(sessionId, nsUser, payment));
         paidSession.register(Registration.of(sessionId, NsUserTest.SANJIGI, payment2));
 
-        when(sessionRepository.findById(anyLong())).thenReturn(Optional.of(paidSession));
-        when(imageRepository.findAllBySessionId(anyLong())).thenReturn(new ArrayList<>(List.of(image)));
-        when(studentRepository.findAllBySessionId(anyLong())).thenReturn(new ArrayList<>(List.of(student2)));
-        when(studentRepository.saveAll(anyList(), anyLong())).thenReturn(new int[]{1});
+        mockSetup(paidSession, student2);
 
         Session accept = sessionService.reject(sessionId, LecturerTest.testLecturer, students);
 
@@ -175,6 +174,7 @@ public class SessionServiceTest {
         when(sessionRepository.findById(anyLong())).thenReturn(Optional.of(paidSession));
         when(imageRepository.findAllBySessionId(anyLong())).thenReturn(new ArrayList<>(List.of(image)));
         when(studentRepository.findAllBySessionId(anyLong())).thenReturn(Arrays.asList(student, student2));
+        when(lecturerRepository.findBySessionId(anyLong())).thenReturn(Optional.of(LecturerTest.testLecturer));
 
         Session foundSession = sessionService.findById(sessionId);
 
