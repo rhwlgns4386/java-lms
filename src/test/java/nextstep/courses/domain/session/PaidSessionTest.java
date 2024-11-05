@@ -87,6 +87,7 @@ public class PaidSessionTest {
         Money fee = new Money(200_000L);
         List<Student> students = new ArrayList<>(Student.of(List.of(RegistrationTest.REGISTRATION, RegistrationTest.REGISTRATION2)));
         PaidSession paidSession = new PaidSession(id, title, new ArrayList<>(List.of(image)), sessionDate, sessionCapacity, fee);
+
         paidSession.assignLecturer(LecturerTest.testLecturer);
 
         paidSession.open();
@@ -99,19 +100,15 @@ public class PaidSessionTest {
 
         Assertions.assertThat(paidSession.getStudents()).hasSize(2);
 
-        Student student1 = paidSession.getStudents().stream()
-                .filter(it -> it.getNsUserId().equals(students.get(0).getNsUserId()))
-                .findFirst()
-                .orElseThrow();
-        Assertions.assertThat(student1.getNsUserId()).isEqualTo(students.get(0).getNsUserId());
-        Assertions.assertThat(student1.getStatus()).isEqualTo(StudentStatus.ACCEPTED);
-
-        Student student2 = paidSession.getStudents().stream()
-                .filter(it -> it.getNsUserId().equals(students.get(1).getNsUserId()))
-                .findFirst()
-                .orElseThrow();
-        Assertions.assertThat(student2.getNsUserId()).isEqualTo(students.get(1).getNsUserId());
-        Assertions.assertThat(student2.getStatus()).isEqualTo(StudentStatus.REJECTED);
+        for (Student student : paidSession.getStudents()) {
+            int index = students.indexOf(student);
+            Assertions.assertThat(student.getNsUserId()).isEqualTo(students.get(index).getNsUserId());
+            if (index == 0) {
+                Assertions.assertThat(student.getStatus()).isEqualTo(StudentStatus.ACCEPTED);
+                continue;
+            }
+            Assertions.assertThat(student.getStatus()).isEqualTo(StudentStatus.REJECTED);
+        }
     }
 
     @Test
@@ -122,8 +119,6 @@ public class PaidSessionTest {
 
         PaidSession paidSession = new PaidSession(id, title, new ArrayList<>(List.of(image)), sessionDate, sessionCapacity, fee);
         paidSession.assignLecturer(LecturerTest.testLecturer);
-
-        Payment payment = new Payment("1", id, NsUserTest.JAVAJIGI.getId(), fee.getPrice());
 
         Assertions.assertThatThrownBy(() -> paidSession.register(RegistrationTest.REGISTRATION))
                 .isInstanceOf(IllegalStateException.class);
