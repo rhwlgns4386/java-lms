@@ -2,8 +2,10 @@ package nextstep.courses.infrastructure;
 
 import nextstep.courses.domain.student.Student;
 import nextstep.courses.domain.student.StudentRepository;
+import nextstep.courses.domain.student.StudentStatus;
 import nextstep.users.domain.NsUser;
 import nextstep.users.domain.NsUserTest;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -71,5 +73,18 @@ public class StudentRepositoryTest {
         List<Student> students = Arrays.asList(student1, student2);
         int[] saved = studentRepository.saveAll(students, sessionId);
         assertThat(saved.length).isEqualTo(2);
+    }
+
+    @Test
+    void update() {
+        Long sessionId = 1L;
+        Long amount = 100_000L;
+        Student student = new Student(amount, NsUserTest.SANJIGI.getId());
+        int save = studentRepository.save(student, sessionId);
+        Assertions.assertThat(save).isEqualTo(1);
+
+        student.accept();
+        Student updatedStudent = studentRepository.updateStatus(student, sessionId);
+        Assertions.assertThat(updatedStudent.getStatus()).isEqualTo(StudentStatus.ACCEPTED);
     }
 }

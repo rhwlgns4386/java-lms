@@ -1,6 +1,7 @@
 package nextstep.courses.domain.session;
 
 import nextstep.courses.domain.image.Image;
+import nextstep.courses.domain.lecturer.Lecturer;
 import nextstep.courses.domain.student.Student;
 
 import java.util.ArrayList;
@@ -10,37 +11,50 @@ public class FreeSession extends Session {
 
     public FreeSession(String title,
                        SessionDate sessionDate,
-                       Image image
+                       List<Image> images
     ) {
-        this(image, sessionDate, null, title, SessionStatus.PREPARING, SessionType.FREE, new ArrayList<>());
+        this(null, title, sessionDate, images, SessionType.FREE, SessionStatus.init(), new ArrayList<>(), null);
     }
 
     public FreeSession(Long id,
                        String title,
                        SessionDate sessionDate,
-                       Image image
+                       List<Image> images
     ) {
-        this(image, sessionDate, id, title, SessionStatus.PREPARING, SessionType.FREE, new ArrayList<>());
+        this(id, title, sessionDate, images, SessionType.FREE, SessionStatus.init(), new ArrayList<>(), null);
     }
 
-    public FreeSession(Image image,
-                       SessionDate sessionDate,
-                       Long id,
+    public FreeSession(Long id,
                        String title,
-                       SessionStatus sessionStatus,
+                       SessionDate sessionDate,
+                       List<Image> images,
                        SessionType sessionType,
+                       SessionStatus sessionStatus,
                        List<Student> students
     ) {
-        super(image, sessionDate, id, title, sessionStatus, sessionType, students);
+        super(id, title, sessionDate, images, sessionType, sessionStatus, students, null);
     }
 
-    public static FreeSession of(FreeSession session, Image image, List<Student> students) {
-        return new FreeSession(image, session.getSessionDate(), session.getId(), session.getTitle(), session.getSessionStatus(), session.getSessionType(), students);
+    public FreeSession(Long id, String title, SessionDate sessionDate, List<Image> images, SessionType sessionType, SessionStatus sessionStatus, List<Student> students, Lecturer lecturer) {
+        super(id, title, sessionDate, images, sessionType, sessionStatus, students, lecturer);
+    }
+
+    public static FreeSession of(FreeSession session, List<Image> images, List<Student> students, Lecturer lecturer) {
+        return new FreeSession(
+                session.getId(),
+                session.getTitle(),
+                session.getSessionDate(),
+                images,
+                session.getSessionType(),
+                session.getSessionStatus(),
+                students,
+                lecturer
+        );
     }
 
     @Override
     public void register(Registration registration) {
-        if (!isAvailableForRegistration()) {
+        if (!isRegistrationAvailable()) {
             throw new IllegalStateException("Can't register session");
         }
 

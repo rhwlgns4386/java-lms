@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -45,6 +46,23 @@ public class JdbcImageRepository implements ImageRepository {
     }
 
     @Override
+    public int[] saveAll(List<Image> images, Long sessionId) {
+        String sql = "insert into image (session_id, size, image_type, width, height, created_at) values(:sessionId, :size, :imageType, :width, :height, :createdAt)";
+        MapSqlParameterSource[] batch = images.stream()
+                .map(image -> {
+                    MapSqlParameterSource param = new MapSqlParameterSource();
+                    param.addValue("sessionId", sessionId);
+                    param.addValue("size", image.getImageSize().getSize());
+                    param.addValue("imageType", image.getImageType().name());
+                    param.addValue("width", image.getImagePixel().getWidth());
+                    param.addValue("height", image.getImagePixel().getHeight());
+                    param.addValue("createdAt", LocalDateTime.now());
+                    return param;
+                }).toArray(MapSqlParameterSource[]::new);
+        return namedParameterJdbcTemplate.batchUpdate(sql, batch);
+    }
+
+    @Override
     public Optional<Image> findById(long id) {
         String sql = "select id, size, image_type, width, height from image where id = :id";
         MapSqlParameterSource param = new MapSqlParameterSource();
@@ -53,10 +71,10 @@ public class JdbcImageRepository implements ImageRepository {
     }
 
     @Override
-    public Optional<Image> findBySessionId(long sessionId) {
+    public List<Image> findAllBySessionId(long sessionId) {
         String sql = "select id, size, image_type, width, height from image where session_id = :sessionId";
         MapSqlParameterSource param = new MapSqlParameterSource();
         param.addValue("sessionId", sessionId);
-        return Optional.ofNullable(namedParameterJdbcTemplate.queryForObject(sql, param, IMAGE_ROW_MAPPER));
+        return namedParameterJdbcTemplate.query(sql, param, IMAGE_ROW_MAPPER);
     }
 }

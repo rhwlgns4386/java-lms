@@ -1,12 +1,16 @@
 package nextstep.courses.service;
 
 import nextstep.courses.domain.image.*;
+import nextstep.courses.domain.lecturer.LecturerRepository;
+import nextstep.courses.domain.lecturer.LecturerTest;
 import nextstep.courses.domain.session.*;
 import nextstep.courses.domain.student.Student;
 import nextstep.courses.domain.student.StudentRepository;
+import nextstep.courses.domain.student.StudentStatus;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
 import nextstep.users.domain.NsUserTest;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,6 +40,8 @@ public class SessionServiceTest {
     ImageRepository imageRepository;
     @Mock
     StudentRepository studentRepository;
+    @Mock
+    LecturerRepository lecturerRepository;
 
     private Session session;
     private Image image;
@@ -53,16 +59,18 @@ public class SessionServiceTest {
         sessionDate = new SessionDate(start, end);
         sessionCapacity = new SessionCapacity(10);
 
-        session = new PaidSession(title, image, sessionDate, sessionCapacity, fee);
+        session = new PaidSession(title, new ArrayList<>(List.of(image)), sessionDate, sessionCapacity, fee);
+        session.assignLecturer(LecturerTest.testLecturer);
     }
 
     @Test
     void createSessionTest() {
         Long courseId = 1L;
-        long sessionId = sessionService.create(courseId, session, session.getImage());
+        long sessionId = sessionService.create(courseId, session, session.getImages(), LecturerTest.testLecturer);
 
         verify(sessionRepository).save(session, courseId);
-        verify(imageRepository).save(session.getImage(), sessionId);
+        verify(imageRepository).saveAll(session.getImages(), sessionId);
+        verify(lecturerRepository).save(LecturerTest.testLecturer, sessionId);
     }
 
 
@@ -72,15 +80,12 @@ public class SessionServiceTest {
         NsUser nsUser = NsUserTest.JAVAJIGI;
         Long amount = 200_000L;
         Payment payment = new Payment("1234", sessionId, nsUser.getId(), amount);
-        PaidSession paidSession = new PaidSession(sessionId, title, image, sessionDate, sessionCapacity, fee);
+        PaidSession paidSession = new PaidSession(sessionId, title, new ArrayList<>(List.of(image)), sessionDate, sessionCapacity, fee);
 
         Student student = new Student(amount, nsUser.getId());
         Student student2 = new Student(amount, NsUserTest.SANJIGI.getId());
 
-        when(sessionRepository.findById(anyLong())).thenReturn(Optional.of(paidSession));
-        when(imageRepository.findBySessionId(anyLong())).thenReturn(Optional.of(image));
-        when(studentRepository.findAllBySessionId(anyLong())).thenReturn(new ArrayList<>(List.of(student2)));
-        when(studentRepository.saveAll(anyList(), anyLong())).thenReturn(new int[]{1});
+        mockSetup(paidSession, student2);
 
         paidSession.open();
 
@@ -94,25 +99,88 @@ public class SessionServiceTest {
     }
 
     @Test
+    void acceptStudentsTest() {
+        Long sessionId = 2L;
+        NsUser nsUser = NsUserTest.JAVAJIGI;
+        Long amount = 200_000L;
+        Payment payment = new Payment("1234", sessionId, nsUser.getId(), amount);
+        Payment payment2 = new Payment("1235", sessionId, NsUserTest.SANJIGI.getId(), amount);
+        PaidSession paidSession = new PaidSession(sessionId, title, new ArrayList<>(List.of(image)), sessionDate, sessionCapacity, fee);
+        paidSession.assignLecturer(LecturerTest.testLecturer);
+
+        Student student = new Student(amount, nsUser.getId());
+        Student student2 = new Student(amount, NsUserTest.SANJIGI.getId());
+        List<Student> students = Arrays.asList(student, student2);
+
+        paidSession.open();
+        paidSession.register(Registration.of(sessionId, nsUser, payment));
+        paidSession.register(Registration.of(sessionId, NsUserTest.SANJIGI, payment2));
+
+        mockSetup(paidSession, student2);
+
+        Session accept = sessionService.accept(sessionId, LecturerTest.testLecturer, students);
+
+        for (Student elem : accept.getStudents()) {
+            Assertions.assertThat(elem.getStatus()).isEqualTo(StudentStatus.ACCEPTED);
+        }
+    }
+
+    private void mockSetup(PaidSession paidSession, Student student) {
+        when(sessionRepository.findById(anyLong())).thenReturn(Optional.of(paidSession));
+        when(imageRepository.findAllBySessionId(anyLong())).thenReturn(new ArrayList<>(List.of(image)));
+        when(studentRepository.findAllBySessionId(anyLong())).thenReturn(new ArrayList<>(List.of(student)));
+        when(lecturerRepository.findBySessionId(anyLong())).thenReturn(Optional.of(LecturerTest.testLecturer));
+        when(studentRepository.saveAll(anyList(), anyLong())).thenReturn(new int[]{1});
+    }
+
+    @Test
+    void rejectStudentsTest() {
+        Long sessionId = 2L;
+        NsUser nsUser = NsUserTest.JAVAJIGI;
+        Long amount = 200_000L;
+        Payment payment = new Payment("1234", sessionId, nsUser.getId(), amount);
+        Payment payment2 = new Payment("1235", sessionId, NsUserTest.SANJIGI.getId(), amount);
+        PaidSession paidSession = new PaidSession(sessionId, title, new ArrayList<>(List.of(image)), sessionDate, sessionCapacity, fee);
+        paidSession.assignLecturer(LecturerTest.testLecturer);
+
+        Student student = new Student(amount, nsUser.getId());
+        Student student2 = new Student(amount, NsUserTest.SANJIGI.getId());
+        List<Student> students = Arrays.asList(student, student2);
+
+        paidSession.open();
+        paidSession.register(Registration.of(sessionId, nsUser, payment));
+        paidSession.register(Registration.of(sessionId, NsUserTest.SANJIGI, payment2));
+
+        mockSetup(paidSession, student2);
+
+        Session accept = sessionService.reject(sessionId, LecturerTest.testLecturer, students);
+
+        for (Student elem : accept.getStudents()) {
+            Assertions.assertThat(elem.getStatus()).isEqualTo(StudentStatus.REJECTED);
+        }
+    }
+
+    @Test
     void findBySessionId() {
         Long sessionId = 2L;
         NsUser nsUser = NsUserTest.JAVAJIGI;
         Long amount = 200_000L;
-        PaidSession paidSession = new PaidSession(sessionId, title, image, sessionDate, sessionCapacity, fee);
+        PaidSession paidSession = new PaidSession(sessionId, title, new ArrayList<>(List.of(image)), sessionDate, sessionCapacity, fee);
         paidSession.open();
 
         Student student = new Student(amount, nsUser.getId());
         Student student2 = new Student(amount, NsUserTest.SANJIGI.getId());
 
         when(sessionRepository.findById(anyLong())).thenReturn(Optional.of(paidSession));
-        when(imageRepository.findBySessionId(anyLong())).thenReturn(Optional.of(image));
+        when(imageRepository.findAllBySessionId(anyLong())).thenReturn(new ArrayList<>(List.of(image)));
         when(studentRepository.findAllBySessionId(anyLong())).thenReturn(Arrays.asList(student, student2));
+        when(lecturerRepository.findBySessionId(anyLong())).thenReturn(Optional.of(LecturerTest.testLecturer));
 
         Session foundSession = sessionService.findById(sessionId);
 
         assertThat(foundSession.getStudents()).hasSameElementsAs(Arrays.asList(student, student2));
         assertThat(foundSession.getId()).isEqualTo(sessionId);
-        assertThat(foundSession.getImage()).isEqualTo(image);
+        assertThat(foundSession.getImages()).hasSameElementsAs(List.of(image));
         assertThat(foundSession.getSessionType()).isEqualTo(SessionType.PAID);
     }
 }

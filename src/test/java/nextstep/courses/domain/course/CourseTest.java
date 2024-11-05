@@ -1,6 +1,5 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.course;
 
-import nextstep.courses.domain.course.Course;
 import nextstep.courses.domain.image.Image;
 import nextstep.courses.domain.image.ImagePixel;
 import nextstep.courses.domain.image.ImageSize;
@@ -13,6 +12,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CourseTest {
@@ -32,12 +32,12 @@ public class CourseTest {
         LocalDateTime end = LocalDateTime.of(2024, 10, 10, 10, 11);
 
         SessionDate sessionDate = new SessionDate(start, end);
-        this.freeSession = new FreeSession(1L, "TDD", sessionDate, image);
+        this.freeSession = new FreeSession(1L, "TDD", sessionDate, new ArrayList<>(List.of(image)));
 
         SessionCapacity sessionCapacity = new SessionCapacity(1);
         Money fee = new Money(200_000L);
 
-        this.paidSession = new PaidSession(2L, "TDD", image, sessionDate, sessionCapacity, fee);
+        this.paidSession = new PaidSession(2L, "TDD", new ArrayList<>(List.of(image)), sessionDate, sessionCapacity, fee);
     }
 
     @Test

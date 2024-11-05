@@ -1,6 +1,7 @@
 package nextstep.courses.domain.session;
 
 import nextstep.courses.domain.image.Image;
+import nextstep.courses.domain.lecturer.Lecturer;
 import nextstep.courses.domain.student.Student;
 
 import java.util.ArrayList;
@@ -11,41 +12,68 @@ public class PaidSession extends Session {
     private Money fee;
 
     public PaidSession(String title,
-                       Image image,
+                       List<Image> images,
                        SessionDate sessionDate,
                        SessionCapacity capacity,
                        Money fee
     ) {
-        this(image, sessionDate, null, title, SessionStatus.PREPARING, SessionType.PAID, capacity, fee, new ArrayList<>());
+        this(null, title, sessionDate, images, SessionType.PAID, SessionStatus.init(), new ArrayList<>(), capacity, fee);
     }
 
     public PaidSession(Long id,
                        String title,
-                       Image image,
+                       List<Image> images,
                        SessionDate sessionDate,
                        SessionCapacity capacity,
                        Money fee
     ) {
-        this(image, sessionDate, id, title, SessionStatus.PREPARING, SessionType.PAID, capacity, fee, new ArrayList<>());
+        this(id, title, sessionDate, images, SessionType.PAID, SessionStatus.init(), new ArrayList<>(), capacity, fee);
     }
 
-    public PaidSession(Image image,
-                       SessionDate sessionDate,
-                       Long id,
+    public PaidSession(Long id,
                        String title,
-                       SessionStatus sessionStatus,
+                       SessionDate sessionDate,
+                       List<Image> images,
                        SessionType sessionType,
+                       SessionStatus sessionStatus,
+                       List<Student> students,
                        SessionCapacity capacity,
-                       Money fee,
-                       List<Student> students
+                       Money fee
     ) {
-        super(image, sessionDate, id, title, sessionStatus, sessionType, students);
+        super(id, title, sessionDate, images, sessionType, sessionStatus, students);
         this.capacity = capacity;
         this.fee = fee;
     }
 
-    public static PaidSession of(PaidSession session, Image image, List<Student> students) {
-        return new PaidSession(image, session.getSessionDate(), session.getId(), session.getTitle(), session.getSessionStatus(), session.getSessionType(), session.getCapacity(), session.getFee(), students);
+    public PaidSession(Long id,
+                       String title,
+                       SessionDate sessionDate,
+                       List<Image> images,
+                       SessionType sessionType,
+                       SessionStatus sessionStatus,
+                       List<Student> students,
+                       Lecturer lecturer,
+                       SessionCapacity capacity,
+                       Money fee
+    ) {
+        super(id, title, sessionDate, images, sessionType, sessionStatus, students, lecturer);
+        this.capacity = capacity;
+        this.fee = fee;
+    }
+
+    public static PaidSession of(PaidSession session, List<Image> images, List<Student> students, Lecturer lecturer) {
+        return new PaidSession(
+                session.getId(),
+                session.getTitle(),
+                session.getSessionDate(),
+                images,
+                session.getSessionType(),
+                session.getSessionStatus(),
+                students,
+                lecturer,
+                session.getCapacity(),
+                session.getFee()
+        );
     }
 
     public SessionCapacity getCapacity() {
@@ -58,7 +86,7 @@ public class PaidSession extends Session {
 
     @Override
     public void register(Registration registration) {
-        if (!isAvailableForRegistration()) {
+        if (!isRegistrationAvailable()) {
             throw new IllegalStateException("Can't register session");
         }
         if (registration == null) {

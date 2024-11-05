@@ -2,6 +2,8 @@ package nextstep.courses.service;
 
 import nextstep.courses.domain.image.Image;
 import nextstep.courses.domain.image.ImageRepository;
+import nextstep.courses.domain.lecturer.Lecturer;
+import nextstep.courses.domain.lecturer.LecturerRepository;
 import nextstep.courses.domain.session.*;
 import nextstep.courses.domain.student.Student;
 import nextstep.courses.domain.student.StudentRepository;
@@ -18,45 +20,52 @@ public class SessionService {
     private final SessionRepository sessionRepository;
     private final ImageRepository imageRepository;
     private final StudentRepository studentRepository;
+    private final LecturerRepository lecturerRepository;
 
-    public SessionService(SessionRepository sessionRepository, ImageRepository imageRepository, StudentRepository studentRepository) {
+    public SessionService(SessionRepository sessionRepository,
+                          ImageRepository imageRepository,
+                          StudentRepository studentRepository,
+                          LecturerRepository lecturerRepository) {
         this.sessionRepository = sessionRepository;
         this.imageRepository = imageRepository;
         this.studentRepository = studentRepository;
+        this.lecturerRepository = lecturerRepository;
     }
 
     @Transactional(readOnly = true)
     public Session findById(long sessionId) {
         Session session = sessionRepository.findById(sessionId).orElseThrow();
-        Image image = imageRepository.findBySessionId(sessionId).orElse(null);
+        List<Image> images = imageRepository.findAllBySessionId(sessionId);
         List<Student> students = studentRepository.findAllBySessionId(sessionId);
+        Lecturer lecturer = lecturerRepository.findBySessionId(sessionId).orElse(null);
 
-        return getSession(session, image, students);
+        return getSession(session, images, students, lecturer);
     }
 
-    private static Session getSession(Session session, Image image, List<Student> students) {
+    private static Session getSession(Session session, List<Image> images, List<Student> students, Lecturer lecturer) {
         if (session.getSessionType().equals(SessionType.FREE)) {
-            return FreeSession.of((FreeSession) session, image, students);
+            return FreeSession.of((FreeSession) session, images, students, lecturer);
         }
-        return PaidSession.of((PaidSession) session, image, students);
+        return PaidSession.of((PaidSession) session, images, students, lecturer);
     }
 
     @Transactional(readOnly = true)
     public List<Session> findAllByCourseId(long courseId) {
         return sessionRepository.findAllByCourseId(courseId).stream()
                 .map(it -> {
-                    Image image = imageRepository.findBySessionId(it.getId()).orElse(null);
+                    List<Image> images = imageRepository.findAllBySessionId(it.getId());
                     List<Student> students = studentRepository.findAllBySessionId(it.getId());
-
-                    return getSession(it, image, students);
+                    Lecturer lecturer = lecturerRepository.findBySessionId(it.getId()).orElse(null);
+                    return getSession(it, images, students, lecturer);
                 })
                 .collect(Collectors.toList());
     }
 
     @Transactional
-    public long create(Long courseId, Session session, Image image) {
+    public long create(Long courseId, Session session, List<Image> images, Lecturer lecturer) {
         long saveSessionId = sessionRepository.save(session, courseId);
-        imageRepository.save(image, saveSessionId);
+        imageRepository.saveAll(images, saveSessionId);
+        lecturerRepository.save(lecturer, saveSessionId);
 
         return saveSessionId;
     }
@@ -72,6 +81,24 @@ public class SessionService {
             return session;
         }
         registerPaidSession((PaidSession) session, registration);
+        return session;
+    }
+
+    @Transactional
+    public Session accept(Long sessionId, Lecturer lecturer, List<Student> students) {
+        Session session = findById(sessionId);
+        session.acceptStudents(lecturer, students);
+
+        studentRepository.saveAll(students, sessionId);
+        return session;
+    }
+
+    @Transactional
+    public Session reject(Long sessionId, Lecturer lecturer, List<Student> students) {
+        Session session = findById(sessionId);
+        session.rejectStudents(lecturer, students);
+
+        studentRepository.saveAll(students, sessionId);
         return session;
     }
 

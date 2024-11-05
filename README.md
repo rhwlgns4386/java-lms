@@ -47,6 +47,20 @@
 * Session 조회 서비스 로직 [X]
 * Course 생성 서비스 로직 [X]
 * Course 조회 서비스 로직 [X]
+* 강의가 하나 이상의 이미지를 가질 수 있도록 변경 [X]
+    * Session class에 List<Image> images field 추가 [X]
+    * 한개의 image가 아니라 여러개의 image들을 받아서 PaidSession, FreeSession 생성하도록 변경 [X]
+    * ImageRepository에서 여러개의 image들을 반환 받도록 변경 [X]
+    * Session class에서 Image image field 제거 [X]
+* 강의 상태를 진행 상태(준비중,진행중,종료)와 모집 상태(비모집중,모집중)으로 분리 [X]
+    * Session에 진행 상태, 모집 상태 field 추가 [X]
+    * Session class 생성 로직에서 진행 상태, 모집 상태 만들도록 변경 [X]
+    * 모든 로직에서 진행 상태, 모집 상태 사용하도록 변경 [X]
+    * Session class에서 SessionStatus field 제거 [X]
+* 선발된 인원만 수강 가능해야 한다 [X]
+    * Lecturer class 추가 [X]
+    * Student에 수강 상태(신청,승인,취소) 추가 [X]
+    * 강사가 수강 신청한 학생들을 승인할 수 있는 로직 추가 [X]
 
 ## ERD
 
@@ -56,4 +70,6 @@ erDiagram
     SESSION ||--|| IMAGE: has
     SESSION ||--o{ STUDENT: use
     NS_USER ||--o{ STUDENT: use
+    NS_USER ||--o{ LECTURER: use
+    SESSION ||--|| LECTURER: use
 ```

@@ -1,6 +1,5 @@
-package nextstep.courses.domain;
+package nextstep.courses.domain.session;
 
-import nextstep.courses.domain.session.Registration;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUserTest;
 import org.assertj.core.api.Assertions;
@@ -9,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 public class RegistrationTest {
     public static final Registration REGISTRATION = new Registration(1L, NsUserTest.JAVAJIGI, new Payment("1", 1L, NsUserTest.JAVAJIGI.getId(), 200_000L));
+    public static final Registration REGISTRATION2 = new Registration(1L, NsUserTest.SANJIGI, new Payment("1", 1L, NsUserTest.SANJIGI.getId(), 200_000L));
 
     @Test
     @DisplayName("Registration 생성")

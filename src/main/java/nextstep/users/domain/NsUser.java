@@ -34,13 +34,13 @@ public class NsUser {
     }
 
     public NsUser(Long id, String userId, String password, String name, String email, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.createdAt = createdAt;
-        this.email = email;
         this.id = id;
-        this.name = name;
-        this.password = password;
-        this.updatedAt = updatedAt;
         this.userId = userId;
+        this.password = password;
+        this.name = name;
+        this.email = email;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
     public Long getId() {

@@ -11,4 +11,6 @@ public interface StudentRepository {
     Optional<Student> findById(Long nsUserId, Long sessionId);
 
     List<Student> findAllBySessionId(Long sessionId);
+
+    Student updateStatus(Student student, Long sessionId);
 }
