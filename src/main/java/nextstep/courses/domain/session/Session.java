@@ -48,10 +48,10 @@ public class Session {
         applyStatus.finish();
     }
 
-    public SessionStudent registration(NsUser nsUser, Payment payment) {
+    public void registration(NsUser nsUser, Payment payment) {
         validate();
         sessionPay.validatePay(payment);
-        return students.registration(id, nsUser);
+
     }
 
     public void mapping(List<SessionStudent> sessionStudents) {

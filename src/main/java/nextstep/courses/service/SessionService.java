@@ -1,6 +1,7 @@
 package nextstep.courses.service;
 
 
+import nextstep.courses.domain.SessionApplyRepository;
 import nextstep.courses.domain.SessionCoverImageRepository;
 import nextstep.courses.domain.SessionRepository;
 import nextstep.courses.domain.SessionStudentRepository;
@@ -8,10 +9,7 @@ import nextstep.courses.domain.coverimage.SessionCoverImage;
 import nextstep.courses.domain.coverimage.SessionCoverImagePath;
 import nextstep.courses.domain.coverimage.SessionCoverImageSize;
 import nextstep.courses.domain.coverimage.SessionCoverImages;
-import nextstep.courses.domain.session.Session;
-import nextstep.courses.domain.session.SessionPayType;
-import nextstep.courses.domain.session.SessionPeriod;
-import nextstep.courses.domain.session.SessionStudent;
+import nextstep.courses.domain.session.*;
 import nextstep.courses.dto.MultipartFile;
 import nextstep.courses.dto.SessionDto;
 import nextstep.payments.domain.Payment;
@@ -34,6 +32,10 @@ public class SessionService {
     @Resource(name = "sessionStudentRepository")
     private SessionStudentRepository sessionStudentRepository;
 
+    @Resource(name = "sessionApplyRepository")
+    private SessionApplyRepository sessionApplyRepository;
+
+
     @Transactional
     public void saveSession(SessionDto dto) {
 
@@ -42,16 +44,7 @@ public class SessionService {
         Session createdSession = createSessionPayType(dto);
         Long sessionId = sessionRepository.save(createdSession);
 
-
         SessionCoverImages sessionCoverImages = SessionCoverImages.create(sessionId, multipartFiles);
-//        SessionCoverImage image = SessionCoverImage.create(
-//                sessionId,
-//                multipartFile.getSize(),
-//                SessionCoverImagePath.create("/", multipartFile.getOriginalFileName()),
-//                new SessionCoverImageSize(multipartFile.getWidth(), multipartFile.getHeight())
-//        );
-
-//        sessionCoverImageRepository.save(image);
 
         sessionCoverImageRepository.saveAll(sessionCoverImages);
     }
@@ -74,10 +67,23 @@ public class SessionService {
         List<SessionStudent> students = sessionStudentRepository.findBySessionId(payment.getSessionId());
         session.mapping(students);
 
-        SessionStudent registration = session.registration(nsUser, payment);
+        session.registration(nsUser, payment);
 
-        sessionStudentRepository.save(registration);
+        SessionApply apply = SessionApply.create(sessionId, nsUser.getId());
+        sessionApplyRepository.save(apply);
     }
 
+    @Transactional
+    public void cancel(Long applyId) {
+        SessionApply apply = sessionApplyRepository.findById(applyId);
+        apply.cancel();
+        sessionApplyRepository.update(apply);
+    }
 
+    @Transactional
+    public void submit(Long applyId) {
+        SessionApply apply = sessionApplyRepository.findById(applyId);
+        apply.submit();
+        sessionApplyRepository.update(apply);
+    }
 }

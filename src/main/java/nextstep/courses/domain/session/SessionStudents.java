@@ -16,11 +16,10 @@ public class SessionStudents {
         this.maximumNumberPeople = maximumNumberPeople;
     }
 
-    public SessionStudent registration(Long sessionId, NsUser nsUser) {
+    public void registration(Long sessionId, NsUser nsUser) {
         SessionStudent sessionStudent = new SessionStudent(sessionId, nsUser.getId());
         validate(sessionStudent);
-        students.add(sessionStudent);
-        return sessionStudent;
+
     }
 
     public boolean isExceeds() {

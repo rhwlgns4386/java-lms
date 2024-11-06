@@ -7,4 +7,5 @@ public interface SessionApplyRepository {
 
     SessionApply findById(Long id);
 
+    void update(SessionApply apply);
 }

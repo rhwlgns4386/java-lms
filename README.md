@@ -10,7 +10,7 @@
 
 ### SessionApplyStatus (강의 지원 상태)
 - [x] 검증(진행중, 모집중)둘 다 아니면 예외
-- [x] SessionStatus유지 하고(SessionProgressStatus, SessionRecruitStatus - null 허용하여 컬럼생성)
+- [x] SessionStatus 유지 하고(SessionProgressStatus, SessionRecruitStatus - null 허용하여 컬럼생성)
 
 ---
 
@@ -34,7 +34,7 @@
 - [x] 선발된 회원 수강 취소 시 예외
 - [x] 선발된 회원면 수강 가능
 - [x] 승인 취소 완료되면 지원서는 삭제
-- [ ] 테이블 생성, CRUD
+- [x] 테이블 생성, 선발된 인원인지 검증
 
 
 
