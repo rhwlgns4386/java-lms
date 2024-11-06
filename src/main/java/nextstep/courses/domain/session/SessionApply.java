@@ -14,6 +14,7 @@ public class SessionApply {
     private boolean isDeleted;
 
     public SessionApply(Long id, Long sessionId, Long userId, boolean isGuest, boolean isDeleted, boolean isSubmit) {
+        this.id = id;
         this.sessionId = sessionId;
         this.userId = userId;
         this.isGuest = isGuest;
@@ -79,4 +80,5 @@ public class SessionApply {
     public boolean isSubmit() {
         return isSubmit;
     }
+
 }

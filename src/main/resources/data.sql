@@ -44,3 +44,9 @@ INSERT INTO session_student(session_id, user_id)
 VALUES (1, 2);
 INSERT INTO session_student(session_id, user_id)
 VALUES (1, 3);
+
+
+INSERT INTO selection_user(user_id)
+values (3);
+INSERT INTO selection_user(user_id)
+values (4);
