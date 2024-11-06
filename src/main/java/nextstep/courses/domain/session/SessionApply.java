@@ -1,5 +1,7 @@
 package nextstep.courses.domain.session;
 
+import nextstep.courses.SessionException;
+
 import java.util.Objects;
 
 public class SessionApply {
@@ -23,6 +25,9 @@ public class SessionApply {
 
 
     public void cancel() {
+        if(!isGuest){
+            throw new SessionException("선발된 인원은 수강 취소 할 수 없습니다");
+        }
         this.isDeleted = true;
     }
 
