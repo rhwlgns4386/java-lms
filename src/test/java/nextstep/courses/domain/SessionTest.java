@@ -4,24 +4,19 @@ import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 
 public class SessionTest {
 
-    public final static SessionImage SESSION_IMAGE = new SessionImage(200, "png", 600, 400, "imageFileName");
+    public final static Session SESSION_RECRUITING_READY = new Session(SessionInfoTest.SESSION_INFO_RECRUIT_READY, SessionImagesTest.SESSION_IMAGE, new SessionPrice(2000), SessionType.PAID);
+    public final static Session SESSION_RECRUITING_PRORESS = new Session(SessionInfoTest.SESSION_INFO_RECRUIT_PROGRESS, SessionImagesTest.SESSION_IMAGE, new SessionPrice(1000), SessionType.PAID);
+    public final static Session SESSION_RECRUITING_END = new Session(SessionInfoTest.SESSION_INFO_RECRUIT_END, SessionImagesTest.SESSION_IMAGE, new SessionPrice(1000), SessionType.PAID);
 
-    public final static Session SESSION_RECRUITING_READY = new Session(SessionInfoTest.SESSION_INFO_RECRUIT_READY, SESSION_IMAGE, new SessionPrice(2000), SessionType.PAID);
-    public final static Session SESSION_RECRUITING_PRORESS = new Session(SessionInfoTest.SESSION_INFO_RECRUIT_PROGRESS, SESSION_IMAGE, new SessionPrice(1000), SessionType.PAID);
-    public final static Session SESSION_RECRUITING_END = new Session(SessionInfoTest.SESSION_INFO_RECRUIT_END, SESSION_IMAGE, new SessionPrice(1000), SessionType.PAID);
-
-    public final static Session SESSION_NO_RECRUITING_READY = new Session(SessionInfoTest.SESSION_INFO_NO_RECRUIT_READY, SESSION_IMAGE, new SessionPrice(3000), SessionType.PAID);
-    public final static Session SESSION_NO_RECRUITING_PROGRESS = new Session(SessionInfoTest.SESSION_INFO_NO_RECRUIT_PROGRESS, SESSION_IMAGE, new SessionPrice(3000), SessionType.PAID);
-    public final static Session SESSION_NO_RECRUITING_END = new Session(SessionInfoTest.SESSION_INFO_NO_RECRUIT_END, SESSION_IMAGE, new SessionPrice(3000), SessionType.PAID);
+    public final static Session SESSION_NO_RECRUITING_READY = new Session(SessionInfoTest.SESSION_INFO_NO_RECRUIT_READY, SessionImagesTest.SESSION_IMAGE, new SessionPrice(3000), SessionType.PAID);
+    public final static Session SESSION_NO_RECRUITING_PROGRESS = new Session(SessionInfoTest.SESSION_INFO_NO_RECRUIT_PROGRESS, SessionImagesTest.SESSION_IMAGE, new SessionPrice(3000), SessionType.PAID);
+    public final static Session SESSION_NO_RECRUITING_END = new Session(SessionInfoTest.SESSION_INFO_NO_RECRUIT_END, SessionImagesTest.SESSION_IMAGE, new SessionPrice(3000), SessionType.PAID);
 
 
     @Test

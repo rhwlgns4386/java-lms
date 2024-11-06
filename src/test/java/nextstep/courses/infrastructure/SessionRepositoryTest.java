@@ -16,7 +16,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+
+import java.util.HashMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -25,7 +27,7 @@ public class SessionRepositoryTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(SessionRepositoryTest.class);
 
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private NamedParameterJdbcTemplate jdbcTemplate;
 
     private SessionRepository sessionRepository;
 
@@ -37,22 +39,24 @@ public class SessionRepositoryTest {
     @Test
     @DisplayName("강의 등록 / 찾기")
     void sessionRegisterCRUD() {
-        int count = sessionRepository.saveRegisterSession(SessionTest.SESSION_NO_RECRUITING_PROGRESS);
-        assertThat(count).isEqualTo(1);
+        int sessionCnt = sessionRepository.saveRegisterSession(SessionTest.SESSION_NO_RECRUITING_PROGRESS);
+        assertThat(SessionTest.SESSION_NO_RECRUITING_PROGRESS.getSessionImages()).hasSize(sessionCnt);
 
-        Session session = sessionRepository.findSessionInfoById(1L);
+        String sql = "SELECT session_id FROM session ORDER BY session_id DESC LIMIT 1";
+        long sessionId = jdbcTemplate.queryForObject(sql, new HashMap<>(), Long.class);
+
+        Session session = sessionRepository.findSessionInfoById(sessionId);
+
         assertThat(session.getSessionTypeCode()).isEqualTo(SessionType.PAID.getTypeCode());
         assertThat(session.getStateCode()).isEqualTo(StateCode.NO_RECRUITING.getStatusCode());
-        assertThat(session.getProgressCode()).isEqualTo(ProgressCode.READY.getProgressCode());
+        assertThat(session.getProgressCode()).isEqualTo(ProgressCode.PROGRESS.getProgressCode());
         assertThat(session).isInstanceOf(PaidSession.class);
 
-        LOGGER.debug("=====================");
-        LOGGER.debug("Session: {}", session);
+        assertThat(session.getSessionImages()).hasSize(2);
     }
 
-
     @Test
-    @DisplayName("주문 조회 / 주문 등록")
+    @DisplayName("강의주문을 조회하고 강의 주문을 한 후 주문정보를 가져온다")
     void sessionOrderCRUD() {
         Session session = sessionRepository.findSessionInfoById(1L);
         int count = sessionRepository.saveOrderSession(NsUserTest.JAVAJIGI, session);
