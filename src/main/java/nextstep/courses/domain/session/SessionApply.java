@@ -31,6 +31,15 @@ public class SessionApply {
         this.isDeleted = true;
     }
 
+
+    public void submit() {
+        if(isGuest){
+            throw new SessionException("선발된 인원이 아니라 승인할 수 없습니다");
+        }
+
+        this.isDeleted = true;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -63,4 +72,5 @@ public class SessionApply {
     public boolean isDeleted() {
         return isDeleted;
     }
+
 }

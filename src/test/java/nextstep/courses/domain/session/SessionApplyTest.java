@@ -17,7 +17,7 @@ public class SessionApplyTest {
 
     @DisplayName("GUEST(선발되지 않은 사람)면 취소 가능")
     @Test
-    void applyCancel() {
+    void cancelApply() {
         SessionApply apply = new SessionApply(1L, 1L, 1L, true, false);
 
         apply.cancel();
@@ -27,11 +27,21 @@ public class SessionApplyTest {
 
     @DisplayName("GUEST(선발되지 않은 사람)면 수강 승인 시 예외")
     @Test
-    void applyCancel_exception() {
+    void cancelApply_exception() {
         SessionApply apply = new SessionApply(1L, 1L, 1L, false, false);
 
         assertThatThrownBy(
                 () -> apply.cancel()
+        );
+    }
+
+    @DisplayName("GUEST(선발되지 않은 사람)면 수강 승인 시 예외")
+    @Test
+    void submitApply() {
+        SessionApply apply = new SessionApply(1L, 1L, 1L, true, false);
+
+        assertThatThrownBy(
+                () -> apply.submit()
         );
     }
 
