@@ -1,8 +1,11 @@
 package nextstep.courses.service;
 
+import nextstep.courses.domain.Instructor;
 import nextstep.courses.domain.SessionImages;
+import nextstep.courses.domain.SessionOrder;
 import nextstep.courses.domain.SessionPrice;
 import nextstep.courses.domain.Students;
+import nextstep.courses.exception.CannotApproveSessionException;
 import nextstep.courses.exception.CannotRegisteSessionException;
 import nextstep.courses.infrastructure.SessionRepository;
 import nextstep.courses.request.RequestOrderParam;
@@ -33,6 +36,7 @@ public class SessionService {
         return sessionRepository.findSessionInfoById(sessionId);
     }
 
+    //현재 상태에 클래스 분리가 필요할까? 분리하게되면 컨트롤러 없어서 분리된 서비스에서 이 서비스를 의존하게됨
     public Session orderSession(Payment payment, NsUser user, long sessionId) throws CannotRegisteSessionException {
         Session session = findSessionInfoById(sessionId);
 
@@ -44,6 +48,30 @@ public class SessionService {
 
         sessionRepository.saveOrderSession(user, session);
         return session;
+    }
+
+    public SessionOrder approveSessionOrder(Instructor instructor, long orderId) throws CannotApproveSessionException {
+        SessionOrder sessionOrder = findSessionOrderByOrderId(orderId);
+
+        SessionOrder approvedSessionOrder = instructor.approveSessionOrder(sessionOrder);
+
+        sessionRepository.saveOrderStateSessionOrder(approvedSessionOrder);
+
+        return approvedSessionOrder;
+    }
+
+    public SessionOrder cancelSessionOrder(Instructor instructor, long orderId) throws CannotApproveSessionException {
+        SessionOrder sessionOrder = findSessionOrderByOrderId(orderId);
+
+        SessionOrder approvedSessionOrder = instructor.cancelSessionOrder(sessionOrder);
+
+        sessionRepository.saveOrderStateSessionOrder(approvedSessionOrder);
+
+        return approvedSessionOrder;
+    }
+
+    public SessionOrder findSessionOrderByOrderId(long orerId){
+        return sessionRepository.findSessionOrderByOrderId(orerId);
     }
 
 }
