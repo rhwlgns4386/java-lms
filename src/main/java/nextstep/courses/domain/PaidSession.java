@@ -11,8 +11,8 @@ public class PaidSession extends Session implements SessionStrategy {
 
     private int studentMaxCount;
 
-    public PaidSession(SessionInfo sessionInfo, SessionImage sessionImage, SessionPrice sessionPrice, int studentMaxCount) {
-        super(sessionInfo, sessionImage, sessionPrice, SessionType.PAID);
+    public PaidSession(SessionInfo sessionInfo, SessionImages sessionImages, SessionPrice sessionPrice, int studentMaxCount) {
+        super(sessionInfo, sessionImages, sessionPrice, SessionType.PAID);
         this.studentMaxCount = studentMaxCount;
 
         if(sessionPrice.getSalePrice() <= 0 ){
