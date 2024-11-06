@@ -8,6 +8,6 @@ public class MaxEnrollment {
     }
 
     public boolean exceeds(int studentCount) {
-        return studentCount > maxStudentCount;
+        return studentCount >= maxStudentCount;
     }
 }
