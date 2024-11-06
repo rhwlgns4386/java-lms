@@ -68,8 +68,4 @@ public class Enrollment {
     public Payment getPayment() {
         return payment;
     }
-
-    public String getPaymentId() {
-        return payment.getId();
-    }
 }

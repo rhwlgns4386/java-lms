@@ -24,14 +24,20 @@ VALUES (2, 2, 'runtime 에 reflect 발동 주체 객체가 뭔지 알 방법이 
         CURRENT_TIMESTAMP(), false);
 
 -- Free session (무료 세션)
-INSERT INTO session (id, course_id, title, start_at, end_at, session_type, session_status, max_capacity, session_fee)
-VALUES (1, 101, 'Introduction to Java', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), 'FREE', 'PENDING', NULL, 0);
+INSERT INTO session (id, course_id, title, start_at, end_at, session_type, session_status, student_capacity,
+                     session_fee)
+VALUES (1, 101, 'Introduction to Java', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), 'FREE', 'PENDING', NULL, NULL);
 
 -- Paid session (유료 세션)
-INSERT INTO session (id, course_id, title, start_at, end_at, session_type, session_status, max_capacity, session_fee)
-VALUES (2, 102, 'Advanced Java', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), 'PAID', 'PENDING', 30, 50000);
+INSERT INTO session (id, course_id, title, start_at, end_at, session_type, session_status, student_capacity,
+                     session_fee)
+VALUES (2, 101, 'Advanced Java', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), 'PAID', 'OPEN', 30, 50000);
 
-INSERT INTO enrollment (id, session_id, user_id, enrollment_date, payment_id)
-VALUES (1, 101, 202, CURRENT_TIMESTAMP, 303);
+INSERT INTO cover_image (session_id, size, image_type, width, height)
+VALUES (2, 1024, 'JPG', 300, 200);
+
+INSERT INTO payment (session_id, ns_user_id, amount, created_at)
+VALUES (2, 1, 50000, CURRENT_TIMESTAMP());
+
 
 

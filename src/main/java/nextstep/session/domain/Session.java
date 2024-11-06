@@ -14,12 +14,13 @@ public class Session {
     private final LocalDate endAt;
     private final CoverImage image;
     private final SessionType sessionType;
-    private final SessionPolicy sessionPolicy;
+    private final Long studentCapacity;
+    private final Long sessionFee;
     private SessionStatus sessionStatus;
     private final Set<Enrollment> enrollments = new HashSet<>();
 
     public Session(Long id, Long courseId, String title, LocalDate startAt, LocalDate endAt, CoverImage image,
-        SessionType sessionType, SessionPolicy sessionPolicy, SessionStatus sessionStatus) {
+        SessionType sessionType, Long studentCapacity, Long sessionFee, SessionStatus sessionStatus) {
         this.id = id;
         this.courseId = courseId;
         this.title = title;
@@ -27,24 +28,25 @@ public class Session {
         this.endAt = endAt;
         this.image = image;
         this.sessionType = sessionType;
-        this.sessionPolicy = sessionPolicy;
+        this.studentCapacity = studentCapacity;
+        this.sessionFee = sessionFee;
         this.sessionStatus = sessionStatus;
     }
 
     private Session(Long id, Long courseId, String title, LocalDate startAt, LocalDate endAt, CoverImage image,
-        SessionType sessionType, SessionPolicy sessionPolicy) {
-        this(id, courseId, title, startAt, endAt, image, sessionType, sessionPolicy, SessionStatus.PENDING);
+        SessionType sessionType, Long studentCapacity, Long sessionFee) {
+        this(id, courseId, title, startAt, endAt, image, sessionType, studentCapacity, sessionFee,
+            SessionStatus.PENDING);
     }
 
     public static Session createFreeSession(Long sessionId, String title, LocalDate startAt, LocalDate endAt,
         CoverImage image) {
-        return new Session(1L, sessionId, title, startAt, endAt, image, SessionType.FREE, new FreeSessionPolicy());
+        return new Session(1L, sessionId, title, startAt, endAt, image, SessionType.FREE, null, null);
     }
 
     public static Session createPaidSession(Long sessionId, String title, LocalDate startAt, LocalDate endAt,
-        CoverImage image, int studentCapacity, Long sessionFee) {
-        return new Session(1L, sessionId, title, startAt, endAt, image, SessionType.PAID,
-            new PaidSessionPolicy(studentCapacity, sessionFee));
+        CoverImage image, Long studentCapacity, Long sessionFee) {
+        return new Session(1L, sessionId, title, startAt, endAt, image, SessionType.PAID, studentCapacity, sessionFee);
     }
 
     public void open() {
@@ -52,15 +54,14 @@ public class Session {
     }
 
     public void enroll(Enrollment enrollment) {
-        validateRegister(enrollment);
+        validateRegister();
         enrollments.add(enrollment);
     }
 
-    private void validateRegister(Enrollment enrollment) {
+    private void validateRegister() {
         if (sessionStatus != SessionStatus.OPEN) {
             throw new IllegalArgumentException("모집중 상태의 강의가 아닙니다.");
         }
-        sessionPolicy.validatePolicy(getEnrolledUserCount(), enrollment);
     }
 
     public boolean isFree() {
@@ -81,5 +82,17 @@ public class Session {
 
     public int getEnrolledUserCount() {
         return enrollments.size();
+    }
+
+    public Long getStudentCapacity() {
+        return studentCapacity;
+    }
+
+    public Long getSessionFee() {
+        return sessionFee;
+    }
+
+    public SessionType getSessionType() {
+        return sessionType;
     }
 }

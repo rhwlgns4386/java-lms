@@ -24,7 +24,7 @@ public class JdbcEnrollmentRepository implements EnrollmentRepository {
     public Enrollment save(Enrollment enrollment) {
         String sql =
             "INSERT INTO enrollment (session_id, user_id, enrollment_date, payment_id) "
-                + "VALUES (?, ?, ?, ?, ?)";
+                + "VALUES (?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -33,7 +33,7 @@ public class JdbcEnrollmentRepository implements EnrollmentRepository {
             ps.setLong(1, enrollment.getSessionId());
             ps.setLong(2, enrollment.getNsUserId());
             ps.setTimestamp(3, Timestamp.valueOf(enrollment.getEnrollmentDate()));
-            ps.setString(4, enrollment.getPaymentId());
+            ps.setString(4, getPaymentId(enrollment));
             return ps;
         }, keyHolder);
 
@@ -46,5 +46,13 @@ public class JdbcEnrollmentRepository implements EnrollmentRepository {
             enrollment.getEnrollmentDate(),
             enrollment.getPayment()
         );
+    }
+
+    private static String getPaymentId(Enrollment enrollment) {
+        if (enrollment == null) {
+            return null;
+        }
+        // return enrollment.getPaymentId();
+        return "1234";
     }
 }

@@ -4,6 +4,8 @@ import nextstep.enrollment.domain.Enrollment;
 
 public interface SessionPolicy {
 
-    void validatePolicy(int enrollStudentCount, Enrollment enrollment);
+    void validatePolicy(Session session, Enrollment enrollment);
+
+    boolean isMatch(SessionType sessionType);
 
 }
