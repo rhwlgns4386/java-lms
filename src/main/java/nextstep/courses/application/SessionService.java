@@ -1,6 +1,7 @@
 package nextstep.courses.application;
 
 import nextstep.courses.domain.*;
+import nextstep.courses.domain.SessionCreate;
 
 public class SessionService {
     private final SessionRepository sessionRepository;
@@ -9,6 +10,11 @@ public class SessionService {
     public SessionService(SessionRepository sessionRepository, StudentRepository studentRepository) {
         this.sessionRepository = sessionRepository;
         this.studentRepository = studentRepository;
+    }
+
+    public void create(SessionCreate sessionCreate) {
+        Session session = Session.from(sessionCreate);
+        sessionRepository.save(session);
     }
 
     public void apply(Long nsUserId, Long sessionId) {

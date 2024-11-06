@@ -23,6 +23,10 @@ public class Session {
 
     private final List<Long> nsUserIds = new ArrayList<>();
 
+    public Session(Long courseId, SessionPeriod period, SessionCoverImage coverImage, SessionFeeType feeType, SessionAmount amount, int maxPersonnel, SessionStatus status) {
+        this(null, courseId, period, coverImage, feeType, amount, maxPersonnel, status);
+    }
+
     public Session(Long id, Long courseId, SessionPeriod period, SessionCoverImage coverImage, SessionFeeType feeType, SessionAmount amount, int maxPersonnel, SessionStatus status) {
         this.id = id;
         this.courseId = courseId;
@@ -47,6 +51,17 @@ public class Session {
 
     public static Session freeSession(Long id, Long courseId, SessionPeriod period, SessionCoverImage coverImage, SessionStatus status) {
         return new Session(id, courseId, period, coverImage, SessionFeeType.FREE, new SessionAmount(0L), 0, status);
+    }
+
+    public static Session from(SessionCreate sessionCreate) {
+        return new Session(
+                sessionCreate.getCourseId(),
+                new SessionPeriod(sessionCreate.getStartDate(), sessionCreate.getEndDate()),
+                new SessionCoverImage(sessionCreate.getFileSize(), sessionCreate.getFileType(), sessionCreate.getWidth(), sessionCreate.getHeight()),
+                sessionCreate.getAmount() == 0L ? SessionFeeType.FREE : SessionFeeType.PAID,
+                new SessionAmount(sessionCreate.getAmount()),
+                sessionCreate.getMaxPersonnel(),
+                SessionStatus.PREPARING);
     }
 
     public Student apply(SessionAddInfo addInfo) {
