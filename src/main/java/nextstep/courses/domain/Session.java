@@ -17,7 +17,7 @@ public class Session {
 
     private CurrentEnrollment currentEnrollment;
 
-    public Session(LocalDateTime startDate, LocalDateTime endDate, SessionImage sessionImage, boolean isFree, SessionStatus sessionStatus, MaxEnrollment maxEnrollment, CurrentEnrollment currentEnrollment) {
+    private Session(LocalDateTime startDate, LocalDateTime endDate, SessionImage sessionImage, boolean isFree, SessionStatus sessionStatus, MaxEnrollment maxEnrollment, CurrentEnrollment currentEnrollment) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.sessionImage = sessionImage;
@@ -25,6 +25,10 @@ public class Session {
         this.sessionStatus = sessionStatus;
         this.maxEnrollment = maxEnrollment;
         this.currentEnrollment = currentEnrollment;
+    }
+
+    public static Session createSession(LocalDateTime startDate, LocalDateTime endDate, SessionImage sessionImage, boolean isFree, SessionStatus sessionStatus, MaxEnrollment maxEnrollment, CurrentEnrollment currentEnrollment) {
+        return new Session(startDate, endDate, sessionImage, isFree, sessionStatus, maxEnrollment, currentEnrollment);
     }
 
     public boolean enroll(Enrollment enrollment) {
