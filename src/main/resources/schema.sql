@@ -82,10 +82,14 @@ create table session_order (
     session_id bigint not null,
     ns_user_id bigint not null,
     sale_price bigint not null,
+    ord_stat_code bigint not null, -- 최종 상태만 나타냄 대기 10 승인 20 취소 30
+    appr_id bigint, -- 승인자
     primary key (order_id),
     foreign key (session_id) references session(session_id),
-    foreign key (ns_user_id) references ns_user(id)
+    foreign key (ns_user_id) references ns_user(id),
+    unique (session_id,ns_user_id)
 );
+-- ALTER TABLE session_order ADD COLUMN ord_stat_code BIGINT NOT NULL;
 
 /*
 drop table session;

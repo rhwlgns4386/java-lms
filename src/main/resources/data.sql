@@ -39,6 +39,14 @@ values ('제목1유료_비모집_준비중', CURRENT_TIMESTAMP, CURRENT_TIMESTAM
        ('제목9무료_모집_진행중', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '30' DAY, 0, 20, 20, 'creatorId2', '10', 2),
        ('제목10무료_모집_강의종료', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '30' DAY, 0, 20, 30, 'creatorId2', '10', 2);
 
+insert into SESSION_ORDER(SESSION_ID, NS_USER_ID, SALE_PRICE, ORD_STAT_CODE, APPR_ID)
+values ( 1, 1, 1000, 10, null), --1번강의 1번유저 대기중
+       ( 1, 2, 1000, 10, null), --1번강의 2번유저 대기중
+       ( 1, 3, 1000, 20, 5), --1번강의를 듣는 3번유저를 5번강사가 승인함
+       ( 2, 3, 1000, 30, 5); --2번강의를 듣는 3번유저를 5번강사가 승인거절함
+;
+
+
 -- 세션 이미지 테이블에 데이터 삽입
 insert into session_image (session_id, file_name, file_size, type, width, height)
 values (1, 'imageFileName3', 1000, 'jpg', 300, 200),
@@ -102,7 +110,7 @@ select *
 from session;
 select *
 From NS_USER;
-select *
+select ORDER_ID, SESSION_ID, NS_USER_ID, SALE_PRICE, ORD_STAT_CODE, APPR_ID
 from SESSION_ORDER;
 
 //insert into SESSION_ORDER(session_id, ns_user_id, sale_price) values (1, 1, 1000);
