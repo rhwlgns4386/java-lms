@@ -10,22 +10,24 @@ public class SessionApply {
     private Long sessionId;
     private Long userId;
     private boolean isGuest;
+    private boolean isSubmit;
     private boolean isDeleted;
 
-    public SessionApply(Long id, Long sessionId, Long userId, boolean isGuest, boolean isDeleted) {
+    public SessionApply(Long id, Long sessionId, Long userId, boolean isGuest, boolean isDeleted, boolean isSubmit) {
         this.sessionId = sessionId;
         this.userId = userId;
         this.isGuest = isGuest;
         this.isDeleted = isDeleted;
+        this.isSubmit = isSubmit;
     }
 
     public static SessionApply create(Long sessionId, Long userId) {
-        return new SessionApply(0L, sessionId, userId, false, false);
+        return new SessionApply(0L, sessionId, userId, false, false, false);
     }
 
 
     public void cancel() {
-        if(!isGuest){
+        if (!isGuest) {
             throw new SessionException("선발된 인원은 수강 취소 할 수 없습니다");
         }
         this.isDeleted = true;
@@ -33,10 +35,11 @@ public class SessionApply {
 
 
     public void submit() {
-        if(isGuest){
+        if (isGuest) {
             throw new SessionException("선발된 인원이 아니라 승인할 수 없습니다");
         }
 
+        this.isSubmit = true;
         this.isDeleted = true;
     }
 
@@ -73,4 +76,7 @@ public class SessionApply {
         return isDeleted;
     }
 
+    public boolean isSubmit() {
+        return isSubmit;
+    }
 }
