@@ -20,6 +20,19 @@ public class SessionInfo {
 
     public SessionInfo(long sessionId, SessionMetaData sessionMetaData, SessionPeriod sessionPeriod,
                        StateCode stateCode, ProgressCode progressCode) {
+        if(sessionMetaData == null) {
+            throw new IllegalArgumentException("강의 정보를 입력해주세요.");
+        }
+        if(sessionPeriod == null) {
+            throw new IllegalArgumentException("강의 기간을 입력해주세요.");
+        }
+        if(stateCode == null) {
+            throw new IllegalArgumentException("강의 상태를 입력해주세요.");
+        }
+        if(progressCode == null) {
+            throw new IllegalArgumentException("강의 진행 상태를 입력해주세요.");
+        }
+
         this.sessionId = sessionId;
         this.sessionPeriod = sessionPeriod;
         this.sessionMetaData =  sessionMetaData;
