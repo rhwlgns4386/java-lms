@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import nextstep.enrollment.domain.Enrollment;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUserTest;
 

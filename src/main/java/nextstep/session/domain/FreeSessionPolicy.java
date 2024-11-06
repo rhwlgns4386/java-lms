@@ -1,5 +1,7 @@
 package nextstep.session.domain;
 
+import nextstep.enrollment.domain.Enrollment;
+
 public class FreeSessionPolicy implements SessionPolicy {
 
     @Override

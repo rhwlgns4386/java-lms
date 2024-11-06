@@ -66,4 +66,14 @@ create table session
     max_capacity   int,
     session_fee    bigint,
     primary key (id)
+);
+
+create table enrollment
+(
+    id              bigint    not null,
+    session_id      bigint    not null,
+    user_id         bigint    not null,
+    enrollment_date timestamp not null,
+    payment_id      bigint    not null,
+    primary key (id)
 )

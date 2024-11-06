@@ -31,3 +31,7 @@ VALUES (1, 101, 'Introduction to Java', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()
 INSERT INTO session (id, course_id, title, start_at, end_at, session_type, session_status, max_capacity, session_fee)
 VALUES (2, 102, 'Advanced Java', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), 'PAID', 'PENDING', 30, 50000);
 
+INSERT INTO enrollment (id, session_id, user_id, enrollment_date, payment_id)
+VALUES (1, 101, 202, CURRENT_TIMESTAMP, 303);
+
+

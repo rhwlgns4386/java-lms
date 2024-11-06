@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+import nextstep.enrollment.domain.Enrollment;
+
 public class Session {
     private final Long id;
     private final Long courseId;

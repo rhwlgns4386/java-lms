@@ -1,5 +1,7 @@
 package nextstep.session.domain;
 
+import nextstep.enrollment.domain.Enrollment;
+
 public class PaidSessionPolicy implements SessionPolicy {
 
     public static final int MIN_CAPACITY = 1;
