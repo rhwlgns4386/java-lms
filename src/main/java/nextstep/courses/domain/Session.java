@@ -13,11 +13,11 @@ public class Session {
 
     private SessionStatus sessionStatus;
 
-    private int maxEnrollment;
+    private MaxEnrollment maxEnrollment;
 
-    private int currentEnrollment;
+    private CurrentEnrollment currentEnrollment;
 
-    public Session(LocalDateTime startDate, LocalDateTime endDate, SessionImage sessionImage, boolean isFree, SessionStatus sessionStatus, int maxEnrollment, int currentEnrollment) {
+    public Session(LocalDateTime startDate, LocalDateTime endDate, SessionImage sessionImage, boolean isFree, SessionStatus sessionStatus, MaxEnrollment maxEnrollment, CurrentEnrollment currentEnrollment) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.sessionImage = sessionImage;
@@ -31,12 +31,7 @@ public class Session {
         if (sessionStatus != SessionStatus.OPEN) {
             throw new IllegalArgumentException("수강 신청 기간이 아닙니다.");
         }
-
-        if (!isFree && currentEnrollment >= maxEnrollment) {
-            throw new IllegalArgumentException("최대 수강신청 인원을 초과했습니다.");
-        }
-
-        currentEnrollment++;
+        currentEnrollment.addStudent();
         return true;
     }
 
