@@ -41,7 +41,11 @@ values ('제목1유료_비모집_준비중', CURRENT_TIMESTAMP, CURRENT_TIMESTAM
 
 -- 세션 이미지 테이블에 데이터 삽입
 insert into session_image (session_id, file_name, file_size, type, width, height)
-values (1, 'imageFileName1', 1000, 'jpg', 300, 200),
+values (1, 'imageFileName3', 1000, 'jpg', 300, 200),
+       (1, 'imageFileName4', 2000, 'png', 600, 400),
+       (1, 'imageFileName4', 2000, 'png', 600, 400),
+       (1, 'imageFileName4', 2000, 'png', 600, 400),
+      -- (1, 'imageFileName3', 2000, 'png', 600, 400),
        (2, 'imageFileName2', 1000, 'png', 600, 400),
        (3, 'imageFileName3', 1000, 'png', 1200, 800),
        (4, 'imageFileName4', 1000, 'png', 1200, 800),
@@ -66,7 +70,26 @@ SELECT s.title,
        si.height,
        si.file_name
 FROM session s
-         LEFT JOIN session_image si ON s.SESSION_ID = si.IMAGE_ID
+         LEFT JOIN session_image si ON s.SESSION_ID = si.SESSION_ID
+WHERE s.SESSION_ID = 1;
+
+SELECT s.title,
+       s.apply_start_date,
+       s.apply_end_date,
+       s.sale_price,
+       s.state_code,
+       s.creator_id,
+       si.file_size,
+       si.type,
+       si.width,
+       si.height,
+       si.file_name,
+       s.session_type,
+       s.student_max_count,
+       s.SESSION_ID,
+       s.PROGRESS_CODE
+FROM session s
+         LEFT JOIN session_image si ON s.SESSION_ID = si.SESSION_ID
 WHERE s.SESSION_ID = 1;
 
 SELECT so.NS_USER_ID,
