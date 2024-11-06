@@ -16,6 +16,10 @@ public class SessionAmount {
         }
     }
 
+    public long getAmount() {
+        return amount;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

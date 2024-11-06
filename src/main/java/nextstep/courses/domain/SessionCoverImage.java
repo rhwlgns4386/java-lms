@@ -64,6 +64,22 @@ public class SessionCoverImage {
         }
     }
 
+    public long getFileSize() {
+        return fileSize;
+    }
+
+    public String getFileType() {
+        return fileType;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

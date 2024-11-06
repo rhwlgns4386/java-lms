@@ -1,11 +1,14 @@
 package nextstep.courses.domain;
 
-import java.util.ArrayList;
-import java.util.List;
+import nextstep.courses.CannotOpenException;
+import nextstep.users.domain.NsUser;
+
 import java.util.Objects;
 
 public class Session {
     private final Long id;
+
+    private final Long courseId;
 
     private final SessionPeriod period;
 
@@ -17,12 +20,15 @@ public class Session {
 
     private final int maxPersonnel;
 
-    private final SessionStatus status;
+    private SessionStatus status;
 
-    private final List<Long> nsUserIds = new ArrayList<>();
+    public Session(Long courseId, SessionPeriod period, SessionCoverImage coverImage, SessionFeeType feeType, SessionAmount amount, int maxPersonnel, SessionStatus status) {
+        this(null, courseId, period, coverImage, feeType, amount, maxPersonnel, status);
+    }
 
-    protected Session(Long id, SessionPeriod period, SessionCoverImage coverImage, SessionFeeType feeType, SessionAmount amount, int maxPersonnel, SessionStatus status) {
+    public Session(Long id, Long courseId, SessionPeriod period, SessionCoverImage coverImage, SessionFeeType feeType, SessionAmount amount, int maxPersonnel, SessionStatus status) {
         this.id = id;
+        this.courseId = courseId;
         this.period = period;
         this.coverImage = coverImage;
         this.feeType = feeType;
@@ -31,9 +37,9 @@ public class Session {
         this.status = status;
     }
 
-    public static Session createPaidSession(Long id, SessionPeriod period, SessionCoverImage coverImage, SessionAmount amount, int maxPersonnel, SessionStatus status) {
+    public static Session paidSession(Long id, Long courseId, SessionPeriod period, SessionCoverImage coverImage, SessionAmount amount, int maxPersonnel, SessionStatus status) {
         validPaidSessionAmount(amount);
-        return new Session(id, period, coverImage, SessionFeeType.PAID, amount, maxPersonnel, status);
+        return new Session(id, courseId, period, coverImage, SessionFeeType.PAID, amount, maxPersonnel, status);
     }
 
     private static void validPaidSessionAmount(SessionAmount amount) {
@@ -42,18 +48,43 @@ public class Session {
         }
     }
 
-    public static Session createFreeSession(Long id, SessionPeriod period, SessionCoverImage coverImage, SessionStatus status) {
-        return new Session(id, period, coverImage, SessionFeeType.FREE, new SessionAmount(0L), 0, status);
+    public static Session freeSession(Long id, Long courseId, SessionPeriod period, SessionCoverImage coverImage, SessionStatus status) {
+        return new Session(id, courseId, period, coverImage, SessionFeeType.FREE, new SessionAmount(0L), 0, status);
     }
 
-    private void validMaxPersonnel() {
-        if (feeType.isPaid() && sizeNsUsers() >= maxPersonnel) {
+    public static Session from(SessionCreate sessionCreate) {
+        return new Session(
+                sessionCreate.getCourseId(),
+                new SessionPeriod(sessionCreate.getStartDate(), sessionCreate.getEndDate()),
+                new SessionCoverImage(sessionCreate.getFileSize(), sessionCreate.getFileType(), sessionCreate.getWidth(), sessionCreate.getHeight()),
+                sessionCreate.getAmount() == 0L ? SessionFeeType.FREE : SessionFeeType.PAID,
+                new SessionAmount(sessionCreate.getAmount()),
+                sessionCreate.getMaxPersonnel(),
+                SessionStatus.PREPARING);
+    }
+
+    public void open() {
+        if (!SessionStatus.PREPARING.equals(this.status)) {
+            throw new CannotOpenException("It cannot be opened." + this.status);
+        }
+        this.status = SessionStatus.RECRUITING;
+    }
+
+    public Student apply(NsUser nsUser, SessionApply addInfo) {
+        validStatus();
+        validAmount(addInfo.getAmount());
+        validMaxPersonnel(addInfo.getCountPersonnel());
+        return new Student(nsUser.getId(), this.id);
+    }
+
+    private void validMaxPersonnel(int countPersonnel) {
+        if (feeType.isPaid() && countPersonnel >= maxPersonnel) {
             throw new IllegalArgumentException("Max personnel exceeded.");
         }
     }
 
-    private void validAmount(SessionAddInfo addInfo) {
-        if (!Objects.equals(new SessionAmount(addInfo.getAmount()), this.amount)) {
+    private void validAmount(SessionAmount amount) {
+        if (!Objects.equals(amount, this.amount)) {
             throw new IllegalArgumentException("Payment amount does not match.");
         }
     }
@@ -64,15 +95,36 @@ public class Session {
         }
     }
 
-    public void add(SessionAddInfo addInfo) {
-        validStatus();
-        validAmount(addInfo);
-        validMaxPersonnel();
-        nsUserIds.add(addInfo.getNsUserId());
+    public Long getId() {
+        return id;
     }
 
-    public int sizeNsUsers() {
-        return nsUserIds.size();
+    public Long getCourseId() {
+        return courseId;
+    }
+
+    public SessionPeriod getPeriod() {
+        return period;
+    }
+
+    public SessionCoverImage getCoverImage() {
+        return coverImage;
+    }
+
+    public SessionFeeType getFeeType() {
+        return feeType;
+    }
+
+    public SessionAmount getAmount() {
+        return amount;
+    }
+
+    public int getMaxPersonnel() {
+        return maxPersonnel;
+    }
+
+    public SessionStatus getStatus() {
+        return status;
     }
 
     @Override
@@ -84,6 +136,6 @@ public class Session {
             return false;
         }
         Session session = (Session) o;
-        return Objects.equals(id, session.id) && Objects.equals(period, session.period) && Objects.equals(coverImage, session.coverImage) && feeType == session.feeType && Objects.equals(amount, session.amount) && Objects.equals(maxPersonnel, session.maxPersonnel) && status == session.status && Objects.equals(nsUserIds, session.nsUserIds);
+        return maxPersonnel == session.maxPersonnel && Objects.equals(id, session.id) && Objects.equals(courseId, session.courseId) && Objects.equals(period, session.period) && Objects.equals(coverImage, session.coverImage) && feeType == session.feeType && Objects.equals(amount, session.amount) && status == session.status;
     }
 }
