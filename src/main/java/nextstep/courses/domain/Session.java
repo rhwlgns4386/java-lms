@@ -1,12 +1,8 @@
 package nextstep.courses.domain;
 
 import nextstep.payments.domain.Payment;
-import nextstep.users.domain.NsUser;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public abstract class Session {
 
@@ -16,43 +12,34 @@ public abstract class Session {
 
     private SessionType type;
 
-    private SessionStatus status = SessionStatus.PREPARING;
-
-    private CoverImage image;
+    private SessionStatus status = new SessionStatus();
 
     protected Long price;
 
-    private List<NsUser> students = new ArrayList<>();
+    private Period period;
 
-    private LocalDateTime startDate;
-
-    private LocalDateTime endDate;
-
-    public Session(Long id, String title, SessionType type, SessionStatus status, Long price, LocalDateTime startDate, LocalDateTime endDate) {
+    public Session(Long id, String title, SessionType type, SessionStatus status, Long price, Period period) {
         this.id = id;
         this.title = title;
         this.type = type;
         this.status = status;
         this.price = price;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.period = period;
     }
 
-    public Session(Long id, String title, SessionType type, Long price, LocalDateTime startDate, LocalDateTime endDate) {
+    public Session(Long id, String title, SessionType type, Long price, Period period) {
         this.id = id;
         this.title = title;
         this.type = type;
         this.price = price;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.period = period;
     }
 
-    public Session(String title, SessionType type, Long price, LocalDateTime startDate, LocalDateTime endDate) {
+    public Session(String title, SessionType type, Long price, Period period) {
         this.title = title;
         this.type = type;
         this.price = price;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.period = period;
     }
 
     public Long getId() {
@@ -71,49 +58,32 @@ public abstract class Session {
         return status;
     }
 
-    public LocalDateTime getStartDate() {
-        return startDate;
-    }
-
-    public LocalDateTime getEndDate() {
-        return endDate;
-    }
-
-    public void openEnrollment() {
-        this.status = SessionStatus.RECRUITING;
-    }
-
-    public void uploadCoverImage(CoverImage image) {
-        this.image = image;
-    }
-
-    public boolean isFreeSession() {
-        return type == SessionType.FREE;
-    }
-
-    public abstract void enroll(List<NsUser> students, Payment payment);
-
-    protected void validateRecruitingStatus() {
-        if (!SessionStatus.canEnroll(status)) {
-            throw new CannotRegisterException("현재 모집중인 상태가 아닙니다.");
-        }
+    public Period getPeriod() {
+        return period;
     }
 
     public Long getPrice() {
         return price;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Session session = (Session) o;
-        return Objects.equals(id, session.id) && Objects.equals(startDate, session.startDate) && Objects.equals(endDate, session.endDate);
+    public void openEnrollment() {
+        status.openSession();
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, startDate, endDate);
+    public void startSession() {
+        status.startSession();
+    }
+
+    public boolean isFreeSession() {
+        return type == SessionType.FREE;
+    }
+
+    public abstract void enroll(List<SessionStudent> students, Payment payment);
+
+    protected void validateRecruitingStatus() {
+        if (!status.canEnroll()) {
+            throw new CannotRegisterException("현재 모집중인 상태가 아닙니다.");
+        }
     }
 
     @Override
