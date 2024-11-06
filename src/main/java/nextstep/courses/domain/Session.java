@@ -35,7 +35,7 @@ public class Session {
         if (sessionStatus != SessionStatus.OPEN) {
             throw new IllegalArgumentException("수강 신청 기간이 아닙니다.");
         }
-        currentEnrollment.addStudent();
+        currentEnrollment.addStudent(maxEnrollment);
         return true;
     }
 

@@ -17,7 +17,7 @@ class SessionTest {
         Payment payment = new Payment("user01", 1L, 1L, 300000L, LocalDateTime.now(),true);
         MaxEnrollment maxEnrollment = new MaxEnrollment(10);
         Session session = Session.createSession(LocalDateTime.now(), LocalDateTime.now().plusDays(1),
-            new SessionImage(500 * 1024, "jpg", 300, 200), false, SessionStatus.OPEN, maxEnrollment, new CurrentEnrollment(0, maxEnrollment));
+            new SessionImage(500 * 1024, "jpg", 300, 200), false, SessionStatus.OPEN, maxEnrollment, new CurrentEnrollment(0));
 
         assertThat(session.enroll(new Enrollment(payment))).isTrue();
     }
@@ -28,7 +28,7 @@ class SessionTest {
         Payment payment = new Payment("user01", 1L, 1L, 300000L, LocalDateTime.now(),true);
         MaxEnrollment maxEnrollment = new MaxEnrollment(10);
         Session session = Session.createSession(LocalDateTime.now(), LocalDateTime.now().plusDays(1),
-            new SessionImage(500 * 1024, "jpg", 300, 200), false, SessionStatus.CLOSED, maxEnrollment, new CurrentEnrollment(0, maxEnrollment));
+            new SessionImage(500 * 1024, "jpg", 300, 200), false, SessionStatus.CLOSED, maxEnrollment, new CurrentEnrollment(0));
 
         assertThatThrownBy(() -> {
             session.enroll(new Enrollment(payment));
@@ -41,7 +41,7 @@ class SessionTest {
         Payment payment = new Payment("user01", 1L, 1L, 300000L, LocalDateTime.now(),true);
         MaxEnrollment maxEnrollment = new MaxEnrollment(1);
         Session session = Session.createSession(LocalDateTime.now(), LocalDateTime.now().plusDays(1),
-            new SessionImage(500 * 1024, "jpg", 300, 200), false, SessionStatus.CLOSED, maxEnrollment, new CurrentEnrollment(1, maxEnrollment));
+            new SessionImage(500 * 1024, "jpg", 300, 200), false, SessionStatus.OPEN, maxEnrollment, new CurrentEnrollment(1));
 
         assertThatThrownBy(() -> {
             session.enroll(new Enrollment(payment));
