@@ -2,6 +2,7 @@ package nextstep.courses.application;
 
 import nextstep.courses.domain.*;
 import nextstep.courses.domain.SessionCreate;
+import nextstep.users.domain.NsUser;
 
 public class SessionService {
     private final SessionRepository sessionRepository;
@@ -22,10 +23,10 @@ public class SessionService {
         sessionRepository.save(session);
     }
 
-    public void apply(Long nsUserId, Long sessionId) {
-        Session session = sessionRepository.findById(sessionId)
+    public void apply(NsUser nsUser, SessionApply sessionApply) {
+        Session session = sessionRepository.findById(sessionApply.getSessionId())
                 .orElseThrow(() -> new IllegalArgumentException("Session not found"));
-        Student student = session.apply(new SessionAddInfo(nsUserId, sessionId));
+        Student student = session.apply(nsUser, sessionApply);
         studentRepository.save(student);
     }
 }

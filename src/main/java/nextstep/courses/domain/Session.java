@@ -1,9 +1,8 @@
 package nextstep.courses.domain;
 
 import nextstep.courses.CannotOpenException;
+import nextstep.users.domain.NsUser;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class Session {
@@ -22,8 +21,6 @@ public class Session {
     private final int maxPersonnel;
 
     private SessionStatus status;
-
-    private final List<Long> nsUserIds = new ArrayList<>();
 
     public Session(Long courseId, SessionPeriod period, SessionCoverImage coverImage, SessionFeeType feeType, SessionAmount amount, int maxPersonnel, SessionStatus status) {
         this(null, courseId, period, coverImage, feeType, amount, maxPersonnel, status);
@@ -73,22 +70,21 @@ public class Session {
         this.status = SessionStatus.RECRUITING;
     }
 
-    public Student apply(SessionAddInfo addInfo) {
+    public Student apply(NsUser nsUser, SessionApply addInfo) {
         validStatus();
-        validAmount(addInfo);
-        validMaxPersonnel();
-        nsUserIds.add(addInfo.getNsUserId());
-        return new Student(addInfo.getNsUserId(), this.id);
+        validAmount(addInfo.getAmount());
+        validMaxPersonnel(addInfo.getCountPersonnel());
+        return new Student(nsUser.getId(), this.id);
     }
 
-    private void validMaxPersonnel() {
-        if (feeType.isPaid() && sizeNsUsers() >= maxPersonnel) {
+    private void validMaxPersonnel(int countPersonnel) {
+        if (feeType.isPaid() && countPersonnel >= maxPersonnel) {
             throw new IllegalArgumentException("Max personnel exceeded.");
         }
     }
 
-    private void validAmount(SessionAddInfo addInfo) {
-        if (!Objects.equals(new SessionAmount(addInfo.getAmount()), this.amount)) {
+    private void validAmount(SessionAmount amount) {
+        if (!Objects.equals(amount, this.amount)) {
             throw new IllegalArgumentException("Payment amount does not match.");
         }
     }
@@ -97,10 +93,6 @@ public class Session {
         if (!status.isRecruiting()) {
             throw new IllegalArgumentException("Session is not recruiting.");
         }
-    }
-
-    public int sizeNsUsers() {
-        return nsUserIds.size();
     }
 
     public Long getId() {
@@ -144,6 +136,6 @@ public class Session {
             return false;
         }
         Session session = (Session) o;
-        return Objects.equals(id, session.id) && Objects.equals(period, session.period) && Objects.equals(coverImage, session.coverImage) && feeType == session.feeType && Objects.equals(amount, session.amount) && Objects.equals(maxPersonnel, session.maxPersonnel) && status == session.status && Objects.equals(nsUserIds, session.nsUserIds);
+        return maxPersonnel == session.maxPersonnel && Objects.equals(id, session.id) && Objects.equals(courseId, session.courseId) && Objects.equals(period, session.period) && Objects.equals(coverImage, session.coverImage) && feeType == session.feeType && Objects.equals(amount, session.amount) && status == session.status;
     }
 }
