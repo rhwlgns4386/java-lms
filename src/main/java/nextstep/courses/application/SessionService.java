@@ -17,6 +17,11 @@ public class SessionService {
         sessionRepository.save(session);
     }
 
+    public void open(Session session) {
+        session.open();
+        sessionRepository.save(session);
+    }
+
     public void apply(Long nsUserId, Long sessionId) {
         Session session = sessionRepository.findById(sessionId)
                 .orElseThrow(() -> new IllegalArgumentException("Session not found"));

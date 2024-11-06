@@ -1,5 +1,7 @@
 package nextstep.courses.domain;
 
+import nextstep.courses.CannotOpenException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -19,7 +21,7 @@ public class Session {
 
     private final int maxPersonnel;
 
-    private final SessionStatus status;
+    private SessionStatus status;
 
     private final List<Long> nsUserIds = new ArrayList<>();
 
@@ -64,6 +66,13 @@ public class Session {
                 SessionStatus.PREPARING);
     }
 
+    public void open() {
+        if (!SessionStatus.PREPARING.equals(this.status)) {
+            throw new CannotOpenException("It cannot be opened." + this.status);
+        }
+        this.status = SessionStatus.RECRUITING;
+    }
+
     public Student apply(SessionAddInfo addInfo) {
         validStatus();
         validAmount(addInfo);
@@ -92,6 +101,10 @@ public class Session {
 
     public int sizeNsUsers() {
         return nsUserIds.size();
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public Long getCourseId() {

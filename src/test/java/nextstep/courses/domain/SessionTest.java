@@ -1,5 +1,6 @@
 package nextstep.courses.domain;
 
+import nextstep.courses.CannotOpenException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,10 +20,22 @@ class SessionTest {
     public static final SessionAddInfo DISMATCH_ADD_INFO = new SessionAddInfo(0L, 10_000L);
 
     private Session paidSession;
+    private Session preparingSession;
+    private Session closedSession;
 
     @BeforeEach
     void setUp() {
+        preparingSession = Session.paidSession(0L, 0L, PERIOD, COVER_IMAGE, AMOUNT, 1, SessionStatus.PREPARING);
         paidSession = Session.paidSession(0L, 0L, PERIOD, COVER_IMAGE, AMOUNT, 1, SessionStatus.RECRUITING);
+        closedSession = Session.paidSession(0L, 0L, PERIOD, COVER_IMAGE, AMOUNT, 1, SessionStatus.CLOSED);
+    }
+
+    @Test
+    void 세션_오픈() {
+        preparingSession.open();
+        assertEquals(preparingSession, paidSession);
+        assertThrows(CannotOpenException.class, () -> paidSession.open());
+        assertThrows(CannotOpenException.class, () -> closedSession.open());
     }
 
     @Test

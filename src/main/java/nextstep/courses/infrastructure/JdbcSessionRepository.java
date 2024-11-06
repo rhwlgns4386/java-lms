@@ -27,8 +27,24 @@ public class JdbcSessionRepository implements SessionRepository {
 
     @Override
     public int save(Session session) {
-        String sql = "insert into session (course_id, start_date, end_date, file_size, file_type, width, height, fee_type, amount, max_personnel, status) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        return jdbcTemplate.update(sql, session.getCourseId(), session.getPeriod().getStartDate(), session.getPeriod().getEndDate(), session.getCoverImage().getFileSize(), session.getCoverImage().getFileType(), session.getCoverImage().getWidth(), session.getCoverImage().getHeight(), session.getFeeType().name(), session.getAmount().getAmount(), session.getMaxPersonnel(), session.getStatus().name());
+        if (session.getId() == null || session.getId() == 0) {
+            String insertSql = "insert into session (course_id, start_date, end_date, file_size, file_type, width, height, fee_type, amount, max_personnel, status) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            return jdbcTemplate.update(insertSql, session.getCourseId(), session.getPeriod().getStartDate(), session.getPeriod().getEndDate(), session.getCoverImage().getFileSize(), session.getCoverImage().getFileType(), session.getCoverImage().getWidth(), session.getCoverImage().getHeight(), session.getFeeType().name(), session.getAmount().getAmount(), session.getMaxPersonnel(), session.getStatus().name());
+        }
+        String updateSql = "update session set course_id = ?, start_date = ?, end_date = ?, file_size = ?, file_type = ?, width = ?, height = ?, fee_type = ?, amount = ?, max_personnel = ?, status = ? where id = ?";
+        return jdbcTemplate.update(updateSql,
+                session.getCourseId(),
+                session.getPeriod().getStartDate(),
+                session.getPeriod().getEndDate(),
+                session.getCoverImage().getFileSize(),
+                session.getCoverImage().getFileType(),
+                session.getCoverImage().getWidth(),
+                session.getCoverImage().getHeight(),
+                session.getFeeType().name(),
+                session.getAmount().getAmount(),
+                session.getMaxPersonnel(),
+                session.getStatus().name(),
+                session.getId());
     }
 
     @Override
