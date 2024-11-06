@@ -9,7 +9,4 @@ public class Enrollment {
         this.payment = payment;
     }
 
-    public boolean isPaymentValid() {
-        return payment != null && payment.isPaymentCompleted();
-    }
 }
