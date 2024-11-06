@@ -1,14 +1,11 @@
 package nextstep.sessions.infrastructure;
 
 import nextstep.courses.domain.Course;
-import nextstep.courses.domain.CourseRepository;
 import nextstep.sessions.domain.*;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,7 +21,7 @@ public class JdbcSessionRepository implements SessionRepository {
 
     @Override
     public Optional<Session> findById(Long id) {
-        String sql = "select s.id, s.start_date,s.end_date, s.status_code , " +
+        String sql = "select s.id, s.start_date,s.end_date, s.status_code , s.progress_status_code, s.recruitment_status_code, " +
                 "s.fee_amount, s.maximum_number_of_applicants, " +
                 " s.created_at ,s.updated_at , c.id as courseId, c.title, c.creator_id, c.created_at as courseCreated , c.updated_at as courseUpdated " +
                 " from ns_session as s left outer join course as c " +
@@ -34,7 +31,9 @@ public class JdbcSessionRepository implements SessionRepository {
             Session session = new Session(
                     rs.getLong("id"),
                     new SessionPeriod(rs.getString("start_date"),rs.getString("end_date")),
-                    new SessionStatus(SessionStatusEnum.getEnumByStatus(rs.getString("status_code"))),
+                    new SessionStatus(rs.getString("status_code"),
+                            rs.getString("progress_status_code"),
+                            rs.getString("recruitment_status_code")),
                     new SessionType(rs.getLong("fee_amount"),
                             rs.getInt("maximum_number_of_applicants")),
                     toLocalDateTime(rs.getTimestamp("created_at")),
@@ -57,12 +56,14 @@ public class JdbcSessionRepository implements SessionRepository {
     public List<Session> findByCourseId(Long courseId) {
         String sql = "select id, start_date, end_date, " +
                 "type_code, maximum_number_of_applicants, fee_amount, " +
-                "  status_code, course_id, created_at, updated_at from ns_session where course_id=?";
+                "  status_code, progress_status_code, recruitment_status_code, course_id, created_at, updated_at from ns_session where course_id=?";
 
         RowMapper<Session> rowMapper = (rs, rowNum) -> new Session(
                 rs.getLong("id"),
                 new SessionPeriod(rs.getString("start_date"),rs.getString("end_date")),
-                new SessionStatus(SessionStatusEnum.getEnumByStatus(rs.getString("status_code"))),
+                new SessionStatus(rs.getString("status_code"),
+                        rs.getString("progress_status_code"),
+                        rs.getString("recruitment_status_code")),
                 new SessionType(rs.getLong("fee_amount"),
                         rs.getInt("maximum_number_of_applicants")),
                 toLocalDateTime(rs.getTimestamp("created_at")),
@@ -72,17 +73,22 @@ public class JdbcSessionRepository implements SessionRepository {
 
     @Override
     public int save(Session session) {
-        String sql = "insert into ns_session (start_date, end_date, status_code," +
-                "type_code, maximum_number_of_applicants, fee_amount, course_id, created_at) values(?, ?, ?, ?, ?, ?, ?,?)";
+        String sql = "insert into ns_session (start_date, end_date, status_code, progress_status_code, " +
+                "recruitment_status_code, " +
+                "type_code, maximum_number_of_applicants, fee_amount, course_id, created_at) " +
+                "values(?, ?, ?, ?, ?, ?, ?,?,?,?)";
         return jdbcTemplate.update(sql, session.getStartDate(), session.getEndDate(), session.getStatusCode(),
+                session.getSessionStatus().getProgressStatus().getStatusCode(), session.getSessionStatus().getRecruitmentStatus().getStatusCode(),
                 session.getTypeCode(),session.getMaxNumberOfApplicants(), session.getFeeAmount(),session.getCourseId(),
                 LocalDateTime.now());
     }
 
     @Override
     public int modifyStatus(Session session) {
-        String sql = "update ns_session set status_code=? where id=?";
-        return this.jdbcTemplate.update(sql, session.getStatusCode(), session.getId());
+        String sql = "update ns_session set status_code=?, progress_status_code = ? ,recruitment_status_code =? " +
+                " where id=?";
+        return this.jdbcTemplate.update(sql, session.getSessionStatus().getStatus(),session.getSessionStatus().getProgressStatus().getStatusCode(),
+                session.getSessionStatus().getRecruitmentStatus().getStatusCode(), session.getId());
     }
 
     @Override

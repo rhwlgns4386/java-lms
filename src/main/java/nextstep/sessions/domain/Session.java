@@ -3,14 +3,17 @@ package nextstep.sessions.domain;
 import nextstep.courses.domain.Course;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 public class Session {
     private Long id;
     private Course course;
+    private List<SessionImage> sessionImages;
     private SessionImage sessionImage;
     private SessionPeriod sessionPeriod;
     private SessionType sessionType;
@@ -20,19 +23,22 @@ public class Session {
     private LocalDateTime updatedAt;
 
     public Session(SessionPeriod period, SessionImage image, SessionType sessionType) {
-        this(0L, image, period, sessionType, new SessionStatus(SessionStatusEnum.PREPARING), LocalDateTime.now(), null);
+        this(0L, image, period, sessionType, SessionStatus.ofInitInstance(), LocalDateTime.now(), null);
     }
 
     public Session(Long sessionId, SessionPeriod sessionPeriod,
                    SessionStatus sessionStatus,
                    SessionType sessionType,
                    LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this(sessionId, null, sessionPeriod, sessionType, sessionStatus, createdAt, updatedAt);
+        this(sessionId, (List<SessionImage>) null, sessionPeriod, sessionType, sessionStatus, createdAt, updatedAt);
     }
 
     public Session(Long sessionId, SessionImage sessionImage, SessionPeriod sessionPeriod, SessionType sessionType, SessionStatus sessionStatus, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this(sessionId, Arrays.asList(sessionImage), sessionPeriod, sessionType, sessionStatus, createdAt, updatedAt);
+    }
+    public Session(Long sessionId, List<SessionImage> sessionImages, SessionPeriod sessionPeriod, SessionType sessionType, SessionStatus sessionStatus, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = sessionId;
-        this.sessionImage = sessionImage;
+        this.sessionImages = sessionImages;
         this.sessionPeriod = sessionPeriod;
         this.sessionType = sessionType;
         this.sessionStatus = sessionStatus;
@@ -52,12 +58,16 @@ public class Session {
         applicationDetails.add(new ApplicationDetail(this.id, nsUser.getId()));
     }
 
-    public void modifyStatus(SessionStatusEnum statusEnum) {
-        SessionStatus updatedSessionStatus = new SessionStatus(statusEnum);
-        if (this.sessionStatus.equals(updatedSessionStatus)) {
-            throw new IllegalArgumentException("변경 하려는 상태가 기존 상태와 동일합니다.");
-        }
-        this.sessionStatus = updatedSessionStatus;
+    public void startRecruiting() {
+        sessionStatus.startRecruiting();
+    }
+
+    public boolean isRecruiting() {
+        return sessionStatus.isRecruiting();
+    }
+
+    public boolean isPreparing() {
+        return sessionStatus.isPreparing();
     }
 
     public void modifyPeriod(SessionPeriod period) {
@@ -69,6 +79,10 @@ public class Session {
 
     public String getStartDate() {
         return this.sessionPeriod.getStartDate();
+    }
+
+    public SessionStatus getSessionStatus() {
+        return sessionStatus;
     }
 
     public String getEndDate() {
@@ -101,6 +115,10 @@ public class Session {
 
     public ApplicationDetail getApplicationDetail(Long userId, long sessionId) {
         return applicationDetails.getMatch(sessionId, userId);
+    }
+
+    public void addSessionImages(List<SessionImage> sessionImages) {
+        this.sessionImages = sessionImages;
     }
 
     public boolean isFree() {
