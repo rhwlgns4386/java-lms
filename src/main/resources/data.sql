@@ -1,10 +1,11 @@
 INSERT INTO ns_user (id, user_id, password, name, email, created_at) values (1, 'javajigi', 'test', '자바지기', 'javajigi@slipp.net', CURRENT_TIMESTAMP());
 INSERT INTO ns_user (id, user_id, password, name, email, created_at) values (2, 'sanjigi', 'test', '산지기', 'sanjigi@slipp.net', CURRENT_TIMESTAMP());
+INSERT INTO ns_user (id, user_id, password, name, email, created_at) values (3, 'notSelected', 'test', '선발안된회원', 'test@slipp.net', CURRENT_TIMESTAMP());
 
 INSERT INTO course(id, title, creator_id, created_at, updated_at) values (10000, '강의제목', 1, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
-INSERT INTO session(id, course_id, start_date, end_date, pricing_type, price, session_status, available_seat, creator_id, created_at, updated_at)
-values (10000, 10000, '2024-10-01 00:00:00', '2024-10-30 23:59:59', 'PAID', 10000, 'RECRUITING', 50, 1, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+INSERT INTO session(id, course_id, start_date, end_date, pricing_type, price, progress_status, recruit_status, available_seat, creator_id, created_at, updated_at)
+values (10000, 10000, '2024-10-01 00:00:00', '2024-10-30 23:59:59', 'PAID', 10000, 'PREPARING', 'RECRUITING', 50, 1, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
 INSERT INTO session_image(id, session_id, file_path, file_size, width, height, creator_id, created_at, updated_at)
 values (10000, 10000, '/test_image.jpg', 100, 300, 200, 1, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());

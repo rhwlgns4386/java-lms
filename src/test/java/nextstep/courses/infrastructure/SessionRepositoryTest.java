@@ -9,7 +9,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -32,7 +31,7 @@ class SessionRepositoryTest {
         Session session = new Session(
                 10000L,
                 createSessionPeriod(),
-                SessionStatus.RECRUITING,
+                new Status(ProgressStatus.IN_PROGRESS, RecruitmentStatus.RECRUITING),
                 null,
                 new Pricing(PricingType.PAID, 10000),
                 50,

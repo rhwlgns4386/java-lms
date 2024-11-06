@@ -22,13 +22,13 @@ public class JdbcUserRepository implements UserRepository {
     public Optional<NsUser> findByUserId(String userId) {
         String sql = "select id, user_id, password, name, email, created_at, updated_at from ns_user where user_id = ?";
         RowMapper<NsUser> rowMapper = (rs, rowNum) -> new NsUser(
-                rs.getLong(1),
-                rs.getString(2),
-                rs.getString(3),
-                rs.getString(4),
-                rs.getString(5),
-                toLocalDateTime(rs.getTimestamp(6)),
-                toLocalDateTime(rs.getTimestamp(7)));
+                rs.getLong("id"),
+                rs.getString("user_id"),
+                rs.getString("password"),
+                rs.getString("name"),
+                rs.getString("email"),
+                toLocalDateTime(rs.getTimestamp("created_at")),
+                toLocalDateTime(rs.getTimestamp("updated_at")));
         return Optional.of(jdbcTemplate.queryForObject(sql, rowMapper, userId));
     }
 

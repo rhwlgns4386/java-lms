@@ -29,6 +29,6 @@ class CourseTest {
 
         Pricing pricing = new Pricing(PricingType.PAID, 10000);
         SessionImage image = new SessionImage(1L, "/image.png", 100, new Size(300, 200), 1L, LocalDateTime.now(), LocalDateTime.now());
-        return new Session(1L, dateRange, SessionStatus.RECRUITING, image, pricing, 50, 1L, LocalDateTime.now());
+        return new Session(1L, dateRange, image, pricing, null, 50, 1L, LocalDateTime.now());
     }
 }

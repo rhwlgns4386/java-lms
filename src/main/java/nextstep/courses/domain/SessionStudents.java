@@ -1,55 +1,53 @@
 package nextstep.courses.domain;
 
-import nextstep.users.domain.NsUser;
-
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.toList;
 
 public class SessionStudents {
-    private Long sessionId;
-    private final List<Long> studentIds;
+    private List<SessionStudent> students;
 
-    public SessionStudents(Long sessionId){
-        this(sessionId, new ArrayList<>());
+    public SessionStudents() {
+        students = new ArrayList<>();
     }
 
-    public SessionStudents(Long sessionId, List<Long> studentIds) {
-        this.sessionId = sessionId;
-        this.studentIds = studentIds;
+    public SessionStudents(List<SessionStudent> students) {
+        this.students = students;
     }
 
-    public void addStudent(Pricing pricing, NsUser user) {
-        checkAddStudent(pricing, user);
-        studentIds.add(user.getId());
+    public void addStudent(SessionStudent student) {
+        checkAddStudent(student);
+        students.add(student);
+    }
+
+    public void filterSelectedStudents() {
+        List<SessionStudent> approveStudents = new ArrayList<>();
+        for (SessionStudent student : students) {
+            if(student.isNotSelected()) continue;
+            student.updateSelected();
+            approveStudents.add(student);
+        }
+        students = approveStudents;
     }
 
     public int size() {
-        return studentIds.size();
+        return students.size();
     }
 
-    private void checkAddStudent(Pricing pricing, NsUser user) {
-        checkExistingStudent(user);
+    private void checkAddStudent(SessionStudent student) {
+        checkExistingStudent(student);
     }
 
-    private void checkExistingStudent(NsUser user) {
-        boolean isExistingStudent = studentIds.contains(user.getId());
+    private void checkExistingStudent(SessionStudent student) {
+        boolean isExistingStudent = students.stream()
+                .map(SessionStudent::getNsUserId)
+                .anyMatch(nsUserId -> student.getNsUserId().equals(nsUserId));
 
         if (isExistingStudent) {
             throw new IllegalStateException("이미 수강신청한 유저입니다.");
         }
     }
 
-    public Long getSessionId() {
-        return sessionId;
-    }
-
-    public List<Long> getStudentIds() {
-        return studentIds;
+    public List<SessionStudent> getStudents() {
+        return new ArrayList<>(students);
     }
 }

@@ -10,9 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
+@Transactional
 public class EnrollmentService {
 
     private final SessionRepository sessionRepository;
@@ -28,7 +27,6 @@ public class EnrollmentService {
         this.userRepository = userRepository;
     }
 
-    @Transactional
     public void enrollSession(EnrollRequest request) {
         Session session = request.getSession();
         NsUser loginUser = request.getLoginUser();
@@ -43,10 +41,18 @@ public class EnrollmentService {
 
         session.enrollStudent(request.getLoginUser(), request.getPayAmount());
 
-        sessionUsersRepository.deleteBySessionId(session.getId());
-        List<SessionStudent> users = List.of(
-                new SessionStudent(session.getId(), loginUser.getId(), loginUser.getId())
-        );
-        sessionUsersRepository.bulkSave(users);
+        SessionStudent student = new SessionStudent(session.getId(), loginUser.getId());
+        sessionUsersRepository.save(student);
     }
+
+    public void filterToSelected(Session session) {
+        sessionRepository.findById(session.getId()).orElseThrow(
+                () -> new RuntimeException("존재하지 않는 강의입니다.")
+        );
+
+        session.filterSelectedStudents();
+        sessionUsersRepository.deleteBySessionId(session.getId());
+        sessionUsersRepository.bulkSave(session.getStudents().getStudents());
+    }
+
 }

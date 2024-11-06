@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Repository
 public class JdbcSessionImageRepository implements SessionImageRepository {
@@ -52,6 +53,23 @@ public class JdbcSessionImageRepository implements SessionImageRepository {
         );
 
         return jdbcTemplate.queryForObject(sql, rowMapper, id);
+    }
+
+    @Override
+    public List<SessionImage> findBySessionId(Long sessionId) {
+        String sql = "select id, file_path, file_size, width, height, creator_id, created_at, updated_at from session_image where session_id = ?";
+
+        RowMapper<SessionImage> rowMapper = (rs, rowNum) -> new SessionImage(
+                rs.getLong("id"),
+                rs.getString("file_path"),
+                rs.getInt("file_size"),
+                new Size(rs.getInt("width"), rs.getInt("height")),
+                rs.getLong("creator_id"),
+                toLocalDateTime(rs.getTimestamp("created_at")),
+                toLocalDateTime(rs.getTimestamp("updated_at"))
+        );
+
+        return jdbcTemplate.query(sql, rowMapper, sessionId);
     }
 
     private LocalDateTime toLocalDateTime(Timestamp timestamp) {

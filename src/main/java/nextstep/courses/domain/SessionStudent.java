@@ -1,7 +1,5 @@
 package nextstep.courses.domain;
 
-import java.time.LocalDateTime;
-
 public class SessionStudent {
     private final Long id;
 
@@ -9,27 +7,25 @@ public class SessionStudent {
 
     private final Long nsUserId;
 
-    private final Long creatorId;
+    private boolean isSelected;
 
-    private final LocalDateTime createdAt;
-
-    private final LocalDateTime updatedAt;
-
-    public SessionStudent(Long sessionId, Long nsUserId, Long creatorId){
-        this(sessionId, nsUserId, creatorId, null, null);
+    public SessionStudent(Long sessionId, Long nsUserId) {
+        this(null, sessionId, nsUserId, false);
     }
 
-    public SessionStudent(Long sessionId, Long nsUserId, Long creatorId, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this(null, sessionId, nsUserId, creatorId, createdAt, updatedAt);
+    public SessionStudent(Long sessionId, Long nsUserId, boolean isSelected) {
+        this(null, sessionId, nsUserId, isSelected);
     }
 
-    public SessionStudent(Long id, Long sessionId, Long nsUserId, Long creatorId, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public SessionStudent(Long id, Long sessionId, Long nsUserId, boolean isSelected) {
         this.id = id;
         this.sessionId = sessionId;
         this.nsUserId = nsUserId;
-        this.creatorId = creatorId;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        this.isSelected = isSelected;
+    }
+
+    public void updateSelected() {
+        isSelected = true;
     }
 
     public Long getId() {
@@ -44,15 +40,11 @@ public class SessionStudent {
         return nsUserId;
     }
 
-    public Long getCreatorId() {
-        return creatorId;
+    public boolean isSelected() {
+        return isSelected;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
+    public boolean isNotSelected() {
+        return !isSelected();
     }
 }

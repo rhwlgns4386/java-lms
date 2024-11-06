@@ -33,5 +33,4 @@ class SessionImageTest {
                 .isThrownBy(() -> new SessionImage(10000L, filePath, 1_048_576, size, 1L, LocalDateTime.now(), LocalDateTime.now()))
                 .withMessage("유효하지 않은 파일 경로입니다");
     }
-
 }

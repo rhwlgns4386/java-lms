@@ -12,7 +12,7 @@ public class Session {
 
     private final SessionPeriod dateRange;
 
-    private final SessionStatus status;
+    private final Status status;
 
     private final SessionImage image;
 
@@ -28,15 +28,19 @@ public class Session {
 
     private LocalDateTime updatedAt;
 
-    public Session(Long courseId, SessionPeriod dateRange, SessionStatus status, SessionImage image, Pricing pricing, int availableSeats, Long creatorId, LocalDateTime createdAt) {
+    public Session(Long courseId, SessionPeriod dateRange, Status status, SessionImage image, Pricing pricing, int availableSeats, Long creatorId, LocalDateTime createdAt) {
         this(0L, courseId, dateRange, status, image, pricing, null, availableSeats, creatorId, createdAt);
     }
 
-    public Session(Long courseId, SessionPeriod dateRange, SessionStatus status, SessionImage image, Pricing pricing, SessionStudents student, int availableSeats, Long creatorId, LocalDateTime createdAt) {
+    public Session(Long courseId, SessionPeriod dateRange, Status status, SessionImage image, Pricing pricing, SessionStudents student, int availableSeats, Long creatorId, LocalDateTime createdAt) {
         this(0L, courseId, dateRange, status, image, pricing, student, availableSeats, creatorId, createdAt);
     }
 
-    public Session(Long id, Long courseId, SessionPeriod dateRange, SessionStatus status, SessionImage image, Pricing pricing, SessionStudents student, int availableSeats, Long creatorId, LocalDateTime createdAt) {
+    public Session(Long courseId, SessionPeriod dateRange, SessionImage image, Pricing pricing, SessionStudents student, int availableSeats, Long creatorId, LocalDateTime createdAt) {
+        this(0L, courseId, dateRange, new Status(ProgressStatus.PREPARING, RecruitmentStatus.RECRUITING), image, pricing, student, availableSeats, creatorId, createdAt);
+    }
+
+    public Session(Long id, Long courseId, SessionPeriod dateRange, Status status, SessionImage image, Pricing pricing, SessionStudents student, int availableSeats, Long creatorId, LocalDateTime createdAt) {
         this.id = id;
         this.courseId = courseId;
         this.dateRange = dateRange;
@@ -51,9 +55,14 @@ public class Session {
 
     public void enrollStudent(NsUser loginUser, int payAmount) {
         checkEnrollmentPermission(payAmount);
-        students.addStudent(pricing, loginUser);
+        students.addStudent(new SessionStudent(id, loginUser.getId()));
     }
 
+    public void filterSelectedStudents(){
+        students.filterSelectedStudents();
+    }
+
+    //region checkEnrollmentPermission
     private void checkEnrollmentPermission(int paymentAmount) {
         validateStatus();
         validatePrice(paymentAmount);
@@ -77,10 +86,11 @@ public class Session {
             return;
         }
 
-        if (students.getStudentIds().size() == availableSeats) {
+        if (students.size() == availableSeats) {
             throw new IllegalStateException("이 강의는 정원이 초과되었습니다.");
         }
     }
+    //endregion
 
     public Long getId() {
         return id;
@@ -94,7 +104,7 @@ public class Session {
         return dateRange;
     }
 
-    public SessionStatus getStatus() {
+    public Status getStatus() {
         return status;
     }
 
