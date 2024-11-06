@@ -1,9 +1,11 @@
 package nextstep.session.domain;
 
+import nextstep.enrollment.domain.Enrollment;
+
 public interface SessionPolicy {
 
-    void validatePolicy(int enrollStudentCount, Long paymentAmount);
+    void validatePolicy(Session session, Enrollment enrollment);
 
-    SessionPaymentType getSessionPaymentType();
+    boolean isMatch(SessionType sessionType);
 
 }

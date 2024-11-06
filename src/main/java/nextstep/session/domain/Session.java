@@ -4,40 +4,76 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-import nextstep.courses.utils.UUIDGenerator;
+import nextstep.enrollment.domain.Enrollment;
 
 public class Session {
-    private final String id;
+    private final Long id;
+    private final Long courseId;
+    private final String title;
     private final LocalDate startAt;
     private final LocalDate endAt;
     private final CoverImage image;
-    private final Set<Enrollment> enrollments = new HashSet<>();
+    private final SessionType sessionType;
+    private final Long studentCapacity;
     private final Long sessionFee;
-    private final SessionPolicy sessionPolicy;
     private SessionStatus sessionStatus;
+    private final Set<Enrollment> enrollments = new HashSet<>();
 
-    public Session(LocalDate startAt, LocalDate endAt, CoverImage image, Long sessionFee,
-        SessionPolicy sessionPolicy) {
-        this.id = UUIDGenerator.getUUID();
+    public Session(Long id, Long courseId, String title, LocalDate startAt, LocalDate endAt, CoverImage image,
+        SessionType sessionType, Long studentCapacity, Long sessionFee, SessionStatus sessionStatus) {
+        this.id = id;
+        this.courseId = courseId;
+        this.title = title;
         this.startAt = startAt;
         this.endAt = endAt;
         this.image = image;
-        this.sessionPolicy = sessionPolicy;
+        this.sessionType = sessionType;
+        this.studentCapacity = studentCapacity;
         this.sessionFee = sessionFee;
-        this.sessionStatus = SessionStatus.PENDING;
+        this.sessionStatus = sessionStatus;
     }
 
-    public String getId() {
+    private Session(Long id, Long courseId, String title, LocalDate startAt, LocalDate endAt, CoverImage image,
+        SessionType sessionType, Long studentCapacity, Long sessionFee) {
+        this(id, courseId, title, startAt, endAt, image, sessionType, studentCapacity, sessionFee,
+            SessionStatus.PENDING);
+    }
+
+    public static Session createFreeSession(Long sessionId, String title, LocalDate startAt, LocalDate endAt,
+        CoverImage image) {
+        return new Session(1L, sessionId, title, startAt, endAt, image, SessionType.FREE, null, null);
+    }
+
+    public static Session createPaidSession(Long sessionId, String title, LocalDate startAt, LocalDate endAt,
+        CoverImage image, Long studentCapacity, Long sessionFee) {
+        return new Session(1L, sessionId, title, startAt, endAt, image, SessionType.PAID, studentCapacity, sessionFee);
+    }
+
+    public void open() {
+        sessionStatus = SessionStatus.OPEN;
+    }
+
+    public void enroll(Enrollment enrollment) {
+        validateRegister();
+        enrollments.add(enrollment);
+    }
+
+    private void validateRegister() {
+        if (sessionStatus != SessionStatus.OPEN) {
+            throw new IllegalArgumentException("모집중 상태의 강의가 아닙니다.");
+        }
+    }
+
+    public boolean isFree() {
+        return sessionType == SessionType.FREE;
+    }
+
+    public boolean isPaid() {
+        return sessionType == SessionType.PAID;
+    }
+
+    public Long getId() {
         return id;
-    }
-
-    public static Session createFreeSession(LocalDate startAt, LocalDate endAt, CoverImage image) {
-        return new Session(startAt, endAt, image, 0L, new FreeSessionPolicy());
-    }
-
-    public static Session createPaidSession(LocalDate startAt, LocalDate endAt, CoverImage image,
-        int studentCapacity, Long sessionFee) {
-        return new Session(startAt, endAt, image, sessionFee, new PaidSessionPolicy(studentCapacity, sessionFee));
     }
 
     public SessionStatus getCourseStatus() {
@@ -48,23 +84,15 @@ public class Session {
         return enrollments.size();
     }
 
-    public void open() {
-        sessionStatus = SessionStatus.OPEN;
+    public Long getStudentCapacity() {
+        return studentCapacity;
     }
 
-    public void enroll(Enrollment enrollment) {
-        validateRegister(enrollment);
-        enrollments.add(enrollment);
+    public Long getSessionFee() {
+        return sessionFee;
     }
 
-    private void validateRegister(Enrollment enrollment) {
-        if (sessionStatus != SessionStatus.OPEN) {
-            throw new IllegalArgumentException("모집중 상태의 강의가 아닙니다.");
-        }
-        sessionPolicy.validatePolicy(getEnrolledUserCount(), enrollment.getPaymentAmount());
-    }
-
-    public boolean isFree() {
-        return sessionPolicy.getSessionPaymentType() == SessionPaymentType.FREE;
+    public SessionType getSessionType() {
+        return sessionType;
     }
 }
