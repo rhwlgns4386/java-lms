@@ -48,10 +48,16 @@ public class Session {
         applyStatus.finish();
     }
 
-    public void registration(NsUser nsUser, Payment payment) {
+    public void apply(Payment payment) {
         validate();
         sessionPay.validatePay(payment);
+    }
 
+    public void validateApply() {
+        validate();
+        if (sessionPay.isPaid() && students.isExceeds()) {
+            throw new SessionException("최대 정원 모집이 끝났습니다");
+        }
     }
 
     public void mapping(List<SessionStudent> sessionStudents) {
@@ -60,7 +66,6 @@ public class Session {
 
     private void validate() {
         applyStatus.validate();
-//        status.validateRegistration();
         if (sessionPay.isPaid() && students.isExceeds()) {
             throw new SessionException("최대 정원 모집이 끝났습니다");
         }
@@ -93,4 +98,6 @@ public class Session {
     public SessionApplyStatus getApplyStatus() {
         return applyStatus;
     }
+
+
 }

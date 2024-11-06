@@ -10,7 +10,6 @@ public class SessionPay {
 
 
     public SessionPay(Long sessionPay, String payType) {
-
         this(sessionPay, SessionPayType.search(payType));
     }
 

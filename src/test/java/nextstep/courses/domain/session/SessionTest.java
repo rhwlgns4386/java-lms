@@ -6,6 +6,7 @@ import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -21,7 +22,7 @@ public class SessionTest {
 
 
         assertThatThrownBy(
-                () -> session.registration(NsUserTest.JAVAJIGI, payment)
+                () -> session.apply(payment)
         ).isInstanceOf(SessionException.class);
     }
 
@@ -35,10 +36,10 @@ public class SessionTest {
         Session session = Session.createPaid(1L, 3000L, sessionPeriod, 1);
         session.recruiting();
 
-        session.registration(NsUserTest.JAVAJIGI, payment);
+        session.mapping(List.of(new SessionStudent(3L, 1L)));
 
         assertThatThrownBy(
-                () -> session.registration(NsUserTest.SANJIGI, payment)
+                () -> session.apply(payment)
         ).isInstanceOf(SessionException.class);
     }
 

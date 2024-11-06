@@ -59,6 +59,6 @@ public class JdbcSessionApplyRepository implements SessionApplyRepository {
 
     @Override
     public void update(SessionApply apply) {
-
+        // 취소 및 승인 후 플래그값 업데이트
     }
 }

@@ -5,9 +5,6 @@ import nextstep.courses.domain.SessionApplyRepository;
 import nextstep.courses.domain.SessionCoverImageRepository;
 import nextstep.courses.domain.SessionRepository;
 import nextstep.courses.domain.SessionStudentRepository;
-import nextstep.courses.domain.coverimage.SessionCoverImage;
-import nextstep.courses.domain.coverimage.SessionCoverImagePath;
-import nextstep.courses.domain.coverimage.SessionCoverImageSize;
 import nextstep.courses.domain.coverimage.SessionCoverImages;
 import nextstep.courses.domain.session.*;
 import nextstep.courses.dto.MultipartFile;
@@ -67,7 +64,7 @@ public class SessionService {
         List<SessionStudent> students = sessionStudentRepository.findBySessionId(payment.getSessionId());
         session.mapping(students);
 
-        session.registration(nsUser, payment);
+        session.apply(payment);
 
         SessionApply apply = SessionApply.create(sessionId, nsUser.getId());
         sessionApplyRepository.save(apply);
@@ -81,9 +78,19 @@ public class SessionService {
     }
 
     @Transactional
-    public void submit(Long applyId) {
+    public void submit(Long sessionId, Long applyId) {
+        Session session = sessionRepository.findById(sessionId);
+
+        List<SessionStudent> students = sessionStudentRepository.findBySessionId(sessionId);
+        session.mapping(students);
+
         SessionApply apply = sessionApplyRepository.findById(applyId);
         apply.submit();
+
+        session.validateApply();
         sessionApplyRepository.update(apply);
+
+        SessionStudent sessionStudent = new SessionStudent(sessionId, apply.getUserId());
+        sessionStudentRepository.save(sessionStudent);
     }
 }
