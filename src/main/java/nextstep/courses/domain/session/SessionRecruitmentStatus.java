@@ -2,24 +2,23 @@ package nextstep.courses.domain.session;
 
 import java.util.Arrays;
 
-public enum StudentSelectionStatus {
-    PENDING("PENDING", "선발 대기중"),
-    SELECTED("SELECTED", "선발"),
-    NOT_SELECTED("NOT_SELECTED", "미선발");
+public enum SessionRecruitmentStatus {
+    NOT_RECRUITING("notRecruiting", "비모집중"),
+    RECRUITING("recruiting", "모집중");
 
     private final String code;
     private final String description;
 
-    StudentSelectionStatus(String code, String description) {
+    SessionRecruitmentStatus(String code, String description) {
         this.code = code;
         this.description = description;
     }
 
-    public static StudentSelectionStatus from(String code) {
+    public static SessionRecruitmentStatus from(String code) {
         return Arrays.stream(values())
                 .filter(status -> status.code.equals(code))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("찾을 수 없는 선발 상태입니다."));
+                .orElseThrow(() -> new IllegalArgumentException("찾을 수 없는 모집 상태입니다."));
     }
 
     public String getCode() {

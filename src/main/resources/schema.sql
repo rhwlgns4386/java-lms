@@ -73,6 +73,8 @@ create table session
     session_type   varchar(10) not null,
     course_fee     bigint,
     max_students   int,
+    progress_status    varchar(20) not null,
+    recruitment_status varchar(20) not null,
     primary key (id)
 );
 
@@ -100,9 +102,4 @@ create table session_cover_images
     primary key (session_id, cover_image_id)
 );
 
-create table session_status
-(
-    session_id         bigint primary key,
-    progress_status    varchar(20) not null,
-    recruitment_status varchar(20) not null
-);
+

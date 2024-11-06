@@ -33,7 +33,7 @@ class PaidSessionTest {
     @Test
     void register() {
         Money courseFee = new Money(10000);
-        PaidSession course = new PaidSession(SessionStatus.ready().recruiting(), period, List.of(coverImage), courseFee, 10);
+        PaidSession course = new PaidSession(SessionProgress.READY, SessionRecruitmentStatus.RECRUITING, period, List.of(coverImage), courseFee, 10);
         Payment payment = new Payment("PG1", 1L, 1L, 10000L);
 
         course.register(NsUserTest.GREEN, payment);
@@ -50,7 +50,7 @@ class PaidSessionTest {
     @Test
     void register_NotOpenStatus() {
         Money courseFee = new Money(10000);
-        PaidSession paidCourse = new PaidSession(SessionStatus.ready().notRecruiting(), period, List.of(coverImage), courseFee, 10);
+        PaidSession paidCourse = new PaidSession(SessionProgress.READY, SessionRecruitmentStatus.NOT_RECRUITING, period, List.of(coverImage), courseFee, 10);
         Payment payment = new Payment("PG1", 1L, 1L, 10000L);
 
         assertThatThrownBy(() -> paidCourse.register(NsUserTest.GREEN, payment))
@@ -61,7 +61,7 @@ class PaidSessionTest {
     @Test
     void register_FullCapacity() {
         Money courseFee = new Money(10000);
-        PaidSession paidCourse = new PaidSession(SessionStatus.ready().recruiting(), period, List.of(coverImage), courseFee, 1);
+        PaidSession paidCourse = new PaidSession(SessionProgress.READY, SessionRecruitmentStatus.RECRUITING, period, List.of(coverImage), courseFee, 1);
         Payment payment = new Payment("PG1", 1L, 1L, 10000L);
 
         paidCourse.register(NsUserTest.GREEN, payment);
@@ -74,7 +74,7 @@ class PaidSessionTest {
     @Test
     void register_InvalidPaymentAmount() {
         Money courseFee = new Money(10000);
-        PaidSession paidCourse = new PaidSession(SessionStatus.ready().recruiting(), period, List.of(coverImage), courseFee, 10);
+        PaidSession paidCourse = new PaidSession(SessionProgress.READY, SessionRecruitmentStatus.RECRUITING, period, List.of(coverImage), courseFee, 10);
         Payment payment = new Payment("PG1", 1L, 1L, 9000L);
 
         assertThatThrownBy(() -> paidCourse.register(NsUserTest.GREEN, payment))
@@ -85,7 +85,7 @@ class PaidSessionTest {
     @Test
     void register_NullPayment() {
         Money courseFee = new Money(10000);
-        PaidSession paidCourse = new PaidSession(SessionStatus.ready().recruiting(), period, List.of(coverImage), courseFee, 10);
+        PaidSession paidCourse = new PaidSession(SessionProgress.READY, SessionRecruitmentStatus.RECRUITING, period, List.of(coverImage), courseFee, 10);
 
         assertThatThrownBy(() -> paidCourse.register(NsUserTest.GREEN, null))
                 .isInstanceOf(IllegalArgumentException.class);
@@ -106,7 +106,7 @@ class PaidSessionTest {
         List<CoverImage> images = List.of(coverImage, secondImage);
 
         // when
-        PaidSession session = new PaidSession(SessionStatus.ready().recruiting(), period, images, courseFee, 10);
+        PaidSession session = new PaidSession(SessionProgress.READY, SessionRecruitmentStatus.RECRUITING, period, images, courseFee, 10);
 
         // then
         assertAll(

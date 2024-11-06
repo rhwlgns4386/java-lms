@@ -29,7 +29,7 @@ class FreeSessionTest {
     void register() {
         LocalDate startDate = LocalDate.of(2024, 10, 10);
         LocalDate endDate = LocalDate.of(2024, 10, 19);
-        FreeSession freeCourse = new FreeSession(new SessionStatus(SessionProgress.READY, RecruitmentStatus.RECRUITING), new Period(startDate, endDate), coverImage);
+        FreeSession freeCourse = new FreeSession(SessionProgress.READY, SessionRecruitmentStatus.RECRUITING, new Period(startDate, endDate), coverImage);
 
         freeCourse.register(NsUserTest.GREEN);
 

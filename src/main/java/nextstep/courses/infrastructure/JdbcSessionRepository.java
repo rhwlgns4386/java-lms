@@ -49,22 +49,22 @@ public class JdbcSessionRepository implements SessionRepository {
 
     private Long saveSession(DefaultSession session) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        String sql = "INSERT INTO session (start_date, end_date, session_type, course_fee, max_students) " +
-                "VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO session (start_date, end_date, session_type, course_fee, max_students, progress_status, recruitment_status) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(sql, new String[] {"id"});
+            PreparedStatement ps = connection.prepareStatement(sql, new String[]{"id"});
             ps.setTimestamp(1, Timestamp.valueOf(session.getPeriod().getStartDate().atStartOfDay()));
             ps.setTimestamp(2, Timestamp.valueOf(session.getPeriod().getEndDate().atStartOfDay()));
             ps.setString(3, session.getTypeCode());
             ps.setLong(4, session.getCourseFeeAmount());
             ps.setInt(5, session.getMaxStudentsSize());
+            ps.setString(6, session.getProgressStatus());
+            ps.setString(7, session.getRecruitmentStatus());
             return ps;
         }, keyHolder);
 
-        long sessionId = Objects.requireNonNull(keyHolder.getKey()).longValue();
-        saveSessionStatus(sessionId, session.getStatus());
-        return sessionId;
+        return Objects.requireNonNull(keyHolder.getKey()).longValue();
 
     }
 
@@ -91,10 +91,6 @@ public class JdbcSessionRepository implements SessionRepository {
         }
     }
 
-    private void saveSessionStatus(Long sessionId, SessionStatus sessionStatus) {
-        String sql = "INSERT INTO session_status (session_id, progress_status, recruitment_status) VALUES (?, ?, ?)";
-        jdbcTemplate.update(sql, sessionId, sessionStatus.getProgressCode(), sessionStatus.getRecruitmentCode());
-    }
 
     @Override
     @Transactional(readOnly = true)
@@ -107,28 +103,20 @@ public class JdbcSessionRepository implements SessionRepository {
                 Period period = new Period(rs.getDate("start_date").toLocalDate(), rs.getDate("end_date").toLocalDate());
                 Money courseFee = new Money(rs.getLong("course_fee"));
                 int maxStudents = rs.getInt("max_students");
-                SessionStatus sessionStatus = findSessionStatusById(id);
+                SessionProgress progressStatus = SessionProgress.from(rs.getString("progress_status"));
+                SessionRecruitmentStatus recruitmentStatus = SessionRecruitmentStatus.from(rs.getString("recruitment_status"));
                 List<CoverImage> images = coverImageRepository.findBySessionId(id);
 
                 List<SessionRegistration> registrations = sessionRegistrationRepository.findRegisteredUsers(id);
 
                 if (SessionType.PAID.getCode().equals(sessionType)) {
-                    return new PaidSession(id, sessionStatus, period, images, courseFee, maxStudents, registrations);
+                    return new PaidSession(id, progressStatus, recruitmentStatus, period, images, courseFee, maxStudents, registrations);
                 }
-                return new FreeSession(id, sessionStatus, period, images, maxStudents, registrations);
+                return new FreeSession(id, progressStatus, recruitmentStatus, period, images, maxStudents, registrations);
             }, id);
 
         } catch (EmptyResultDataAccessException e) {
             throw new IllegalArgumentException("세션을 찾을 수 없습니다: " + id, e);
         }
     }
-
-    private SessionStatus findSessionStatusById(Long sessionId) {
-        String sql = "SELECT progress_status, recruitment_status FROM session_status WHERE session_id = ?";
-        return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> new SessionStatus(
-                SessionProgress.from(rs.getString("progress_status")),
-                RecruitmentStatus.from(rs.getString("recruitment_status"))
-        ), sessionId);
-    }
-
 }

@@ -7,16 +7,12 @@ import nextstep.users.domain.NsUser;
 import java.util.List;
 
 public class FreeSession extends DefaultSession {
-    public FreeSession(SessionStatus status, Period period, CoverImage coverImage) {
-        super(0L, status, period, List.of(coverImage), new Money(0L), Integer.MAX_VALUE, SessionType.FREE);
+    public FreeSession(SessionProgress progress, SessionRecruitmentStatus recruitmentStatus, Period period, CoverImage coverImage) {
+        super(0L, period, List.of(coverImage), new Money(0L), Integer.MAX_VALUE, SessionType.FREE, progress, recruitmentStatus);
     }
 
-    public FreeSession(Long id, SessionStatus sessionStatus, Period period, List<CoverImage> images, int maxStudents) {
-        super(id, sessionStatus, period, images, new Money(0L), maxStudents, SessionType.FREE);
-    }
-
-    public FreeSession(Long id, SessionStatus sessionStatus, Period period, List<CoverImage> images, int maxStudents, List<SessionRegistration> registrations) {
-        super(id, sessionStatus, period, images, new Money(0L), maxStudents, SessionType.FREE, registrations);
+    public FreeSession(Long id,SessionProgress progress, SessionRecruitmentStatus recruitmentStatus, Period period, List<CoverImage> images, int maxStudents, List<SessionRegistration> registrations) {
+        super(id, period, images, new Money(0L), maxStudents, SessionType.FREE, registrations, progress, recruitmentStatus);
     }
 
     @Override

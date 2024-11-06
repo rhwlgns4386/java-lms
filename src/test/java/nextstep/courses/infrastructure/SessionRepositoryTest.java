@@ -64,17 +64,16 @@ class SessionRepositoryTest {
     @Test
     void findFreeSession() {
         // given
-        FreeSession freeSession = new FreeSession(SessionStatus.ready().recruiting(), period, coverImage);
+        FreeSession freeSession = new FreeSession(SessionProgress.READY, SessionRecruitmentStatus.RECRUITING, period, coverImage);
         Long savedId = sessionRepository.saveFreeSession(freeSession);
 
         // when
-        DefaultSession foundSession = sessionRepository.findById(savedId);
-
+        DefaultSession foundSession = SessionFactory.from(sessionRepository.findById(savedId));
         // then
         FreeSession foundFreeSession = (FreeSession) foundSession;
         assertThat(foundFreeSession)
-                .extracting("status.progress", "status.recruitment", "period.startDate", "period.endDate", "courseFee.amount", "maxStudents")
-                .containsExactly(SessionProgress.READY, RecruitmentStatus.RECRUITING, period.getStartDate(), period.getEndDate(), 0L, Integer.MAX_VALUE);
+                .extracting("progress", "recruitment", "period.startDate", "period.endDate", "courseFee.amount", "maxStudents")
+                .containsExactly(SessionProgress.READY, SessionRecruitmentStatus.RECRUITING, period.getStartDate(), period.getEndDate(), 0L, Integer.MAX_VALUE);
     }
 
     @DisplayName("유료세션을 조회할 수 있다.")
@@ -82,17 +81,16 @@ class SessionRepositoryTest {
     void findPaidSession() {
         // given
         Money courseFee = new Money(50000L);
-        PaidSession paidSession = new PaidSession(SessionStatus.ready().recruiting(), period, List.of(coverImage), courseFee, 20);
+        PaidSession paidSession = new PaidSession(SessionProgress.READY, SessionRecruitmentStatus.RECRUITING, period, List.of(coverImage), courseFee, 20);
         Long savedId = sessionRepository.savePaidSession(paidSession);
 
         // when
-        DefaultSession foundSession = sessionRepository.findById(savedId);
+        DefaultSession foundSession = SessionFactory.from(sessionRepository.findById(savedId));
 
         // then
-        PaidSession foundPaidSession = (PaidSession) foundSession;
-        assertThat(foundPaidSession)
-                .extracting("status.progress", "status.recruitment", "period.startDate", "period.endDate", "courseFee.amount", "maxStudents")
-                .containsExactly(SessionProgress.READY, RecruitmentStatus.RECRUITING, period.getStartDate(), period.getEndDate(), 50000L, 20);
+        assertThat(foundSession)
+                .extracting("progress", "recruitment", "period.startDate", "period.endDate", "courseFee.amount", "maxStudents")
+                .containsExactly(SessionProgress.READY, SessionRecruitmentStatus.RECRUITING, period.getStartDate(), period.getEndDate(), 50000L, 20);
     }
 
     @DisplayName("세션의 모든 커버 이미지를 조회할 수 있다")
@@ -116,11 +114,11 @@ class SessionRepositoryTest {
                 LocalDateTime.now()
         );
 
-        PaidSession paidSession = new PaidSession(SessionStatus.ready().recruiting(), period, List.of(coverImage, secondImage), new Money(50000L), 20);
+        PaidSession paidSession = new PaidSession(SessionProgress.READY, SessionRecruitmentStatus.RECRUITING, period, List.of(coverImage, secondImage), new Money(50000L), 20);
         Long savedId = sessionRepository.savePaidSession(paidSession);
 
         // when
-        DefaultSession foundSession = sessionRepository.findById(savedId);
+        DefaultSession foundSession = SessionFactory.from(sessionRepository.findById(savedId));
 
         // then
         assertAll(

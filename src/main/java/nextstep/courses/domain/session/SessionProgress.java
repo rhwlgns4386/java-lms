@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public enum SessionProgress {
     READY("ready", "준비중"),
-    IN_PROGRESS("in_progress", "진행중"),
+    IN_PROGRESS("inProgress", "진행중"),
     FINISHED("finished", "종료");
 
     private final String code;

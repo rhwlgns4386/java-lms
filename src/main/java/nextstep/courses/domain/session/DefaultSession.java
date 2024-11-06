@@ -11,26 +11,28 @@ import java.util.List;
 public abstract class DefaultSession {
     protected final Long id;
     protected final SessionType type;
-    protected final SessionStatus status;
     protected final Period period;
     protected final Money courseFee;
     protected final int maxStudents;
-    private final List<CoverImage> coverImages;
+    protected final List<CoverImage> coverImages;
     protected List<SessionRegistration> registrations;
+    protected SessionProgress progress;
+    protected SessionRecruitmentStatus recruitment;
 
-    protected DefaultSession(Long id, SessionStatus status, Period period, List<CoverImage> coverImages, Money courseFee, int maxStudents, SessionType type) {
-        this(id, status, period, coverImages, courseFee, maxStudents, type, Collections.emptyList());
+    protected DefaultSession(Long id, Period period, List<CoverImage> coverImages, Money courseFee, int maxStudents, SessionType type, SessionProgress progress, SessionRecruitmentStatus recruitment) {
+        this(id, period, coverImages, courseFee, maxStudents, type, Collections.emptyList(), progress, recruitment);
     }
 
-    protected DefaultSession(Long id, SessionStatus status, Period period, List<CoverImage> coverImages, Money courseFee, int maxStudents, SessionType type, List<SessionRegistration> registrations) {
+    protected DefaultSession(Long id, Period period, List<CoverImage> coverImages, Money courseFee, int maxStudents, SessionType type, List<SessionRegistration> registrations, SessionProgress progress, SessionRecruitmentStatus recruitment) {
         this.id = id;
-        this.status = status;
         this.period = period;
         this.coverImages = coverImages;
         this.courseFee = courseFee;
         this.maxStudents = maxStudents;
         this.type = type;
         this.registrations = new ArrayList<>(registrations);
+        this.recruitment = recruitment;
+        this.progress = progress;
     }
 
     public void register(NsUser student, Payment payment) {
@@ -44,10 +46,14 @@ public abstract class DefaultSession {
     protected abstract void doRegister(NsUser user, Payment payment);
 
     private void validateSessionStatus() {
-        if (status.canRegister()) {
+        if (canRegister()) {
             return;
         }
         throw new IllegalArgumentException("강의 상태가 모집 중일때만 수강신청이 가능합니다.");
+    }
+
+    public boolean canRegister() {
+        return recruitment != SessionRecruitmentStatus.NOT_RECRUITING && progress != SessionProgress.FINISHED;
     }
 
     public long getId() {
@@ -63,10 +69,30 @@ public abstract class DefaultSession {
     }
 
     public Long getCourseFeeAmount() {
-        if(courseFee == null){
+        if (courseFee == null) {
             return 0L;
         }
         return courseFee.getAmount();
+    }
+
+    public SessionType getType() {
+        return type;
+    }
+
+    public Money getCourseFee() {
+        return courseFee;
+    }
+
+    public int getMaxStudents() {
+        return maxStudents;
+    }
+
+    public SessionProgress getProgress() {
+        return progress;
+    }
+
+    public SessionRecruitmentStatus getRecruitment() {
+        return recruitment;
     }
 
     public int getMaxStudentsSize() {
@@ -77,11 +103,16 @@ public abstract class DefaultSession {
         return Collections.unmodifiableList(coverImages);
     }
 
-    public SessionStatus getStatus() {
-        return status;
-    }
 
     public List<SessionRegistration> getRegistrations() {
         return registrations;
+    }
+
+    public String getProgressStatus() {
+        return progress.getCode();
+    }
+
+    public String getRecruitmentStatus() {
+        return recruitment.getCode();
     }
 }

@@ -3,7 +3,7 @@ package nextstep.courses.infrastructure;
 import nextstep.courses.domain.session.SessionRegistration;
 import nextstep.courses.domain.session.SessionRegistrationRepository;
 import nextstep.courses.domain.session.SessionRegistrationStatus;
-import nextstep.courses.domain.session.StudentSelectionStatus;
+import nextstep.courses.domain.session.StudentApprovalStatus;
 import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,7 +48,7 @@ class SessionRegistrationRepositoryTest {
         assertThat(found).isPresent();
         assertAll(
                 () -> assertThat(found.get().getRegistrationStatus()).isEqualTo(SessionRegistrationStatus.PENDING),
-                () -> assertThat(found.get().getSelectionStatus()).isEqualTo(StudentSelectionStatus.PENDING)
+                () -> assertThat(found.get().getSelectionStatus()).isEqualTo(StudentApprovalStatus.PENDING)
         );
     }
     @DisplayName("수강신청을 선택하여 승인할 수 있다.")
@@ -60,14 +60,14 @@ class SessionRegistrationRepositoryTest {
         SessionRegistration registration = sessionRegistration.findBySessionIdAndUserId(sessionId, userId).get();
 
         // when
-        registration.select();
-        registration.approve();
+        registration.approveStudent();
+        registration.approveRegistration();
         sessionRegistration.update(registration);
 
         // then
         SessionRegistration updated = sessionRegistration.findBySessionIdAndUserId(sessionId, userId).get();
         assertAll(
-                () -> assertThat(updated.getSelectionStatus()).isEqualTo(StudentSelectionStatus.SELECTED),
+                () -> assertThat(updated.getSelectionStatus()).isEqualTo(StudentApprovalStatus.APPROVED),
                 () -> assertThat(updated.getRegistrationStatus()).isEqualTo(SessionRegistrationStatus.APPROVED)
         );
     }
@@ -81,8 +81,8 @@ class SessionRegistrationRepositoryTest {
         sessionRegistration.saveRegistrations(sessionId, List.of(userId1, userId2));
 
         SessionRegistration registration1 = sessionRegistration.findBySessionIdAndUserId(sessionId, userId1).get();
-        registration1.select();
-        registration1.approve();
+        registration1.approveStudent();
+        registration1.approveRegistration();
         sessionRegistration.update(registration1);
 
         // when

@@ -7,16 +7,17 @@ import nextstep.users.domain.NsUser;
 import java.util.List;
 
 public class PaidSession extends DefaultSession {
-    public PaidSession(SessionStatus status, Period period, List<CoverImage> coverImages, Money courseFee, int maxStudents) {
-        super(0L, status, period, coverImages, courseFee, maxStudents, SessionType.PAID);
+    public PaidSession(SessionProgress progress, SessionRecruitmentStatus recruitmentStatus, Period period, List<CoverImage> coverImages, Money courseFee, int maxStudents) {
+        super(0L, period, coverImages, courseFee, maxStudents, SessionType.PAID, progress, recruitmentStatus);
     }
 
-    public PaidSession(Long id, SessionStatus sessionStatus, Period period, List<CoverImage> images, Money courseFee, int maxStudents) {
-        super(id, sessionStatus, period, images, courseFee, maxStudents, SessionType.PAID);
+    public PaidSession(Long id, SessionProgress progress, SessionRecruitmentStatus recruitmentStatus, Period period, List<CoverImage> images, Money courseFee, int maxStudents) {
+        super(id, period, images, courseFee, maxStudents, SessionType.PAID, progress, recruitmentStatus);
     }
 
-    public PaidSession(Long id, SessionStatus sessionStatus, Period period, List<CoverImage> images, Money courseFee, int maxStudents, List<SessionRegistration> registrations) {
-        super(id, sessionStatus, period, images, courseFee, maxStudents, SessionType.PAID, registrations);
+
+    public PaidSession(Long id, SessionProgress progress, SessionRecruitmentStatus recruitment, Period period, List<CoverImage> images, Money courseFee, int maxStudents, List<SessionRegistration> registrations) {
+        super(id, period, images, courseFee, maxStudents, SessionType.PAID, registrations, progress, recruitment);
     }
 
     @Override

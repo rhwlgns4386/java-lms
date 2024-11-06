@@ -31,7 +31,7 @@ public class JdbcSessionRegistrationRepository implements SessionRegistrationRep
                     ps.setLong(2, userId);
                     ps.setTimestamp(3, Timestamp.valueOf(java.time.LocalDateTime.now()));
                     ps.setString(4, SessionRegistrationStatus.PENDING.getCode());
-                    ps.setString(5, StudentSelectionStatus.PENDING.getCode());
+                    ps.setString(5, StudentApprovalStatus.PENDING.getCode());
                 });
     }
 
@@ -48,7 +48,7 @@ public class JdbcSessionRegistrationRepository implements SessionRegistrationRep
                         rs.getLong("user_id"),
                         rs.getTimestamp("registered_at").toLocalDateTime(),
                         SessionRegistrationStatus.valueOf(rs.getString("registration_status")),
-                        StudentSelectionStatus.valueOf(rs.getString("selection_status"))
+                        StudentApprovalStatus.valueOf(rs.getString("selection_status"))
                 ),
                 sessionId,
                 SessionRegistrationStatus.APPROVED.getCode()
@@ -95,7 +95,7 @@ public class JdbcSessionRegistrationRepository implements SessionRegistrationRep
                 rs.getLong("user_id"),
                 rs.getTimestamp("registered_at").toLocalDateTime(),
                 SessionRegistrationStatus.from(rs.getString("registration_status")),
-                StudentSelectionStatus.from(rs.getString("selection_status"))
+                StudentApprovalStatus.from(rs.getString("selection_status"))
 
         );
     }

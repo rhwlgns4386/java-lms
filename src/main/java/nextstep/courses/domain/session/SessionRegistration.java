@@ -7,13 +7,13 @@ public class SessionRegistration {
     private final Long userId;
     private final LocalDateTime registeredAt;
     private SessionRegistrationStatus registrationStatus;
-    private StudentSelectionStatus selectionStatus;
+    private StudentApprovalStatus selectionStatus;
 
     public SessionRegistration(Long sessionId, Long userId) {
-        this(sessionId, userId, LocalDateTime.now(), SessionRegistrationStatus.PENDING, StudentSelectionStatus.PENDING);
+        this(sessionId, userId, LocalDateTime.now(), SessionRegistrationStatus.PENDING, StudentApprovalStatus.PENDING);
     }
 
-    public SessionRegistration(Long sessionId, Long userId, LocalDateTime registeredAt, SessionRegistrationStatus registrationStatus, StudentSelectionStatus selectionStatus) {
+    public SessionRegistration(Long sessionId, Long userId, LocalDateTime registeredAt, SessionRegistrationStatus registrationStatus, StudentApprovalStatus selectionStatus) {
         this.sessionId = sessionId;
         this.userId = userId;
         this.registeredAt = registeredAt;
@@ -29,34 +29,34 @@ public class SessionRegistration {
         return userId;
     }
 
-    public void select() {
+    public void approveStudent() {
         validateSelectionChange();
-        this.selectionStatus = StudentSelectionStatus.SELECTED;
+        this.selectionStatus = StudentApprovalStatus.APPROVED;
     }
 
-    public void reject() {
+    public void rejectStudent() {
         validateSelectionChange();
-        this.selectionStatus = StudentSelectionStatus.NOT_SELECTED;
+        this.selectionStatus = StudentApprovalStatus.REJECTED;
     }
 
-    public void approve() {
+    public void approveRegistration() {
         validateApproval();
         this.registrationStatus = SessionRegistrationStatus.APPROVED;
     }
 
-    public void cancel() {
+    public void cancelRegistration() {
         validateCancellation();
         this.registrationStatus = SessionRegistrationStatus.CANCEL;
     }
 
     private void validateSelectionChange() {
-        if (selectionStatus != StudentSelectionStatus.PENDING) {
+        if (selectionStatus != StudentApprovalStatus.PENDING) {
             throw new IllegalStateException("이미 선발 여부가 결정되었습니다.");
         }
     }
 
     private void validateApproval() {
-        if (selectionStatus != StudentSelectionStatus.SELECTED) {
+        if (selectionStatus != StudentApprovalStatus.APPROVED) {
             throw new IllegalStateException("선발되지 않은 학생은 수강 승인할 수 없습니다.");
         }
         if (registrationStatus != SessionRegistrationStatus.PENDING) {
@@ -65,7 +65,7 @@ public class SessionRegistration {
     }
 
     private void validateCancellation() {
-        if (selectionStatus != StudentSelectionStatus.NOT_SELECTED) {
+        if (selectionStatus != StudentApprovalStatus.REJECTED) {
             throw new IllegalStateException("선발된 학생의 수강신청은 취소할 수 없습니다.");
         }
         if (registrationStatus != SessionRegistrationStatus.PENDING) {
@@ -73,31 +73,11 @@ public class SessionRegistration {
         }
     }
 
-    public boolean isSelected() {
-        return selectionStatus == StudentSelectionStatus.SELECTED;
-    }
-
-    public boolean isRejected() {
-        return selectionStatus == StudentSelectionStatus.NOT_SELECTED;
-    }
-
-    public boolean isPending() {
-        return registrationStatus == SessionRegistrationStatus.PENDING;
-    }
-
-    public boolean isApproved() {
-        return registrationStatus == SessionRegistrationStatus.APPROVED;
-    }
-
-    public boolean isCanceled() {
-        return registrationStatus == SessionRegistrationStatus.CANCEL;
-    }
-
     public SessionRegistrationStatus getRegistrationStatus() {
         return registrationStatus;
     }
 
-    public StudentSelectionStatus getSelectionStatus() {
+    public StudentApprovalStatus getSelectionStatus() {
         return selectionStatus;
     }
 
