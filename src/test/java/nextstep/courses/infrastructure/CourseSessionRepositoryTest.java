@@ -32,8 +32,8 @@ class CourseSessionRepositoryTest {
 
         jdbcTemplate.update("INSERT INTO cover_image (file_size, image_type, width, height, created_at) VALUES (102400, 'JPG', 600, 400, CURRENT_TIMESTAMP)");
         jdbcTemplate.update("INSERT INTO course (id, title, creator_id, created_at) VALUES (?, 'Test Course', 1, CURRENT_TIMESTAMP)", courseId);
-        jdbcTemplate.update("INSERT INTO session (id, status, start_date, end_date,  session_type) VALUES (?, 'OPEN', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'FREE')", sessionId1);
-        jdbcTemplate.update("INSERT INTO session (id, status, start_date, end_date,  session_type) VALUES (?, 'OPEN', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'FREE')", sessionId2);
+        jdbcTemplate.update("INSERT INTO session (id, start_date, end_date,  session_type) VALUES (?,  CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'FREE')", sessionId1);
+        jdbcTemplate.update("INSERT INTO session (id,  start_date, end_date,  session_type) VALUES (?,  CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'FREE')", sessionId2);
     }
 
     @DisplayName("Course에 Session을 추가하고 조회할 수 있다.")

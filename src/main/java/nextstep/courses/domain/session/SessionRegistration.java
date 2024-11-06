@@ -1,51 +1,24 @@
 package nextstep.courses.domain.session;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 public class SessionRegistration {
     private final Long sessionId;
     private final Long userId;
     private final LocalDateTime registeredAt;
-    private final RegistrationState state;
+    private SessionRegistrationStatus registrationStatus;
+    private StudentSelectionStatus selectionStatus;
 
     public SessionRegistration(Long sessionId, Long userId) {
-        this(sessionId, userId, LocalDateTime.now(), new RegistrationState());
+        this(sessionId, userId, LocalDateTime.now(), SessionRegistrationStatus.PENDING, StudentSelectionStatus.PENDING);
     }
 
-    public SessionRegistration(Long sessionId, Long userId, LocalDateTime registeredAt, RegistrationState state) {
+    public SessionRegistration(Long sessionId, Long userId, LocalDateTime registeredAt, SessionRegistrationStatus registrationStatus, StudentSelectionStatus selectionStatus) {
         this.sessionId = sessionId;
         this.userId = userId;
         this.registeredAt = registeredAt;
-        this.state = state;
-    }
-
-    public void select() {
-        state.select();
-    }
-
-    public void reject() {
-        state.reject();
-    }
-
-    public void approve() {
-        state.approve();
-    }
-
-    public void cancel() {
-        state.cancel();
-    }
-
-    public boolean isSelected() {
-        return state.isSelected();
-    }
-
-    public boolean isPending() {
-        return state.isPending();
-    }
-
-    public boolean isApproved() {
-        return state.isApproved();
+        this.registrationStatus = registrationStatus;
+        this.selectionStatus = selectionStatus;
     }
 
     public Long getSessionId() {
@@ -56,25 +29,76 @@ public class SessionRegistration {
         return userId;
     }
 
+    public void select() {
+        validateSelectionChange();
+        this.selectionStatus = StudentSelectionStatus.SELECTED;
+    }
+
+    public void reject() {
+        validateSelectionChange();
+        this.selectionStatus = StudentSelectionStatus.NOT_SELECTED;
+    }
+
+    public void approve() {
+        validateApproval();
+        this.registrationStatus = SessionRegistrationStatus.APPROVED;
+    }
+
+    public void cancel() {
+        validateCancellation();
+        this.registrationStatus = SessionRegistrationStatus.CANCEL;
+    }
+
+    private void validateSelectionChange() {
+        if (selectionStatus != StudentSelectionStatus.PENDING) {
+            throw new IllegalStateException("이미 선발 여부가 결정되었습니다.");
+        }
+    }
+
+    private void validateApproval() {
+        if (selectionStatus != StudentSelectionStatus.SELECTED) {
+            throw new IllegalStateException("선발되지 않은 학생은 수강 승인할 수 없습니다.");
+        }
+        if (registrationStatus != SessionRegistrationStatus.PENDING) {
+            throw new IllegalStateException("이미 처리된 수강신청입니다.");
+        }
+    }
+
+    private void validateCancellation() {
+        if (selectionStatus != StudentSelectionStatus.NOT_SELECTED) {
+            throw new IllegalStateException("선발된 학생의 수강신청은 취소할 수 없습니다.");
+        }
+        if (registrationStatus != SessionRegistrationStatus.PENDING) {
+            throw new IllegalStateException("이미 처리된 수강신청입니다.");
+        }
+    }
+
+    public boolean isSelected() {
+        return selectionStatus == StudentSelectionStatus.SELECTED;
+    }
+
+    public boolean isRejected() {
+        return selectionStatus == StudentSelectionStatus.NOT_SELECTED;
+    }
+
+    public boolean isPending() {
+        return registrationStatus == SessionRegistrationStatus.PENDING;
+    }
+
+    public boolean isApproved() {
+        return registrationStatus == SessionRegistrationStatus.APPROVED;
+    }
+
+    public boolean isCanceled() {
+        return registrationStatus == SessionRegistrationStatus.CANCEL;
+    }
+
     public SessionRegistrationStatus getRegistrationStatus() {
-        return state.getRegistrationStatus();
+        return registrationStatus;
     }
 
     public StudentSelectionStatus getSelectionStatus() {
-        return state.getSelectionStatus();
+        return selectionStatus;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        SessionRegistration that = (SessionRegistration) o;
-        return Objects.equals(sessionId, that.sessionId) &&
-                Objects.equals(userId, that.userId);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(sessionId, userId);
-    }
 }

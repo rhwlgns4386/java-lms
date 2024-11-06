@@ -8,11 +8,15 @@ import java.util.List;
 
 public class FreeSession extends DefaultSession {
     public FreeSession(SessionStatus status, Period period, CoverImage coverImage) {
-        super(0L, status, period, List.of(coverImage), new Money(0L), new Capacity(Integer.MAX_VALUE));
+        super(0L, status, period, List.of(coverImage), new Money(0L), Integer.MAX_VALUE, SessionType.FREE);
     }
 
-    public FreeSession(Long id, SessionStatus sessionStatus, Period period, List<CoverImage> images, SessionRegistrations registrations) {
-        super(id, sessionStatus, period, images, new Money(0L), registrations);
+    public FreeSession(Long id, SessionStatus sessionStatus, Period period, List<CoverImage> images, int maxStudents) {
+        super(id, sessionStatus, period, images, new Money(0L), maxStudents, SessionType.FREE);
+    }
+
+    public FreeSession(Long id, SessionStatus sessionStatus, Period period, List<CoverImage> images, int maxStudents, List<SessionRegistration> registrations) {
+        super(id, sessionStatus, period, images, new Money(0L), maxStudents, SessionType.FREE, registrations);
     }
 
     @Override
@@ -22,7 +26,7 @@ public class FreeSession extends DefaultSession {
 
     @Override
     protected void doRegister(NsUser user, Payment payment) {
-        registrations.register(user);
+        registrations.add(new SessionRegistration(id, user.getId()));
     }
 
     public void register(NsUser student) {

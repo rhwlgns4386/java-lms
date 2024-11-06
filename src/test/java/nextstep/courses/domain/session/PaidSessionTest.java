@@ -6,6 +6,7 @@ import nextstep.courses.domain.cover.CoverImageSize;
 import nextstep.courses.domain.cover.CoverImageType;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUserTest;
+import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,26 +33,24 @@ class PaidSessionTest {
     @Test
     void register() {
         Money courseFee = new Money(10000);
-        Capacity capacity = new Capacity(10);
-        PaidSession course = new PaidSession(SessionStatus.ready().recruiting(), period, List.of(coverImage), courseFee, capacity);
+        PaidSession course = new PaidSession(SessionStatus.ready().recruiting(), period, List.of(coverImage), courseFee, 10);
         Payment payment = new Payment("PG1", 1L, 1L, 10000L);
 
         course.register(NsUserTest.GREEN, payment);
 
-        assertAll(
-                () -> assertThat(course.getRegistrations())
-                        .extracting("sessionId", "maxStudents")
-                        .containsExactly(course.getId(), 10),
-                () -> assertThat(course.getRegistrations().contains(NsUserTest.GREEN.getId())).isTrue()
-        );
+        assertThat(course.getRegistrations())
+                .hasSize(1)
+                .extracting("sessionId", "userId")
+                .containsExactly(
+                        Tuple.tuple(course.getId(), NsUserTest.GREEN.getId())
+                );
     }
 
     @DisplayName("모집 상태가 아닌 강의는 수강신청을 할 수 없다.")
     @Test
     void register_NotOpenStatus() {
-        Capacity capacity = new Capacity(10);
         Money courseFee = new Money(10000);
-        PaidSession paidCourse = new PaidSession(SessionStatus.ready().notRecruiting(), period, List.of(coverImage), courseFee, capacity);
+        PaidSession paidCourse = new PaidSession(SessionStatus.ready().notRecruiting(), period, List.of(coverImage), courseFee, 10);
         Payment payment = new Payment("PG1", 1L, 1L, 10000L);
 
         assertThatThrownBy(() -> paidCourse.register(NsUserTest.GREEN, payment))
@@ -61,9 +60,8 @@ class PaidSessionTest {
     @DisplayName("최대 수강 인원을 초과한 강의에 등록하는 경우 예외로 처리한다.")
     @Test
     void register_FullCapacity() {
-        Capacity capacity = new Capacity(1);
         Money courseFee = new Money(10000);
-        PaidSession paidCourse = new PaidSession(SessionStatus.ready().recruiting(), period, List.of(coverImage), courseFee, capacity);
+        PaidSession paidCourse = new PaidSession(SessionStatus.ready().recruiting(), period, List.of(coverImage), courseFee, 1);
         Payment payment = new Payment("PG1", 1L, 1L, 10000L);
 
         paidCourse.register(NsUserTest.GREEN, payment);
@@ -75,9 +73,8 @@ class PaidSessionTest {
     @DisplayName("결제금액과 수강료가 일치하지 않으면 예외로 처리한다.")
     @Test
     void register_InvalidPaymentAmount() {
-        Capacity capacity = new Capacity(10);
         Money courseFee = new Money(10000);
-        PaidSession paidCourse = new PaidSession(SessionStatus.ready().recruiting(), period, List.of(coverImage), courseFee, capacity);
+        PaidSession paidCourse = new PaidSession(SessionStatus.ready().recruiting(), period, List.of(coverImage), courseFee, 10);
         Payment payment = new Payment("PG1", 1L, 1L, 9000L);
 
         assertThatThrownBy(() -> paidCourse.register(NsUserTest.GREEN, payment))
@@ -87,9 +84,8 @@ class PaidSessionTest {
     @DisplayName("결제 정보가 없을 경우 예외로 처리한다.")
     @Test
     void register_NullPayment() {
-        Capacity capacity = new Capacity(10);
         Money courseFee = new Money(10000);
-        PaidSession paidCourse = new PaidSession(SessionStatus.ready().recruiting(), period, List.of(coverImage), courseFee, capacity);
+        PaidSession paidCourse = new PaidSession(SessionStatus.ready().recruiting(), period, List.of(coverImage), courseFee, 10);
 
         assertThatThrownBy(() -> paidCourse.register(NsUserTest.GREEN, null))
                 .isInstanceOf(IllegalArgumentException.class);
@@ -100,7 +96,6 @@ class PaidSessionTest {
     void createWithMultipleImages() {
         // given
         Money courseFee = new Money(10000);
-        Capacity capacity = new Capacity(10);
 
         CoverImage secondImage = new CoverImage(
                 2L,
@@ -111,12 +106,11 @@ class PaidSessionTest {
         List<CoverImage> images = List.of(coverImage, secondImage);
 
         // when
-        PaidSession session = new PaidSession(SessionStatus.ready().recruiting(), period, images, courseFee, capacity);
+        PaidSession session = new PaidSession(SessionStatus.ready().recruiting(), period, images, courseFee, 10);
 
         // then
         assertAll(
                 () -> assertThat(session.getCoverImages()).hasSize(2),
-                () -> assertThat(session.getCoverImage()).isEqualTo(coverImage),
                 () -> assertThat(session.getCoverImages())
                         .containsExactly(coverImage, secondImage)
         );

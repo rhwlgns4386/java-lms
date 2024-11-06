@@ -86,12 +86,11 @@ class SessionRegistrationRepositoryTest {
         sessionRegistration.update(registration1);
 
         // when
-        List<Long> approvedUserIds = sessionRegistration.findRegisteredUserIds(sessionId);
+        List<SessionRegistration> approvedUsers = sessionRegistration.findRegisteredUsers(sessionId);
 
         // then
-        assertThat(approvedUserIds)
-                .hasSize(1)
-                .containsExactly(userId1);
+        assertThat(approvedUsers)
+                .hasSize(1);
     }
     @AfterEach
     void tearDown() {

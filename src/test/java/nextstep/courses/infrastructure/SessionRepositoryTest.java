@@ -73,7 +73,7 @@ class SessionRepositoryTest {
         // then
         FreeSession foundFreeSession = (FreeSession) foundSession;
         assertThat(foundFreeSession)
-                .extracting("status.progress", "status.recruitment", "period.startDate", "period.endDate", "courseFee.amount", "registrations.maxStudents")
+                .extracting("status.progress", "status.recruitment", "period.startDate", "period.endDate", "courseFee.amount", "maxStudents")
                 .containsExactly(SessionProgress.READY, RecruitmentStatus.RECRUITING, period.getStartDate(), period.getEndDate(), 0L, Integer.MAX_VALUE);
     }
 
@@ -82,7 +82,7 @@ class SessionRepositoryTest {
     void findPaidSession() {
         // given
         Money courseFee = new Money(50000L);
-        PaidSession paidSession = new PaidSession(SessionStatus.ready().recruiting(), period, List.of(coverImage), courseFee, new Capacity(20));
+        PaidSession paidSession = new PaidSession(SessionStatus.ready().recruiting(), period, List.of(coverImage), courseFee, 20);
         Long savedId = sessionRepository.savePaidSession(paidSession);
 
         // when
@@ -91,7 +91,7 @@ class SessionRepositoryTest {
         // then
         PaidSession foundPaidSession = (PaidSession) foundSession;
         assertThat(foundPaidSession)
-                .extracting("status.progress", "status.recruitment", "period.startDate", "period.endDate", "courseFee.amount", "registrations.maxStudents")
+                .extracting("status.progress", "status.recruitment", "period.startDate", "period.endDate", "courseFee.amount", "maxStudents")
                 .containsExactly(SessionProgress.READY, RecruitmentStatus.RECRUITING, period.getStartDate(), period.getEndDate(), 50000L, 20);
     }
 
@@ -116,7 +116,7 @@ class SessionRepositoryTest {
                 LocalDateTime.now()
         );
 
-        PaidSession paidSession = new PaidSession(SessionStatus.ready().recruiting(), period, List.of(coverImage, secondImage), new Money(50000L), new Capacity(20));
+        PaidSession paidSession = new PaidSession(SessionStatus.ready().recruiting(), period, List.of(coverImage, secondImage), new Money(50000L), 20);
         Long savedId = sessionRepository.savePaidSession(paidSession);
 
         // when

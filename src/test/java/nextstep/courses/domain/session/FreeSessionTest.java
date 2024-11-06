@@ -5,6 +5,7 @@ import nextstep.courses.domain.cover.CoverImageFile;
 import nextstep.courses.domain.cover.CoverImageSize;
 import nextstep.courses.domain.cover.CoverImageType;
 import nextstep.users.domain.NsUserTest;
+import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 
 class FreeSessionTest {
@@ -33,11 +33,11 @@ class FreeSessionTest {
 
         freeCourse.register(NsUserTest.GREEN);
 
-        assertAll(
-                () -> assertThat(freeCourse.getRegistrations())
-                        .extracting("sessionId", "maxStudents")
-                        .containsExactly(freeCourse.getId(), Integer.MAX_VALUE),
-                () -> assertThat(freeCourse.getRegistrations().contains(NsUserTest.GREEN.getId())).isTrue()
-        );
+        assertThat(freeCourse.getRegistrations())
+                .hasSize(1)
+                .extracting("sessionId", "userId")
+                .containsExactly(
+                        Tuple.tuple(freeCourse.getId(), NsUserTest.GREEN.getId())
+                );
     }
 }

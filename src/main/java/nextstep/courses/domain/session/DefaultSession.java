@@ -1,49 +1,36 @@
 package nextstep.courses.domain.session;
 
-import nextstep.courses.domain.common.Column;
 import nextstep.courses.domain.cover.CoverImage;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public abstract class DefaultSession {
-    // 실제 필드는 없지만 DB 매핑을 위해 어노테이션 추가
-    @Column(name = "session_type")
-    protected static String TYPE;
     protected final Long id;
-
+    protected final SessionType type;
     protected final SessionStatus status;
-    // Period는 start_date와 end_date 두 컬럼에 매핑되므로 두 개의 @Column 사용
-    @Column(name = "start_date", subField = "startDate")
-    @Column(name = "end_date", subField = "endDate")
     protected final Period period;
-
-    @Column(name = "course_fee")
     protected final Money courseFee;
-    protected final SessionRegistrations registrations;
+    protected final int maxStudents;
     private final List<CoverImage> coverImages;
-    @Column(name = "max_students", subField = "maxStudents")
-    protected Capacity capacity;
+    protected List<SessionRegistration> registrations;
 
-    protected DefaultSession(Long id, SessionStatus status, Period period, List<CoverImage> coverImages, Money courseFee, Capacity capacity) {
-        this.id = id;
-        this.status = status;
-        this.period = period;
-        this.coverImages = coverImages;
-        this.courseFee = courseFee;
-        this.capacity = capacity;
-        this.registrations = new SessionRegistrations(id, capacity.getMaxStudentsSize());
+    protected DefaultSession(Long id, SessionStatus status, Period period, List<CoverImage> coverImages, Money courseFee, int maxStudents, SessionType type) {
+        this(id, status, period, coverImages, courseFee, maxStudents, type, Collections.emptyList());
     }
 
-    protected DefaultSession(Long id, SessionStatus status, Period period, List<CoverImage> coverImages, Money courseFee, SessionRegistrations registrations) {
+    protected DefaultSession(Long id, SessionStatus status, Period period, List<CoverImage> coverImages, Money courseFee, int maxStudents, SessionType type, List<SessionRegistration> registrations) {
         this.id = id;
         this.status = status;
         this.period = period;
         this.coverImages = coverImages;
         this.courseFee = courseFee;
-        this.registrations = registrations;
+        this.maxStudents = maxStudents;
+        this.type = type;
+        this.registrations = new ArrayList<>(registrations);
     }
 
     public void register(NsUser student, Payment payment) {
@@ -63,20 +50,27 @@ public abstract class DefaultSession {
         throw new IllegalArgumentException("강의 상태가 모집 중일때만 수강신청이 가능합니다.");
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
-    }
-
-    public List<Long> getRegisteredStudentIds() {
-        return registrations.getApprovedUserIds();
     }
 
     public Period getPeriod() {
         return period;
     }
 
-    public SessionRegistrations getRegistrations() {
-        return registrations;
+    public String getTypeCode() {
+        return type.getCode();
+    }
+
+    public Long getCourseFeeAmount() {
+        if(courseFee == null){
+            return 0L;
+        }
+        return courseFee.getAmount();
+    }
+
+    public int getMaxStudentsSize() {
+        return maxStudents;
     }
 
     public List<CoverImage> getCoverImages() {
@@ -85,5 +79,9 @@ public abstract class DefaultSession {
 
     public SessionStatus getStatus() {
         return status;
+    }
+
+    public List<SessionRegistration> getRegistrations() {
+        return registrations;
     }
 }

@@ -36,17 +36,25 @@ public class JdbcSessionRegistrationRepository implements SessionRegistrationRep
     }
 
     @Override
-    public List<Long> findRegisteredUserIds(Long sessionId) {
-        String sql = "SELECT user_id FROM session_registration " +
+    public List<SessionRegistration> findRegisteredUsers(Long sessionId) {
+        String sql = "SELECT session_id, user_id, registered_at, registration_status, selection_status " +
+                "FROM session_registration " +
                 "WHERE session_id = ? AND registration_status = ?";
 
-        return jdbcTemplate.queryForList(
+        return jdbcTemplate.query(
                 sql,
-                Long.class,
+                (rs, rowNum) -> new SessionRegistration(
+                        rs.getLong("session_id"),
+                        rs.getLong("user_id"),
+                        rs.getTimestamp("registered_at").toLocalDateTime(),
+                        SessionRegistrationStatus.valueOf(rs.getString("registration_status")),
+                        StudentSelectionStatus.valueOf(rs.getString("selection_status"))
+                ),
                 sessionId,
                 SessionRegistrationStatus.APPROVED.getCode()
         );
     }
+
     @Override
     public Optional<SessionRegistration> findBySessionIdAndUserId(Long sessionId, Long userId) {
         String sql = "SELECT * FROM session_registration WHERE session_id = ? AND user_id = ?";
@@ -81,16 +89,14 @@ public class JdbcSessionRegistrationRepository implements SessionRegistrationRep
     }
 
     private SessionRegistration mapRowToSessionRegistration(ResultSet rs, int rowNum) throws SQLException {
-        RegistrationState state = new RegistrationState(
-                SessionRegistrationStatus.from(rs.getString("registration_status")),
-                StudentSelectionStatus.from(rs.getString("selection_status"))
-        );
 
         return new SessionRegistration(
                 rs.getLong("session_id"),
                 rs.getLong("user_id"),
                 rs.getTimestamp("registered_at").toLocalDateTime(),
-                state
+                SessionRegistrationStatus.from(rs.getString("registration_status")),
+                StudentSelectionStatus.from(rs.getString("selection_status"))
+
         );
     }
 }
