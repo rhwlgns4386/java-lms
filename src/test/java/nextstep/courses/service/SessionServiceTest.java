@@ -1,6 +1,7 @@
 package nextstep.courses.service;
 
 import nextstep.courses.domain.FreeSession;
+import nextstep.courses.domain.Instructor;
 import nextstep.courses.domain.PaidSession;
 import nextstep.courses.domain.ProgressCode;
 import nextstep.courses.domain.Session;
@@ -9,11 +10,14 @@ import nextstep.courses.domain.SessionImages;
 import nextstep.courses.domain.SessionImagesTest;
 import nextstep.courses.domain.SessionInfo;
 import nextstep.courses.domain.SessionMetaData;
+import nextstep.courses.domain.SessionOrder;
+import nextstep.courses.domain.SessionOrderTest;
 import nextstep.courses.domain.SessionPeriod;
 import nextstep.courses.domain.SessionPrice;
 import nextstep.courses.domain.SessionType;
 import nextstep.courses.domain.StateCode;
 import nextstep.courses.domain.Students;
+import nextstep.courses.exception.CannotApproveSessionException;
 import nextstep.courses.exception.CannotRegisteSessionException;
 import nextstep.courses.infrastructure.SessionRepository;
 import nextstep.payments.domain.Payment;
@@ -25,6 +29,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
@@ -179,6 +184,26 @@ public class SessionServiceTest {
             sessionService.orderSession(payment, NsUserTest.JAVAJIGI, 1);
         })
                 .isInstanceOf(CannotRegisteSessionException.class).hasMessageStartingWith("강의는 중복 신청할 수 없습니다.");
+    }
+
+    @Test
+    @DisplayName("대기중인 강의주문을 강사가 승인")
+    void saveOrderStateSessionOrder() throws CannotApproveSessionException {
+        SessionOrder sessionOrder = SessionOrderTest.SESSION_ORDER_READY;
+        when(sessionRepository.findSessionOrderByOrderId(Mockito.any(Long.class))).thenReturn(sessionOrder);
+        when(sessionRepository.saveOrderStateSessionOrder(Mockito.any(SessionOrder.class))).thenReturn(1);
+
+        assertThat(sessionService.approveSessionOrder(new Instructor(7), 1L));
+    }
+
+    @Test
+    @DisplayName("대기중이지 않은 강의주문을 강사가 승인시 오류")
+    void saveOrderStateSessionOrder_CannotApproveSessionException() {
+        SessionOrder sessionOrder = SessionOrderTest.SESSION_ORDER_APPROVE;
+        when(sessionRepository.findSessionOrderByOrderId(Mockito.any(Long.class))).thenReturn(sessionOrder);
+
+        assertThatThrownBy(() -> sessionService.approveSessionOrder(new Instructor(7), 1L))
+                .isInstanceOf(CannotApproveSessionException.class);
     }
 
 }
