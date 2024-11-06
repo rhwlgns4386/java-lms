@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 
 class FreeSessionTest {
@@ -39,5 +40,19 @@ class FreeSessionTest {
                 .containsExactly(
                         Tuple.tuple(freeCourse.getId(), NsUserTest.GREEN.getId())
                 );
+    }
+
+    @DisplayName("이미 신청한 사용자가 수강신청을 하면 예외로 처리한다.")
+    @Test
+    void alreadyExistUser() {
+        LocalDate startDate = LocalDate.of(2024, 10, 10);
+        LocalDate endDate = LocalDate.of(2024, 10, 19);
+        FreeSession freeCourse = new FreeSession(SessionProgress.READY, SessionRecruitmentStatus.RECRUITING, new Period(startDate, endDate), coverImage);
+
+        freeCourse.register(NsUserTest.GREEN);
+
+        assertThatThrownBy(() -> freeCourse.register(NsUserTest.GREEN))
+                .isInstanceOf(IllegalArgumentException.class);
+
     }
 }

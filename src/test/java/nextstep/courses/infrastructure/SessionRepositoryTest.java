@@ -59,7 +59,6 @@ class SessionRepositoryTest {
         );
     }
 
-
     @DisplayName("무료 세션을 조회할 수 있다.")
     @Test
     void findFreeSession() {

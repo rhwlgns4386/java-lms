@@ -21,14 +21,6 @@ public class SessionRegistration {
         this.selectionStatus = selectionStatus;
     }
 
-    public Long getSessionId() {
-        return sessionId;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
     public void approveStudent() {
         validateSelectionChange();
         this.selectionStatus = StudentApprovalStatus.APPROVED;
@@ -73,6 +65,14 @@ public class SessionRegistration {
         }
     }
 
+    public Long getSessionId() {
+        return sessionId;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
     public SessionRegistrationStatus getRegistrationStatus() {
         return registrationStatus;
     }
@@ -80,5 +80,4 @@ public class SessionRegistration {
     public StudentApprovalStatus getSelectionStatus() {
         return selectionStatus;
     }
-
 }

@@ -35,25 +35,40 @@ public abstract class DefaultSession {
         this.progress = progress;
     }
 
-    public void register(NsUser student, Payment payment) {
-        validateSessionStatus();
-        validate(student, payment);
-        doRegister(student, payment);
+    public void register(NsUser user, Payment payment) {
+        validateDefaultStatus(user);
+        validateAdditionalRequirements(user, payment);
+        doRegister(user, payment);
     }
 
-    protected abstract void validate(NsUser user, Payment payment);
+    protected abstract void validateAdditionalRequirements(NsUser user, Payment payment);
 
     protected abstract void doRegister(NsUser user, Payment payment);
 
-    private void validateSessionStatus() {
-        if (canRegister()) {
-            return;
+    private void validateDefaultStatus(NsUser user) {
+        if (isRegistrationUnavailable()) {
+            throw new IllegalArgumentException("강의 상태가 모집 중일때만 수강신청이 가능합니다.");
         }
-        throw new IllegalArgumentException("강의 상태가 모집 중일때만 수강신청이 가능합니다.");
+        if (isAlreadyRegistered(user)) {
+            throw new IllegalArgumentException("이미 등록된 사용자 입니다.");
+        }
+        if (isFull()) {
+            throw new IllegalArgumentException("수강 인원이 꽉찼습니다.");
+        }
     }
 
-    public boolean canRegister() {
-        return recruitment != SessionRecruitmentStatus.NOT_RECRUITING && progress != SessionProgress.FINISHED;
+    private boolean isFull() {
+        return registrations.size() >= maxStudents;
+    }
+
+    private boolean isAlreadyRegistered(NsUser user) {
+        return registrations.stream()
+                .map(SessionRegistration::getUserId)
+                .anyMatch(userId -> userId.equals(user.getId()));
+    }
+
+    public boolean isRegistrationUnavailable() {
+        return recruitment == SessionRecruitmentStatus.NOT_RECRUITING || progress == SessionProgress.FINISHED;
     }
 
     public long getId() {
@@ -73,10 +88,6 @@ public abstract class DefaultSession {
             return 0L;
         }
         return courseFee.getAmount();
-    }
-
-    public SessionType getType() {
-        return type;
     }
 
     public Money getCourseFee() {
@@ -102,7 +113,6 @@ public abstract class DefaultSession {
     public List<CoverImage> getCoverImages() {
         return Collections.unmodifiableList(coverImages);
     }
-
 
     public List<SessionRegistration> getRegistrations() {
         return registrations;

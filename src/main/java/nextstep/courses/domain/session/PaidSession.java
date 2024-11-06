@@ -11,30 +11,18 @@ public class PaidSession extends DefaultSession {
         super(0L, period, coverImages, courseFee, maxStudents, SessionType.PAID, progress, recruitmentStatus);
     }
 
-    public PaidSession(Long id, SessionProgress progress, SessionRecruitmentStatus recruitmentStatus, Period period, List<CoverImage> images, Money courseFee, int maxStudents) {
-        super(id, period, images, courseFee, maxStudents, SessionType.PAID, progress, recruitmentStatus);
-    }
-
-
     public PaidSession(Long id, SessionProgress progress, SessionRecruitmentStatus recruitment, Period period, List<CoverImage> images, Money courseFee, int maxStudents, List<SessionRegistration> registrations) {
         super(id, period, images, courseFee, maxStudents, SessionType.PAID, registrations, progress, recruitment);
     }
 
     @Override
-    protected void validate(NsUser student, Payment payment) {
-        validateCapacity();
+    protected void validateAdditionalRequirements(NsUser student, Payment payment) {
         validatePayment(payment);
     }
 
     @Override
     protected void doRegister(NsUser user, Payment payment) {
         registrations.add(new SessionRegistration(id, user.getId()));
-    }
-
-    private void validateCapacity() {
-        if (registrations.size() >= maxStudents) {
-            throw new IllegalArgumentException("수강 인원이 꽉 찼습니다.");
-        }
     }
 
     private void validatePayment(Payment payment) {

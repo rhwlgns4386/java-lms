@@ -51,6 +51,7 @@ class SessionRegistrationRepositoryTest {
                 () -> assertThat(found.get().getSelectionStatus()).isEqualTo(StudentApprovalStatus.PENDING)
         );
     }
+
     @DisplayName("수강신청을 선택하여 승인할 수 있다.")
     @Test
     void updateRegistrationStatus() {
@@ -92,6 +93,7 @@ class SessionRegistrationRepositoryTest {
         assertThat(approvedUsers)
                 .hasSize(1);
     }
+
     @AfterEach
     void tearDown() {
         jdbcTemplate.update("DELETE FROM session_registration");

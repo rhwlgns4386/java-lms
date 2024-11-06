@@ -11,12 +11,12 @@ public class FreeSession extends DefaultSession {
         super(0L, period, List.of(coverImage), new Money(0L), Integer.MAX_VALUE, SessionType.FREE, progress, recruitmentStatus);
     }
 
-    public FreeSession(Long id,SessionProgress progress, SessionRecruitmentStatus recruitmentStatus, Period period, List<CoverImage> images, int maxStudents, List<SessionRegistration> registrations) {
+    public FreeSession(Long id, SessionProgress progress, SessionRecruitmentStatus recruitmentStatus, Period period, List<CoverImage> images, int maxStudents, List<SessionRegistration> registrations) {
         super(id, period, images, new Money(0L), maxStudents, SessionType.FREE, registrations, progress, recruitmentStatus);
     }
 
     @Override
-    protected void validate(NsUser student, Payment payment) {
+    protected void validateAdditionalRequirements(NsUser student, Payment payment) {
         //무료 세선은 수강신청 제한이 없음
     }
 
