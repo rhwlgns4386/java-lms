@@ -5,7 +5,7 @@ public class SessionImage {
     public static final int MAX_SIZE_BYTE  = 1 * 1024 * 1024;
     public static final int MIN_WIDTH = 300;
     public static final int MIN_HEIGHT = 200;
-    public static final double EXPECTED_RATIO = 3.0 / 2.0;
+    public static final int EXPECTED_RATIO = 3 / 2;
     private int size;
 
     private ImageType imageType;
