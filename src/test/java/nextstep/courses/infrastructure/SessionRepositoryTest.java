@@ -67,10 +67,9 @@ class SessionRepositoryTest {
         Long savedId = sessionRepository.saveFreeSession(freeSession);
 
         // when
-        DefaultSession foundSession = SessionFactory.from(sessionRepository.findById(savedId));
+        DefaultSession foundSession = sessionRepository.findById(savedId);
         // then
-        FreeSession foundFreeSession = (FreeSession) foundSession;
-        assertThat(foundFreeSession)
+        assertThat(foundSession)
                 .extracting("progress", "recruitment", "period.startDate", "period.endDate", "courseFee.amount", "maxStudents")
                 .containsExactly(SessionProgress.READY, SessionRecruitmentStatus.RECRUITING, period.getStartDate(), period.getEndDate(), 0L, Integer.MAX_VALUE);
     }
@@ -84,7 +83,7 @@ class SessionRepositoryTest {
         Long savedId = sessionRepository.savePaidSession(paidSession);
 
         // when
-        DefaultSession foundSession = SessionFactory.from(sessionRepository.findById(savedId));
+        DefaultSession foundSession = sessionRepository.findById(savedId);
 
         // then
         assertThat(foundSession)
@@ -117,7 +116,7 @@ class SessionRepositoryTest {
         Long savedId = sessionRepository.savePaidSession(paidSession);
 
         // when
-        DefaultSession foundSession = SessionFactory.from(sessionRepository.findById(savedId));
+        DefaultSession foundSession = sessionRepository.findById(savedId);
 
         // then
         assertAll(
