@@ -11,7 +11,6 @@
 ### SessionApplyStatus (강의 지원 상태)
 - [x] 검증(진행중, 모집중)둘 다 아니면 예외
 - [x] SessionStatus유지 하고(SessionProgressStatus, SessionRecruitStatus - null 허용하여 컬럼생성)
-- [x] 수강 신청시 모집중 or 진행중 상태에서만 가능
 
 ---
 
@@ -34,7 +33,7 @@
 ### SessionApply (수강 신청)
 - GUEST는 선발되지 않은 회원이라 가정
 
-- [ ] GUEST(선발되지 않은 사람)면 취소 가능
+- [x] GUEST(선발되지 않은 사람)면 취소 가능
 - [ ] GUEST(선발되지 않은 사람)면 수강 승인 시 예외
 - [ ] GUEST가 아니면(선발된 회원) 수강 취소 시 예외
 - [ ] GUEST가 아니면(선발된 회원)면 수강 가능
