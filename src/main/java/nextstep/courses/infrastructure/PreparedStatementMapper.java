@@ -1,7 +1,6 @@
 package nextstep.courses.infrastructure;
 
 import nextstep.courses.domain.common.Column;
-import nextstep.courses.domain.cover.CoverImage;
 import nextstep.courses.domain.session.*;
 
 import java.lang.reflect.Field;
@@ -50,10 +49,9 @@ public class PreparedStatementMapper {
         Map<String, Integer> sqlOrder = Map.of(
                 "start_date", 1,
                 "end_date", 2,
-                "cover_image_id", 3,
-                "session_type", 4,
-                "course_fee", 5,
-                "max_students", 6
+                "session_type", 3,
+                "course_fee", 4,
+                "max_students", 5
         );
         return sqlOrder.getOrDefault(columnName, Integer.MAX_VALUE);
     }
@@ -89,11 +87,6 @@ public class PreparedStatementMapper {
             if (value instanceof Capacity && MAX_STUDENTS.equals(column.subField())) {
                 Capacity capacity = (Capacity) value;
                 setParameter(ps, parameterIndex, capacity.getMaxStudentsSize());
-                return;
-            }
-
-            if (value instanceof CoverImage) {
-                setParameter(ps, parameterIndex, ((CoverImage) value).getId());
                 return;
             }
 

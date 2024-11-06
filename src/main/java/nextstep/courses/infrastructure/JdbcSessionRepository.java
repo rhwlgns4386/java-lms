@@ -53,8 +53,8 @@ public class JdbcSessionRepository implements SessionRepository {
 
     private Long saveSession(DefaultSession session) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        String sql = "INSERT INTO session (start_date, end_date, cover_image_id, session_type, course_fee, max_students) " +
-                "VALUES ( ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO session (start_date, end_date, session_type, course_fee, max_students) " +
+                "VALUES ( ?, ?,  ?, ?, ?)";
 
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, new String[]{"id"});

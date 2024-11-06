@@ -71,7 +71,6 @@ create table session
     status         varchar(20)  null,
     start_date     timestamp   not null,
     end_date       timestamp   not null,
-    cover_image_id bigint      not null,
     session_type   varchar(10) not null,
     course_fee     bigint,
     max_students   int,

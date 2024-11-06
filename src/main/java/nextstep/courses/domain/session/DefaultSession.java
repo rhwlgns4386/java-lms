@@ -19,8 +19,7 @@ public abstract class DefaultSession {
     @Column(name = "start_date", subField = "startDate")
     @Column(name = "end_date", subField = "endDate")
     protected final Period period;
-    @Column(name = "cover_image_id")
-    protected final CoverImage coverImage;
+
     @Column(name = "course_fee")
     protected final Money courseFee;
     protected final SessionRegistrations registrations;
@@ -32,7 +31,6 @@ public abstract class DefaultSession {
         this.id = id;
         this.status = status;
         this.period = period;
-        this.coverImage = coverImages.get(0);
         this.coverImages = coverImages;
         this.courseFee = courseFee;
         this.capacity = capacity;
@@ -43,7 +41,6 @@ public abstract class DefaultSession {
         this.id = id;
         this.status = status;
         this.period = period;
-        this.coverImage = coverImages.get(0);
         this.coverImages = coverImages;
         this.courseFee = courseFee;
         this.registrations = registrations;
@@ -68,10 +65,6 @@ public abstract class DefaultSession {
 
     public Long getId() {
         return id;
-    }
-
-    public CoverImage getCoverImage() {
-        return coverImage;
     }
 
     public List<Long> getRegisteredStudentIds() {
