@@ -17,9 +17,17 @@ public class SessionDate {
     }
 
     private void isValid(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        if(startDateTime.isAfter(endDateTime)) {
+        if (startDateTime.isAfter(endDateTime)) {
             throw new IllegalArgumentException(DATE_ERROR);
         }
+    }
+
+    public LocalDateTime getStartDateTime() {
+        return startDateTime;
+    }
+
+    public LocalDateTime getEndDateTime() {
+        return endDateTime;
     }
 
     @Override

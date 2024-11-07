@@ -68,6 +68,35 @@ public class Session {
         return this.enrollUserInfos.getEnrollUserInfos();
     }
 
+    public Long getSessionId() {
+        return sessionId;
+    }
+
+    public Long getSessionPrice() {
+        return sessionPrice.getPrice();
+    }
+
+    public SessionPriceType getSessionPriceType() {
+        return sessionPrice.getSessionPriceType();
+    }
+
+    public SessionStatus getSessionStatus() {
+        return sessionStatus;
+    }
+
+    public LocalDateTime getStartDateTime() {
+        return sessionDate.getStartDateTime();
+    }
+
+    public LocalDateTime getEndDateTime() {
+        return sessionDate.getEndDateTime();
+    }
+
+    public String getFilePath() {
+        return sessionCoverImage.getFilePath();
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -94,9 +123,14 @@ public class Session {
         private LocalDateTime startDateTime;
         private LocalDateTime endDateTime;
         private int availableEnrollCount;
+        private String filePath;
 
-        public SessionBuilder(Long sessionId) {
+        public SessionBuilder() {
+        }
+
+        public SessionBuilder sessionId(Long sessionId) {
             this.sessionId = sessionId;
+            return this;
         }
 
         public SessionBuilder price(Long price) {
@@ -131,6 +165,11 @@ public class Session {
 
         public SessionBuilder availableEnrollCount(int availableEnrollCount) {
             this.availableEnrollCount = availableEnrollCount;
+            return this;
+        }
+
+        public SessionBuilder filePath(String filePath) {
+            this.filePath = filePath;
             return this;
         }
 

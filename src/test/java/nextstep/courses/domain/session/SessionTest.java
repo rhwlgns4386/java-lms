@@ -24,12 +24,13 @@ public class SessionTest {
 
     @BeforeEach
     void setUp() {
-        sessionCoverImage = new SessionCoverImage.SessionCoverImageBuilder(1L).fileName("leo.png").volume(150).width(300).height(200).build();
+        sessionCoverImage = new SessionCoverImage.SessionCoverImageBuilder().id(1L).fileName("leo.png").filePath("/home/lms/image/cover/leo.png").volume(150).width(200).height(300).build();
         EnrollUserInfo enrollUserInfo = new EnrollUserInfo(1L, 1L);
         enrollUserInfos = new EnrollUserInfos(20);
         enrollUserInfos.add(enrollUserInfo);
 
-        freeSession = new Session.SessionBuilder(1L)
+        freeSession = new Session.SessionBuilder()
+                .sessionId(1L)
                 .price(1000L)
                 .sessionPriceType(SessionPriceType.FREE)
                 .sessionStatus(SessionStatus.ENROLLING)
@@ -39,7 +40,8 @@ public class SessionTest {
                 .availableEnrollCount(30)
                 .build();
 
-        paidSession = new Session.SessionBuilder(2L)
+        paidSession = new Session.SessionBuilder()
+                .sessionId(2L)
                 .price(1000L)
                 .sessionPriceType(SessionPriceType.PAID)
                 .sessionStatus(SessionStatus.ENROLLING)
@@ -75,7 +77,8 @@ public class SessionTest {
 
     @Test
     void 유로_강의_등록_상태_PENDING_실패_테스트() {
-        Session errorPaidSession = new Session.SessionBuilder(1L)
+        Session errorPaidSession = new Session.SessionBuilder()
+                .sessionId(1L)
                 .price(1000L)
                 .sessionPriceType(SessionPriceType.PAID)
                 .sessionStatus(SessionStatus.PENDING)
@@ -92,7 +95,8 @@ public class SessionTest {
 
     @Test
     void 유료_강의_등록_사이즈_실패_테스트() {
-        Session errorPaidSession = new Session.SessionBuilder(1L)
+        Session errorPaidSession = new Session.SessionBuilder()
+                .sessionId(1L)
                 .price(1000L)
                 .sessionPriceType(SessionPriceType.PAID)
                 .sessionStatus(SessionStatus.ENROLLING)

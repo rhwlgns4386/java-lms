@@ -1,19 +1,22 @@
 package nextstep.courses.domain.enroll;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class EnrollUserInfo {
     private final Long sessionId;
     private final Long nsUserId;
 
-    private final LocalDateTime createdAt = LocalDateTime.now();
-    private LocalDateTime updatedAt;
-
     public EnrollUserInfo(Long sessionId, Long nsUserId) {
         this.sessionId = sessionId;
         this.nsUserId = nsUserId;
-        this.updatedAt = LocalDateTime.now();
+    }
+
+    public Long getSessionId() {
+        return sessionId;
+    }
+
+    public Long getNsUserId() {
+        return nsUserId;
     }
 
     @Override

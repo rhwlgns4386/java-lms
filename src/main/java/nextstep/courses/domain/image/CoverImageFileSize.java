@@ -6,8 +6,8 @@ public class CoverImageFileSize {
     private static final String RATIO_ERROR = "잘못된 비율입니다: 비율은 반드시 3:2여야 합니다.";
     private static final String FILE_SIZE_MIN_ERROR = "잘못된 크기입니다: 높이는 300픽셀, 넓이는 200픽셀 이상이어야 합니다.";
     private static final double RATIO = 3.0 / 2.0;
-    private static final int MIN_HEIGHT = 200;
-    private static final int MIN_WIDTH = 300;
+    private static final int MIN_HEIGHT = 300;
+    private static final int MIN_WIDTH = 200;
 
     private final int height;
     private final int width;
@@ -16,11 +16,19 @@ public class CoverImageFileSize {
         if (width < MIN_WIDTH || height < MIN_HEIGHT) {
             throw new IllegalArgumentException(FILE_SIZE_MIN_ERROR);
         }
-        if ((double) width / (double) height != RATIO) {
+        if ((double) height / (double) width != RATIO) {
             throw new IllegalArgumentException(RATIO_ERROR);
         }
         this.height = height;
         this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int getWidth() {
+        return width;
     }
 
     @Override
