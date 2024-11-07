@@ -1,5 +1,6 @@
 package nextstep.courses.domain.session;
 
+import nextstep.courses.SessionException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -34,7 +35,7 @@ public class SessionApplyTest {
 
         assertThatThrownBy(
                 () -> apply.submit()
-        );
+        ).isInstanceOf(SessionException.class);
     }
 
 
@@ -45,7 +46,7 @@ public class SessionApplyTest {
 
         assertThatThrownBy(
                 () -> apply.cancel()
-        );
+        ).isInstanceOf(SessionException.class);
     }
 
     @DisplayName("선발된 인원(isSelection = true)면 수강 가능")
