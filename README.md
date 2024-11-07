@@ -8,6 +8,25 @@
 ## 온라인 코드 리뷰 과정
 * [텍스트와 이미지로 살펴보는 온라인 코드 리뷰 과정](https://github.com/next-step/nextstep-docs/tree/master/codereview)
 
+# STEP4 TODO
+# STEP4 DONE
+- [x] 4단계 요구사항
+  - [x] 강사는 수강신청한 사람 중 선발된 인원에 대해서만 수강 승인이 가능해야 한다.
+  - [x] 강사는 수강신청한 사람 중 선발되지 않은 사람은 수강 취소할 수 있어야 한다.
+  - [x] 강의는 하나 이상의 커버 이미지를 가진다.
+  - [x] 강의 진행 상태와 모집 상태로 분리해야한다
+- [x] 3단계 피드백 반영 
+  - [x] 팩토리 메소드 분리
+- [x] 4단계 피드백
+  - [x] coverImage 제거
+  - [x] SessionRegistrations 제거
+  - [x] RegistrationState 분리
+  - [x] sessionType 실제 지정
+  - [x] select 이름 변경
+  - [x] approve 로직 변경
+  - [x] JdbcSessionRepository 에서 분기 -> 타입에 따라 구현체 필요
+  - [x] 세션 생성을 팩토리 클래스로 분리
+---
 # STEP3 TODO
 # STEP3 DONE
 - [x] 3단계 요구사항

@@ -4,28 +4,25 @@ import nextstep.courses.domain.cover.CoverImage;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
 
+import java.util.List;
+
 public class FreeSession extends DefaultSession {
-
-    public FreeSession(Status status, Period period, CoverImage coverImage) {
-        this(0L, status, period, coverImage, new Money(0), new Capacity(Integer.MAX_VALUE));
+    public FreeSession(SessionProgress progress, SessionRecruitmentStatus recruitmentStatus, Period period, CoverImage coverImage) {
+        super(0L, period, List.of(coverImage), new Money(0L), Integer.MAX_VALUE, SessionType.FREE, progress, recruitmentStatus);
     }
 
-    public FreeSession(Long id, Status status, Period period, CoverImage coverImage, Capacity capacity) {
-        this(id, status, period, coverImage, new Money(0), capacity);
-    }
-
-    private FreeSession(Long id, Status status, Period period, CoverImage coverImage, Money courseFee, Capacity capacity) {
-        super(id, status, period, coverImage, courseFee, capacity);
+    public FreeSession(Long id, SessionProgress progress, SessionRecruitmentStatus recruitmentStatus, Period period, List<CoverImage> images, int maxStudents, List<SessionRegistration> registrations) {
+        super(id, period, images, new Money(0L), maxStudents, SessionType.FREE, registrations, progress, recruitmentStatus);
     }
 
     @Override
-    protected void validate(NsUser student, Payment payment) {
+    protected void validateAdditionalRequirements(NsUser student, Payment payment) {
         //무료 세선은 수강신청 제한이 없음
     }
 
     @Override
     protected void doRegister(NsUser user, Payment payment) {
-        capacity = capacity.register(user);
+        registrations.add(new SessionRegistration(id, user.getId()));
     }
 
     public void register(NsUser student) {

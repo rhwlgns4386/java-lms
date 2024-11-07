@@ -4,31 +4,25 @@ import nextstep.courses.domain.cover.CoverImage;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
 
-public class PaidSession extends DefaultSession {
+import java.util.List;
 
-    public PaidSession(Status status, Period period, CoverImage coverImage, Money courseFee, Capacity capacity) {
-        this(0L, status, period, coverImage, courseFee, capacity);
+public class PaidSession extends DefaultSession {
+    public PaidSession(SessionProgress progress, SessionRecruitmentStatus recruitmentStatus, Period period, List<CoverImage> coverImages, Money courseFee, int maxStudents) {
+        super(0L, period, coverImages, courseFee, maxStudents, SessionType.PAID, progress, recruitmentStatus);
     }
 
-    public PaidSession(Long id, Status status, Period period, CoverImage coverImage, Money courseFee, Capacity capacity) {
-        super(id, status, period, coverImage, courseFee, capacity);
+    public PaidSession(Long id, SessionProgress progress, SessionRecruitmentStatus recruitment, Period period, List<CoverImage> images, Money courseFee, int maxStudents, List<SessionRegistration> registrations) {
+        super(id, period, images, courseFee, maxStudents, SessionType.PAID, registrations, progress, recruitment);
     }
 
     @Override
-    protected void validate(NsUser student, Payment payment) {
-        validateCapacity();
+    protected void validateAdditionalRequirements(NsUser student, Payment payment) {
         validatePayment(payment);
     }
 
     @Override
-    protected void doRegister(NsUser student, Payment payment) {
-        capacity = capacity.register(student);
-    }
-
-    private void validateCapacity() {
-        if (capacity.isFull()) {
-            throw new IllegalArgumentException("수강 인원이 꽉 찼습니다.");
-        }
+    protected void doRegister(NsUser user, Payment payment) {
+        registrations.add(new SessionRegistration(id, user.getId()));
     }
 
     private void validatePayment(Payment payment) {
