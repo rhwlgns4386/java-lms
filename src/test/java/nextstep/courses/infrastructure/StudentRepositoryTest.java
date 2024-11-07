@@ -28,6 +28,16 @@ public class StudentRepositoryTest {
     }
 
     @Test
+    void findBySessionId() {
+        Student student = new Student(1L, 1L);
+        int count = studentRepository.save(student);
+        assertThat(count).isEqualTo(1);
+        Student savedStudent = studentRepository.findBySessionId(1L).get(0);
+        assertThat(savedStudent.getSessionId()).isEqualTo(student.getSessionId());
+        LOGGER.debug("Student: {}", savedStudent);
+    }
+
+    @Test
     void crud() {
         Student student = new Student(1L, 1L);
         int count = studentRepository.save(student);

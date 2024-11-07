@@ -1,31 +1,54 @@
 package nextstep.courses.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 public class SessionApply {
-    private final Long nsUserId;
-    private final Long sessionId;
-    private final SessionAmount amount;
-    private final int countPersonnel;
+    private final int maxPersonnel;
+    private final SessionStatus status;
+    private List<Student> students;
 
-    public SessionApply(Long nsUserId, Long sessionId, SessionAmount amount, int countPersonnel) {
-        this.nsUserId = nsUserId;
-        this.sessionId = sessionId;
-        this.amount = amount;
-        this.countPersonnel = countPersonnel;
+    public SessionApply(int maxPersonnel, SessionStatus status, List<Student> students) {
+        this.maxPersonnel = maxPersonnel;
+        this.status = status;
+        this.students = new ArrayList<>(students);
     }
 
-    public Long getNsUserId() {
-        return nsUserId;
+    public void apply(Student student) {
+        validStatus();
+        validContains(student);
+        validMaxPersonnel();
+        students.add(student);
     }
 
-    public Long getSessionId() {
-        return sessionId;
+    private void validContains(Student student) {
+        if (students.contains(student)) {
+            throw new IllegalArgumentException("Student is already in the list.");
+        }
     }
 
-    public SessionAmount getAmount() {
-        return amount;
+    private void validMaxPersonnel() {
+        if (students.size() >= maxPersonnel) {
+            throw new IllegalArgumentException("Max personnel exceeded.");
+        }
     }
 
-    public int getCountPersonnel() {
-        return countPersonnel;
+    private void validStatus() {
+        if (!status.isRecruiting()) {
+            throw new IllegalArgumentException("Session is not recruiting.");
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        SessionApply that = (SessionApply) o;
+        return maxPersonnel == that.maxPersonnel && status == that.status && Objects.equals(students, that.students);
     }
 }

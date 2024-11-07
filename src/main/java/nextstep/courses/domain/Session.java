@@ -1,8 +1,8 @@
 package nextstep.courses.domain;
 
 import nextstep.courses.CannotOpenException;
-import nextstep.users.domain.NsUser;
 
+import java.util.List;
 import java.util.Objects;
 
 public class Session {
@@ -70,29 +70,8 @@ public class Session {
         this.status = SessionStatus.RECRUITING;
     }
 
-    public Student apply(SessionApply addInfo) {
-        validStatus();
-        validAmount(addInfo.getAmount());
-        validMaxPersonnel(addInfo.getCountPersonnel());
-        return new Student(addInfo.getNsUserId(), this.id);
-    }
-
-    private void validMaxPersonnel(int countPersonnel) {
-        if (feeType.isPaid() && countPersonnel >= maxPersonnel) {
-            throw new IllegalArgumentException("Max personnel exceeded.");
-        }
-    }
-
-    private void validAmount(SessionAmount amount) {
-        if (!Objects.equals(amount, this.amount)) {
-            throw new IllegalArgumentException("Payment amount does not match.");
-        }
-    }
-
-    private void validStatus() {
-        if (!status.isRecruiting()) {
-            throw new IllegalArgumentException("Session is not recruiting.");
-        }
+    public SessionApply sessionApply(List<Student> students) {
+        return new SessionApply(maxPersonnel, status, students);
     }
 
     public Long getId() {
