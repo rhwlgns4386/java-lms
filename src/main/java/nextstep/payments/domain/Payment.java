@@ -16,6 +16,8 @@ public class Payment {
 
     private LocalDateTime createdAt;
 
+    private boolean isCompleted;
+
     public Payment() {
     }
 
@@ -25,5 +27,18 @@ public class Payment {
         this.nsUserId = nsUserId;
         this.amount = amount;
         this.createdAt = LocalDateTime.now();
+    }
+
+    public Payment(String id, Long sessionId, Long nsUserId, Long amount, LocalDateTime createdAt, boolean isCompleted) {
+        this.id = id;
+        this.sessionId = sessionId;
+        this.nsUserId = nsUserId;
+        this.amount = amount;
+        this.createdAt = createdAt;
+        this.isCompleted = isCompleted;
+    }
+
+    public boolean isPaymentCompleted() {
+        return isCompleted;
     }
 }
