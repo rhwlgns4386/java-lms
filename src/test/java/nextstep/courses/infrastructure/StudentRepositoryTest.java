@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -17,13 +18,13 @@ public class StudentRepositoryTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(CourseRepositoryTest.class);
 
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     private StudentRepository studentRepository;
 
     @BeforeEach
     void setUp() {
-        studentRepository = new JdbcStudentRepository(jdbcTemplate);
+        studentRepository = new JdbcStudentRepository(namedParameterJdbcTemplate);
     }
 
     @Test

@@ -4,8 +4,12 @@ import nextstep.courses.domain.Student;
 import nextstep.courses.domain.StudentRepository;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Repository("studentRepository")
@@ -15,21 +19,26 @@ public class JdbcStudentRepository implements StudentRepository {
             rs.getLong("ns_user_id"),
             rs.getLong("session_id"));
 
-    private JdbcOperations jdbcTemplate;
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    public JdbcStudentRepository(JdbcOperations jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public JdbcStudentRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
     @Override
     public int save(Student student) {
-        String sql = "insert into student (ns_user_id, session_id) values (?, ?)";
-        return jdbcTemplate.update(sql, student.getNsUserId(), student.getSessionId());
+        String sql = "insert into student (ns_user_id, session_id) values (:nsUserId, :sessionId)";
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("nsUserId", student.getNsUserId())
+                .addValue("sessionId", student.getSessionId());
+        return namedParameterJdbcTemplate.update(sql, params);
     }
 
     @Override
     public Optional<Student> findById(Long id) {
-        String sql = "select id, ns_user_id, session_id from student where id = ?";
-        return Optional.ofNullable(jdbcTemplate.queryForObject(sql, STUDENT_ROW_MAPPER, id));
+        String sql = "select id, ns_user_id, session_id from student where id = :id";
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("id", id);
+        return Optional.ofNullable(namedParameterJdbcTemplate.queryForObject(sql, params, STUDENT_ROW_MAPPER));
     }
 }
