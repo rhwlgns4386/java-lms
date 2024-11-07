@@ -7,7 +7,6 @@ import java.util.Arrays;
 public enum SessionPayType {
     FREE, PAID;
 
-
     public static SessionPayType search(String type) {
         return Arrays.stream(SessionPayType.values())
                 .filter(value -> value.toString().equals(type))
