@@ -19,4 +19,13 @@ public class FixtureSessionFactory {
             studentCapacity,
             sessionFee);
     }
+
+    public static Session createFreeSession(Long id) {
+        return Session.createFreeSession(
+            id,
+            "title",
+            LocalDate.of(2024, 1, 1),
+            LocalDate.of(2024, 12, 1),
+            null);
+    }
 }

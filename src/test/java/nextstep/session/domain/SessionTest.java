@@ -2,8 +2,6 @@ package nextstep.session.domain;
 
 import static org.assertj.core.api.Assertions.*;
 
-import java.time.LocalDate;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -25,9 +23,7 @@ class SessionTest {
     @Test
     @DisplayName("startSession 메서드가 강의 진행 상태를 모집중으로 변경한다.")
     void startSessionTest() {
-        LocalDate startAt = LocalDate.of(2024, 1, 1);
-        LocalDate endAt = LocalDate.of(2024, 12, 1);
-        Session session = Session.createFreeSession(1L, "title", startAt, endAt, null);
+        Session session = FixtureSessionFactory.createFreeSession(1L);
 
         session.startSession();
 
@@ -37,8 +33,7 @@ class SessionTest {
     @Test
     @DisplayName("수강신청 시 수강인원이 증가한다.")
     void incrementEnrollStudentCountWhenEnrollTest() {
-        Session session = Session.createFreeSession(1L, "title", LocalDate.of(2024, 1, 1), LocalDate.of(2024, 12, 1),
-            null);
+        Session session = FixtureSessionFactory.createFreeSession(1L);
         Enrollment enrollment = Enrollment.free(1L, session, NsUserTest.JAVAJIGI);
 
         session.startSession();
@@ -50,12 +45,11 @@ class SessionTest {
     @Test
     @DisplayName("수강신청 시 수강 신청 상태가 모집중이 아닐 경우 예외가 발생한다.")
     void resTest() {
-        Session session = Session.createPaidSession(1L, "title", LocalDate.of(2024, 1, 1), LocalDate.of(2024, 12, 1),
-            null, 1L,
-            10_000L);
+        Session session = FixtureSessionFactory.createFreeSession(1L);
         Enrollment enrollment = Enrollment.free(1L, session, NsUserTest.JAVAJIGI);
 
-        assertThatThrownBy(() -> session.enroll(enrollment)).isInstanceOf(IllegalArgumentException.class)
+        assertThatThrownBy(() -> session.enroll(enrollment))
+            .isInstanceOf(IllegalStateException.class)
             .hasMessage("모집중 상태의 강의가 아닙니다.");
     }
 
