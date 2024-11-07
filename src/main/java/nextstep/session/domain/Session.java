@@ -63,6 +63,10 @@ public class Session {
         sessionEnrollmentStatus = SessionEnrollmentStatus.RECRUITING;
     }
 
+    public void completeSession() {
+        sessionProgressStatus = SessionProgressStatus.COMPLETED;
+    }
+
     public void enroll(Enrollment enrollment) {
         validateRegister();
         enrollments.add(enrollment);
@@ -70,7 +74,7 @@ public class Session {
 
     private void validateRegister() {
         if (sessionProgressStatus != SessionProgressStatus.IN_PROGRESS) {
-            throw new IllegalArgumentException("모집중 상태의 강의가 아닙니다.");
+            throw new IllegalStateException("모집중 상태의 강의가 아닙니다.");
         }
     }
 

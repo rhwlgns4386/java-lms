@@ -53,4 +53,16 @@ class SessionTest {
             .hasMessage("모집중 상태의 강의가 아닙니다.");
     }
 
+    @Test
+    @DisplayName("종료된 강의의 모집 상태를 변경할 때 예외가 발생한다.")
+    void throwExceptionWhenUpdatingEnrollmentStatusForClosedSession() {
+        Session session = FixtureSessionFactory.createFreeSession(1L);
+
+        session.completeSession();
+
+        assertThatThrownBy(() -> session.startRecruitment())
+            .isInstanceOf(IllegalStateException.class)
+            .hasMessage("종료된 강의는 모집 상태를 변경할 수 없습니다.");
+    }
+
 }
