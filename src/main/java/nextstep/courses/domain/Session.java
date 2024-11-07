@@ -12,8 +12,6 @@ public class Session {
 
     private final SessionPeriod period;
 
-    private final SessionCoverImage coverImage;
-
     private final SessionFeeType feeType;
 
     private final SessionAmount amount;
@@ -24,15 +22,14 @@ public class Session {
 
     private SessionRecruitment recruitment;
 
-    public Session(Long courseId, SessionPeriod period, SessionCoverImage coverImage, SessionFeeType feeType, SessionAmount amount, int maxPersonnel, SessionProgressStatus progressStatus, SessionRecruitment recruitment) {
-        this(null, courseId, period, coverImage, feeType, amount, maxPersonnel, progressStatus, recruitment);
+    public Session(Long courseId, SessionPeriod period, SessionFeeType feeType, SessionAmount amount, int maxPersonnel, SessionProgressStatus progressStatus, SessionRecruitment recruitment) {
+        this(null, courseId, period, feeType, amount, maxPersonnel, progressStatus, recruitment);
     }
 
-    public Session(Long id, Long courseId, SessionPeriod period, SessionCoverImage coverImage, SessionFeeType feeType, SessionAmount amount, int maxPersonnel, SessionProgressStatus progressStatus, SessionRecruitment recruitment) {
+    public Session(Long id, Long courseId, SessionPeriod period, SessionFeeType feeType, SessionAmount amount, int maxPersonnel, SessionProgressStatus progressStatus, SessionRecruitment recruitment) {
         this.id = id;
         this.courseId = courseId;
         this.period = period;
-        this.coverImage = coverImage;
         this.feeType = feeType;
         this.amount = amount;
         this.maxPersonnel = maxPersonnel;
@@ -40,9 +37,9 @@ public class Session {
         this.recruitment = recruitment;
     }
 
-    public static Session paidSession(Long id, Long courseId, SessionPeriod period, SessionCoverImage coverImage, SessionAmount amount, int maxPersonnel, SessionProgressStatus status, SessionRecruitment recruitment) {
+    public static Session paidSession(Long id, Long courseId, SessionPeriod period, SessionAmount amount, int maxPersonnel, SessionProgressStatus status, SessionRecruitment recruitment) {
         validPaidSessionAmount(amount);
-        return new Session(id, courseId, period, coverImage, SessionFeeType.PAID, amount, maxPersonnel, status, recruitment);
+        return new Session(id, courseId, period, SessionFeeType.PAID, amount, maxPersonnel, status, recruitment);
     }
 
     private static void validPaidSessionAmount(SessionAmount amount) {
@@ -51,15 +48,14 @@ public class Session {
         }
     }
 
-    public static Session freeSession(Long id, Long courseId, SessionPeriod period, SessionCoverImage coverImage, SessionProgressStatus status, SessionRecruitment recruitment) {
-        return new Session(id, courseId, period, coverImage, SessionFeeType.FREE, new SessionAmount(0L), 0, status, recruitment);
+    public static Session freeSession(Long id, Long courseId, SessionPeriod period, SessionProgressStatus status, SessionRecruitment recruitment) {
+        return new Session(id, courseId, period, SessionFeeType.FREE, new SessionAmount(0L), 0, status, recruitment);
     }
 
     public static Session from(SessionCreate sessionCreate) {
         return new Session(
                 sessionCreate.getCourseId(),
                 new SessionPeriod(sessionCreate.getStartDate(), sessionCreate.getEndDate()),
-                new SessionCoverImage(sessionCreate.getFileSize(), sessionCreate.getFileType(), sessionCreate.getWidth(), sessionCreate.getHeight()),
                 sessionCreate.getAmount() == 0L ? SessionFeeType.FREE : SessionFeeType.PAID,
                 new SessionAmount(sessionCreate.getAmount()),
                 sessionCreate.getMaxPersonnel(),
@@ -88,10 +84,6 @@ public class Session {
 
     public SessionPeriod getPeriod() {
         return period;
-    }
-
-    public SessionCoverImage getCoverImage() {
-        return coverImage;
     }
 
     public SessionFeeType getFeeType() {
@@ -123,6 +115,6 @@ public class Session {
             return false;
         }
         Session session = (Session) o;
-        return maxPersonnel == session.maxPersonnel && Objects.equals(id, session.id) && Objects.equals(courseId, session.courseId) && Objects.equals(period, session.period) && Objects.equals(coverImage, session.coverImage) && feeType == session.feeType && Objects.equals(amount, session.amount) && progressStatus == session.progressStatus;
+        return maxPersonnel == session.maxPersonnel && Objects.equals(id, session.id) && Objects.equals(courseId, session.courseId) && Objects.equals(period, session.period) && feeType == session.feeType && Objects.equals(amount, session.amount) && progressStatus == session.progressStatus;
     }
 }

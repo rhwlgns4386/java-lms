@@ -14,9 +14,13 @@ public class SessionService {
         this.studentRepository = studentRepository;
     }
 
-    public void create(SessionCreate sessionCreate) {
+    public void create(SessionCreate sessionCreate, List<SessionImageCreate> images) {
         Session session = Session.from(sessionCreate);
-        sessionRepository.save(session);
+        long sessionId = sessionRepository.save(session);
+        for (SessionImageCreate image : images) {
+            SessionCoverImage coverImage = SessionCoverImage.from(sessionId, image);
+            sessionRepository.save(session);
+        }
     }
 
     public void open(Session session) {

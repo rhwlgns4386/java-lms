@@ -10,15 +10,18 @@ public class SessionCoverImage {
     private static final double WIDTH_HEIGHT_RATIO = 3.0 / 2.0;
     private static final String[] ALLOWED_FILE_TYPES = {"gif", "jpg", "jpeg", "png", "svg"};
 
+    private Long id;
+    private final Long sessionId;
     private final long fileSize;
     private final String fileType;
     private final int width;
     private final int height;
 
-    public SessionCoverImage(long fileSize, String fileType, int width, int height) {
+    public SessionCoverImage(Long sessionId, long fileSize, String fileType, int width, int height) {
         validFileSize(fileSize);
         validFileType(fileType);
         validWidthAndHeight(width, height);
+        this.sessionId = sessionId;
         this.fileSize = fileSize;
         this.fileType = fileType;
         this.width = width;
@@ -62,6 +65,14 @@ public class SessionCoverImage {
         if (isAspectRatio(width, height)) {
             throw new IllegalArgumentException("Invalid aspect ratio: " + width + "x" + height);
         }
+    }
+
+    public static SessionCoverImage from(Long sessionId, SessionImageCreate imageCreate) {
+        return new SessionCoverImage(sessionId, imageCreate.getFileSize(), imageCreate.getFileType(), imageCreate.getWidth(), imageCreate.getHeight());
+    }
+
+    public Long getSessionId() {
+        return sessionId;
     }
 
     public long getFileSize() {
