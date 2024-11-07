@@ -1,7 +1,9 @@
 package nextstep.session.domain;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import nextstep.enrollment.domain.Enrollment;
@@ -12,7 +14,7 @@ public class Session {
     private final String title;
     private final LocalDate startAt;
     private final LocalDate endAt;
-    private final CoverImage image;
+    private List<CoverImage> coverImages = new ArrayList<>();
     private final SessionType sessionType;
     private final Long studentCapacity;
     private final Long sessionFee;
@@ -20,7 +22,8 @@ public class Session {
     private SessionEnrollmentStatus sessionEnrollmentStatus;
     private final Set<Enrollment> enrollments = new HashSet<>();
 
-    public Session(Long id, Long courseId, String title, LocalDate startAt, LocalDate endAt, CoverImage image,
+    public Session(Long id, Long courseId, String title, LocalDate startAt, LocalDate endAt,
+        List<CoverImage> coverImages,
         SessionType sessionType, Long studentCapacity, Long sessionFee, SessionProgressStatus sessionProgressStatus,
         SessionEnrollmentStatus sessionEnrollmentStatus) {
         this.id = id;
@@ -28,7 +31,7 @@ public class Session {
         this.title = title;
         this.startAt = startAt;
         this.endAt = endAt;
-        this.image = image;
+        this.coverImages = coverImages;
         this.sessionType = sessionType;
         this.studentCapacity = studentCapacity;
         this.sessionFee = sessionFee;
@@ -36,20 +39,22 @@ public class Session {
         this.sessionEnrollmentStatus = sessionEnrollmentStatus;
     }
 
-    private Session(Long id, Long courseId, String title, LocalDate startAt, LocalDate endAt, CoverImage image,
+    private Session(Long id, Long courseId, String title, LocalDate startAt, LocalDate endAt,
+        List<CoverImage> coverImages,
         SessionType sessionType, Long studentCapacity, Long sessionFee) {
-        this(id, courseId, title, startAt, endAt, image, sessionType, studentCapacity, sessionFee,
+        this(id, courseId, title, startAt, endAt, coverImages, sessionType, studentCapacity, sessionFee,
             SessionProgressStatus.PREPARING, SessionEnrollmentStatus.NOT_RECRUITING);
     }
 
     public static Session createFreeSession(Long sessionId, String title, LocalDate startAt, LocalDate endAt,
-        CoverImage image) {
-        return new Session(1L, sessionId, title, startAt, endAt, image, SessionType.FREE, null, null);
+        List<CoverImage> coverImages) {
+        return new Session(1L, sessionId, title, startAt, endAt, coverImages, SessionType.FREE, null, null);
     }
 
     public static Session createPaidSession(Long sessionId, String title, LocalDate startAt, LocalDate endAt,
-        CoverImage image, Long studentCapacity, Long sessionFee) {
-        return new Session(1L, sessionId, title, startAt, endAt, image, SessionType.PAID, studentCapacity, sessionFee);
+        List<CoverImage> coverImages, Long studentCapacity, Long sessionFee) {
+        return new Session(1L, sessionId, title, startAt, endAt, coverImages, SessionType.PAID, studentCapacity,
+            sessionFee);
     }
 
     // 강의 진행 상태를 진행중으로 바꾸는 메서드
@@ -111,5 +116,9 @@ public class Session {
 
     public SessionType getSessionType() {
         return sessionType;
+    }
+
+    public List<CoverImage> getCoverImages() {
+        return coverImages;
     }
 }

@@ -3,6 +3,8 @@ package nextstep.session.domain;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.List;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -75,6 +77,19 @@ class SessionTest {
         assertThatThrownBy(() -> session.enroll(enrollment))
             .isInstanceOf(IllegalStateException.class)
             .hasMessage("모집중 상태의 강의가 아닙니다.");
+    }
+
+    @Test
+    @DisplayName("강의는 여러개의 강의 커버 이미지 정보를 가질 수 있다.")
+    void multipleCoverImagesForSessionTest() {
+        List<CoverImage> coverImages = List.of(
+            new CoverImage(1024, 300, 200, ImageType.GIF),
+            new CoverImage(1024, 300, 200, ImageType.JPG),
+            new CoverImage(1024, 300, 200, ImageType.PNG)
+        );
+        Session session = FixtureSessionFactory.createFreeSession(1L, coverImages);
+
+        assertThat(session.getCoverImages()).hasSize(3);
     }
 
 }

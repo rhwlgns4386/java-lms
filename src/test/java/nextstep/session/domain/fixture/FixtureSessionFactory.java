@@ -1,7 +1,9 @@
 package nextstep.session.domain.fixture;
 
 import java.time.LocalDate;
+import java.util.List;
 
+import nextstep.session.domain.CoverImage;
 import nextstep.session.domain.Session;
 
 public class FixtureSessionFactory {
@@ -27,5 +29,14 @@ public class FixtureSessionFactory {
             LocalDate.of(2024, 1, 1),
             LocalDate.of(2024, 12, 1),
             null);
+    }
+
+    public static Session createFreeSession(Long id, List<CoverImage> coverImages) {
+        return Session.createFreeSession(
+            id,
+            "title",
+            LocalDate.of(2024, 1, 1),
+            LocalDate.of(2024, 12, 1),
+            coverImages);
     }
 }

@@ -1,6 +1,7 @@
 package nextstep.session.infrastructure;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.jdbc.core.JdbcOperations;
@@ -26,40 +27,42 @@ public class JdbcSessionRepository implements SessionRepository {
 
     @Override
     public Optional<Session> findById(Long id) {
-        String sql =
-            "SELECT s.id, s.course_id, s.title, s.start_at, s.end_at, s.session_fee, s.student_capacity, "
-                + "s.session_type, s.session_progress_status, s.session_enrollment_status, c.size, c.width, c.height, c.image_type "
-                + "FROM session s "
-                + "INNER JOIN cover_image c "
-                + "ON s.id = c.session_id "
-                + "WHERE s.id = ?";
+        String findSessionSql =
+            "SELECT id, course_id, title, start_at, end_at, session_fee, student_capacity, "
+                + "session_type, session_progress_status, session_enrollment_status "
+                + "FROM session "
+                + "WHERE id = ?";
 
-        RowMapper<Session> rowMapper = (rs, rowNum) -> {
+        List<CoverImage> coverImages = findCoverImages(id);
 
-            CoverImage coverImage = new CoverImage(
-                rs.getInt("size"),
-                rs.getInt("width"),
-                rs.getInt("height"),
-                ImageType.valueOf(rs.getString("image_type"))
-            );
+        RowMapper<Session> rowMapper = (rs, rowNum) -> new Session(
+            rs.getLong("id"),
+            rs.getLong("course_id"),
+            rs.getString("title"),
+            rs.getObject("start_at", LocalDate.class),
+            rs.getObject("end_at", LocalDate.class),
+            coverImages,
+            SessionType.valueOf(rs.getString("session_type")),
+            rs.getLong("student_capacity"),
+            rs.getLong("session_fee"),
+            SessionProgressStatus.valueOf(rs.getString("session_progress_status")),
+            SessionEnrollmentStatus.valueOf(rs.getString("session_enrollment_status"))
+        );
 
-            SessionType sessionType = SessionType.valueOf(rs.getString("session_type"));
+        return Optional.ofNullable(jdbcTemplate.queryForObject(findSessionSql, rowMapper, id));
+    }
 
-            return new Session(
-                rs.getLong("id"),
-                rs.getLong("course_id"),
-                rs.getString("title"),
-                rs.getObject("start_at", LocalDate.class),
-                rs.getObject("end_at", LocalDate.class),
-                coverImage,
-                sessionType,
-                rs.getLong("student_capacity"),
-                rs.getLong("session_fee"),
-                SessionProgressStatus.valueOf(rs.getString("session_progress_status")),
-                SessionEnrollmentStatus.valueOf(rs.getString("session_enrollment_status"))
-            );
-        };
-
-        return Optional.ofNullable(jdbcTemplate.queryForObject(sql, rowMapper, id));
+    private List<CoverImage> findCoverImages(Long sessionId) {
+        String findCoverImagesSql =
+            "SELECT size, width, height, image_type "
+                + "FROM cover_image "
+                + "WHERE session_id = ?";
+        RowMapper<CoverImage> rowMapper = (rs, rowNum) -> new CoverImage(
+            rs.getInt("size"),
+            rs.getInt("width"),
+            rs.getInt("height"),
+            ImageType.valueOf(rs.getString("image_type"))
+        );
+        return jdbcTemplate.query(findCoverImagesSql, rowMapper, sessionId);
     }
 }

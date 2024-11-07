@@ -32,7 +32,7 @@ VALUES (1, 101, 'Introduction to Java', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()
 -- Paid session (유료 세션)
 INSERT INTO session (id, course_id, title, start_at, end_at, session_type, session_progress_status,
                      session_enrollment_status, student_capacity, session_fee)
-VALUES (2, 101, 'Advanced Java', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), 'PAID', 'IN_PROGRESS', 'NOT_RECRUITING', 30,
+VALUES (2, 101, 'Advanced Java', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), 'PAID', 'IN_PROGRESS', 'RECRUITING', 30,
         50000);
 
 INSERT INTO cover_image (session_id, size, image_type, width, height)
