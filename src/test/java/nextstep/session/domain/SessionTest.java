@@ -44,17 +44,6 @@ class SessionTest {
     }
 
     @Test
-    @DisplayName("수강신청 시 수강 신청 상태가 모집중이 아닐 경우 예외가 발생한다.")
-    void resTest() {
-        Session session = FixtureSessionFactory.createFreeSession(1L);
-        Enrollment enrollment = Enrollment.free(1L, session, NsUserTest.JAVAJIGI);
-
-        assertThatThrownBy(() -> session.enroll(enrollment))
-            .isInstanceOf(IllegalStateException.class)
-            .hasMessage("모집중 상태의 강의가 아닙니다.");
-    }
-
-    @Test
     @DisplayName("종료된 강의의 모집 상태를 변경할 때 예외가 발생한다.")
     void throwExceptionWhenUpdatingEnrollmentStatusForClosedSession() {
         Session session = FixtureSessionFactory.createFreeSession(1L);
@@ -75,6 +64,17 @@ class SessionTest {
         session.startRecruitment(); // 강의 모집 상태 모집중
 
         assertDoesNotThrow(() -> session.enroll(enrollment));
+    }
+
+    @Test
+    @DisplayName("강의 모집 상태가 모집중이 아닐 때 수강신청시 예외가 발생한다.")
+    void throwExceptionWhenSessionIsNotRecruiting() {
+        Session session = FixtureSessionFactory.createFreeSession(1L);
+        Enrollment enrollment = Enrollment.free(1L, session, NsUserTest.JAVAJIGI);
+
+        assertThatThrownBy(() -> session.enroll(enrollment))
+            .isInstanceOf(IllegalStateException.class)
+            .hasMessage("모집중 상태의 강의가 아닙니다.");
     }
 
 }
