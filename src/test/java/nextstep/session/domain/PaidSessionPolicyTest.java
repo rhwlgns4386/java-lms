@@ -30,7 +30,7 @@ class PaidSessionPolicyTest {
         Session session = FixtureSessionFactory.createPaidSession(1L, 1L, 5000L);
         Payment payment = FixturePaymentFactory.create(1L, 1L, 1L, 5_000L);
         Enrollment enrollment = Enrollment.paid(1L, session, NsUserTest.JAVAJIGI, payment);
-        session.open();
+        session.startSession();
         session.enroll(enrollment);
 
         Enrollment enrollment2 = Enrollment.paid(2L, session, NsUserTest.SANJIGI, payment);

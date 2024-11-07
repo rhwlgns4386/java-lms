@@ -17,10 +17,12 @@ public class Session {
     private final Long studentCapacity;
     private final Long sessionFee;
     private SessionProgressStatus sessionProgressStatus;
+    private SessionEnrollmentStatus sessionEnrollmentStatus;
     private final Set<Enrollment> enrollments = new HashSet<>();
 
     public Session(Long id, Long courseId, String title, LocalDate startAt, LocalDate endAt, CoverImage image,
-        SessionType sessionType, Long studentCapacity, Long sessionFee, SessionProgressStatus sessionProgressStatus) {
+        SessionType sessionType, Long studentCapacity, Long sessionFee, SessionProgressStatus sessionProgressStatus,
+        SessionEnrollmentStatus sessionEnrollmentStatus) {
         this.id = id;
         this.courseId = courseId;
         this.title = title;
@@ -31,12 +33,13 @@ public class Session {
         this.studentCapacity = studentCapacity;
         this.sessionFee = sessionFee;
         this.sessionProgressStatus = sessionProgressStatus;
+        this.sessionEnrollmentStatus = sessionEnrollmentStatus;
     }
 
     private Session(Long id, Long courseId, String title, LocalDate startAt, LocalDate endAt, CoverImage image,
         SessionType sessionType, Long studentCapacity, Long sessionFee) {
         this(id, courseId, title, startAt, endAt, image, sessionType, studentCapacity, sessionFee,
-            SessionProgressStatus.PENDING);
+            SessionProgressStatus.PENDING, SessionEnrollmentStatus.NOT_RECRUITING);
     }
 
     public static Session createFreeSession(Long sessionId, String title, LocalDate startAt, LocalDate endAt,
@@ -49,8 +52,15 @@ public class Session {
         return new Session(1L, sessionId, title, startAt, endAt, image, SessionType.PAID, studentCapacity, sessionFee);
     }
 
-    public void open() {
+    public void startSession() {
         sessionProgressStatus = SessionProgressStatus.OPEN;
+    }
+
+    public void startRecruitment() {
+        if (sessionProgressStatus == SessionProgressStatus.CLOSED) {
+            throw new IllegalStateException("종료된 강의는 모집 상태를 변경할 수 없습니다.");
+        }
+        sessionEnrollmentStatus = SessionEnrollmentStatus.RECRUITING;
     }
 
     public void enroll(Enrollment enrollment) {
