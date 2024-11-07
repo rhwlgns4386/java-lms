@@ -51,7 +51,7 @@ public class SessionService {
 
         session.enroll(dto.getNsUser(), dto.getPrice(), new PaymentStrategyImpl());
 
-        for(EnrollUserInfo enrollUserInfo : session.getEnrollUserInfos()) {
+        for (EnrollUserInfo enrollUserInfo : session.getEnrollUserInfos()) {
             enrollUserInfoRepository.save(enrollUserInfo);
         }
     }

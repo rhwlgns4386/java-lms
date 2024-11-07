@@ -38,13 +38,13 @@ public class EnrollUserInfos {
     }
 
     public void checkPaidSessionEnroll(SessionPriceType sessionPriceType) {
-        if(!sessionPriceType.isFree())  {
+        if (!sessionPriceType.isFree()) {
             checkSize();
         }
     }
 
     private void checkSize() {
-        if(enrollUserInfos.size() == availableEnrollCount) {
+        if (enrollUserInfos.size() == availableEnrollCount) {
             throw new IllegalArgumentException(FULL_CAPACITY_ERROR);
         }
     }

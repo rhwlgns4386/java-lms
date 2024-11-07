@@ -89,7 +89,7 @@ public class Session {
     }
 
     public LocalDateTime getEndDateTime() {
-        return  sessionDate.getEndDateTime();
+        return sessionDate.getEndDateTime();
     }
 
     public String getFilePath() {
