@@ -28,7 +28,7 @@ public class SessionApply {
 
 
     public void cancel() {
-        if (!isSelection) {
+        if (isSelection) {
             throw new SessionException("선발된 인원은 수강 취소 할 수 없습니다");
         }
         this.isDeleted = true;
@@ -36,7 +36,7 @@ public class SessionApply {
 
 
     public void submit() {
-        if (isSelection) {
+        if (!isSelection) {
             throw new SessionException("선발된 인원이 아니라 승인할 수 없습니다");
         }
 

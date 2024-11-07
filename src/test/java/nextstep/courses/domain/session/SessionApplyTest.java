@@ -16,40 +16,42 @@ public class SessionApplyTest {
         assertThat(apply).isEqualTo(SessionApply.create(1L, 1L));
     }
 
-    @DisplayName("GUEST(선발되지 않은 사람)면 취소 가능")
+    @DisplayName("선발되지 않은 인원(isSelection = false)이면 취소 가능 - isDeleted flag만 변경")
     @Test
     void cancelApply() {
-        SessionApply apply = new SessionApply(1L, 1L, 1L, true, false, false);
+        SessionApply apply = new SessionApply(1L, 1L, 1L, false, false, false);
 
         apply.cancel();
 
         assertThat(apply.isDeleted()).isTrue();
     }
 
-    @DisplayName("GUEST(선발되지 않은 사람)면 수강 승인 시 예외")
-    @Test
-    void cancelApply_exception() {
-        SessionApply apply = new SessionApply(1L, 1L, 1L, false, false, false);
 
-        assertThatThrownBy(
-                () -> apply.cancel()
-        );
-    }
-
-    @DisplayName("GUEST(선발되지 않은 사람)면 수강 승인 시 예외")
+    @DisplayName("선발되지 않은 인원(isSelection = false)면 수강 승인 시 예외")
     @Test
     void submitApply_exception() {
-        SessionApply apply = new SessionApply(1L, 1L, 1L, true, false, false);
+        SessionApply apply = new SessionApply(1L, 1L, 1L, false, false, false);
 
         assertThatThrownBy(
                 () -> apply.submit()
         );
     }
 
-    @DisplayName("GUEST가 아니면(선발된 회원)면 수강 가능")
+
+    @DisplayName("선발된 인원이면(isSelection = true) 취소 시 예외")
+    @Test
+    void cancelApply_exception() {
+        SessionApply apply = new SessionApply(1L, 1L, 1L, true, false, false);
+
+        assertThatThrownBy(
+                () -> apply.cancel()
+        );
+    }
+
+    @DisplayName("선발된 인원(isSelection = true)면 수강 가능")
     @Test
     void submitApply() {
-        SessionApply apply = new SessionApply(1L, 1L, 1L, false, false, false);
+        SessionApply apply = new SessionApply(1L, 1L, 1L, true, false, false);
 
         apply.submit();
 
@@ -57,7 +59,5 @@ public class SessionApplyTest {
                 () -> assertThat(apply.isSubmit()).isTrue(),
                 () -> assertThat(apply.isDeleted()).isTrue()
         );
-
     }
-
 }
