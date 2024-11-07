@@ -37,4 +37,11 @@ public class SessionService {
         sessionApply.apply(student);
         studentRepository.save(student);
     }
+
+    public void updateApprovalStatus(Long sessionId, SessionApprovalStatus sessionApprovalStatus) {
+        Session session = sessionRepository.findById(sessionId)
+                .orElseThrow(() -> new IllegalArgumentException("Session not found"));
+        session.updateApprovalStatus(sessionApprovalStatus);
+        sessionRepository.save(session);
+    }
 }

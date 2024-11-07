@@ -16,8 +16,9 @@ create table session (
     fee_type varchar(255),
     amount int,
     max_personnel int,
-    status varchar(255),
+    progress_status varchar(255),
     recruitment varchar(255),
+    approval_status varchar(255),
     primary key (id)
 );
 

@@ -1,6 +1,7 @@
 package nextstep.courses.domain;
 
 import nextstep.courses.CannotOpenException;
+import nextstep.courses.NotPendingException;
 
 import java.util.List;
 import java.util.Objects;
@@ -22,11 +23,13 @@ public class Session {
 
     private SessionRecruitment recruitment;
 
-    public Session(Long courseId, SessionPeriod period, SessionFeeType feeType, SessionAmount amount, int maxPersonnel, SessionProgressStatus progressStatus, SessionRecruitment recruitment) {
-        this(null, courseId, period, feeType, amount, maxPersonnel, progressStatus, recruitment);
+    private SessionApprovalStatus approvalStatus;
+
+    public Session(Long courseId, SessionPeriod period, SessionFeeType feeType, SessionAmount amount, int maxPersonnel, SessionProgressStatus progressStatus, SessionRecruitment recruitment, SessionApprovalStatus approvalStatus) {
+        this(null, courseId, period, feeType, amount, maxPersonnel, progressStatus, recruitment, approvalStatus);
     }
 
-    public Session(Long id, Long courseId, SessionPeriod period, SessionFeeType feeType, SessionAmount amount, int maxPersonnel, SessionProgressStatus progressStatus, SessionRecruitment recruitment) {
+    public Session(Long id, Long courseId, SessionPeriod period, SessionFeeType feeType, SessionAmount amount, int maxPersonnel, SessionProgressStatus progressStatus, SessionRecruitment recruitment, SessionApprovalStatus approvalStatus) {
         this.id = id;
         this.courseId = courseId;
         this.period = period;
@@ -35,11 +38,12 @@ public class Session {
         this.maxPersonnel = maxPersonnel;
         this.progressStatus = progressStatus;
         this.recruitment = recruitment;
+        this.approvalStatus = approvalStatus;
     }
 
-    public static Session paidSession(Long id, Long courseId, SessionPeriod period, SessionAmount amount, int maxPersonnel, SessionProgressStatus status, SessionRecruitment recruitment) {
+    public static Session paidSession(Long id, Long courseId, SessionPeriod period, SessionAmount amount, int maxPersonnel, SessionProgressStatus status, SessionRecruitment recruitment, SessionApprovalStatus approvalStatus) {
         validPaidSessionAmount(amount);
-        return new Session(id, courseId, period, SessionFeeType.PAID, amount, maxPersonnel, status, recruitment);
+        return new Session(id, courseId, period, SessionFeeType.PAID, amount, maxPersonnel, status, recruitment, approvalStatus);
     }
 
     private static void validPaidSessionAmount(SessionAmount amount) {
@@ -48,8 +52,8 @@ public class Session {
         }
     }
 
-    public static Session freeSession(Long id, Long courseId, SessionPeriod period, SessionProgressStatus status, SessionRecruitment recruitment) {
-        return new Session(id, courseId, period, SessionFeeType.FREE, new SessionAmount(0L), 0, status, recruitment);
+    public static Session freeSession(Long id, Long courseId, SessionPeriod period, SessionProgressStatus status, SessionRecruitment recruitment, SessionApprovalStatus approvalStatus) {
+        return new Session(id, courseId, period, SessionFeeType.FREE, new SessionAmount(0L), 0, status, recruitment, approvalStatus);
     }
 
     public static Session from(SessionCreate sessionCreate) {
@@ -60,7 +64,8 @@ public class Session {
                 new SessionAmount(sessionCreate.getAmount()),
                 sessionCreate.getMaxPersonnel(),
                 SessionProgressStatus.PREPARING,
-                SessionRecruitment.NOT_RECRUITING);
+                SessionRecruitment.NOT_RECRUITING,
+                SessionApprovalStatus.PENDING);
     }
 
     public void open() {
@@ -72,6 +77,13 @@ public class Session {
 
     public SessionApply sessionApply(List<Student> students) {
         return new SessionApply(maxPersonnel, recruitment, progressStatus, students);
+    }
+
+    public void updateApprovalStatus(SessionApprovalStatus sessionApprovalStatus) {
+        if (!approvalStatus.isPending()) {
+            throw new NotPendingException("It cannot be approved." + this.approvalStatus);
+        }
+        this.approvalStatus = sessionApprovalStatus;
     }
 
     public Long getId() {
@@ -104,6 +116,10 @@ public class Session {
 
     public SessionRecruitment getRecruitment() {
         return recruitment;
+    }
+
+    public SessionApprovalStatus getApprovalStatus() {
+        return approvalStatus;
     }
 
     @Override
