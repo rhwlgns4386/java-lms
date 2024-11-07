@@ -44,16 +44,20 @@ public class SessionCoverImage {
         return sessionId;
     }
 
-    public CoverImageVolume getCoverImageVolume() {
-        return coverImageVolume;
+    public int getCoverImageVolumeSize() {
+        return coverImageVolume.getSize();
     }
 
-    public CoverImageExtensionType getCoverImageExtensionType() {
-        return coverImageExtensionType;
+    public String getCoverImageExtensionTypeName() {
+        return coverImageExtensionType.getExtension();
     }
 
-    public CoverImageFileSize getCoverImageFileSize() {
-        return coverImageFileSize;
+    public int getCoverImageFileHeightSize() {
+        return coverImageFileSize.getHeight();
+    }
+
+    public int getCoverImageFileWidthSize() {
+        return coverImageFileSize.getWidth();
     }
 
     public String getFileName() {

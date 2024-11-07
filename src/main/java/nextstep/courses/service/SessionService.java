@@ -14,8 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
-import java.util.Set;
 
+@Transactional
 @Service("sessionService")
 public class SessionService {
 
@@ -28,18 +28,10 @@ public class SessionService {
     @Resource(name = "enrollUserInfoRepository")
     private EnrollUserInfoRepository enrollUserInfoRepository;
 
-    @Transactional
     public void saveSession(SessionDto dto) {
-        Session session = new Session.SessionBuilder()
-                .sessionId(dto.getSessionId())
-                .price(dto.getPrice())
-                .sessionPriceType(dto.getSessionPriceType())
-                .sessionStatus(dto.getSessionStatus())
-                .startDateTime(LocalDateTime.now())
-                .endDateTime(LocalDateTime.now().plusMonths(3))
-                .availableEnrollCount(30)
-                .filePath(dto.getFilePath())
-                .build();
+        LocalDateTime currentDateTime = LocalDateTime.now();
+
+        Session session = dto.toModel();
 
         Long saveKey = sessionRepository.save(session);
 
@@ -54,14 +46,12 @@ public class SessionService {
         sessionCoverImageRepository.save(sessionCoverImage);
     }
 
-    @Transactional
     public void enroll(EnrollDto dto) {
         Session session = findById(dto.getId());
 
         session.enroll(dto.getNsUser(), dto.getPrice(), new PaymentStrategyImpl());
-        Set<EnrollUserInfo> enrollUserInfos = session.getEnrollUserInfos();
 
-        for(EnrollUserInfo enrollUserInfo : enrollUserInfos) {
+        for(EnrollUserInfo enrollUserInfo : session.getEnrollUserInfos()) {
             enrollUserInfoRepository.save(enrollUserInfo);
         }
     }

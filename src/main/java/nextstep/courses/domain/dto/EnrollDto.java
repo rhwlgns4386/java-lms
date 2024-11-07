@@ -4,9 +4,9 @@ import nextstep.users.domain.NsUser;
 
 public class EnrollDto {
 
-    private Long id;
-    private NsUser nsUser;
-    private Long price;
+    private final Long id;
+    private final NsUser nsUser;
+    private final Long price;
 
     public EnrollDto(Long id, NsUser nsUser, Long price) {
         this.id = id;

@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository("enrollUserInfoRepository")
 public class JdbcEnrollUserInfoRepository implements EnrollUserInfoRepository {
+    private static final RowMapper<EnrollUserInfo> ENROLL_USER_INFO_ROW_MAPPER = (rs, rowNum) ->
+            new EnrollUserInfo(rs.getLong(1), rs.getLong(2));
 
     private JdbcOperations jdbcTemplate;
 
@@ -24,11 +26,8 @@ public class JdbcEnrollUserInfoRepository implements EnrollUserInfoRepository {
     @Override
     public EnrollUserInfo findBySessionIdAndNsUserId(Long sessionId, Long userId) {
         String sql = "select session_id, user_id from enroll_user_info where session_id = ? and user_id = ?";
-        RowMapper<EnrollUserInfo> rowMapper = (rs, rowNum) -> new EnrollUserInfo(
-                rs.getLong(1),
-                rs.getLong(2)
-        );
-        return jdbcTemplate.queryForObject(sql, rowMapper, sessionId, userId);
+
+        return jdbcTemplate.queryForObject(sql, ENROLL_USER_INFO_ROW_MAPPER, sessionId, userId);
     }
 
 

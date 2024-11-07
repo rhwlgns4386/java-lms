@@ -45,10 +45,10 @@ public class JdbcSessionCoverImageRepository implements SessionCoverImageReposit
             PreparedStatement ps = connection.prepareStatement(sql, new String[] {"id"});
             ps.setLong(1, sessionCoverImage.getSessionId());
             ps.setString(2, sessionCoverImage.getFileName());
-            ps.setInt(3, sessionCoverImage.getCoverImageVolume().getSize());
-            ps.setString(4, sessionCoverImage.getCoverImageExtensionType().getExtension());
-            ps.setInt(5, sessionCoverImage.getCoverImageFileSize().getHeight());
-            ps.setInt(6, sessionCoverImage.getCoverImageFileSize().getWidth());
+            ps.setInt(3, sessionCoverImage.getCoverImageVolumeSize());
+            ps.setString(4, sessionCoverImage.getCoverImageExtensionTypeName());
+            ps.setInt(5, sessionCoverImage.getCoverImageFileHeightSize());
+            ps.setInt(6, sessionCoverImage.getCoverImageFileWidthSize());
             ps.setString(7, sessionCoverImage.getFilePath());
             return ps;
         }, keyHolder);
