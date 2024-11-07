@@ -23,10 +23,10 @@ public class SessionService {
         sessionRepository.save(session);
     }
 
-    public void apply(NsUser nsUser, SessionApply sessionApply) {
+    public void apply(SessionApply sessionApply) {
         Session session = sessionRepository.findById(sessionApply.getSessionId())
                 .orElseThrow(() -> new IllegalArgumentException("Session not found"));
-        Student student = session.apply(nsUser, sessionApply);
+        Student student = session.apply(sessionApply);
         studentRepository.save(student);
     }
 }

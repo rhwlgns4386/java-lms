@@ -70,11 +70,11 @@ public class Session {
         this.status = SessionStatus.RECRUITING;
     }
 
-    public Student apply(NsUser nsUser, SessionApply addInfo) {
+    public Student apply(SessionApply addInfo) {
         validStatus();
         validAmount(addInfo.getAmount());
         validMaxPersonnel(addInfo.getCountPersonnel());
-        return new Student(nsUser.getId(), this.id);
+        return new Student(addInfo.getNsUserId(), this.id);
     }
 
     private void validMaxPersonnel(int countPersonnel) {
