@@ -21,6 +21,7 @@ create table session (
     amount int,
     max_personnel int,
     status varchar(255),
+    recruitment varchar(255),
     primary key (id)
 );
 

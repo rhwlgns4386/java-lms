@@ -6,12 +6,14 @@ import java.util.Objects;
 
 public class SessionApply {
     private final int maxPersonnel;
-    private final SessionStatus status;
+    private final SessionRecruitment recruitment;
+    private final SessionProgressStatus progressStatus;
     private List<Student> students;
 
-    public SessionApply(int maxPersonnel, SessionStatus status, List<Student> students) {
+    public SessionApply(int maxPersonnel, SessionRecruitment recruitment, SessionProgressStatus progressStatus, List<Student> students) {
         this.maxPersonnel = maxPersonnel;
-        this.status = status;
+        this.recruitment = recruitment;
+        this.progressStatus = progressStatus;
         this.students = new ArrayList<>(students);
     }
 
@@ -35,7 +37,7 @@ public class SessionApply {
     }
 
     private void validStatus() {
-        if (!status.isRecruiting()) {
+        if (progressStatus.isClosed() || !recruitment.isRecruiting()) {
             throw new IllegalArgumentException("Session is not recruiting.");
         }
     }
@@ -49,6 +51,6 @@ public class SessionApply {
             return false;
         }
         SessionApply that = (SessionApply) o;
-        return maxPersonnel == that.maxPersonnel && status == that.status && Objects.equals(students, that.students);
+        return maxPersonnel == that.maxPersonnel && recruitment == that.recruitment && Objects.equals(students, that.students);
     }
 }

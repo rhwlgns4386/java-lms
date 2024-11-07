@@ -1,7 +1,6 @@
 package nextstep.courses.infrastructure;
 
 import nextstep.courses.domain.*;
-import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -19,7 +18,8 @@ public class JdbcSessionRepository implements SessionRepository {
             SessionFeeType.valueOf(rs.getString("fee_type")),
             new SessionAmount(rs.getInt("amount")),
             rs.getInt("max_personnel"),
-            SessionStatus.valueOf(rs.getString("status")));
+            SessionProgressStatus.valueOf(rs.getString("status")),
+            SessionRecruitment.valueOf(rs.getString("recruitment")));
 
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
@@ -40,21 +40,22 @@ public class JdbcSessionRepository implements SessionRepository {
                 .addValue("feeType", session.getFeeType().name())
                 .addValue("amount", session.getAmount().getAmount())
                 .addValue("maxPersonnel", session.getMaxPersonnel())
-                .addValue("status", session.getStatus().name());
+                .addValue("status", session.getProgressStatus().name())
+                .addValue("recruitment", session.getRecruitment().name());
 
 
         if (session.getId() == null || session.getId() == 0) {
-            String insertSql = "insert into session (course_id, start_date, end_date, file_size, file_type, width, height, fee_type, amount, max_personnel, status) values (:courseId, :startDate, :endDate, :fileSize, :fileType, :width, :height, :feeType, :amount, :maxPersonnel, :status)";
+            String insertSql = "insert into session (course_id, start_date, end_date, file_size, file_type, width, height, fee_type, amount, max_personnel, status, recruitment) values (:courseId, :startDate, :endDate, :fileSize, :fileType, :width, :height, :feeType, :amount, :maxPersonnel, :status, :recruitment)";
             return namedParameterJdbcTemplate.update(insertSql, params);
         }
         params.addValue("id", session.getId());
-        String updateSql = "update session set course_id = :courseId, start_date = :startDate, end_date = :endDate, file_size = :fileSize, file_type = :fileType, width = :width, height = :height, fee_type = :feeType, amount = :amount, max_personnel = :maxPersonnel, status = :status where id = :id";
+        String updateSql = "update session set course_id = :courseId, start_date = :startDate, end_date = :endDate, file_size = :fileSize, file_type = :fileType, width = :width, height = :height, fee_type = :feeType, amount = :amount, max_personnel = :maxPersonnel, status = :status, recruitment = :recruitment where id = :id";
         return namedParameterJdbcTemplate.update(updateSql, params);
     }
 
     @Override
     public Optional<Session> findById(Long id) {
-        String sql = "select id, course_id, start_date, end_date, file_size, file_type, width, height, fee_type, amount, max_personnel, status from session where id = :id";
+        String sql = "select id, course_id, start_date, end_date, file_size, file_type, width, height, fee_type, amount, max_personnel, status, recruitment from session where id = :id";
         MapSqlParameterSource params = new MapSqlParameterSource().addValue("id", id);
         return Optional.ofNullable(namedParameterJdbcTemplate.queryForObject(sql, params, SESSION_ROW_MAPPER));
     }
