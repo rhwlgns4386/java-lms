@@ -41,5 +41,8 @@ VALUES (2, 1024, 'JPG', 300, 200);
 INSERT INTO payment (session_id, ns_user_id, amount, created_at)
 VALUES (2, 1, 50000, CURRENT_TIMESTAMP());
 
+INSERT INTO enrollment (session_id, user_id, enrollment_date, payment_id)
+VALUES (2, 1, CURRENT_TIMESTAMP, 1);
+
 
 

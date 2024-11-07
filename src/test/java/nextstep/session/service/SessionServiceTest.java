@@ -18,6 +18,6 @@ class SessionServiceTest {
     @Test
     @DisplayName("강의 수강신청 시 정상 등록 된다.")
     void throwExceptionWhenSessionFeeDoesNotMatchPaymentAmount() {
-        assertDoesNotThrow(() -> sessionService.enroll(NsUserTest.JAVAJIGI, 2L));
+        assertDoesNotThrow(() -> sessionService.approve(NsUserTest.JAVAJIGI.getId(), 2L));
     }
 }
