@@ -16,11 +16,11 @@ public class Session {
     private final SessionType sessionType;
     private final Long studentCapacity;
     private final Long sessionFee;
-    private SessionStatus sessionStatus;
+    private SessionProgressStatus sessionProgressStatus;
     private final Set<Enrollment> enrollments = new HashSet<>();
 
     public Session(Long id, Long courseId, String title, LocalDate startAt, LocalDate endAt, CoverImage image,
-        SessionType sessionType, Long studentCapacity, Long sessionFee, SessionStatus sessionStatus) {
+        SessionType sessionType, Long studentCapacity, Long sessionFee, SessionProgressStatus sessionProgressStatus) {
         this.id = id;
         this.courseId = courseId;
         this.title = title;
@@ -30,13 +30,13 @@ public class Session {
         this.sessionType = sessionType;
         this.studentCapacity = studentCapacity;
         this.sessionFee = sessionFee;
-        this.sessionStatus = sessionStatus;
+        this.sessionProgressStatus = sessionProgressStatus;
     }
 
     private Session(Long id, Long courseId, String title, LocalDate startAt, LocalDate endAt, CoverImage image,
         SessionType sessionType, Long studentCapacity, Long sessionFee) {
         this(id, courseId, title, startAt, endAt, image, sessionType, studentCapacity, sessionFee,
-            SessionStatus.PENDING);
+            SessionProgressStatus.PENDING);
     }
 
     public static Session createFreeSession(Long sessionId, String title, LocalDate startAt, LocalDate endAt,
@@ -50,7 +50,7 @@ public class Session {
     }
 
     public void open() {
-        sessionStatus = SessionStatus.OPEN;
+        sessionProgressStatus = SessionProgressStatus.OPEN;
     }
 
     public void enroll(Enrollment enrollment) {
@@ -59,7 +59,7 @@ public class Session {
     }
 
     private void validateRegister() {
-        if (sessionStatus != SessionStatus.OPEN) {
+        if (sessionProgressStatus != SessionProgressStatus.OPEN) {
             throw new IllegalArgumentException("모집중 상태의 강의가 아닙니다.");
         }
     }
@@ -76,8 +76,8 @@ public class Session {
         return id;
     }
 
-    public SessionStatus getCourseStatus() {
-        return sessionStatus;
+    public SessionProgressStatus getCourseStatus() {
+        return sessionProgressStatus;
     }
 
     public int getEnrolledUserCount() {

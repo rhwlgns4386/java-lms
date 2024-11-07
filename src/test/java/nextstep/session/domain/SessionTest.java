@@ -19,8 +19,8 @@ class SessionTest {
         Session freeSession = Session.createFreeSession(1L, "title", startAt, endAt, null);
         Session paidSession = Session.createPaidSession(1L, "title", startAt, endAt, null, 1L, 10_000L);
 
-        assertThat(freeSession.getCourseStatus()).isEqualTo(SessionStatus.PENDING);
-        assertThat(paidSession.getCourseStatus()).isEqualTo(SessionStatus.PENDING);
+        assertThat(freeSession.getCourseStatus()).isEqualTo(SessionProgressStatus.PENDING);
+        assertThat(paidSession.getCourseStatus()).isEqualTo(SessionProgressStatus.PENDING);
     }
 
     @Test
@@ -32,7 +32,7 @@ class SessionTest {
 
         session.open();
 
-        assertThat(session.getCourseStatus()).isEqualTo(SessionStatus.OPEN);
+        assertThat(session.getCourseStatus()).isEqualTo(SessionProgressStatus.OPEN);
     }
 
     @Test

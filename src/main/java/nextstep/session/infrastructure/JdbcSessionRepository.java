@@ -10,8 +10,8 @@ import org.springframework.stereotype.Repository;
 import nextstep.session.domain.CoverImage;
 import nextstep.session.domain.ImageType;
 import nextstep.session.domain.Session;
+import nextstep.session.domain.SessionProgressStatus;
 import nextstep.session.domain.SessionRepository;
-import nextstep.session.domain.SessionStatus;
 import nextstep.session.domain.SessionType;
 
 @Repository("jdbcSessionRepository")
@@ -54,7 +54,7 @@ public class JdbcSessionRepository implements SessionRepository {
                 sessionType,
                 rs.getLong("student_capacity"),
                 rs.getLong("session_fee"),
-                SessionStatus.valueOf(rs.getString("session_status"))
+                SessionProgressStatus.valueOf(rs.getString("session_status"))
             );
         };
 

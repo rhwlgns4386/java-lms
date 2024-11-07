@@ -1,6 +1,6 @@
 package nextstep.session.domain;
 
-public enum SessionStatus {
+public enum SessionProgressStatus {
     PENDING,
     OPEN,
     CLOSED
