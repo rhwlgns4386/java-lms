@@ -39,7 +39,7 @@ public class Session {
     private Session(Long id, Long courseId, String title, LocalDate startAt, LocalDate endAt, CoverImage image,
         SessionType sessionType, Long studentCapacity, Long sessionFee) {
         this(id, courseId, title, startAt, endAt, image, sessionType, studentCapacity, sessionFee,
-            SessionProgressStatus.PENDING, SessionEnrollmentStatus.NOT_RECRUITING);
+            SessionProgressStatus.PREPARING, SessionEnrollmentStatus.NOT_RECRUITING);
     }
 
     public static Session createFreeSession(Long sessionId, String title, LocalDate startAt, LocalDate endAt,
@@ -53,11 +53,11 @@ public class Session {
     }
 
     public void startSession() {
-        sessionProgressStatus = SessionProgressStatus.OPEN;
+        sessionProgressStatus = SessionProgressStatus.IN_PROGRESS;
     }
 
     public void startRecruitment() {
-        if (sessionProgressStatus == SessionProgressStatus.CLOSED) {
+        if (sessionProgressStatus == SessionProgressStatus.COMPLETED) {
             throw new IllegalStateException("종료된 강의는 모집 상태를 변경할 수 없습니다.");
         }
         sessionEnrollmentStatus = SessionEnrollmentStatus.RECRUITING;
@@ -69,7 +69,7 @@ public class Session {
     }
 
     private void validateRegister() {
-        if (sessionProgressStatus != SessionProgressStatus.OPEN) {
+        if (sessionProgressStatus != SessionProgressStatus.IN_PROGRESS) {
             throw new IllegalArgumentException("모집중 상태의 강의가 아닙니다.");
         }
     }

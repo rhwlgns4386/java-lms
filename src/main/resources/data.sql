@@ -26,13 +26,14 @@ VALUES (2, 2, 'runtime 에 reflect 발동 주체 객체가 뭔지 알 방법이 
 -- Free session (무료 세션)
 INSERT INTO session (id, course_id, title, start_at, end_at, session_type, session_progress_status,
                      session_enrollment_status, student_capacity, session_fee)
-VALUES (1, 101, 'Introduction to Java', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), 'FREE', 'PENDING', 'NOT_RECRUITING',
+VALUES (1, 101, 'Introduction to Java', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), 'FREE', 'PREPARING', 'NOT_RECRUITING',
         NULL, NULL);
 
 -- Paid session (유료 세션)
 INSERT INTO session (id, course_id, title, start_at, end_at, session_type, session_progress_status,
                      session_enrollment_status, student_capacity, session_fee)
-VALUES (2, 101, 'Advanced Java', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), 'PAID', 'OPEN', 'NOT_RECRUITING', 30, 50000);
+VALUES (2, 101, 'Advanced Java', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), 'PAID', 'IN_PROGRESS', 'NOT_RECRUITING', 30,
+        50000);
 
 INSERT INTO cover_image (session_id, size, image_type, width, height)
 VALUES (2, 1024, 'JPG', 300, 200);
