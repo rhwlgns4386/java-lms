@@ -37,7 +37,7 @@ class SessionTest {
         Session session = FixtureSessionFactory.createFreeSession(1L);
         Enrollment enrollment = Enrollment.free(1L, session, NsUserTest.JAVAJIGI);
 
-        session.startSession();
+        session.startRecruitment();
         session.enroll(enrollment);
 
         assertThat(session.getEnrolledUserCount()).isOne();
