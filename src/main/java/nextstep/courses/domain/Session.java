@@ -64,7 +64,7 @@ public class Session {
     }
 
     public void open() {
-        if (!SessionStatus.PREPARING.equals(this.status)) {
+        if (!status.isPreparing()) {
             throw new CannotOpenException("It cannot be opened." + this.status);
         }
         this.status = SessionStatus.RECRUITING;

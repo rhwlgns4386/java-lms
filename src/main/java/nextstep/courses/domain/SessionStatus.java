@@ -6,4 +6,8 @@ public enum SessionStatus {
     public boolean isRecruiting() {
         return this == RECRUITING;
     }
+
+    public boolean isPreparing() {
+        return this == PREPARING;
+    }
 }
