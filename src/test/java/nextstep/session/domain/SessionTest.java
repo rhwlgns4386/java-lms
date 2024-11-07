@@ -1,6 +1,7 @@
 package nextstep.session.domain;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -63,6 +64,17 @@ class SessionTest {
         assertThatThrownBy(() -> session.startRecruitment())
             .isInstanceOf(IllegalStateException.class)
             .hasMessage("종료된 강의는 모집 상태를 변경할 수 없습니다.");
+    }
+
+    @Test
+    @DisplayName("강의 모집 상태가 모집중일 때 수강신청이 가능하다.")
+    void enrollmentAllowedWhenSessionIsRecruiting() {
+        Session session = FixtureSessionFactory.createFreeSession(1L);
+        Enrollment enrollment = Enrollment.free(1L, session, NsUserTest.JAVAJIGI);
+
+        session.startRecruitment(); // 강의 모집 상태 모집중
+
+        assertDoesNotThrow(() -> session.enroll(enrollment));
     }
 
 }

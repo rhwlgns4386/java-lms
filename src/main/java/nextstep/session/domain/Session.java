@@ -52,19 +52,22 @@ public class Session {
         return new Session(1L, sessionId, title, startAt, endAt, image, SessionType.PAID, studentCapacity, sessionFee);
     }
 
+    // 강의 진행 상태를 진행중으로 바꾸는 메서드
     public void startSession() {
         sessionProgressStatus = SessionProgressStatus.IN_PROGRESS;
     }
 
+    // 강의 진행 상태를 종료로 바꾸는 메서드
+    public void completeSession() {
+        sessionProgressStatus = SessionProgressStatus.COMPLETED;
+    }
+
+    // 강의 모집 상태를 모집중으로 바꾸는 메서드
     public void startRecruitment() {
         if (sessionProgressStatus == SessionProgressStatus.COMPLETED) {
             throw new IllegalStateException("종료된 강의는 모집 상태를 변경할 수 없습니다.");
         }
         sessionEnrollmentStatus = SessionEnrollmentStatus.RECRUITING;
-    }
-
-    public void completeSession() {
-        sessionProgressStatus = SessionProgressStatus.COMPLETED;
     }
 
     public void enroll(Enrollment enrollment) {
@@ -73,7 +76,7 @@ public class Session {
     }
 
     private void validateRegister() {
-        if (sessionProgressStatus != SessionProgressStatus.IN_PROGRESS) {
+        if (sessionEnrollmentStatus != SessionEnrollmentStatus.RECRUITING) {
             throw new IllegalStateException("모집중 상태의 강의가 아닙니다.");
         }
     }
