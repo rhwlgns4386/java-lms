@@ -52,45 +52,27 @@ create table delete_history (
 create table image (
     id bigint auto_increment primary key,
     image_type varchar(20) not null,
-    session_id bigint not null
-);
-
-create table image_size(
-    id bigint auto_increment primary key,
-    image_size int not null
-);
-
-create table image_width_height(
-    id bigint auto_increment primary key,
+    image_size int not null,
     image_width int not null,
-    image_height int not null
-);
-
-create table session_register_info (
-   session_id bigint not null,
-   session_status varchar(20) not null
-);
-
-create table session_info (
-    session_id bigint not null,
-    session_type varchar(20) not null,
-    price bigint not null,
-    max_students int not null
-);
-
-create table session_duration (
-    session_id bigint not null,
-    start_date timestamp,
-    end_date timestamp
+    image_height int not null,
+    session_id bigint not null
 );
 
 create table session (
-    session_id bigint not null
+    session_id bigint not null,
+    session_type varchar(20) not null,
+    price bigint not null,
+    max_students int not null,
+    start_date timestamp,
+    end_date timestamp,
+    session_status varchar(20) not null,
+    session_register_status varchar(20) not null
 );
 
 create table students(
     session_id bigint not null,
-    user_id varchar(20) not null
+    user_id varchar(20) not null,
+    selected_status varchar(20) not null default 'unselected'
 );
 
 create table payments (

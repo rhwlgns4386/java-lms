@@ -6,30 +6,40 @@ import nextstep.users.domain.NsUser;
 
 public class SessionRegisterInfo {
     private final SessionStatus sessionStatus;
+    private final SessionRegisteringStatus sessionRegisteringStatus;
     private final Long sessionId;
-    private final Students students;
+    private Students students;
     private final Payments payments;
 
-    public SessionRegisterInfo(Long sessionId,SessionStatus sessionStatus, Students students, Payments payments) {
+    public SessionRegisterInfo(Long sessionId,SessionStatus sessionStatus, Students students, Payments payments, SessionRegisteringStatus sessionRegisteringStatus) {
         this.sessionId = sessionId;
         this.sessionStatus = sessionStatus;
         this.students = students;
         this.payments = payments;
+        this.sessionRegisteringStatus = sessionRegisteringStatus;
     }
 
-    public void checkSessionIsRegistering() {
-        if (sessionStatus != SessionStatus.REGISTER) {
-            throw new IllegalArgumentException("이 강의는 지금 모집중인 상태가 아닙니다");
+    public void checkSessionIsOpen() {
+        if(sessionRegisteringStatus.isClosed()) {
+            throw new IllegalArgumentException("이 강의는 모집중인 상태가 아닙니다");
         }
     }
 
-    public void addStudent(NsUser nsUser) {
+    public void removeUnselectedStudents() {
+        this.students = students.cancelRegisterWhoUnselected();
+    }
+
+    public void addStudentBySelectedStatus(NsUser nsUser, SelectStatus selectStatus) {
         checkUserAlreadyRegisterSession(nsUser);
-        students.addStudent(nsUser.getUserId());
+        if(selectStatus.isSelected() ) {
+            students.addSelectedStudent(nsUser.getUserId(), sessionId);
+            return;
+        }
+        students.addUnSelectedStudent(nsUser.getUserId(), sessionId);
     }
 
     private void checkUserAlreadyRegisterSession(NsUser nsUser) {
-        if (students.getContainResult(nsUser)) {
+        if (students.getContainResult(nsUser.getUserId(), sessionId)) {
             throw new IllegalArgumentException("이미 수업에 등록한 학생입니다");
         }
     }
@@ -62,6 +72,14 @@ public class SessionRegisterInfo {
         return sessionId;
     }
 
+    public SessionRegisteringStatus getSessionRegisteringStatus() {
+        return sessionRegisteringStatus;
+    }
+
+    public boolean isRegistering() {
+        return sessionRegisteringStatus.isOpen();
+    }
+
     @Override
     public final boolean equals(Object o) {
         if (this == o) {
@@ -83,4 +101,5 @@ public class SessionRegisterInfo {
         result = 31 * result + Objects.hashCode(payments);
         return result;
     }
+
 }
