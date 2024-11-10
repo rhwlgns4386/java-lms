@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class PaidSessionTest {
 
-    public final static PaidSession PAID_SESSION = new PaidSession(SessionInfoTest.SESSION_INFO_RECRUIT_PROGRESS, SessionImagesTest.SESSION_IMAGE, new SessionPrice(1000), 2);
+    public final static PaidSession PAID_SESSION = new PaidSession(new SessionId(-1), SessionInfoTest.SESSION_INFO_RECRUIT_PROGRESS, SessionImagesTest.SESSION_IMAGE, new SessionPrice(1000), 2);
 
     private PaidSession paidSession;
     private PaidSession maxStudentTwoSession;
@@ -22,8 +22,8 @@ public class PaidSessionTest {
 
     @BeforeEach
     void setUp() {
-        paidSession = new PaidSession(SessionInfoTest.SESSION_INFO_RECRUIT_PROGRESS, SessionImagesTest.SESSION_IMAGE, new SessionPrice(1000L),  1);
-        maxStudentTwoSession = new PaidSession( SessionInfoTest.SESSION_INFO_RECRUIT_PROGRESS, SessionImagesTest.SESSION_IMAGE,new SessionPrice(1000L), 2);
+        paidSession = new PaidSession(new SessionId(-1), SessionInfoTest.SESSION_INFO_RECRUIT_PROGRESS, SessionImagesTest.SESSION_IMAGE, new SessionPrice(1000L),  1);
+        maxStudentTwoSession = new PaidSession(new SessionId(-1), SessionInfoTest.SESSION_INFO_RECRUIT_PROGRESS, SessionImagesTest.SESSION_IMAGE,new SessionPrice(1000L), 2);
     }
 
     @Test
@@ -35,7 +35,7 @@ public class PaidSessionTest {
     @Test
     @DisplayName("강의신청가능여부 호출하여 모집중이 아닌경우 오류")
     void validateStateCode_IllegalArgumentException() {
-        PaidSession paidSession = new PaidSession(SessionInfoTest.SESSION_INFO_NO_RECRUIT_PROGRESS, SessionImagesTest.SESSION_IMAGE,
+        PaidSession paidSession = new PaidSession(new SessionId(-1), SessionInfoTest.SESSION_INFO_NO_RECRUIT_PROGRESS, SessionImagesTest.SESSION_IMAGE,
                 new SessionPrice(1000L), 4);
 
         assertThatThrownBy(() -> {
@@ -46,7 +46,7 @@ public class PaidSessionTest {
     @Test
     @DisplayName("강의신청가능여부 호출하여 모집중이어도 강의가 종료된 경우 오류")
     void validateProgressCode_IllegalArgumentException() {
-        PaidSession paidSession = new PaidSession(SessionInfoTest.SESSION_INFO_RECRUIT_END, SessionImagesTest.SESSION_IMAGE,
+        PaidSession paidSession = new PaidSession(new SessionId(-1), SessionInfoTest.SESSION_INFO_RECRUIT_END, SessionImagesTest.SESSION_IMAGE,
                 new SessionPrice(1000L), 4);
 
         assertThatThrownBy(() -> {

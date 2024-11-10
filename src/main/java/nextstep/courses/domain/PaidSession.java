@@ -11,8 +11,8 @@ public class PaidSession extends Session implements SessionStrategy {
 
     private int studentMaxCount;
 
-    public PaidSession(SessionInfo sessionInfo, SessionImages sessionImages, SessionPrice sessionPrice, int studentMaxCount) {
-        super(sessionInfo, sessionImages, sessionPrice, SessionType.PAID);
+    public PaidSession(SessionId sessionId, SessionInfo sessionInfo, SessionImages sessionImages, SessionPrice sessionPrice, int studentMaxCount) {
+        super(sessionId, sessionInfo, sessionImages, sessionPrice, SessionType.PAID);
         this.studentMaxCount = studentMaxCount;
         if(sessionPrice.isLessThanOrEqualTo(0) ){
             throw new IllegalArgumentException("유료강의는 0원 이하가 될 수 없습니다.");
