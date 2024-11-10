@@ -3,17 +3,17 @@ package nextstep.courses.domain;
 import nextstep.courses.exception.CannotApproveSessionException;
 
 public class Instructor {
-    private final long id;
+    private final InstructorId instructorId;
 
-    private final String instructorId;
+    private final String loginId;
 
-    public Instructor(final long id) {
-        this(id, null);
+    public Instructor(final InstructorId instructorId) {
+        this(instructorId, null);
     }
 
-    public Instructor(final long id, String instructorId) {
-        this.id = id;
+    public Instructor(final InstructorId instructorId, String loginId) {
         this.instructorId = instructorId;
+        this.loginId = loginId;
     }
 
     public SessionOrder approveSessionOrder(SessionOrder sessionOrder) throws CannotApproveSessionException {
@@ -31,6 +31,6 @@ public class Instructor {
     }
 
     public long getId() {
-        return id;
+        return instructorId.getInstructorId();
     }
 }

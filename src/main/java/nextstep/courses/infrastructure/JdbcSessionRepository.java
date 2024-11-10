@@ -1,7 +1,9 @@
 package nextstep.courses.infrastructure;
 
 import nextstep.courses.domain.Instructor;
+import nextstep.courses.domain.InstructorId;
 import nextstep.courses.domain.OrderStateCode;
+import nextstep.courses.domain.SessionId;
 import nextstep.courses.domain.SessionImages;
 import nextstep.courses.domain.SessionMetaData;
 import nextstep.courses.domain.SessionOrder;
@@ -20,7 +22,6 @@ import nextstep.courses.strategy.FreeSessionRepositoryStrategy;
 import nextstep.courses.strategy.PaidSessionRepositoryStrategy;
 import nextstep.courses.strategy.SessionRepositoryStrategy;
 import nextstep.users.domain.NsUser;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -58,7 +59,7 @@ public class JdbcSessionRepository implements SessionRepository {
     @Override
     public Session findSessionInfoById(long sessionId) {
         String sql = "SELECT s.title, s.apply_start_date, s.apply_end_date, s.sale_price, s.state_code, s.creator_id, " +
-                "si.file_size, si.type, si.width, si.height, si.file_name, s.session_type, s.student_max_count, s.SESSION_ID, s.PROGRESS_CODE " +
+                "si.file_size, si.type, si.width, si.height, si.file_name, s.session_type, s.student_max_count, s.SESSION_ID, s.PROGRESS_CODE, s.INSTRUCTOR_ID " +
                 "FROM session s " +
                 "LEFT JOIN session_image si ON s.SESSION_ID = si.SESSION_ID " +
                 "WHERE s.SESSION_ID = :sessionId";
@@ -77,13 +78,16 @@ public class JdbcSessionRepository implements SessionRepository {
             long sessionIdFromDb = rs.getLong(14);
             ProgressCode progressCode = ProgressCode.fromCode(rs.getInt(15));
 
+            InstructorId instructorId = new InstructorId(rs.getLong(16));
+            Instructor instructor = new Instructor(instructorId);
+
             List<SessionImage> sessionImages = new ArrayList<>();
             getSessionImages(rs, sessionImages);
 
             SessionMetaData sessionMetaData = new SessionMetaData(title, creatorId);
             SessionPeriod sessionPeriod = new SessionPeriod(applyStartDate, applyEndDate);
-
-            return SessionFactory.createSession(new SessionInfo(sessionIdFromDb, sessionMetaData, sessionPeriod, stateCode, progressCode),
+            SessionId sessionIdObj = new SessionId(sessionIdFromDb);
+            return SessionFactory.createSession(sessionIdObj, new SessionInfo(sessionMetaData, sessionPeriod, stateCode, progressCode, instructor),
                     new SessionImages(sessionImages),
                     new SessionPrice(salePrice),
                     studentMaxCount,
@@ -145,7 +149,8 @@ public class JdbcSessionRepository implements SessionRepository {
             long salePrice = rs.getLong(4);
             int ordStatCode = rs.getInt(5);
             long apprId = rs.getLong(6);
-            return new SessionOrder(orderId, sessionId, new NsUser(studentId), OrderStateCode.fromCode(ordStatCode), new SessionPrice(salePrice), new Instructor(apprId));
+            InstructorId instructorId = new InstructorId(apprId);
+            return new SessionOrder(orderId, sessionId, new NsUser(studentId), OrderStateCode.fromCode(ordStatCode), new SessionPrice(salePrice), new Instructor(instructorId));
         });
 
     }
