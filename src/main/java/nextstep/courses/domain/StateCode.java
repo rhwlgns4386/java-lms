@@ -3,9 +3,9 @@ package nextstep.courses.domain;
 import java.util.Arrays;
 
 public enum StateCode {
-    READY(10),
+    //READY(10),
     RECRUITING(20),
-    END(30);
+    NO_RECRUITING(30);
 
     private final int statusCode;
 

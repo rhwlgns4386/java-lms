@@ -2,66 +2,56 @@ package nextstep.courses.domain;
 
 import nextstep.courses.exception.CannotRegisteSessionException;
 import nextstep.courses.request.RequestOrderParam;
-import nextstep.courses.collection.Students;
 import nextstep.users.domain.NsUser;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.List;
 
-public class Session {
-    //구성이 필요한 관계는 이렇게
+public abstract class Session {
+    private SessionId sessionId;
+
     private SessionInfo sessionInfo;
 
-    private SessionImage sessionImage;
+    private SessionImages sessionImages;
 
-    private long salePrice;
-
-    private StateCode stateCode;//이넘이니까 클래스로 받아도되네
+    private SessionPrice salePrice;
 
     private Students students;
 
     private SessionType sessionType;
 
-    public Session() {
+    public Session(SessionInfo sessionInfo, SessionImages sessionImages, SessionPrice salePrice, SessionType sessionType) {
+        this(null, sessionInfo, sessionImages, salePrice, sessionType);
     }
+    public Session(SessionId sessionId, SessionInfo sessionInfo, SessionImages sessionImages, SessionPrice salePrice, SessionType sessionType) {
+        if (sessionInfo == null) {
+            throw new IllegalArgumentException("강의 정보를 입력해주세요");
+        }
+        if (sessionImages == null || sessionImages.getSessionImages().isEmpty()) {
+            throw new IllegalArgumentException("강의 이미지를 입력해주세요");
+        }
+        if (salePrice == null) {
+            throw new IllegalArgumentException("강의 금액을 입력해주세요");
+        }
+        if (sessionType == null) {
+            throw new IllegalArgumentException("강의 타입을 선택해주세요.");
+        }
 
-    public Session(String title, LocalDateTime applyStartDate, LocalDateTime applyEndDate,
-                   long salePrice, StateCode stateCode, String createId,
-                   int fileSize, String type, int width, int height, String fileName, SessionType sessionType) {
-        this(title, applyStartDate, applyEndDate, salePrice, stateCode, createId,
-                fileSize, type, width, height, fileName, new Students(Collections.emptyList()), sessionType);
-    }
-
-    public Session(String title, LocalDateTime applyStartDate, LocalDateTime applyEndDate,
-                   long salePrice, StateCode stateCode, String createId,
-                   int fileSize, String type, int width, int height, String fileName, Students students, SessionType sessionType) {
-        this.sessionInfo = new SessionInfo(title, applyStartDate, applyEndDate, createId);
-        this.stateCode = stateCode;
-        this.salePrice = salePrice;
-        this.sessionImage = new SessionImage(fileSize, type, width, height, fileName);
-        this.students = students;
-        this.sessionType = sessionType;
-    }
-
-    public Session(SessionInfo sessionInfo, SessionImage sessionImage, long salePrice, StateCode stateCode) {
-        this(sessionInfo, sessionImage, salePrice, stateCode, SessionType.FREE);
-    }
-
-    public Session(SessionInfo sessionInfo, SessionImage sessionImage, long salePrice, StateCode stateCode, SessionType sessionType) {
+        this.sessionId = sessionId;
         this.sessionInfo = sessionInfo;
-        this.sessionImage = sessionImage;
+        this.sessionImages = sessionImages;
         this.salePrice = salePrice;
-        this.stateCode = stateCode;
         this.sessionType = sessionType;
         this.students = new Students(Collections.emptyList());
     }
 
     public long getSalePrice() {
-        return salePrice;
+        return salePrice.getSalePrice();
     }
 
     public int getStateCode() {
-        return stateCode.getStatusCode();
+        return sessionInfo.getStatusCode();
     }
 
     public int getStudentsSize() {
@@ -69,7 +59,11 @@ public class Session {
     }
 
     public void validateOrderSessionStatus() {
-        stateCode.validateOrderSessionStatus();
+        sessionInfo.validateOrderSessionStatus();
+    }
+
+    public void validateOrderSessionProgressCode() {
+        sessionInfo.validateOrderSessionProgressCode();
     }
 
     public void updateStudent(NsUser student) {
@@ -113,6 +107,19 @@ public class Session {
     }
 
     public long getSessionId() {
-        return sessionInfo.getSessionId();
+        return sessionId.getSessionId();
     }
+
+    public int getProgressCode() {
+        return sessionInfo.getProgressCode();
+    }
+
+    public List<SessionImage> getSessionImages() {
+        return sessionImages.getSessionImages();
+    }
+
+    public long getInstructorId(){
+        return sessionInfo.getInstructorId();
+    }
+
 }

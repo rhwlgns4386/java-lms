@@ -4,57 +4,58 @@ import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 
 public class SessionTest {
-    public final static SessionInfo SESSION_INFO = new SessionInfo("제목1", LocalDateTime.now(), LocalDateTime.now().plus(10, ChronoUnit.HALF_DAYS), "createorId");
-    public final static SessionImage SESSION_IMAGE = new SessionImage(200, "png", 600, 400, "imageFileName");
-    public final static SessionInfo MAX_STUDENT_INFO = new SessionInfo("2명모집", LocalDateTime.now(), LocalDateTime.now().plus(20, ChronoUnit.HALF_DAYS), "createorId");
 
-    public final static Session SESSION_REDAY = new Session("제목1", LocalDateTime.now(), LocalDateTime.now().plus(10, ChronoUnit.HALF_DAYS),
-            0, StateCode.READY, "createorId", 100, "jpg", 300, 200, "imageFileName1", SessionType.PAID);
+    public final static Session SESSION_RECRUITING_READY = new PaidSession(new SessionId(-1), SessionInfoTest.SESSION_INFO_RECRUIT_READY, SessionImagesTest.SESSION_IMAGE, new SessionPrice(2000), 10);
+    public final static Session SESSION_RECRUITING_PRORESS = new PaidSession(new SessionId(-1), SessionInfoTest.SESSION_INFO_RECRUIT_PROGRESS, SessionImagesTest.SESSION_IMAGE, new SessionPrice(1000), 10);
+    public final static Session SESSION_RECRUITING_END = new PaidSession(new SessionId(-1), SessionInfoTest.SESSION_INFO_RECRUIT_END, SessionImagesTest.SESSION_IMAGE, new SessionPrice(1000), 10);
 
-    public final static Session SESSION_RECRUITING = new Session("제목2", LocalDateTime.now(), LocalDateTime.now().plus(20, ChronoUnit.HALF_DAYS),
-            0, StateCode.RECRUITING, "createorId", 200, "png", 600, 400, "imageFileName2", SessionType.PAID);
-
-    public final static Session SESSION_END = new Session("제목3", LocalDateTime.now(), LocalDateTime.now().plus(30, ChronoUnit.HALF_DAYS),
-            0, StateCode.END, "createorId", 300, "png", 1200, 800, "imageFileName3", SessionType.PAID);
+    public final static Session SESSION_NO_RECRUITING_READY = new PaidSession(new SessionId(-1), SessionInfoTest.SESSION_INFO_NO_RECRUIT_READY, SessionImagesTest.SESSION_IMAGE, new SessionPrice(3000), 10);
+    public final static Session SESSION_NO_RECRUITING_PROGRESS = new PaidSession(new SessionId(-1), SessionInfoTest.SESSION_INFO_NO_RECRUIT_PROGRESS, SessionImagesTest.SESSION_IMAGE, new SessionPrice(3000), 10);
+    public final static Session SESSION_NO_RECRUITING_END = new FreeSession(new SessionId(-1), SessionInfoTest.SESSION_INFO_NO_RECRUIT_END, SessionImagesTest.SESSION_IMAGE);
 
 
     @Test
-    @DisplayName("강의는 모집중에만 등록이 가능 pass")
+    @DisplayName("강의상태체크 호출하여 강의가 모집중이면 수강신청이 가능 pass")
     void validateOrderSessionStatus() {
-        SESSION_RECRUITING.validateOrderSessionStatus();
+        SESSION_RECRUITING_PRORESS.validateOrderSessionStatus();
+        SESSION_RECRUITING_READY.validateOrderSessionStatus();
     }
 
     @Test
-    @DisplayName("강의는 모집중이 아닌 경우 오류")
+    @DisplayName("강의상태체크 호출하여 강의가 모집중이 아닌 경우 오류")
     void validateRegistSessionStatus_IllegalArgumentException() {
         assertThatThrownBy(() -> {
-            SESSION_REDAY.validateOrderSessionStatus();
-        }).isInstanceOf(IllegalArgumentException.class);
+            SESSION_NO_RECRUITING_READY.validateOrderSessionStatus();
+            SESSION_NO_RECRUITING_PROGRESS.validateOrderSessionStatus();
+            SESSION_NO_RECRUITING_END.validateOrderSessionStatus();
+        }).isInstanceOf(IllegalArgumentException.class).hasMessageStartingWith("모집하지 않는 강의입니다.");
+    }
 
+    @Test
+    @DisplayName("강의진행상태체크 호출하여 강의가 종료된 경우 모집중이어도 오류")
+    void validateOrderSessionProgressCode_IllegalArgumentException() {
         assertThatThrownBy(() -> {
-            SESSION_END.validateOrderSessionStatus();
-        }).isInstanceOf(IllegalArgumentException.class);
+            SESSION_RECRUITING_END.validateOrderSessionProgressCode();
+            SESSION_NO_RECRUITING_END.validateOrderSessionProgressCode();
+        }).isInstanceOf(IllegalArgumentException.class).hasMessageStartingWith("종료된 강의입니다.");
     }
 
     @Test
     @DisplayName("처음 강의를 신청하면 false")
     void isDuplicateStudent_false() {
-        assertThat(SESSION_RECRUITING.isDuplicateStudent(NsUserTest.JAVAJIGI)).isFalse();
+        assertThat(SESSION_RECRUITING_PRORESS.isDuplicateStudent(NsUserTest.JAVAJIGI)).isFalse();
     }
 
     @Test
     @DisplayName("중복으로 강의를 신청하면 true")
     void isDuplicateStudent_true() {
-        SESSION_RECRUITING.updateStudent(NsUserTest.SANJIGI);
+        SESSION_RECRUITING_PRORESS.updateStudent(NsUserTest.SANJIGI);
 
-        assertThat(SESSION_RECRUITING.isDuplicateStudent(NsUserTest.SANJIGI)).isTrue();
+        assertThat(SESSION_RECRUITING_PRORESS.isDuplicateStudent(NsUserTest.SANJIGI)).isTrue();
     }
 }

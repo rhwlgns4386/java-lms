@@ -57,4 +57,23 @@ public class SessionImage {
         }
     }
 
+    public int getFileSize() {
+        return fileSize;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
 }

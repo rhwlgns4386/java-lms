@@ -40,5 +40,4 @@ public class SessionImageTest {
             SessionImage sessionImage = new SessionImage(100, "jpg", 200, 300, "image");
         }).isInstanceOf(IllegalArgumentException.class).hasMessageStartingWith("이미지의 width는 300픽셀, height는 200픽셀 이상이어야 합니다.");
     }
-
 }

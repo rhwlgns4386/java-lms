@@ -3,32 +3,45 @@ package nextstep.courses.domain;
 import java.time.LocalDateTime;
 
 public class SessionInfo {
-    long sessionId;
 
-    private String title;
+    private Instructor instructor;
+
+    private SessionMetaData sessionMetaData;
 
     private SessionPeriod sessionPeriod;
 
-    private String creatorId;
+    private StateCode stateCode;
 
-    public SessionInfo(String title, LocalDateTime applyStartDate, LocalDateTime applyEndDate,
-                       String creatorId) {
-        this(-1, title, applyStartDate, applyEndDate, creatorId);
-    }
+    private ProgressCode progressCode; //새로 추가됨
 
-    public SessionInfo(long sessionId, String title, LocalDateTime applyStartDate, LocalDateTime applyEndDate, String creatorId) {
-        this.sessionId = sessionId;
-        this.title = title;
-        this.sessionPeriod = new SessionPeriod(applyStartDate, applyEndDate);
-        this.creatorId = creatorId;
+    public SessionInfo(SessionMetaData sessionMetaData, SessionPeriod sessionPeriod,
+                       StateCode stateCode, ProgressCode progressCode, Instructor instructor) {
+        if(sessionMetaData == null) {
+            throw new IllegalArgumentException("강의 정보를 입력해주세요.");
+        }
+        if(sessionPeriod == null) {
+            throw new IllegalArgumentException("강의 기간을 입력해주세요.");
+        }
+        if(stateCode == null) {
+            throw new IllegalArgumentException("강의 상태를 입력해주세요.");
+        }
+        if(progressCode == null) {
+            throw new IllegalArgumentException("강의 진행 상태를 입력해주세요.");
+        }
+
+        this.sessionPeriod = sessionPeriod;
+        this.sessionMetaData =  sessionMetaData;
+        this.stateCode = stateCode;
+        this.progressCode = progressCode;
+        this.instructor = instructor;
     }
 
     public String getTitle() {
-        return title;
+        return sessionMetaData.getTitle();
     }
 
     public String getCreatorId() {
-        return creatorId;
+        return sessionMetaData.getCreatorId();
     }
 
     public LocalDateTime getApplyStartDate() {
@@ -39,9 +52,23 @@ public class SessionInfo {
         return sessionPeriod.getApplyEndDate();
     }
 
-    public long getSessionId() {
-        return sessionId;
+    public void validateOrderSessionStatus() {
+        stateCode.validateOrderSessionStatus();
+    }
+
+    public int getStatusCode() {
+        return stateCode.getStatusCode();
+    }
+
+    public int getProgressCode() {
+        return progressCode.getProgressCode();
+    }
+
+    public void validateOrderSessionProgressCode() {
+        progressCode.validateOrderSessionProgressCode();
+    }
+
+    public long getInstructorId(){
+        return instructor.getId();
     }
 }
-
-

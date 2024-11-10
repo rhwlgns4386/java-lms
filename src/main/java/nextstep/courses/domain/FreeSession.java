@@ -8,13 +8,13 @@ import nextstep.users.domain.NsUser;
 public class FreeSession extends Session implements SessionStrategy {
     // private Session session;//구성이 필요한 관계는 이렇게 합성
 
-    public FreeSession(SessionInfo sessionInfo, SessionImage sessionImage,
-                       long salePrice, StateCode stateCode) {
-        super(sessionInfo, sessionImage, 0, stateCode);
+    public FreeSession(SessionId sessionId, SessionInfo sessionInfo, SessionImages sessionImages) {
+        super(sessionId, sessionInfo, sessionImages, new SessionPrice(0), SessionType.FREE);
     }
 
     public void validateOrderSession(RequestOrderParam requestOrderParam) throws CannotRegisteSessionException {
         validateOrderSessionStatus();
+        validateOrderSessionProgressCode();
         validateDuplicateStudent(requestOrderParam.getStudent());
     }
 
