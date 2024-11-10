@@ -16,7 +16,7 @@ public class SessionTest {
 
     public final static Session SESSION_NO_RECRUITING_READY = new PaidSession(new SessionId(-1), SessionInfoTest.SESSION_INFO_NO_RECRUIT_READY, SessionImagesTest.SESSION_IMAGE, new SessionPrice(3000), 10);
     public final static Session SESSION_NO_RECRUITING_PROGRESS = new PaidSession(new SessionId(-1), SessionInfoTest.SESSION_INFO_NO_RECRUIT_PROGRESS, SessionImagesTest.SESSION_IMAGE, new SessionPrice(3000), 10);
-    public final static Session SESSION_NO_RECRUITING_END = new PaidSession(new SessionId(-1), SessionInfoTest.SESSION_INFO_NO_RECRUIT_END, SessionImagesTest.SESSION_IMAGE, new SessionPrice(3000), 10);
+    public final static Session SESSION_NO_RECRUITING_END = new FreeSession(new SessionId(-1), SessionInfoTest.SESSION_INFO_NO_RECRUIT_END, SessionImagesTest.SESSION_IMAGE);
 
 
     @Test

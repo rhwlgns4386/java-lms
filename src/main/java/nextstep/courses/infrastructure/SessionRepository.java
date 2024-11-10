@@ -10,11 +10,4 @@ public interface SessionRepository {
 
     Session findSessionInfoById(long id);
 
-    Students findOrderInfoBySessionId(long l);
-
-    int saveOrderSession(NsUser user, Session session);
-
-    SessionOrder findSessionOrderByOrderId(long orderId);
-
-    int saveOrderStateSessionOrder(SessionOrder approvedSessionOrder);
 }

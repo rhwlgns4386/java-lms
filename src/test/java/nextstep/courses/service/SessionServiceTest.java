@@ -20,6 +20,7 @@ import nextstep.courses.domain.StateCode;
 import nextstep.courses.domain.Students;
 import nextstep.courses.exception.CannotApproveSessionException;
 import nextstep.courses.exception.CannotRegisteSessionException;
+import nextstep.courses.infrastructure.SessionOrderRepository;
 import nextstep.courses.infrastructure.SessionRepository;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
@@ -51,6 +52,9 @@ public class SessionServiceTest {
 
     @Mock
     private SessionRepository sessionRepository;
+
+    @Mock
+    private SessionOrderRepository sessionOrderRepository;
 
     private Payment payment = new Payment("id", 1L, 1L, 1000L);
     private SessionInfo sessionInfo;
@@ -123,7 +127,7 @@ public class SessionServiceTest {
         Students students = new Students(List.of(new NsUser(1L)));
 
         when(sessionRepository.findSessionInfoById(1L)).thenReturn(paidSession);
-        when(sessionRepository.findOrderInfoBySessionId(1L)).thenReturn(students);
+        when(sessionOrderRepository.findOrderInfoBySessionId(1L)).thenReturn(students);
 
         Session session = sessionService.orderSession(payment, NsUserTest.SANJIGI, 1);
 
@@ -139,7 +143,7 @@ public class SessionServiceTest {
         Students students = new Students(List.of(new NsUser(2L)));
 
         when(sessionRepository.findSessionInfoById(1L)).thenReturn(paidSession);
-        when(sessionRepository.findOrderInfoBySessionId(1L)).thenReturn(students);
+        when(sessionOrderRepository.findOrderInfoBySessionId(1L)).thenReturn(students);
 
         assertThatThrownBy(() -> {
             sessionService.orderSession(payment, NsUserTest.SANJIGI, 1);
@@ -153,7 +157,7 @@ public class SessionServiceTest {
         Students students = new Students(List.of(new NsUser(3L), new NsUser(4L)));
 
         when(sessionRepository.findSessionInfoById(1L)).thenReturn(paidSession);
-        when(sessionRepository.findOrderInfoBySessionId(1L)).thenReturn(students);
+        when(sessionOrderRepository.findOrderInfoBySessionId(1L)).thenReturn(students);
 
         assertThatThrownBy(() -> {
             sessionService.orderSession(payment, NsUserTest.SANJIGI, 1);
@@ -167,7 +171,7 @@ public class SessionServiceTest {
         Students students = new Students(List.of(new NsUser(3L), new NsUser(4L), new NsUser(5L)));
 
         when(sessionRepository.findSessionInfoById(1L)).thenReturn(freeSession);
-        when(sessionRepository.findOrderInfoBySessionId(1L)).thenReturn(students);
+        when(sessionOrderRepository.findOrderInfoBySessionId(1L)).thenReturn(students);
 
         sessionService.orderSession(payment, NsUserTest.JAVAJIGI, 1);
     }
@@ -179,7 +183,7 @@ public class SessionServiceTest {
         Students students = new Students(List.of(new NsUser(1L), new NsUser(2L), new NsUser(3L)));
 
         when(sessionRepository.findSessionInfoById(1L)).thenReturn(freeSession);
-        when(sessionRepository.findOrderInfoBySessionId(1L)).thenReturn(students);
+        when(sessionOrderRepository.findOrderInfoBySessionId(1L)).thenReturn(students);
 
         assertThatThrownBy(() -> {
             sessionService.orderSession(payment, NsUserTest.JAVAJIGI, 1);
@@ -191,8 +195,8 @@ public class SessionServiceTest {
     @DisplayName("대기중인 강의주문을 강사가 승인")
     void saveOrderStateSessionOrder() throws CannotApproveSessionException {
         SessionOrder sessionOrder = SessionOrderTest.SESSION_ORDER_READY;
-        when(sessionRepository.findSessionOrderByOrderId(Mockito.any(Long.class))).thenReturn(sessionOrder);
-        when(sessionRepository.saveOrderStateSessionOrder(Mockito.any(SessionOrder.class))).thenReturn(1);
+        when(sessionOrderRepository.findSessionOrderByOrderId(Mockito.any(Long.class))).thenReturn(sessionOrder);
+        when(sessionOrderRepository.saveOrderStateSessionOrder(Mockito.any(SessionOrder.class))).thenReturn(1);
 
         assertThat(sessionService.approveSessionOrder(new Instructor(new InstructorId(7)), 1L));
     }
@@ -201,7 +205,7 @@ public class SessionServiceTest {
     @DisplayName("대기중이지 않은 강의주문을 강사가 승인시 오류")
     void saveOrderStateSessionOrder_CannotApproveSessionException() {
         SessionOrder sessionOrder = SessionOrderTest.SESSION_ORDER_APPROVE;
-        when(sessionRepository.findSessionOrderByOrderId(Mockito.any(Long.class))).thenReturn(sessionOrder);
+        when(sessionOrderRepository.findSessionOrderByOrderId(Mockito.any(Long.class))).thenReturn(sessionOrder);
 
         assertThatThrownBy(() -> sessionService.approveSessionOrder(new Instructor(new InstructorId(7)), 1L))
                 .isInstanceOf(CannotApproveSessionException.class);

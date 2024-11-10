@@ -7,6 +7,7 @@ import nextstep.courses.domain.SessionPrice;
 import nextstep.courses.domain.Students;
 import nextstep.courses.exception.CannotApproveSessionException;
 import nextstep.courses.exception.CannotRegisteSessionException;
+import nextstep.courses.infrastructure.SessionOrderRepository;
 import nextstep.courses.infrastructure.SessionRepository;
 import nextstep.courses.request.RequestOrderParam;
 import nextstep.courses.domain.Session;
@@ -21,9 +22,11 @@ import org.springframework.stereotype.Service;
 public class SessionService {
 
     private final SessionRepository sessionRepository;
+    private final SessionOrderRepository sessionOrderRepository;
 
-    public SessionService(SessionRepository sessionRepository) {
+    public SessionService(SessionRepository sessionRepository, SessionOrderRepository sessionOrderRepository) {
         this.sessionRepository = sessionRepository;
+        this.sessionOrderRepository = sessionOrderRepository;
     }
 
     public void registerPaidSession(SessionInfo sessionInfo, SessionImages sessionImages, SessionPrice salePrice, int studentMaxCount, SessionType sessionType) {
@@ -36,17 +39,16 @@ public class SessionService {
         return sessionRepository.findSessionInfoById(sessionId);
     }
 
-    //현재 상태에 클래스 분리가 필요할까? 분리하게되면 컨트롤러 없어서 분리된 서비스에서 이 서비스를 의존하게됨
     public Session orderSession(Payment payment, NsUser user, long sessionId) throws CannotRegisteSessionException {
         Session session = findSessionInfoById(sessionId);
 
-        Students students = sessionRepository.findOrderInfoBySessionId(sessionId);
+        Students students = sessionOrderRepository.findOrderInfoBySessionId(sessionId);
         session.addStudents(students);
 
         RequestOrderParam param = new RequestOrderParam(payment, user);
         session.orderSession(param);
 
-        sessionRepository.saveOrderSession(user, session);
+        sessionOrderRepository.saveOrderSession(user, session);
         return session;
     }
 
@@ -55,7 +57,7 @@ public class SessionService {
 
         SessionOrder approvedSessionOrder = instructor.approveSessionOrder(sessionOrder);
 
-        sessionRepository.saveOrderStateSessionOrder(approvedSessionOrder);
+        sessionOrderRepository.saveOrderStateSessionOrder(approvedSessionOrder);
 
         return approvedSessionOrder;
     }
@@ -65,13 +67,13 @@ public class SessionService {
 
         SessionOrder approvedSessionOrder = instructor.cancelSessionOrder(sessionOrder);
 
-        sessionRepository.saveOrderStateSessionOrder(approvedSessionOrder);
+        sessionOrderRepository.saveOrderStateSessionOrder(approvedSessionOrder);
 
         return approvedSessionOrder;
     }
 
     public SessionOrder findSessionOrderByOrderId(long orerId){
-        return sessionRepository.findSessionOrderByOrderId(orerId);
+        return sessionOrderRepository.findSessionOrderByOrderId(orerId);
     }
 
 }
