@@ -38,9 +38,7 @@ class SessionTest {
     void incrementEnrollStudentCountWhenEnrollTest() {
         Session session = getRecruitingFreeSession();
         Enrollment enrollment = Enrollment.free(1L, session, NsUserTest.JAVAJIGI);
-
-        session.startRecruitment();
-        session.enroll(enrollment);
+        enrollment.approve();
 
         assertThat(session.getEnrolledUserCount()).isOne();
     }

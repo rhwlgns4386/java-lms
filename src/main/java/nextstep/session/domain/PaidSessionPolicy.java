@@ -10,7 +10,8 @@ public class PaidSessionPolicy implements SessionPolicy {
     public static final int MIN_CAPACITY = 1;
 
     @Override
-    public void validatePolicy(Session session, Enrollment enrollment) {
+    public void validatePolicy(Enrollment enrollment) {
+        Session session = enrollment.getSession();
         if (session.getStudentCapacity() < MIN_CAPACITY) {
             throw new IllegalArgumentException("최대 수강 인원은 1명 이상이어야 합니다.");
         }

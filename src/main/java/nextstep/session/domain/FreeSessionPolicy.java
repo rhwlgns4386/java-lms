@@ -8,7 +8,7 @@ import nextstep.enrollment.domain.Enrollment;
 public class FreeSessionPolicy implements SessionPolicy {
 
     @Override
-    public void validatePolicy(Session session, Enrollment enrollment) {
+    public void validatePolicy(Enrollment enrollment) {
         // 무료강의는 정책이 존재하지 않음
     }
 

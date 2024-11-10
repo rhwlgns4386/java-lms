@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import nextstep.payments.domain.Payment;
 import nextstep.session.domain.Session;
+import nextstep.session.domain.SessionType;
 import nextstep.users.domain.NsUser;
 
 public class Enrollment {
@@ -61,6 +62,7 @@ public class Enrollment {
     // 관리자가 수강 신청을 승인
     public void approve() {
         approvalStatus = ApprovalStatus.APPROVED;
+        session.enroll(this);
     }
 
     public Long getPaymentAmount() {
@@ -71,8 +73,16 @@ public class Enrollment {
         return id;
     }
 
+    public Session getSession() {
+        return session;
+    }
+
     public Long getSessionId() {
         return session.getId();
+    }
+
+    public SessionType getSessionType() {
+        return session.getSessionType();
     }
 
     public Long getNsUserId() {

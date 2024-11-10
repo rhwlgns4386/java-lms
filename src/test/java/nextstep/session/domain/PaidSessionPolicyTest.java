@@ -19,7 +19,7 @@ class PaidSessionPolicyTest {
         Payment payment = FixturePaymentFactory.create(1L, 1L, 1L, 10_000L);
         Enrollment enrollment = Enrollment.paid(1L, session, NsUserTest.JAVAJIGI, payment);
 
-        assertThatThrownBy(() -> new PaidSessionPolicy().validatePolicy(session, enrollment))
+        assertThatThrownBy(() -> new PaidSessionPolicy().validatePolicy(enrollment))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("결제금액이 수강료와 일치하지 않습니다.");
     }
@@ -30,12 +30,11 @@ class PaidSessionPolicyTest {
         Session session = getRecruitingPaidSession(1L);
         Payment payment = FixturePaymentFactory.create(1L, 1L, 1L, 5_000L);
         Enrollment enrollment = Enrollment.paid(1L, session, NsUserTest.JAVAJIGI, payment);
-        session.startRecruitment();
-        session.enroll(enrollment);
+        enrollment.approve();
 
         Enrollment enrollment2 = Enrollment.paid(2L, session, NsUserTest.SANJIGI, payment);
 
-        assertThatThrownBy(() -> new PaidSessionPolicy().validatePolicy(session, enrollment2))
+        assertThatThrownBy(() -> new PaidSessionPolicy().validatePolicy(enrollment2))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("정원을 초과했습니다.");
     }
@@ -48,7 +47,7 @@ class PaidSessionPolicyTest {
         Payment payment = FixturePaymentFactory.create(1L, 1L, 1L, 5_000L);
         Enrollment enrollment = Enrollment.paid(1L, session, NsUserTest.JAVAJIGI, payment);
 
-        assertThatThrownBy(() -> new PaidSessionPolicy().validatePolicy(session, enrollment))
+        assertThatThrownBy(() -> new PaidSessionPolicy().validatePolicy(enrollment))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("최대 수강 인원은 1명 이상이어야 합니다.");
     }
