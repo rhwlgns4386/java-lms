@@ -1,5 +1,7 @@
 package nextstep.courses.domain;
 
+import nextstep.courses.exception.CannotRegisteSessionException;
+
 import java.util.Arrays;
 
 public enum OrderStateCode {
@@ -16,11 +18,15 @@ public enum OrderStateCode {
     public static OrderStateCode fromCode(int orderStateCode) {
         return Arrays.stream(OrderStateCode.values()).filter(value -> value.getOrderStateCode() == orderStateCode)
                 .findFirst().orElseThrow(() -> {
-                    throw new IllegalArgumentException("주문상태코드가 유효하지 않습니다.");
+                    try {
+                        throw new CannotRegisteSessionException("주문상태코드가 유효하지 않습니다.");
+                    } catch (CannotRegisteSessionException e) {
+                        throw new RuntimeException(e);
+                    }
                 });
     }
 
-    public int getOrderStateCode(){
+    public int getOrderStateCode() {
         return orderStateCode;
     }
 

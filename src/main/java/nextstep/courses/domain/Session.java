@@ -24,10 +24,6 @@ public class Session {
     public Session() {
     }
 
-    public Session(SessionInfo sessionInfo, SessionImages sessionImages, SessionPrice salePrice) {
-        this(sessionInfo, sessionImages, salePrice, SessionType.FREE); //기존꺼를 유지하고 이렇게 SessionType.Free 기본 값 해도되나요? 나중에 사이드나 영향범위 없을까요?
-    }
-
     public Session(SessionInfo sessionInfo, SessionImages sessionImages, SessionPrice salePrice, SessionType sessionType) {
         //null체크랑 각 sessionInfo, sessionImages 에서도 각 요소들 Null체크 괜찮나요?
         if (sessionInfo == null) {
@@ -44,7 +40,7 @@ public class Session {
         }
 
         this.sessionInfo = sessionInfo;
-        this.sessionImages =sessionImages;
+        this.sessionImages = sessionImages;
         this.salePrice = salePrice;
         this.sessionType = sessionType;
         this.students = new Students(Collections.emptyList());

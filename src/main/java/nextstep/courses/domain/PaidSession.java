@@ -14,8 +14,7 @@ public class PaidSession extends Session implements SessionStrategy {
     public PaidSession(SessionInfo sessionInfo, SessionImages sessionImages, SessionPrice sessionPrice, int studentMaxCount) {
         super(sessionInfo, sessionImages, sessionPrice, SessionType.PAID);
         this.studentMaxCount = studentMaxCount;
-
-        if(sessionPrice.getSalePrice() <= 0 ){
+        if(sessionPrice.isLessThanOrEqualTo(0) ){
             throw new IllegalArgumentException("유료강의는 0원 이하가 될 수 없습니다.");
         }
     }
@@ -35,9 +34,13 @@ public class PaidSession extends Session implements SessionStrategy {
     }
 
     private void validateMaxStudentCount() throws CannotRegisteSessionException {
-        if (studentMaxCount <= getStudentsSize()) {
+        if (isMaxStudentCount()) {
             throw new CannotRegisteSessionException("최대인원 수를 초과하였습니다.");
         }
+    }
+
+    private boolean isMaxStudentCount() {
+        return studentMaxCount <= getStudentsSize();
     }
 
     private void validateSalePrice(Payment payment) throws CannotRegisteSessionException {
