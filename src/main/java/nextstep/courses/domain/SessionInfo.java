@@ -3,9 +3,10 @@ package nextstep.courses.domain;
 import java.time.LocalDateTime;
 
 public class SessionInfo {
-    private final long sessionId;
 
-    SessionMetaData sessionMetaData;
+    private Instructor instructor;
+
+    private SessionMetaData sessionMetaData;
 
     private SessionPeriod sessionPeriod;
 
@@ -14,12 +15,7 @@ public class SessionInfo {
     private ProgressCode progressCode; //새로 추가됨
 
     public SessionInfo(SessionMetaData sessionMetaData, SessionPeriod sessionPeriod,
-                       StateCode stateCode, ProgressCode progressCode) {
-        this(-1, sessionMetaData, sessionPeriod, stateCode, progressCode);
-    }
-
-    public SessionInfo(long sessionId, SessionMetaData sessionMetaData, SessionPeriod sessionPeriod,
-                       StateCode stateCode, ProgressCode progressCode) {
+                       StateCode stateCode, ProgressCode progressCode, Instructor instructor) {
         if(sessionMetaData == null) {
             throw new IllegalArgumentException("강의 정보를 입력해주세요.");
         }
@@ -33,11 +29,11 @@ public class SessionInfo {
             throw new IllegalArgumentException("강의 진행 상태를 입력해주세요.");
         }
 
-        this.sessionId = sessionId;
         this.sessionPeriod = sessionPeriod;
         this.sessionMetaData =  sessionMetaData;
         this.stateCode = stateCode;
         this.progressCode = progressCode;
+        this.instructor = instructor;
     }
 
     public String getTitle() {
@@ -56,10 +52,6 @@ public class SessionInfo {
         return sessionPeriod.getApplyEndDate();
     }
 
-    public long getSessionId() {
-        return sessionId;
-    }
-
     public void validateOrderSessionStatus() {
         stateCode.validateOrderSessionStatus();
     }
@@ -76,4 +68,7 @@ public class SessionInfo {
         progressCode.validateOrderSessionProgressCode();
     }
 
+    public long getInstructorId(){
+        return instructor.getId();
+    }
 }

@@ -9,6 +9,8 @@ import java.util.Collections;
 import java.util.List;
 
 public abstract class Session {
+    private SessionId sessionId;
+
     private SessionInfo sessionInfo;
 
     private SessionImages sessionImages;
@@ -20,6 +22,9 @@ public abstract class Session {
     private SessionType sessionType;
 
     public Session(SessionInfo sessionInfo, SessionImages sessionImages, SessionPrice salePrice, SessionType sessionType) {
+        this(null, sessionInfo, sessionImages, salePrice, sessionType);
+    }
+    public Session(SessionId sessionId, SessionInfo sessionInfo, SessionImages sessionImages, SessionPrice salePrice, SessionType sessionType) {
         if (sessionInfo == null) {
             throw new IllegalArgumentException("강의 정보를 입력해주세요");
         }
@@ -33,6 +38,7 @@ public abstract class Session {
             throw new IllegalArgumentException("강의 타입을 선택해주세요.");
         }
 
+        this.sessionId = sessionId;
         this.sessionInfo = sessionInfo;
         this.sessionImages = sessionImages;
         this.salePrice = salePrice;
@@ -101,7 +107,7 @@ public abstract class Session {
     }
 
     public long getSessionId() {
-        return sessionInfo.getSessionId();
+        return sessionId.getSessionId();
     }
 
     public int getProgressCode() {
@@ -111,4 +117,9 @@ public abstract class Session {
     public List<SessionImage> getSessionImages() {
         return sessionImages.getSessionImages();
     }
+
+    public long getInstructorId(){
+        return sessionInfo.getInstructorId();
+    }
+
 }

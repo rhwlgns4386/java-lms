@@ -10,13 +10,13 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class SessionTest {
 
-    public final static Session SESSION_RECRUITING_READY = new PaidSession(SessionInfoTest.SESSION_INFO_RECRUIT_READY, SessionImagesTest.SESSION_IMAGE, new SessionPrice(2000), 10);
-    public final static Session SESSION_RECRUITING_PRORESS = new PaidSession(SessionInfoTest.SESSION_INFO_RECRUIT_PROGRESS, SessionImagesTest.SESSION_IMAGE, new SessionPrice(1000), 10);
-    public final static Session SESSION_RECRUITING_END = new PaidSession(SessionInfoTest.SESSION_INFO_RECRUIT_END, SessionImagesTest.SESSION_IMAGE, new SessionPrice(1000), 10);
+    public final static Session SESSION_RECRUITING_READY = new PaidSession(new SessionId(-1), SessionInfoTest.SESSION_INFO_RECRUIT_READY, SessionImagesTest.SESSION_IMAGE, new SessionPrice(2000), 10);
+    public final static Session SESSION_RECRUITING_PRORESS = new PaidSession(new SessionId(-1), SessionInfoTest.SESSION_INFO_RECRUIT_PROGRESS, SessionImagesTest.SESSION_IMAGE, new SessionPrice(1000), 10);
+    public final static Session SESSION_RECRUITING_END = new PaidSession(new SessionId(-1), SessionInfoTest.SESSION_INFO_RECRUIT_END, SessionImagesTest.SESSION_IMAGE, new SessionPrice(1000), 10);
 
-    public final static Session SESSION_NO_RECRUITING_READY = new PaidSession(SessionInfoTest.SESSION_INFO_NO_RECRUIT_READY, SessionImagesTest.SESSION_IMAGE, new SessionPrice(3000), 10);
-    public final static Session SESSION_NO_RECRUITING_PROGRESS = new PaidSession(SessionInfoTest.SESSION_INFO_NO_RECRUIT_PROGRESS, SessionImagesTest.SESSION_IMAGE, new SessionPrice(3000), 10);
-    public final static Session SESSION_NO_RECRUITING_END = new PaidSession(SessionInfoTest.SESSION_INFO_NO_RECRUIT_END, SessionImagesTest.SESSION_IMAGE, new SessionPrice(3000), 10);
+    public final static Session SESSION_NO_RECRUITING_READY = new PaidSession(new SessionId(-1), SessionInfoTest.SESSION_INFO_NO_RECRUIT_READY, SessionImagesTest.SESSION_IMAGE, new SessionPrice(3000), 10);
+    public final static Session SESSION_NO_RECRUITING_PROGRESS = new PaidSession(new SessionId(-1), SessionInfoTest.SESSION_INFO_NO_RECRUIT_PROGRESS, SessionImagesTest.SESSION_IMAGE, new SessionPrice(3000), 10);
+    public final static Session SESSION_NO_RECRUITING_END = new PaidSession(new SessionId(-1), SessionInfoTest.SESSION_INFO_NO_RECRUIT_END, SessionImagesTest.SESSION_IMAGE, new SessionPrice(3000), 10);
 
 
     @Test
