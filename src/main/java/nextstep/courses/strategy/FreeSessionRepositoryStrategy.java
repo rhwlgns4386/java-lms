@@ -19,9 +19,9 @@ public class FreeSessionRepositoryStrategy implements SessionRepositoryStrategy 
 
     @Override
     public int saveRegisterSession(Session session) {
-        String sql = "insert into session (title, apply_start_date, apply_end_date, sale_price, state_code, creator_id, session_type, student_max_count, PROGRESS_CODE) " +
+        String sql = "insert into session (title, apply_start_date, apply_end_date, sale_price, state_code, creator_id, session_type, student_max_count, PROGRESS_CODE, INSTRUCTOR_ID) " +
                 "values(:title, :apply_start_date, :apply_end_date, :sale_price," +
-                ":state_code, :creator_id, :session_type ,:student_max_count ,:progress_code)";
+                ":state_code, :creator_id, :session_type ,:student_max_count ,:progress_code, :instructor_id)";
         SqlParameterSource param = new MapSqlParameterSource()
                 .addValue("title", session.getTitle())
                 .addValue("apply_start_date", Timestamp.valueOf(session.getApplyStartDate()))
@@ -31,7 +31,8 @@ public class FreeSessionRepositoryStrategy implements SessionRepositoryStrategy 
                 .addValue("creator_id", session.getCreatorId())
                 .addValue("session_type", session.getSessionTypeCode())
                 .addValue("student_max_count", -1)
-                .addValue("progress_code", session.getProgressCode());
+                .addValue("progress_code", session.getProgressCode())
+                .addValue("instructor_id", session.getInstructorId());
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(sql, param, keyHolder);
