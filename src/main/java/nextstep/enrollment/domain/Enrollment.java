@@ -32,7 +32,7 @@ public class Enrollment {
         this.nsUserId = nsUserId;
         this.enrollmentDate = LocalDateTime.now();
         this.payment = payment;
-        this.approvalStatus = ApprovalStatus.REJECTED;
+        this.approvalStatus = ApprovalStatus.NOT_APPROVED;
         this.enrollmentStatus = EnrollmentStatus.ACTIVE;
     }
 
@@ -44,6 +44,7 @@ public class Enrollment {
         return new Enrollment(id, session.getId(), nsUser.getId(), payment);
     }
 
+    // 수강생이 강의를 직접 취소
     public void cancel() {
         if (approvalStatus == ApprovalStatus.APPROVED) {
             throw new IllegalStateException("수강신청 승인되어 취소할 수 없습니다.");
@@ -51,12 +52,9 @@ public class Enrollment {
         enrollmentStatus = EnrollmentStatus.CANCELLED;
     }
 
+    // 관리자가 수강 신청을 승인
     public void approve() {
         approvalStatus = ApprovalStatus.APPROVED;
-    }
-
-    public void reject() {
-        approvalStatus = ApprovalStatus.REJECTED;
     }
 
     public Long getPaymentAmount() {

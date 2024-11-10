@@ -76,7 +76,7 @@ create table enrollment
     user_id           bigint      not null,
     enrollment_date   timestamp   not null,
     payment_id        bigint,
-    approval_status   varchar(20) not null default 'REJECTED',
+    approval_status   varchar(20) not null default 'NOT_APPROVED',
     enrollment_status varchar(20) not null default 'ACTIVE',
     primary key (id)
 );

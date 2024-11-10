@@ -17,7 +17,6 @@ class EnrollmentTest {
     void cancelTest() {
         Session session = FixtureSessionFactory.createFreeSession(1L);
         Enrollment enrollment = Enrollment.free(1L, session, NsUserTest.JAVAJIGI);
-        enrollment.reject();
         assertDoesNotThrow(() -> enrollment.cancel());
     }
 
