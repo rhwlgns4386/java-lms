@@ -37,10 +37,16 @@ public class Enrollment {
     }
 
     public static Enrollment free(Long id, Session session, NsUser nsUser) {
+        if (!session.isRecruiting()) {
+            throw new IllegalStateException("모집중인 강의가 아닙니다.");
+        }
         return new Enrollment(id, session.getId(), nsUser.getId(), null);
     }
 
     public static Enrollment paid(Long id, Session session, NsUser nsUser, Payment payment) {
+        if (!session.isRecruiting()) {
+            throw new IllegalStateException("모집중인 강의가 아닙니다.");
+        }
         return new Enrollment(id, session.getId(), nsUser.getId(), payment);
     }
 

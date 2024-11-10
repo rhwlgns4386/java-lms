@@ -76,18 +76,18 @@ public class Session {
     }
 
     public void enroll(Enrollment enrollment) {
-        validateRegister();
-        enrollments.add(enrollment);
-    }
-
-    private void validateRegister() {
-        if (sessionEnrollmentStatus != SessionEnrollmentStatus.RECRUITING) {
+        if (!isRecruiting()) {
             throw new IllegalStateException("모집중 상태의 강의가 아닙니다.");
         }
+        enrollments.add(enrollment);
     }
 
     public boolean isFree() {
         return sessionType == SessionType.FREE;
+    }
+
+    public boolean isRecruiting() {
+        return sessionEnrollmentStatus == SessionEnrollmentStatus.RECRUITING;
     }
 
     public Long getId() {
