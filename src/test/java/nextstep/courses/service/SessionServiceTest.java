@@ -2,6 +2,7 @@ package nextstep.courses.service;
 
 import nextstep.courses.domain.FreeSession;
 import nextstep.courses.domain.Instructor;
+import nextstep.courses.domain.InstructorId;
 import nextstep.courses.domain.PaidSession;
 import nextstep.courses.domain.ProgressCode;
 import nextstep.courses.domain.Session;
@@ -59,10 +60,10 @@ public class SessionServiceTest {
     void setUp() {
         sessionInfo = new SessionInfo(new SessionMetaData("제목", "작성자"),
                 new SessionPeriod(LocalDateTime.now(), LocalDateTime.now().plus(10, ChronoUnit.HALF_DAYS)),
-                StateCode.RECRUITING, ProgressCode.PROGRESS);
+                StateCode.RECRUITING, ProgressCode.PROGRESS, new Instructor(new InstructorId(1)));
         sessionInfoReady = new SessionInfo(new SessionMetaData("제목", "작성자"),
                 new SessionPeriod(LocalDateTime.now(), LocalDateTime.now().plus(10, ChronoUnit.HALF_DAYS)),
-                StateCode.RECRUITING, ProgressCode.PROGRESS);
+                StateCode.RECRUITING, ProgressCode.PROGRESS, new Instructor(new InstructorId(2)));
     }
 
     @Test
@@ -193,7 +194,7 @@ public class SessionServiceTest {
         when(sessionRepository.findSessionOrderByOrderId(Mockito.any(Long.class))).thenReturn(sessionOrder);
         when(sessionRepository.saveOrderStateSessionOrder(Mockito.any(SessionOrder.class))).thenReturn(1);
 
-        assertThat(sessionService.approveSessionOrder(new Instructor(7), 1L));
+        assertThat(sessionService.approveSessionOrder(new Instructor(new InstructorId(7)), 1L));
     }
 
     @Test
@@ -202,7 +203,7 @@ public class SessionServiceTest {
         SessionOrder sessionOrder = SessionOrderTest.SESSION_ORDER_APPROVE;
         when(sessionRepository.findSessionOrderByOrderId(Mockito.any(Long.class))).thenReturn(sessionOrder);
 
-        assertThatThrownBy(() -> sessionService.approveSessionOrder(new Instructor(7), 1L))
+        assertThatThrownBy(() -> sessionService.approveSessionOrder(new Instructor(new InstructorId(7)), 1L))
                 .isInstanceOf(CannotApproveSessionException.class);
     }
 

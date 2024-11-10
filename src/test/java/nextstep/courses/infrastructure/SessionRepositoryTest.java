@@ -1,6 +1,7 @@
 package nextstep.courses.infrastructure;
 
 import nextstep.courses.domain.Instructor;
+import nextstep.courses.domain.InstructorId;
 import nextstep.courses.domain.OrderStateCode;
 import nextstep.courses.domain.ProgressCode;
 import nextstep.courses.domain.SessionOrder;
@@ -104,7 +105,7 @@ public class SessionRepositoryTest {
         SessionOrder sessionOrder = sessionRepository.findSessionOrderByOrderId(1L);
         assertThat(sessionOrder.getOrderStateCode()).isEqualTo(OrderStateCode.READY.getOrderStateCode());
 
-        SessionOrder approvedSessionOrder = new SessionOrder(1,1,new NsUser(1L), OrderStateCode.APPROVE, new SessionPrice(1000), new Instructor(7));
+        SessionOrder approvedSessionOrder = new SessionOrder(1,1,new NsUser(1L), OrderStateCode.APPROVE, new SessionPrice(1000), new Instructor(new InstructorId(7)));
         sessionRepository.saveOrderStateSessionOrder(approvedSessionOrder);
 
         SessionOrder resultOrder = sessionRepository.findSessionOrderByOrderId(1L);
@@ -120,7 +121,7 @@ public class SessionRepositoryTest {
         SessionOrder sessionOrder = sessionRepository.findSessionOrderByOrderId(1L);
         assertThat(sessionOrder.getOrderStateCode()).isEqualTo(OrderStateCode.READY.getOrderStateCode());
 
-        SessionOrder approvedSessionOrder = new SessionOrder(1,1,new NsUser(1L), OrderStateCode.CANCEL, new SessionPrice(1000), new Instructor(7));
+        SessionOrder approvedSessionOrder = new SessionOrder(1,1,new NsUser(1L), OrderStateCode.CANCEL, new SessionPrice(1000), new Instructor(new InstructorId(7)));
         sessionRepository.saveOrderStateSessionOrder(approvedSessionOrder);
 
         SessionOrder resultOrder = sessionRepository.findSessionOrderByOrderId(1L);
