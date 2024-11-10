@@ -8,17 +8,17 @@ import nextstep.users.domain.NsUser;
 
 public class Enrollment {
     private final Long id;
-    private final Long sessionId;
+    private final Session session;
     private final Long nsUserId;
     private final LocalDateTime enrollmentDate;
     private final Payment payment;
     private ApprovalStatus approvalStatus;
     private EnrollmentStatus enrollmentStatus;
 
-    public Enrollment(Long id, Long sessionId, Long nsUserId, LocalDateTime enrollmentDate, Payment payment,
+    public Enrollment(Long id, Session session, Long nsUserId, LocalDateTime enrollmentDate, Payment payment,
         ApprovalStatus approvalStatus, EnrollmentStatus enrollmentStatus) {
         this.id = id;
-        this.sessionId = sessionId;
+        this.session = session;
         this.nsUserId = nsUserId;
         this.enrollmentDate = enrollmentDate;
         this.payment = payment;
@@ -26,9 +26,9 @@ public class Enrollment {
         this.enrollmentStatus = enrollmentStatus;
     }
 
-    private Enrollment(Long id, Long sessionId, Long nsUserId, Payment payment) {
+    private Enrollment(Long id, Session session, Long nsUserId, Payment payment) {
         this.id = id;
-        this.sessionId = sessionId;
+        this.session = session;
         this.nsUserId = nsUserId;
         this.enrollmentDate = LocalDateTime.now();
         this.payment = payment;
@@ -40,14 +40,14 @@ public class Enrollment {
         if (!session.isRecruiting()) {
             throw new IllegalStateException("모집중인 강의가 아닙니다.");
         }
-        return new Enrollment(id, session.getId(), nsUser.getId(), null);
+        return new Enrollment(id, session, nsUser.getId(), null);
     }
 
     public static Enrollment paid(Long id, Session session, NsUser nsUser, Payment payment) {
         if (!session.isRecruiting()) {
             throw new IllegalStateException("모집중인 강의가 아닙니다.");
         }
-        return new Enrollment(id, session.getId(), nsUser.getId(), payment);
+        return new Enrollment(id, session, nsUser.getId(), payment);
     }
 
     // 수강생이 강의를 직접 취소
@@ -72,7 +72,7 @@ public class Enrollment {
     }
 
     public Long getSessionId() {
-        return sessionId;
+        return session.getId();
     }
 
     public Long getNsUserId() {

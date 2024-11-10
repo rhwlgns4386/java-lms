@@ -16,14 +16,18 @@ import nextstep.enrollment.domain.Enrollment;
 import nextstep.enrollment.domain.EnrollmentRepository;
 import nextstep.enrollment.domain.EnrollmentStatus;
 import nextstep.payments.domain.Payment;
+import nextstep.session.domain.Session;
+import nextstep.session.infrastructure.JdbcSessionRepository;
 
 @Repository("jdbcEnrollmentRepository")
 public class JdbcEnrollmentRepository implements EnrollmentRepository {
 
     private final JdbcOperations jdbcTemplate;
+    private final JdbcSessionRepository jdbcSessionRepository;
 
-    public JdbcEnrollmentRepository(JdbcOperations jdbcTemplate) {
+    public JdbcEnrollmentRepository(JdbcOperations jdbcTemplate, JdbcSessionRepository jdbcSessionRepository) {
         this.jdbcTemplate = jdbcTemplate;
+        this.jdbcSessionRepository = jdbcSessionRepository;
     }
 
     @Override
@@ -36,6 +40,11 @@ public class JdbcEnrollmentRepository implements EnrollmentRepository {
                 + "WHERE e.id = ?";
 
         RowMapper<Enrollment> rowMapper = (rs, rowNum) -> {
+            long sessionId = rs.getLong("session_id");
+
+            Session session = jdbcSessionRepository.findById(sessionId)
+                .orElseThrow(() -> new IllegalArgumentException("강의를 찾을 수 없습니다."));
+
             Payment payment = new Payment(
                 rs.getLong("payment_id"),
                 rs.getLong("session_id"),
@@ -43,9 +52,10 @@ public class JdbcEnrollmentRepository implements EnrollmentRepository {
                 rs.getLong("amount"),
                 rs.getObject("created_at", LocalDateTime.class)
             );
+
             return new Enrollment(
                 rs.getLong("id"),
-                rs.getLong("session_id"),
+                session,
                 rs.getLong("user_id"),
                 rs.getTimestamp("enrollment_date").toLocalDateTime(),
                 payment,
@@ -66,6 +76,9 @@ public class JdbcEnrollmentRepository implements EnrollmentRepository {
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
+        Session session = jdbcSessionRepository.findById(enrollment.getSessionId())
+            .orElseThrow(() -> new IllegalArgumentException("강의를 찾을 수 없습니다."));
+
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, new String[] {"id"});
             ps.setLong(1, enrollment.getSessionId());
@@ -81,7 +94,7 @@ public class JdbcEnrollmentRepository implements EnrollmentRepository {
 
         return new Enrollment(
             generatedId,
-            enrollment.getSessionId(),
+            session,
             enrollment.getNsUserId(),
             enrollment.getEnrollmentDate(),
             enrollment.getPayment(),
