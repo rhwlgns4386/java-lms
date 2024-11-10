@@ -8,20 +8,41 @@ import java.util.Set;
 
 public class SessionEnrollment {
 
-    private SessionStatus sessionStatus;
-    private Set<NsUser> enrolledUsers;
+    private final SessionStatus sessionStatus;
+    private final Set<NsUser> enrolledUsers;
 
     private SessionEnrollment(SessionStatus sessionStatus) {
         this.sessionStatus = sessionStatus;
         this.enrolledUsers = new HashSet<>();
     }
 
+    private SessionEnrollment(SessionStatus sessionStatus, Set<NsUser> enrolledUsers) {
+        this.sessionStatus = sessionStatus;
+        this.enrolledUsers = enrolledUsers;
+    }
+
     public static SessionEnrollment of(SessionStatus sessionStatus) {
         return new SessionEnrollment(sessionStatus);
     }
 
+    public static SessionEnrollment of(SessionStatus sessionStatus, Set<NsUser> enrolledUsers) {
+        return new SessionEnrollment(sessionStatus, enrolledUsers);
+    }
+
     public void enrollUser(NsUser user) {
+        validateDuplicateEnrollment(user);
+
         enrolledUsers.add(user);
+    }
+
+    public void validateDuplicateEnrollment(NsUser nsUser) {
+        if (isDuplicateEnrolledUser(nsUser)) {
+            throw new IllegalStateException("중복된 수강신청입니다.");
+        }
+    }
+
+    private boolean isDuplicateEnrolledUser(NsUser nsUser) {
+        return enrolledUsers.contains(nsUser);
     }
 
     public int size() {
@@ -37,10 +58,11 @@ public class SessionEnrollment {
     }
 
     public boolean isNotOpen() {
-        return sessionStatus != SessionStatus.OPEN;
+        return sessionStatus.isNotOpen();
     }
 
-    public boolean contains(NsUser nsUser) {
-        return enrolledUsers.contains(nsUser);
+    public SessionStatus getSessionStatus() {
+        return sessionStatus;
     }
+
 }

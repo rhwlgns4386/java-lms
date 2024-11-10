@@ -4,21 +4,28 @@ import nextstep.courses.domain.cover.CoverImage;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 public abstract class Session {
 
-    protected Long id;
-    protected SessionBody sessionBody;
-    protected SessionEnrollment sessionEnrollment;
+    protected final long id;
+    protected final long courseId;
+    protected final SessionBody sessionBody;
+    protected final SessionEnrollment sessionEnrollment;
 
-    protected Session(Long id, SessionBody sessionBody, SessionEnrollment sessionEnrollment) {
+    protected Session(long id, long courseId, SessionBody sessionBody, SessionEnrollment sessionEnrollment) {
         this.id = id;
+        this.courseId = courseId;
         this.sessionBody = sessionBody;
         this.sessionEnrollment = sessionEnrollment;
     }
 
-    abstract public void enroll(NsUser nsUser, Payment payment);
+    public abstract void enroll(NsUser nsUser, Payment payment);
+
+    public abstract long getFee();
+
+    public abstract int getMaxEnrollments();
 
     public void validateSessionStatus() {
         if (isNotOpen()) {
@@ -26,18 +33,12 @@ public abstract class Session {
         }
     }
 
-    private boolean isNotOpen() {
+    public boolean isNotOpen() {
         return sessionEnrollment.isNotOpen();
     }
 
-    public void validateDuplicateEnrollment(NsUser nsUser) {
-        if (isDuplicateEnrolledUser(nsUser)) {
-            throw new IllegalStateException("중복된 수강신청입니다.");
-        }
-    }
-
-    private boolean isDuplicateEnrolledUser(NsUser nsUser) {
-        return sessionEnrollment.contains(nsUser);
+    public long getId() {
+        return id;
     }
 
     public String getTitle() {
@@ -55,4 +56,41 @@ public abstract class Session {
     public Set<NsUser> getEnrolledUsers() {
         return sessionEnrollment.getEnrolledUsers();
     }
+
+    public LocalDateTime getStartDate() {
+        return sessionBody.getPeriod().getStartDate();
+    }
+
+    public LocalDateTime getEndDate() {
+        return sessionBody.getPeriod().getEndDate();
+    }
+
+    public String getSessionStatus() {
+        return sessionEnrollment.getSessionStatus().name();
+    }
+
+    public long getCourseId() {
+        return courseId;
+    }
+
+    public String getFileName() {
+        return sessionBody.getCoverImage().getFileName();
+    }
+
+    public int getImageSize() {
+        return sessionBody.getCoverImage().getImageSize();
+    }
+
+    public String getImageExtension() {
+        return sessionBody.getCoverImage().getExtension().name();
+    }
+
+    public int getWidth() {
+        return sessionBody.getCoverImage().getWidth();
+    }
+
+    public int getHeight() {
+        return sessionBody.getCoverImage().getHeight();
+    }
+
 }
