@@ -36,7 +36,7 @@ class SessionTest {
     @Test
     @DisplayName("수강신청 시 수강인원이 증가한다.")
     void incrementEnrollStudentCountWhenEnrollTest() {
-        Session session = FixtureSessionFactory.createFreeSession(1L);
+        Session session = getRecruitingFreeSession();
         Enrollment enrollment = Enrollment.free(1L, session, NsUserTest.JAVAJIGI);
 
         session.startRecruitment();
@@ -60,23 +60,20 @@ class SessionTest {
     @Test
     @DisplayName("강의 모집 상태가 모집중일 때 수강신청이 가능하다.")
     void enrollmentAllowedWhenSessionIsRecruiting() {
-        Session session = FixtureSessionFactory.createFreeSession(1L);
+        Session session = getRecruitingFreeSession();
         Enrollment enrollment = Enrollment.free(1L, session, NsUserTest.JAVAJIGI);
-
-        session.startRecruitment(); // 강의 모집 상태 모집중
 
         assertDoesNotThrow(() -> session.enroll(enrollment));
     }
 
     @Test
-    @DisplayName("강의 모집 상태가 모집중이 아닐 때 수강신청시 예외가 발생한다.")
+    @DisplayName("강의 모집 상태가 모집중이 아닐 때 수강신청 생성시 예외가 발생한다.")
     void throwExceptionWhenSessionIsNotRecruiting() {
         Session session = FixtureSessionFactory.createFreeSession(1L);
-        Enrollment enrollment = Enrollment.free(1L, session, NsUserTest.JAVAJIGI);
 
-        assertThatThrownBy(() -> session.enroll(enrollment))
+        assertThatThrownBy(() -> Enrollment.free(1L, session, NsUserTest.JAVAJIGI))
             .isInstanceOf(IllegalStateException.class)
-            .hasMessage("모집중 상태의 강의가 아닙니다.");
+            .hasMessage("모집중인 강의가 아닙니다.");
     }
 
     @Test
@@ -92,4 +89,9 @@ class SessionTest {
         assertThat(session.getCoverImages()).hasSize(3);
     }
 
+    private static Session getRecruitingFreeSession() {
+        Session session = FixtureSessionFactory.createFreeSession(1L);
+        session.startRecruitment();
+        return session;
+    }
 }
