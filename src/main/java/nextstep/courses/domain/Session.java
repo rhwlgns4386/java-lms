@@ -8,11 +8,9 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
-public class Session {
-    //구성이 필요한 관계는 이렇게
+public abstract class Session {
     private SessionInfo sessionInfo;
 
-    //private SessionImage sessionImage;
     private SessionImages sessionImages;
 
     private SessionPrice salePrice;
@@ -21,11 +19,7 @@ public class Session {
 
     private SessionType sessionType;
 
-    public Session() {
-    }
-
     public Session(SessionInfo sessionInfo, SessionImages sessionImages, SessionPrice salePrice, SessionType sessionType) {
-        //null체크랑 각 sessionInfo, sessionImages 에서도 각 요소들 Null체크 괜찮나요?
         if (sessionInfo == null) {
             throw new IllegalArgumentException("강의 정보를 입력해주세요");
         }

@@ -1,5 +1,7 @@
 package nextstep.courses.domain;
 
+import java.util.Objects;
+
 public class SessionPrice {
 
     private final long salePrice;
@@ -24,8 +26,23 @@ public class SessionPrice {
 
     public boolean isLessThanTo(long salePrice) {
         if (salePrice < 0) {
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SessionPrice that = (SessionPrice) o;
+        return salePrice == that.salePrice;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(salePrice);
+    }
+
 }
