@@ -26,18 +26,18 @@ VALUES (2, 2, 'runtime 에 reflect 발동 주체 객체가 뭔지 알 방법이 
         CURRENT_TIMESTAMP(), false);
 
 -- 세션 테이블에 데이터 삽입
-insert into session (title, apply_start_date, apply_end_date, sale_price, state_code, PROGRESS_CODE, creator_id,
+insert into session (title, apply_start_date, apply_end_date, sale_price, state_code, PROGRESS_CODE, creator_id, INSTRUCTOR_ID,
                      session_type, STUDENT_MAX_COUNT)
-values ('제목1유료_비모집_준비중', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '30' DAY, 1000, 30, 10, 'creatorId1', '20', 0),
-       ('제목2유료_비모집_진행중', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '30' DAY, 1000, 30, 20, 'creatorId1', '20', 0),
-       ('제목3유료_모집_준비중', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '30' DAY, 2000, 20, 10, 'creatorId1', '20', 0),
-       ('제목4유료_모집_진행중', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '30' DAY, 2000, 20, 20, 'creatorId1', '20', 0),
-       ('제목5유료_모집_강의종료', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '30' DAY, 2000, 20, 30, 'creatorId1', '20', 0),
-       ('제목6무료_비모집_진행중', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '30' DAY, 0, 30, 20, 'creatorId2', '10', 2),
-       ('제목7무료_비모집_강의종료', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '30' DAY, 0, 20, 30, 'creatorId2', '10', 2),
-       ('제목8무료_모집_준비중', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '30' DAY, 0, 20, 10, 'creatorId2', '10', 2),
-       ('제목9무료_모집_진행중', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '30' DAY, 0, 20, 20, 'creatorId2', '10', 2),
-       ('제목10무료_모집_강의종료', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '30' DAY, 0, 20, 30, 'creatorId2', '10', 2);
+values ('제목1유료_비모집_준비중', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '30' DAY, 1000, 30, 10, 'creatorId1', 1, '20', 0),
+       ('제목2유료_비모집_진행중', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '30' DAY, 1000, 30, 20, 'creatorId1', 1, '20', 0),
+       ('제목3유료_모집_준비중', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '30' DAY, 2000, 20, 10, 'creatorId1', 1, '20', 0),
+       ('제목4유료_모집_진행중', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '30' DAY, 2000, 20, 20, 'creatorId1', 1, '20', 0),
+       ('제목5유료_모집_강의종료', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '30' DAY, 2000, 20, 30, 'creatorId1', 1, '20', 0),
+       ('제목6무료_비모집_진행중', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '30' DAY, 0, 30, 20, 'creatorId2', 1, '10', 2),
+       ('제목7무료_비모집_강의종료', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '30' DAY, 0, 20, 30, 'creatorId2', 1, '10', 2),
+       ('제목8무료_모집_준비중', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '30' DAY, 0, 20, 10, 'creatorId2', 1, '10', 2),
+       ('제목9무료_모집_진행중', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '30' DAY, 0, 20, 20, 'creatorId2', 1, '10', 2),
+       ('제목10무료_모집_강의종료', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '30' DAY, 0, 20, 30, 'creatorId2', 1, '10', 2);
 
 insert into SESSION_ORDER(SESSION_ID, NS_USER_ID, SALE_PRICE, ORD_STAT_CODE, APPR_ID)
 values ( 1, 1, 1000, 10, null), --1번강의 1번유저 대기중
@@ -46,6 +46,10 @@ values ( 1, 1, 1000, 10, null), --1번강의 1번유저 대기중
        ( 2, 3, 1000, 30, 5); --2번강의를 듣는 3번유저를 5번강사가 승인거절함
 ;
 
+insert into INSTRUCTOR(LOGIN_ID, CELL_NO, EMAIL)
+values('instructor1','010-1111-1111','1@naver.com'),
+      ('instructor2','010-2222-2222','2@naver.com'),
+      ('instructor3','010-3333-3333','3@naver.com');
 
 -- 세션 이미지 테이블에 데이터 삽입
 insert into session_image (session_id, file_name, file_size, type, width, height)
@@ -113,8 +117,9 @@ From NS_USER;
 select ORDER_ID, SESSION_ID, NS_USER_ID, SALE_PRICE, ORD_STAT_CODE, APPR_ID
 from SESSION_ORDER;
 
-//insert into SESSION_ORDER(session_id, ns_user_id, sale_price) values (1, 1, 1000);
-
 select *
 from SESSION_IMAGE;
+
+select *
+from INSTRUCTOR;
 
