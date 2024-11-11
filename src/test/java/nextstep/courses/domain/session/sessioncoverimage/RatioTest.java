@@ -1,12 +1,12 @@
-package nextstep.courses.domain.session.sessionCoverImage;
+package nextstep.courses.domain.session.sessioncoverimage;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static nextstep.courses.domain.session.sessionCoverImage.SessionCoverImageTest.createHeight;
-import static nextstep.courses.domain.session.sessionCoverImage.SessionCoverImageTest.createRatio;
-import static nextstep.courses.domain.session.sessionCoverImage.SessionCoverImageTest.createWidth;
+import static nextstep.courses.domain.session.sessioncoverimage.SessionCoverImageTest.createHeight;
+import static nextstep.courses.domain.session.sessioncoverimage.SessionCoverImageTest.createRatio;
+import static nextstep.courses.domain.session.sessioncoverimage.SessionCoverImageTest.createWidth;
 
 class RatioTest {
 

@@ -1,5 +1,6 @@
 package nextstep.users.domain;
 
+import nextstep.courses.domain.session.entity.StudentEntity;
 import nextstep.qna.UnAuthorizedException;
 
 import java.time.LocalDateTime;
@@ -115,6 +116,10 @@ public class NsUser {
 
     public boolean isGuestUser() {
         return false;
+    }
+
+    public StudentEntity from(long sessionId) {
+        return new StudentEntity(id, sessionId);
     }
 
     private static class GuestNsUser extends NsUser {

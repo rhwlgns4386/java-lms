@@ -20,4 +20,12 @@ public enum PayType {
     private boolean isPay() {
         return this == PAY;
     }
+
+    public static boolean isFree(String payType) {
+        return valueOf(payType) == FREE;
+    }
+
+    public static boolean isPay(String payType) {
+        return valueOf(payType) == PAY;
+    }
 }

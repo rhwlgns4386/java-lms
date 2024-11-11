@@ -5,4 +5,5 @@ import nextstep.users.domain.NsUser;
 
 public interface Enrollment {
     void enroll(NsUser student, Payment payment);
+
 }

@@ -1,4 +1,4 @@
-package nextstep.courses.domain.session.sessionCoverImage;
+package nextstep.courses.domain.session.sessioncoverimage;
 
 public class Size {
     private static final long MAX_SIZE = 1 * 1024 * 1024;

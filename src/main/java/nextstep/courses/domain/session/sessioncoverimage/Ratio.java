@@ -1,4 +1,4 @@
-package nextstep.courses.domain.session.sessionCoverImage;
+package nextstep.courses.domain.session.sessioncoverimage;
 
 public class Ratio {
     private static final int WIDTH_RATIO = 3;

@@ -34,4 +34,5 @@ public class PayEnrollment implements Enrollment {
 
         students.enroll(student);
     }
+
 }

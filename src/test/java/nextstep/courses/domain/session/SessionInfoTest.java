@@ -1,13 +1,13 @@
 package nextstep.courses.domain.session;
 
-import nextstep.courses.domain.session.sessionCoverImage.SessionCoverImage;
+import nextstep.courses.domain.session.sessioncoverimage.SessionCoverImage;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static nextstep.courses.domain.session.sessionCoverImage.SessionCoverImageTest.createHeight;
-import static nextstep.courses.domain.session.sessionCoverImage.SessionCoverImageTest.createRatio;
-import static nextstep.courses.domain.session.sessionCoverImage.SessionCoverImageTest.createSize;
-import static nextstep.courses.domain.session.sessionCoverImage.SessionCoverImageTest.createWidth;
+import static nextstep.courses.domain.session.sessioncoverimage.SessionCoverImageTest.createHeight;
+import static nextstep.courses.domain.session.sessioncoverimage.SessionCoverImageTest.createRatio;
+import static nextstep.courses.domain.session.sessioncoverimage.SessionCoverImageTest.createSize;
+import static nextstep.courses.domain.session.sessioncoverimage.SessionCoverImageTest.createWidth;
 
 class SessionInfoTest {
 

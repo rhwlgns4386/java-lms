@@ -1,6 +1,6 @@
 package nextstep.courses.domain.session;
 
-import nextstep.courses.domain.session.sessionCoverImage.SessionCoverImage;
+import nextstep.courses.domain.session.sessioncoverimage.SessionCoverImage;
 
 public class SessionInfo {
     private final String title;

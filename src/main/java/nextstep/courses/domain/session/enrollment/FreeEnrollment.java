@@ -7,12 +7,10 @@ import nextstep.users.domain.NsUser;
 public class FreeEnrollment implements Enrollment {
     private final Status status;
     private final Students students;
-    private final Price price;
 
-    public FreeEnrollment(Status status, Students students, Price price) {
+    public FreeEnrollment(Status status, Students students) {
         this.status = status;
         this.students = students;
-        this.price = price;
     }
 
     @Override
@@ -27,4 +25,5 @@ public class FreeEnrollment implements Enrollment {
 
         students.enroll(student);
     }
+
 }

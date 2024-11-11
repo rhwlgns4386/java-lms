@@ -1,4 +1,4 @@
-package nextstep.courses.domain.session.sessionCoverImage;
+package nextstep.courses.domain.session.sessioncoverimage;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

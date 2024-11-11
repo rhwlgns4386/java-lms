@@ -7,7 +7,7 @@ import nextstep.courses.domain.session.enrollment.Price;
 import nextstep.courses.domain.session.enrollment.PriceTest;
 import nextstep.courses.domain.session.enrollment.Status;
 import nextstep.courses.domain.session.enrollment.Students;
-import nextstep.courses.domain.session.sessionCoverImage.SessionCoverImage;
+import nextstep.courses.domain.session.sessioncoverimage.SessionCoverImage;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
 import nextstep.users.domain.NsUserTest;
@@ -17,10 +17,10 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 
-import static nextstep.courses.domain.session.sessionCoverImage.SessionCoverImageTest.createHeight;
-import static nextstep.courses.domain.session.sessionCoverImage.SessionCoverImageTest.createRatio;
-import static nextstep.courses.domain.session.sessionCoverImage.SessionCoverImageTest.createSize;
-import static nextstep.courses.domain.session.sessionCoverImage.SessionCoverImageTest.createWidth;
+import static nextstep.courses.domain.session.sessioncoverimage.SessionCoverImageTest.createHeight;
+import static nextstep.courses.domain.session.sessioncoverimage.SessionCoverImageTest.createRatio;
+import static nextstep.courses.domain.session.sessioncoverimage.SessionCoverImageTest.createSize;
+import static nextstep.courses.domain.session.sessioncoverimage.SessionCoverImageTest.createWidth;
 
 class SessionTest {
 
@@ -32,7 +32,7 @@ class SessionTest {
 
         Students students = new Students(0);
         Price freePrice = PriceTest.createFreePrice();
-        Enrollment freeEnrollment = new FreeEnrollment(Status.RECRUIT, students, freePrice);
+        Enrollment freeEnrollment = new FreeEnrollment(Status.RECRUIT, students);
 
         SessionPeriod sessionPeriod = new SessionPeriod(LocalDateTime.now(), LocalDateTime.now().plusDays(30L));
 
