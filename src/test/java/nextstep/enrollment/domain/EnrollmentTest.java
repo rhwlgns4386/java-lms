@@ -6,7 +6,10 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import nextstep.payments.domain.Payment;
 import nextstep.session.domain.Session;
+import nextstep.session.domain.fixture.FixtureEnrollmentFactory;
+import nextstep.session.domain.fixture.FixturePaymentFactory;
 import nextstep.session.domain.fixture.FixtureSessionFactory;
 import nextstep.users.domain.NsUserTest;
 
@@ -32,9 +35,34 @@ class EnrollmentTest {
             .hasMessage("수강신청 승인되어 취소할 수 없습니다.");
     }
 
-    private static Session getRecruitingFreeSession() {
+    @Test
+    @DisplayName("모집중인 강의가 아니라면 무료 강의를 생성할 때 예외가 발생한다.")
+    void throwExceptionWhenFreeEnrollmentBySessionIsNotRecruiting() {
+        Session session = FixtureSessionFactory.createFreeSession(1L);
+
+        Assertions.assertThatThrownBy(() -> Enrollment.free(1L, session, NsUserTest.JAVAJIGI))
+            .isInstanceOf(IllegalStateException.class)
+            .hasMessage("모집중인 강의가 아닙니다.");
+    }
+
+    @Test
+    @DisplayName("모집중인 강의가 아니라면 유료 강의를 생성할 때 예외가 발생한다.")
+    void throwExceptionWhenPaidEnrollmentBySessionIsNotRecruiting() {
+        Session session = FixtureSessionFactory.createFreeSession(1L);
+
+        Assertions.assertThatThrownBy(() -> getEnrollmentByPaidSession(session))
+            .isInstanceOf(IllegalStateException.class)
+            .hasMessage("모집중인 강의가 아닙니다.");
+    }
+
+    private Session getRecruitingFreeSession() {
         Session session = FixtureSessionFactory.createFreeSession(1L);
         session.startRecruitment();
         return session;
+    }
+
+    private Enrollment getEnrollmentByPaidSession(Session session) {
+        Payment mockPayment = FixturePaymentFactory.create(1L, 1L, 1L, 5_000L);
+        return FixtureEnrollmentFactory.createEnrollmentByPaidSession(session, mockPayment);
     }
 }
