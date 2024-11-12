@@ -29,8 +29,7 @@ class SessionTest {
 
     @Test
     void 수강신청() {
-        List<Student> students = List.of(new Student(1L, 1L));
-        assertEquals(paidSession.sessionApply(students), new SessionApply(1, SessionRecruitment.RECRUITING, SessionProgressStatus.PROGRESSING, List.of(new Student(1L, 1L))));
+        assertEquals(paidSession.sessionApply(1L, List.of()), new Student(1L, 0L));
     }
 
     @Test

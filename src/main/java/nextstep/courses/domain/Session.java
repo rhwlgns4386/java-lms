@@ -2,6 +2,7 @@ package nextstep.courses.domain;
 
 import nextstep.courses.CannotOpenException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -21,6 +22,8 @@ public class Session {
     private SessionProgressStatus progressStatus;
 
     private SessionRecruitment recruitment;
+
+    private List<Student> students = new ArrayList<>();
 
     public Session(Long courseId, SessionPeriod period, SessionFeeType feeType, SessionAmount amount, int maxPersonnel, SessionProgressStatus progressStatus, SessionRecruitment recruitment) {
         this(null, courseId, period, feeType, amount, maxPersonnel, progressStatus, recruitment);
@@ -70,8 +73,32 @@ public class Session {
         this.progressStatus = SessionProgressStatus.PROGRESSING;
     }
 
-    public SessionApply sessionApply(List<Student> students) {
-        return new SessionApply(maxPersonnel, recruitment, progressStatus, students);
+    public Student sessionApply(Long nsUserId, List<Student> students) {
+        Student student = new Student(nsUserId, id);
+        students = new ArrayList<>(students);
+        validStatus();
+        validMaxPersonnel();
+        validContains(student);
+        students.add(student);
+        return student;
+    }
+
+    private void validContains(Student student) {
+        if (students.contains(student)) {
+            throw new IllegalArgumentException("Student is already in the list.");
+        }
+    }
+
+    private void validMaxPersonnel() {
+        if (students.size() >= maxPersonnel) {
+            throw new IllegalArgumentException("Max personnel exceeded.");
+        }
+    }
+
+    private void validStatus() {
+        if (progressStatus.isClosed() || !recruitment.isRecruiting()) {
+            throw new IllegalArgumentException("Session is not recruiting.");
+        }
     }
 
     public Long getId() {

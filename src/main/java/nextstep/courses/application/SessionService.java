@@ -32,9 +32,7 @@ public class SessionService {
         Session session = sessionRepository.findById(sessionId)
                 .orElseThrow(() -> new IllegalArgumentException("Session not found"));
         List<Student> students = studentRepository.findBySessionId(sessionId);
-        SessionApply sessionApply = session.sessionApply(students);
-        Student student = new Student(nsUserId, sessionId);
-        sessionApply.apply(student);
+        Student student = session.sessionApply(nsUserId, students);
         studentRepository.save(student);
     }
 
