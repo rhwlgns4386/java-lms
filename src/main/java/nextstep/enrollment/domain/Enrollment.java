@@ -62,7 +62,6 @@ public class Enrollment {
     // 관리자가 수강 신청을 승인
     public void approve() {
         approvalStatus = ApprovalStatus.APPROVED;
-        session.enroll(this);
     }
 
     public Long getPaymentAmount() {

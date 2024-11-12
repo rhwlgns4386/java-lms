@@ -2,11 +2,7 @@ package nextstep.session.domain;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
-import nextstep.enrollment.domain.Enrollment;
 
 public class Session {
     private final Long id;
@@ -20,7 +16,6 @@ public class Session {
     private final Long sessionFee;
     private SessionProgressStatus sessionProgressStatus;
     private SessionEnrollmentStatus sessionEnrollmentStatus;
-    private final Set<Enrollment> enrollments = new HashSet<>();
 
     public Session(Long id, Long courseId, String title, LocalDate startAt, LocalDate endAt,
         List<CoverImage> coverImages,
@@ -75,13 +70,6 @@ public class Session {
         sessionEnrollmentStatus = SessionEnrollmentStatus.RECRUITING;
     }
 
-    public void enroll(Enrollment enrollment) {
-        if (!isRecruiting()) {
-            throw new IllegalStateException("모집중 상태의 강의가 아닙니다.");
-        }
-        enrollments.add(enrollment);
-    }
-
     public boolean isFree() {
         return sessionType == SessionType.FREE;
     }
@@ -96,10 +84,6 @@ public class Session {
 
     public SessionProgressStatus getCourseStatus() {
         return sessionProgressStatus;
-    }
-
-    public int getEnrolledUserCount() {
-        return enrollments.size();
     }
 
     public Long getStudentCapacity() {

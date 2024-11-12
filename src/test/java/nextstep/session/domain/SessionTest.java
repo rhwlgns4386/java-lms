@@ -1,7 +1,6 @@
 package nextstep.session.domain;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 
@@ -34,16 +33,6 @@ class SessionTest {
     }
 
     @Test
-    @DisplayName("수강신청 시 수강인원이 증가한다.")
-    void incrementEnrollStudentCountWhenEnrollTest() {
-        Session session = getRecruitingFreeSession();
-        Enrollment enrollment = Enrollment.free(1L, session, NsUserTest.JAVAJIGI);
-        enrollment.approve();
-
-        assertThat(session.getEnrolledUserCount()).isOne();
-    }
-
-    @Test
     @DisplayName("종료된 강의의 모집 상태를 변경할 때 예외가 발생한다.")
     void throwExceptionWhenUpdatingEnrollmentStatusForClosedSession() {
         Session session = FixtureSessionFactory.createFreeSession(1L);
@@ -53,15 +42,6 @@ class SessionTest {
         assertThatThrownBy(() -> session.startRecruitment())
             .isInstanceOf(IllegalStateException.class)
             .hasMessage("종료된 강의는 모집 상태를 변경할 수 없습니다.");
-    }
-
-    @Test
-    @DisplayName("강의 모집 상태가 모집중일 때 수강신청이 가능하다.")
-    void enrollmentAllowedWhenSessionIsRecruiting() {
-        Session session = getRecruitingFreeSession();
-        Enrollment enrollment = Enrollment.free(1L, session, NsUserTest.JAVAJIGI);
-
-        assertDoesNotThrow(() -> session.enroll(enrollment));
     }
 
     @Test

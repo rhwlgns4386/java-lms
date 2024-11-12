@@ -69,6 +69,16 @@ public class JdbcEnrollmentRepository implements EnrollmentRepository {
     }
 
     @Override
+    public int countApprovedEnrollmentsBySessionId(Long sessionId) {
+        String sql =
+            "SELECT COUNT(*) "
+                + "FROM enrollment "
+                + "WHERE session_id = ? "
+                + "AND approval_status = " + ApprovalStatus.APPROVED;
+        return jdbcTemplate.queryForObject(sql, Integer.class, sessionId);
+    }
+
+    @Override
     public Enrollment save(Enrollment enrollment) {
         String sql =
             "INSERT INTO enrollment (session_id, user_id, enrollment_date, payment_id, approval_status, enrollment_status) "
