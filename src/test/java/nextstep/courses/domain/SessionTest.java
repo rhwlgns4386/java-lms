@@ -1,7 +1,6 @@
 package nextstep.courses.domain;
 
 import nextstep.courses.CannotOpenException;
-import nextstep.courses.NotPendingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,39 +16,15 @@ class SessionTest {
     public static final SessionPeriod PERIOD = new SessionPeriod(NOW, NOW.plusDays(1L));
     public static final SessionAmount AMOUNT = new SessionAmount(100_000L);
 
-    private Session pendingSession;
-    private Session approvedSession;
-    private Session rejectedSession;
     private Session paidSession;
     private Session preparingSession;
     private Session closedSession;
 
     @BeforeEach
     void setUp() {
-        pendingSession = Session.paidSession(0L, 0L, PERIOD, AMOUNT, 1, SessionProgressStatus.PREPARING, SessionRecruitment.RECRUITING, SessionApprovalStatus.PENDING);
-        approvedSession = Session.paidSession(0L, 0L, PERIOD, AMOUNT, 1, SessionProgressStatus.PREPARING, SessionRecruitment.RECRUITING, SessionApprovalStatus.APPROVED);
-        rejectedSession = Session.paidSession(0L, 0L, PERIOD, AMOUNT, 1, SessionProgressStatus.PREPARING, SessionRecruitment.RECRUITING, SessionApprovalStatus.REJECTED);
-        preparingSession = Session.paidSession(0L, 0L, PERIOD, AMOUNT, 1, SessionProgressStatus.PREPARING, SessionRecruitment.RECRUITING, SessionApprovalStatus.PENDING);
-        paidSession = Session.paidSession(0L, 0L, PERIOD, AMOUNT, 1, SessionProgressStatus.PROGRESSING, SessionRecruitment.RECRUITING, SessionApprovalStatus.PENDING);
-        closedSession = Session.paidSession(0L, 0L, PERIOD, AMOUNT, 1, SessionProgressStatus.CLOSED, SessionRecruitment.RECRUITING, SessionApprovalStatus.PENDING);
-    }
-
-    @Test
-    void 승인상태_보류_아닐떄_예외발생() {
-        assertThrows(NotPendingException.class, () -> approvedSession.updateApprovalStatus(SessionApprovalStatus.APPROVED));
-        assertThrows(NotPendingException.class, () -> rejectedSession.updateApprovalStatus(SessionApprovalStatus.REJECTED));
-    }
-
-    @Test
-    void 수강_거절() {
-        pendingSession.updateApprovalStatus(SessionApprovalStatus.REJECTED);
-        assertEquals(pendingSession, Session.paidSession(0L, 0L, PERIOD, AMOUNT, 1, SessionProgressStatus.PREPARING, SessionRecruitment.RECRUITING, SessionApprovalStatus.REJECTED));
-    }
-
-    @Test
-    void 수강_승인() {
-        pendingSession.updateApprovalStatus(SessionApprovalStatus.APPROVED);
-        assertEquals(pendingSession, Session.paidSession(0L, 0L, PERIOD, AMOUNT, 1, SessionProgressStatus.PREPARING, SessionRecruitment.RECRUITING, SessionApprovalStatus.PENDING));
+        preparingSession = Session.paidSession(0L, 0L, PERIOD, AMOUNT, 1, SessionProgressStatus.PREPARING, SessionRecruitment.RECRUITING);
+        paidSession = Session.paidSession(0L, 0L, PERIOD, AMOUNT, 1, SessionProgressStatus.PROGRESSING, SessionRecruitment.RECRUITING);
+        closedSession = Session.paidSession(0L, 0L, PERIOD, AMOUNT, 1, SessionProgressStatus.CLOSED, SessionRecruitment.RECRUITING);
     }
 
     @Test
@@ -69,6 +44,6 @@ class SessionTest {
     @Test
     void 세션_생성() {
         Session session = Session.from(new SessionCreate(0L, NOW, NOW.plusDays(1L), 100_000L, 50));
-        assertEquals(session, new Session(0L, PERIOD, SessionFeeType.PAID, AMOUNT, 50, SessionProgressStatus.PREPARING, SessionRecruitment.RECRUITING, SessionApprovalStatus.PENDING));
+        assertEquals(session, new Session(0L, PERIOD, SessionFeeType.PAID, AMOUNT, 50, SessionProgressStatus.PREPARING, SessionRecruitment.RECRUITING));
     }
 }

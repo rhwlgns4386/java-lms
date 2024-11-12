@@ -21,8 +21,7 @@ public class JdbcSessionRepository implements SessionRepository {
             new SessionAmount(rs.getInt("amount")),
             rs.getInt("max_personnel"),
             SessionProgressStatus.valueOf(rs.getString("progress_status")),
-            SessionRecruitment.valueOf(rs.getString("recruitment")),
-            SessionApprovalStatus.valueOf(rs.getString("approval_status")));
+            SessionRecruitment.valueOf(rs.getString("recruitment")));
 
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
@@ -40,24 +39,22 @@ public class JdbcSessionRepository implements SessionRepository {
                 .addValue("amount", session.getAmount().getAmount())
                 .addValue("maxPersonnel", session.getMaxPersonnel())
                 .addValue("progressStatus", session.getProgressStatus().name())
-                .addValue("recruitment", session.getRecruitment().name())
-                .addValue("approvalStatus", session.getApprovalStatus().name());
-
+                .addValue("recruitment", session.getRecruitment().name());
         if (session.getId() == null || session.getId() == 0) {
-            String insertSql = "insert into session (course_id, start_date, end_date, fee_type, amount, max_personnel, progress_status, recruitment, approval_status) values (:courseId, :startDate, :endDate, :feeType, :amount, :maxPersonnel, :progressStatus, :recruitment, :approvalStatus)";
+            String insertSql = "insert into session (course_id, start_date, end_date, fee_type, amount, max_personnel, progress_status, recruitment) values (:courseId, :startDate, :endDate, :feeType, :amount, :maxPersonnel, :progressStatus, :recruitment)";
             KeyHolder keyHolder = new GeneratedKeyHolder();
             namedParameterJdbcTemplate.update(insertSql, params, keyHolder, new String[]{"id"});
             return Objects.requireNonNull(keyHolder.getKey()).longValue();
         }
         params.addValue("id", session.getId());
-        String updateSql = "update session set course_id = :courseId, start_date = :startDate, end_date = :endDate, fee_type = :feeType, amount = :amount, max_personnel = :maxPersonnel, progress_status = :progressStatus, recruitment = :recruitment, approval_status = :approvalStatus where id = :id";
+        String updateSql = "update session set course_id = :courseId, start_date = :startDate, end_date = :endDate, fee_type = :feeType, amount = :amount, max_personnel = :maxPersonnel, progress_status = :progressStatus, recruitment = :recruitment where id = :id";
         namedParameterJdbcTemplate.update(updateSql, params);
         return session.getId();
     }
 
     @Override
     public Optional<Session> findById(Long id) {
-        String sql = "select id, course_id, start_date, end_date, fee_type, amount, max_personnel, progress_status, recruitment, approval_status from session where id = :id";
+        String sql = "select id, course_id, start_date, end_date, fee_type, amount, max_personnel, progress_status, recruitment from session where id = :id";
         MapSqlParameterSource params = new MapSqlParameterSource().addValue("id", id);
         return Optional.ofNullable(namedParameterJdbcTemplate.queryForObject(sql, params, SESSION_ROW_MAPPER));
     }

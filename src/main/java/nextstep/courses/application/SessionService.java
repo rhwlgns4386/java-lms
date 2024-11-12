@@ -38,10 +38,10 @@ public class SessionService {
         studentRepository.save(student);
     }
 
-    public void updateApprovalStatus(Long sessionId, SessionApprovalStatus sessionApprovalStatus) {
-        Session session = sessionRepository.findById(sessionId)
-                .orElseThrow(() -> new IllegalArgumentException("Session not found"));
-        session.updateApprovalStatus(sessionApprovalStatus);
-        sessionRepository.save(session);
+    public void updateApprovalStatus(Long studentId, SessionApprovalStatus sessionApprovalStatus) {
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new IllegalArgumentException("Student not found"));
+        student.updateApprovalStatus(sessionApprovalStatus);
+        studentRepository.save(student);
     }
 }
