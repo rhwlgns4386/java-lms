@@ -1,8 +1,9 @@
 package nextstep.courses.domain;
 
 import nextstep.courses.CannotOpenException;
-import nextstep.users.domain.NsUser;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Session {
@@ -12,34 +13,36 @@ public class Session {
 
     private final SessionPeriod period;
 
-    private final SessionCoverImage coverImage;
-
     private final SessionFeeType feeType;
 
     private final SessionAmount amount;
 
     private final int maxPersonnel;
 
-    private SessionStatus status;
+    private SessionProgressStatus progressStatus;
 
-    public Session(Long courseId, SessionPeriod period, SessionCoverImage coverImage, SessionFeeType feeType, SessionAmount amount, int maxPersonnel, SessionStatus status) {
-        this(null, courseId, period, coverImage, feeType, amount, maxPersonnel, status);
+    private SessionRecruitment recruitment;
+
+    private List<Student> students = new ArrayList<>();
+
+    public Session(Long courseId, SessionPeriod period, SessionFeeType feeType, SessionAmount amount, int maxPersonnel, SessionProgressStatus progressStatus, SessionRecruitment recruitment) {
+        this(null, courseId, period, feeType, amount, maxPersonnel, progressStatus, recruitment);
     }
 
-    public Session(Long id, Long courseId, SessionPeriod period, SessionCoverImage coverImage, SessionFeeType feeType, SessionAmount amount, int maxPersonnel, SessionStatus status) {
+    public Session(Long id, Long courseId, SessionPeriod period, SessionFeeType feeType, SessionAmount amount, int maxPersonnel, SessionProgressStatus progressStatus, SessionRecruitment recruitment) {
         this.id = id;
         this.courseId = courseId;
         this.period = period;
-        this.coverImage = coverImage;
         this.feeType = feeType;
         this.amount = amount;
         this.maxPersonnel = maxPersonnel;
-        this.status = status;
+        this.progressStatus = progressStatus;
+        this.recruitment = recruitment;
     }
 
-    public static Session paidSession(Long id, Long courseId, SessionPeriod period, SessionCoverImage coverImage, SessionAmount amount, int maxPersonnel, SessionStatus status) {
+    public static Session paidSession(Long id, Long courseId, SessionPeriod period, SessionAmount amount, int maxPersonnel, SessionProgressStatus status, SessionRecruitment recruitment) {
         validPaidSessionAmount(amount);
-        return new Session(id, courseId, period, coverImage, SessionFeeType.PAID, amount, maxPersonnel, status);
+        return new Session(id, courseId, period, SessionFeeType.PAID, amount, maxPersonnel, status, recruitment);
     }
 
     private static void validPaidSessionAmount(SessionAmount amount) {
@@ -48,49 +51,52 @@ public class Session {
         }
     }
 
-    public static Session freeSession(Long id, Long courseId, SessionPeriod period, SessionCoverImage coverImage, SessionStatus status) {
-        return new Session(id, courseId, period, coverImage, SessionFeeType.FREE, new SessionAmount(0L), 0, status);
+    public static Session freeSession(Long id, Long courseId, SessionPeriod period, SessionProgressStatus status, SessionRecruitment recruitment) {
+        return new Session(id, courseId, period, SessionFeeType.FREE, new SessionAmount(0L), 0, status, recruitment);
     }
 
     public static Session from(SessionCreate sessionCreate) {
         return new Session(
                 sessionCreate.getCourseId(),
                 new SessionPeriod(sessionCreate.getStartDate(), sessionCreate.getEndDate()),
-                new SessionCoverImage(sessionCreate.getFileSize(), sessionCreate.getFileType(), sessionCreate.getWidth(), sessionCreate.getHeight()),
                 sessionCreate.getAmount() == 0L ? SessionFeeType.FREE : SessionFeeType.PAID,
                 new SessionAmount(sessionCreate.getAmount()),
                 sessionCreate.getMaxPersonnel(),
-                SessionStatus.PREPARING);
+                SessionProgressStatus.PREPARING,
+                SessionRecruitment.NOT_RECRUITING);
     }
 
     public void open() {
-        if (!SessionStatus.PREPARING.equals(this.status)) {
-            throw new CannotOpenException("It cannot be opened." + this.status);
+        if (!progressStatus.isPreparing()) {
+            throw new CannotOpenException("It cannot be opened." + this.progressStatus);
         }
-        this.status = SessionStatus.RECRUITING;
+        this.progressStatus = SessionProgressStatus.PROGRESSING;
     }
 
-    public Student apply(NsUser nsUser, SessionApply addInfo) {
+    public Student sessionApply(Long nsUserId, List<Student> students) {
+        Student student = new Student(nsUserId, id);
+        students = new ArrayList<>(students);
         validStatus();
-        validAmount(addInfo.getAmount());
-        validMaxPersonnel(addInfo.getCountPersonnel());
-        return new Student(nsUser.getId(), this.id);
+        validMaxPersonnel();
+        validContains(student);
+        students.add(student);
+        return student;
     }
 
-    private void validMaxPersonnel(int countPersonnel) {
-        if (feeType.isPaid() && countPersonnel >= maxPersonnel) {
+    private void validContains(Student student) {
+        if (students.contains(student)) {
+            throw new IllegalArgumentException("Student is already in the list.");
+        }
+    }
+
+    private void validMaxPersonnel() {
+        if (students.size() >= maxPersonnel) {
             throw new IllegalArgumentException("Max personnel exceeded.");
         }
     }
 
-    private void validAmount(SessionAmount amount) {
-        if (!Objects.equals(amount, this.amount)) {
-            throw new IllegalArgumentException("Payment amount does not match.");
-        }
-    }
-
     private void validStatus() {
-        if (!status.isRecruiting()) {
+        if (progressStatus.isClosed() || !recruitment.isRecruiting()) {
             throw new IllegalArgumentException("Session is not recruiting.");
         }
     }
@@ -107,10 +113,6 @@ public class Session {
         return period;
     }
 
-    public SessionCoverImage getCoverImage() {
-        return coverImage;
-    }
-
     public SessionFeeType getFeeType() {
         return feeType;
     }
@@ -123,8 +125,12 @@ public class Session {
         return maxPersonnel;
     }
 
-    public SessionStatus getStatus() {
-        return status;
+    public SessionProgressStatus getProgressStatus() {
+        return progressStatus;
+    }
+
+    public SessionRecruitment getRecruitment() {
+        return recruitment;
     }
 
     @Override
@@ -136,6 +142,6 @@ public class Session {
             return false;
         }
         Session session = (Session) o;
-        return maxPersonnel == session.maxPersonnel && Objects.equals(id, session.id) && Objects.equals(courseId, session.courseId) && Objects.equals(period, session.period) && Objects.equals(coverImage, session.coverImage) && feeType == session.feeType && Objects.equals(amount, session.amount) && status == session.status;
+        return maxPersonnel == session.maxPersonnel && Objects.equals(id, session.id) && Objects.equals(courseId, session.courseId) && Objects.equals(period, session.period) && feeType == session.feeType && Objects.equals(amount, session.amount) && progressStatus == session.progressStatus;
     }
 }
