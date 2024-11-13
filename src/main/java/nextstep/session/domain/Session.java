@@ -1,10 +1,8 @@
 package nextstep.session.domain;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
-
-import nextstep.enrollment.domain.Enrollment;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Session {
     private final Long id;
@@ -12,76 +10,80 @@ public class Session {
     private final String title;
     private final LocalDate startAt;
     private final LocalDate endAt;
-    private final CoverImage image;
+    private List<CoverImage> coverImages = new ArrayList<>();
     private final SessionType sessionType;
     private final Long studentCapacity;
     private final Long sessionFee;
-    private SessionStatus sessionStatus;
-    private final Set<Enrollment> enrollments = new HashSet<>();
+    private SessionProgressStatus sessionProgressStatus;
+    private SessionEnrollmentStatus sessionEnrollmentStatus;
 
-    public Session(Long id, Long courseId, String title, LocalDate startAt, LocalDate endAt, CoverImage image,
-        SessionType sessionType, Long studentCapacity, Long sessionFee, SessionStatus sessionStatus) {
+    public Session(Long id, Long courseId, String title, LocalDate startAt, LocalDate endAt,
+        List<CoverImage> coverImages,
+        SessionType sessionType, Long studentCapacity, Long sessionFee, SessionProgressStatus sessionProgressStatus,
+        SessionEnrollmentStatus sessionEnrollmentStatus) {
         this.id = id;
         this.courseId = courseId;
         this.title = title;
         this.startAt = startAt;
         this.endAt = endAt;
-        this.image = image;
+        this.coverImages = coverImages;
         this.sessionType = sessionType;
         this.studentCapacity = studentCapacity;
         this.sessionFee = sessionFee;
-        this.sessionStatus = sessionStatus;
+        this.sessionProgressStatus = sessionProgressStatus;
+        this.sessionEnrollmentStatus = sessionEnrollmentStatus;
     }
 
-    private Session(Long id, Long courseId, String title, LocalDate startAt, LocalDate endAt, CoverImage image,
+    private Session(Long id, Long courseId, String title, LocalDate startAt, LocalDate endAt,
+        List<CoverImage> coverImages,
         SessionType sessionType, Long studentCapacity, Long sessionFee) {
-        this(id, courseId, title, startAt, endAt, image, sessionType, studentCapacity, sessionFee,
-            SessionStatus.PENDING);
+        this(id, courseId, title, startAt, endAt, coverImages, sessionType, studentCapacity, sessionFee,
+            SessionProgressStatus.PREPARING, SessionEnrollmentStatus.NOT_RECRUITING);
     }
 
     public static Session createFreeSession(Long sessionId, String title, LocalDate startAt, LocalDate endAt,
-        CoverImage image) {
-        return new Session(1L, sessionId, title, startAt, endAt, image, SessionType.FREE, null, null);
+        List<CoverImage> coverImages) {
+        return new Session(1L, sessionId, title, startAt, endAt, coverImages, SessionType.FREE, null, null);
     }
 
     public static Session createPaidSession(Long sessionId, String title, LocalDate startAt, LocalDate endAt,
-        CoverImage image, Long studentCapacity, Long sessionFee) {
-        return new Session(1L, sessionId, title, startAt, endAt, image, SessionType.PAID, studentCapacity, sessionFee);
+        List<CoverImage> coverImages, Long studentCapacity, Long sessionFee) {
+        return new Session(1L, sessionId, title, startAt, endAt, coverImages, SessionType.PAID, studentCapacity,
+            sessionFee);
     }
 
-    public void open() {
-        sessionStatus = SessionStatus.OPEN;
+    // 강의 진행 상태를 진행중으로 바꾸는 메서드
+    public void startSession() {
+        sessionProgressStatus = SessionProgressStatus.IN_PROGRESS;
     }
 
-    public void enroll(Enrollment enrollment) {
-        validateRegister();
-        enrollments.add(enrollment);
+    // 강의 진행 상태를 종료로 바꾸는 메서드
+    public void completeSession() {
+        sessionProgressStatus = SessionProgressStatus.COMPLETED;
     }
 
-    private void validateRegister() {
-        if (sessionStatus != SessionStatus.OPEN) {
-            throw new IllegalArgumentException("모집중 상태의 강의가 아닙니다.");
+    // 강의 모집 상태를 모집중으로 바꾸는 메서드
+    public void startRecruitment() {
+        if (sessionProgressStatus == SessionProgressStatus.COMPLETED) {
+            throw new IllegalStateException("종료된 강의는 모집 상태를 변경할 수 없습니다.");
         }
+        sessionEnrollmentStatus = SessionEnrollmentStatus.RECRUITING;
     }
 
     public boolean isFree() {
         return sessionType == SessionType.FREE;
     }
 
-    public boolean isPaid() {
-        return sessionType == SessionType.PAID;
+    public boolean isRecruiting() {
+        return sessionEnrollmentStatus == SessionEnrollmentStatus.RECRUITING;
     }
 
     public Long getId() {
         return id;
     }
 
-    public SessionStatus getCourseStatus() {
-        return sessionStatus;
-    }
-
-    public int getEnrolledUserCount() {
-        return enrollments.size();
+    public SessionProgressStatus getCourseStatus() {
+        return sessionProgressStatus;
     }
 
     public Long getStudentCapacity() {
@@ -94,5 +96,9 @@ public class Session {
 
     public SessionType getSessionType() {
         return sessionType;
+    }
+
+    public List<CoverImage> getCoverImages() {
+        return coverImages;
     }
 }

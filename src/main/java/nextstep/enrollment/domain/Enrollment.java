@@ -4,37 +4,64 @@ import java.time.LocalDateTime;
 
 import nextstep.payments.domain.Payment;
 import nextstep.session.domain.Session;
+import nextstep.session.domain.SessionType;
 import nextstep.users.domain.NsUser;
 
 public class Enrollment {
     private final Long id;
     private final Session session;
-    private final NsUser nsUser;
+    private final Long nsUserId;
     private final LocalDateTime enrollmentDate;
     private final Payment payment;
+    private ApprovalStatus approvalStatus;
+    private EnrollmentStatus enrollmentStatus;
 
-    private Enrollment(Long id, Session session, NsUser nsUser, Payment payment) {
+    public Enrollment(Long id, Session session, Long nsUserId, LocalDateTime enrollmentDate, Payment payment,
+        ApprovalStatus approvalStatus, EnrollmentStatus enrollmentStatus) {
         this.id = id;
         this.session = session;
-        this.nsUser = nsUser;
-        this.enrollmentDate = LocalDateTime.now();
-        this.payment = payment;
-    }
-
-    public Enrollment(Long id, Session session, NsUser nsUser, LocalDateTime enrollmentDate, Payment payment) {
-        this.id = id;
-        this.session = session;
-        this.nsUser = nsUser;
+        this.nsUserId = nsUserId;
         this.enrollmentDate = enrollmentDate;
         this.payment = payment;
+        this.approvalStatus = approvalStatus;
+        this.enrollmentStatus = enrollmentStatus;
+    }
+
+    private Enrollment(Long id, Session session, Long nsUserId, Payment payment) {
+        this.id = id;
+        this.session = session;
+        this.nsUserId = nsUserId;
+        this.enrollmentDate = LocalDateTime.now();
+        this.payment = payment;
+        this.approvalStatus = ApprovalStatus.NOT_APPROVED;
+        this.enrollmentStatus = EnrollmentStatus.ACTIVE;
     }
 
     public static Enrollment free(Long id, Session session, NsUser nsUser) {
-        return new Enrollment(id, session, nsUser, null);
+        if (!session.isRecruiting()) {
+            throw new IllegalStateException("모집중인 강의가 아닙니다.");
+        }
+        return new Enrollment(id, session, nsUser.getId(), null);
     }
 
     public static Enrollment paid(Long id, Session session, NsUser nsUser, Payment payment) {
-        return new Enrollment(id, session, nsUser, payment);
+        if (!session.isRecruiting()) {
+            throw new IllegalStateException("모집중인 강의가 아닙니다.");
+        }
+        return new Enrollment(id, session, nsUser.getId(), payment);
+    }
+
+    // 수강생이 강의를 직접 취소
+    public void cancel() {
+        if (approvalStatus == ApprovalStatus.APPROVED) {
+            throw new IllegalStateException("수강신청 승인되어 취소할 수 없습니다.");
+        }
+        enrollmentStatus = EnrollmentStatus.CANCELLED;
+    }
+
+    // 관리자가 수강 신청을 승인
+    public void approve() {
+        approvalStatus = ApprovalStatus.APPROVED;
     }
 
     public Long getPaymentAmount() {
@@ -49,16 +76,16 @@ public class Enrollment {
         return session;
     }
 
-    public NsUser getNsUser() {
-        return nsUser;
-    }
-
     public Long getSessionId() {
         return session.getId();
     }
 
+    public SessionType getSessionType() {
+        return session.getSessionType();
+    }
+
     public Long getNsUserId() {
-        return nsUser.getId();
+        return nsUserId;
     }
 
     public LocalDateTime getEnrollmentDate() {
@@ -67,5 +94,13 @@ public class Enrollment {
 
     public Payment getPayment() {
         return payment;
+    }
+
+    public ApprovalStatus getApprovalStatus() {
+        return approvalStatus;
+    }
+
+    public EnrollmentStatus getEnrollmentStatus() {
+        return enrollmentStatus;
     }
 }
