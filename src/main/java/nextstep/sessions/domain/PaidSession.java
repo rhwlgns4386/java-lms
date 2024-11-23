@@ -3,7 +3,7 @@ package nextstep.sessions.domain;
 import nextstep.courses.domain.Course;
 import nextstep.payments.domain.Payment;
 import nextstep.sessions.CannotRegisterException;
-import nextstep.users.domain.NsStudent;
+import nextstep.studentsessions.domain.StudentSession;
 import nextstep.users.domain.NsUser;
 
 import java.time.LocalDate;
@@ -13,16 +13,19 @@ import java.util.List;
 public class PaidSession extends Session {
     protected Integer maxStudent;
 
-    public PaidSession(Long id, Course course, List<NsStudent> students, String title, Integer fee, Image coverImage, Integer maxStudent, SessionStatus sessionStatus, LocalDate startDate, LocalDate endDate, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        super(id, course, students, title, coverImage, SessionFeeStatus.PAID, fee, sessionStatus, startDate, endDate, createdAt, updatedAt);
+    public PaidSession(Long id, Course course, List<StudentSession> studentSessions, String title, Integer fee, List<Image> coverImages,
+                       Integer maxStudent, SessionProgressStatus sessionStatus, SessionRecruitmentStatus sessionRecruitmentStatus,
+                       LocalDate startDate, LocalDate endDate, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        super(id, course, studentSessions, title, coverImages, SessionFeeStatus.PAID, fee, sessionStatus, sessionRecruitmentStatus,
+                startDate, endDate, createdAt, updatedAt);
         this.maxStudent = maxStudent;
     }
 
     public void registerSession(NsUser loginUser, Payment payment, LocalDateTime createdAt) {
-        this.validateUser(loginUser, payment.getNsUserId());
-        this.validatePaidSession(payment);
+        validateUser(loginUser, payment.getNsUserId());
+        validatePaidSession(payment);
 
-        this.registerSession(loginUser, createdAt);
+        registerSession(loginUser, createdAt);
     }
 
     private void validateUser(NsUser loginUser, Long paidUserId) {
@@ -32,12 +35,12 @@ public class PaidSession extends Session {
     }
 
     private void validatePaidSession(Payment payment) {
-        this.validateSessionFull();
+        validateSessionFull();
         payment.validateSessionFee(this.fee);
     }
 
     private void validateSessionFull() {
-        if (this.maxStudent == this.students.size()) {
+        if (this.maxStudent <= this.studentSessions.size()) {
             throw new CannotRegisterException("유료 강의는 강의 최대 수강 인원을 초과할 수 없습니다.");
         }
     }

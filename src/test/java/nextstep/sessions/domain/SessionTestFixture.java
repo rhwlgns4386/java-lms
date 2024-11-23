@@ -1,6 +1,8 @@
 package nextstep.sessions.domain;
 
 import nextstep.courses.domain.Course;
+import nextstep.studentsessions.domain.StudentSession;
+import nextstep.users.NsUserTestFixture;
 import nextstep.users.domain.NsStudent;
 
 import java.time.LocalDate;
@@ -11,14 +13,16 @@ import java.util.List;
 public abstract class SessionTestFixture<T extends SessionTestFixture<T>> {
     protected Long id = 0L;
     protected Course course = new Course();
-    protected SessionFeeStatus feeStatus = SessionFeeStatus.FREE;
     protected String title = "TEST_SESSION_TITLE";
-    protected Image coverImage = new Image();
+    protected List<Image> coverImages = new ArrayList<>();
     protected LocalDate startDate = LocalDate.now();
     protected LocalDate endDate = LocalDate.now().plusDays(40);
-    protected SessionStatus sessionStatus = SessionStatus.RECRUITING;
-    protected List<NsStudent> students = new ArrayList<>();
+    protected SessionProgressStatus sessionStatus = SessionProgressStatus.ONGOING;
+    protected SessionRecruitmentStatus sessionRecruitmentStatus = SessionRecruitmentStatus.OPEN;
     protected LocalDateTime createdAt = LocalDateTime.now();
+    protected List<StudentSession> studentSessions = new ArrayList<>() {{
+        add(new StudentSession(null, new NsStudent(new NsUserTestFixture().createdAt(LocalDateTime.now()).build(), LocalDateTime.now()), LocalDateTime.now()));
+    }};
     protected LocalDateTime updatedAt = LocalDateTime.now().plusHours(1);
 
     public static Paid paidSessionBuilder() {
@@ -44,13 +48,13 @@ public abstract class SessionTestFixture<T extends SessionTestFixture<T>> {
         return (T) this;
     }
 
-    public T coverImage(Image coverImage) {
-        this.coverImage = coverImage;
+    public T coverImages(List<Image> coverImages) {
+        this.coverImages = coverImages;
         return (T) this;
     }
 
-    public T students(List<NsStudent> students) {
-        this.students = students;
+    public T studentSessions(StudentSession studentSession) {
+        this.studentSessions.add(studentSession);
         return (T) this;
     }
 
@@ -64,8 +68,13 @@ public abstract class SessionTestFixture<T extends SessionTestFixture<T>> {
         return (T) this;
     }
 
-    public T sessionStatus(SessionStatus sessionStatus) {
+    public T sessionStatus(SessionProgressStatus sessionStatus) {
         this.sessionStatus = sessionStatus;
+        return (T) this;
+    }
+
+    public T sessionRecruitmentStatus(SessionRecruitmentStatus sessionRecruitmentStatus) {
+        this.sessionRecruitmentStatus = sessionRecruitmentStatus;
         return (T) this;
     }
 
@@ -81,8 +90,8 @@ public abstract class SessionTestFixture<T extends SessionTestFixture<T>> {
 
     public static class Free extends SessionTestFixture<Free> {
         public FreeSession build() {
-            return new FreeSession(this.id, this.course, this.students, this.title, this.coverImage, this.sessionStatus,
-                    this.startDate, this.endDate, this.createdAt, this.updatedAt);
+            return new FreeSession(this.id, this.course, this.studentSessions, this.title, this.coverImages,
+                    this.sessionStatus, this.sessionRecruitmentStatus, this.startDate, this.endDate, this.createdAt, this.updatedAt);
         }
     }
 
@@ -102,8 +111,8 @@ public abstract class SessionTestFixture<T extends SessionTestFixture<T>> {
         }
 
         public PaidSession build() {
-            return new PaidSession(id, course, students, title, fee, coverImage, maxStudent, sessionStatus,
-                    startDate, endDate, createdAt, null);
+            return new PaidSession(id, course, studentSessions, title, fee, coverImages, maxStudent, sessionStatus,
+                    sessionRecruitmentStatus, startDate, endDate, createdAt, null);
         }
     }
 }

@@ -16,16 +16,14 @@ public class Image extends BaseEntity {
     private int widthInPixels;
     private int heightInPixels;
 
-    public Image() {
-    }
     public Image(int sizeInKB, String type, int widthInPixels, int heightInPixels, LocalDateTime createdAt) {
-        this(0L, sizeInKB, type, widthInPixels, heightInPixels, createdAt);
+        this(0L, sizeInKB, type, widthInPixels, heightInPixels, createdAt, null);
     }
 
-    public Image(Long id, int sizeInKB, String type, int widthInPixels, int heightInPixels, LocalDateTime createdAt) {
-        super(id, createdAt);
-        this.validateImageSize(sizeInKB);
-        this.validateWidthHeight(widthInPixels, heightInPixels);
+    public Image(Long id, int sizeInKB, String type, int widthInPixels, int heightInPixels, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        super(id, createdAt, updatedAt);
+        validateImageSize(sizeInKB);
+        validateWidthHeight(widthInPixels, heightInPixels);
         this.type = ImageType.of(type);
         this.sizeInKB = sizeInKB;
         this.widthInPixels = widthInPixels;
@@ -42,7 +40,7 @@ public class Image extends BaseEntity {
         if (isNonAllowedPixels(widthInPixels, heightInPixels)) {
             throw new IllegalArgumentException(String.format("width와 height는 200 픽셀 이상이어야 합니다.(width: %dpx, height: %dpx)", widthInPixels, heightInPixels));
         }
-        if (this.isNonAllowedRatio(widthInPixels, heightInPixels)) {
+        if (isNonAllowedRatio(widthInPixels, heightInPixels)) {
             throw new IllegalArgumentException(String.format("width와 height의 비율은 3:2여야 합니다.(width: %dpx, height: %dpx)", widthInPixels, heightInPixels));
         }
     }
