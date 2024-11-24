@@ -21,7 +21,7 @@ class FreeEnrollmentTest {
     @Test
     @DisplayName("무료 강의인 경우 최대 수강 인원과 상관없이 수강신청이 정상적으로 진행되어야 한다")
     void enroll_정상케이스() {
-        Enrollment enrollment = new FreeEnrollment(Status.RECRUIT, students);
+        Enrollment enrollment = new FreeEnrollment(Status.PROGRESS, EnrollmentStatus.POSSIBLE, students);
 
         enrollment.enroll(NsUserTest.JAVAJIGI, payment1);
 
@@ -29,9 +29,19 @@ class FreeEnrollmentTest {
     }
 
     @Test
-    @DisplayName("현재 모집중인 강의가 아니라면 수강신청이 불가능하다")
+    @DisplayName("현재 진행중인 강의가 아니라면 수강신청이 불가능하다")
+    void enroll_실패케이스_현재_진행중인_강의가_아닌_경우() {
+        Enrollment enrollment = new FreeEnrollment(Status.PREPARE, EnrollmentStatus.IMPOSSIBLE, students);
+
+        Assertions.assertThatThrownBy(() -> {
+            enrollment.enroll(NsUserTest.JAVAJIGI, payment1);
+        }).isInstanceOf(CannotApplyException.class);
+    }
+
+    @Test
+    @DisplayName("현재 진행중인 강의이나, 모집중이 아니라면 수강신청이 불가능하다")
     void enroll_실패케이스_현재_모집중인_강의가_아닌_경우() {
-        Enrollment enrollment = new FreeEnrollment(Status.PREPARE, students);
+        Enrollment enrollment = new FreeEnrollment(Status.PROGRESS, EnrollmentStatus.IMPOSSIBLE, students);
 
         Assertions.assertThatThrownBy(() -> {
             enrollment.enroll(NsUserTest.JAVAJIGI, payment1);
@@ -41,7 +51,7 @@ class FreeEnrollmentTest {
     @Test
     @DisplayName("이미 등록된 학생인 경우 수강신청이 불가능하다")
     void enroll_실패케이스_이미_등록된_학생인_경우() {
-        Enrollment enrollment = new FreeEnrollment(Status.RECRUIT, students);
+        Enrollment enrollment = new FreeEnrollment(Status.PROGRESS, EnrollmentStatus.POSSIBLE, students);
         enrollment.enroll(NsUserTest.JAVAJIGI, payment1);
 
         Payment payment2 = new Payment("2", 2L, 1L, 0L);

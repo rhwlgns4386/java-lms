@@ -2,9 +2,8 @@ package nextstep.courses.domain.session;
 
 import nextstep.courses.CannotApplyException;
 import nextstep.courses.domain.session.enrollment.Enrollment;
+import nextstep.courses.domain.session.enrollment.EnrollmentStatus;
 import nextstep.courses.domain.session.enrollment.FreeEnrollment;
-import nextstep.courses.domain.session.enrollment.Price;
-import nextstep.courses.domain.session.enrollment.PriceTest;
 import nextstep.courses.domain.session.enrollment.Status;
 import nextstep.courses.domain.session.enrollment.Students;
 import nextstep.courses.domain.session.sessioncoverimage.SessionCoverImage;
@@ -16,6 +15,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static nextstep.courses.domain.session.sessioncoverimage.SessionCoverImageTest.createHeight;
 import static nextstep.courses.domain.session.sessioncoverimage.SessionCoverImageTest.createRatio;
@@ -28,11 +28,10 @@ class SessionTest {
         SessionCoverImage sessionCoverImage = new SessionCoverImage("jpg",
                                                                     createRatio(createWidth(300), createHeight(200)),
                                                                     createSize(1_048_575L));
-        SessionInfo sessionInfo = new SessionInfo("강의1", sessionCoverImage, 1L);
+        SessionInfo sessionInfo = new SessionInfo("강의1", List.of(sessionCoverImage), 1L);
 
         Students students = new Students(0);
-        Price freePrice = PriceTest.createFreePrice();
-        Enrollment freeEnrollment = new FreeEnrollment(Status.RECRUIT, students);
+        Enrollment freeEnrollment = new FreeEnrollment(Status.PROGRESS, EnrollmentStatus.POSSIBLE, students);
 
         SessionPeriod sessionPeriod = new SessionPeriod(LocalDateTime.now(), LocalDateTime.now().plusDays(30L));
 

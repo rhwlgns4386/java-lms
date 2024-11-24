@@ -27,16 +27,26 @@ class PayEnrollmentTest {
 
     @Test
     void enroll_정상케이스() {
-        Enrollment enrollment = new PayEnrollment(Status.RECRUIT, students, payPrice);
+        Enrollment enrollment = new PayEnrollment(Status.PROGRESS, EnrollmentStatus.POSSIBLE, students, payPrice);
         enrollment.enroll(NsUserTest.JAVAJIGI, payment1);
 
         Assertions.assertThat(students.countOfStudent()).isEqualTo(1);
     }
 
     @Test
-    @DisplayName("현재 모집중인 강의가 아니라면 수강신청이 불가능하다")
+    @DisplayName("현재 진행중인 강의가 아니라면 수강신청이 불가능하다")
+    void enroll_실패케이스_현재_진행중인_강의가_아닌_경우() {
+        Enrollment enrollment = new PayEnrollment(Status.PREPARE, EnrollmentStatus.IMPOSSIBLE, students, payPrice);
+
+        Assertions.assertThatThrownBy(() -> {
+            enrollment.enroll(NsUserTest.JAVAJIGI, payment1);
+        }).isInstanceOf(CannotApplyException.class);
+    }
+
+    @Test
+    @DisplayName("현재 진행중인 강의이나, 모집중이 아니라면 수강신청이 불가능하다")
     void enroll_실패케이스_현재_모집중인_강의가_아닌_경우() {
-        Enrollment enrollment = new PayEnrollment(Status.PREPARE, students, payPrice);
+        Enrollment enrollment = new PayEnrollment(Status.PROGRESS, EnrollmentStatus.IMPOSSIBLE, students, payPrice);
 
         Assertions.assertThatThrownBy(() -> {
             enrollment.enroll(NsUserTest.JAVAJIGI, payment1);
@@ -46,7 +56,7 @@ class PayEnrollmentTest {
     @Test
     @DisplayName("이미 등록된 학생인 경우 수강신청이 불가능하다")
     void enroll_실패케이스_이미_등록된_학생인_경우() {
-        Enrollment enrollment = new PayEnrollment(Status.RECRUIT, students, payPrice);
+        Enrollment enrollment = new PayEnrollment(Status.PROGRESS, EnrollmentStatus.POSSIBLE, students, payPrice);
         enrollment.enroll(NsUserTest.JAVAJIGI, payment1);
 
         Assertions.assertThatThrownBy(() -> {
@@ -57,7 +67,7 @@ class PayEnrollmentTest {
     @Test
     @DisplayName("강의 정원이 초과된 경우 수강신청이 불가능하다")
     void enroll_실패케이스_정원이_초과된_경우() {
-        Enrollment enrollment = new PayEnrollment(Status.RECRUIT, students, payPrice);
+        Enrollment enrollment = new PayEnrollment(Status.PROGRESS, EnrollmentStatus.POSSIBLE, students, payPrice);
 
         enrollment.enroll(NsUserTest.JAVAJIGI, payment1);
         enrollment.enroll(NsUserTest.SANJIGI, payment2);
@@ -73,7 +83,7 @@ class PayEnrollmentTest {
     @Test
     @DisplayName("결제 금액과 수강료가 일치하지 않는 경우 수강신청이 불가능하다")
     void enroll_결제_금액과_수강료가_일치하지_않는_경우() {
-        Enrollment enrollment = new PayEnrollment(Status.RECRUIT, students, payPrice);
+        Enrollment enrollment = new PayEnrollment(Status.PROGRESS, EnrollmentStatus.POSSIBLE, students, payPrice);
 
         Payment payment = new Payment("1", 1L, 1L, 500_000L);
 

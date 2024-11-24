@@ -4,6 +4,8 @@ import nextstep.courses.domain.session.sessioncoverimage.SessionCoverImage;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static nextstep.courses.domain.session.sessioncoverimage.SessionCoverImageTest.createHeight;
 import static nextstep.courses.domain.session.sessioncoverimage.SessionCoverImageTest.createRatio;
 import static nextstep.courses.domain.session.sessioncoverimage.SessionCoverImageTest.createSize;
@@ -17,7 +19,7 @@ class SessionInfoTest {
                                                                     createRatio(createWidth(300), createHeight(200)),
                                                                     createSize(1_048_575L));
 
-        SessionInfo sessionInfo = new SessionInfo("강의1", sessionCoverImage, 1L);
+        SessionInfo sessionInfo = new SessionInfo("강의1", List.of(sessionCoverImage), 1L);
 
         Assertions.assertThat(sessionInfo).isNotNull();
     }

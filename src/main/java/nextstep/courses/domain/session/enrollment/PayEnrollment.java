@@ -4,21 +4,25 @@ import nextstep.courses.CannotApplyException;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
 
+import java.util.List;
+
 public class PayEnrollment implements Enrollment {
 
     private final Status status;
+    private final EnrollmentStatus enrollmentStatus;
     private final Students students;
     private final Price price;
 
-    public PayEnrollment(Status status, Students students, Price price) {
+    public PayEnrollment(Status status, EnrollmentStatus enrollmentStatus, Students students, Price price) {
         this.status = status;
+        this.enrollmentStatus = enrollmentStatus;
         this.students = students;
         this.price = price;
     }
 
     @Override
     public void enroll(NsUser student, Payment payment) {
-        if (!status.isRecruit()) {
+        if (!status.isProgress() || enrollmentStatus.isImPossible()) {
             throw new CannotApplyException("현재 모집중인 강의가 아닙니다.");
         }
 
@@ -33,6 +37,11 @@ public class PayEnrollment implements Enrollment {
         price.isValid(payment);
 
         students.enroll(student);
+    }
+
+    @Override
+    public void approve(List<Long> userIdList) {
+        students.approve(userIdList);
     }
 
 }

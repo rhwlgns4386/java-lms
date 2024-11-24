@@ -4,6 +4,8 @@ import nextstep.courses.domain.session.enrollment.Enrollment;
 import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
 
+import java.util.List;
+
 public class Session {
     private final SessionInfo sessionInfo;
 
@@ -19,6 +21,10 @@ public class Session {
 
     public void enroll(NsUser student, Payment payment) {
         enrollment.enroll(student, payment);
+    }
+
+    public void approve(List<Long> userIdList) {
+        enrollment.approve(userIdList);
     }
 
 }

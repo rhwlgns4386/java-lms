@@ -1,10 +1,12 @@
 package nextstep.courses.domain.session;
 
+import nextstep.courses.domain.session.enrollment.EnrollmentStatus;
 import nextstep.courses.domain.session.enrollment.PayType;
 import nextstep.courses.domain.session.enrollment.Status;
 import nextstep.courses.domain.session.entity.SessionEntity;
+import nextstep.courses.domain.session.sessioncoverimage.SessionCoverImageRepository;
+import nextstep.courses.infrastructure.JdbcSessionCoverImageRepository;
 import nextstep.courses.infrastructure.JdbcSessionRepository;
-import nextstep.courses.infrastructure.JdbcStudentRepository;
 import nextstep.users.domain.UserRepository;
 import nextstep.users.infrastructure.JdbcUserRepository;
 import org.assertj.core.api.Assertions;
@@ -24,15 +26,15 @@ class SessionRepositoryTest {
 
     private SessionRepository sessionRepository;
 
-    private StudentRepository studentRepository;
+    private SessionCoverImageRepository sessionCoverImageRepository;
 
     private UserRepository userRepository;
 
     @BeforeEach
     void setUp() {
         userRepository = new JdbcUserRepository(jdbcTemplate);
-        studentRepository = new JdbcStudentRepository(jdbcTemplate);
-        sessionRepository = new JdbcSessionRepository(jdbcTemplate, studentRepository, userRepository);
+        sessionCoverImageRepository = new JdbcSessionCoverImageRepository(jdbcTemplate);
+        sessionRepository = new JdbcSessionRepository(jdbcTemplate, sessionCoverImageRepository, userRepository);
     }
 
     @Test
@@ -40,6 +42,7 @@ class SessionRepositoryTest {
         SessionEntity sessionEntity = new SessionEntity("강의3",
                                                         1L,
                                                         Status.CLOSE.name(),
+                                                        EnrollmentStatus.IMPOSSIBLE.name(),
                                                         800_000L,
                                                         PayType.PAY.name(),
                                                         100,

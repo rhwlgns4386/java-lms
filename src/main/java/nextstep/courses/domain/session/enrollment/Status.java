@@ -1,9 +1,9 @@
 package nextstep.courses.domain.session.enrollment;
 
 public enum Status {
-    PREPARE, RECRUIT, CLOSE;
+    PREPARE, PROGRESS, CLOSE;
 
-    public boolean isRecruit() {
-        return this == RECRUIT;
+    public boolean isProgress() {
+        return this == PROGRESS;
     }
 }

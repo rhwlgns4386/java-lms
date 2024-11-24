@@ -4,6 +4,9 @@ import nextstep.users.domain.NsUser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class Students {
     private final int maxStudentCount;
@@ -37,5 +40,19 @@ public class Students {
 
     public boolean alreadyEnrolled(NsUser student) {
         return students.contains(student);
+    }
+
+    public void approve(List<Long> userIdList) {
+        Optional<Long> nonExistStudent = userIdList.stream()
+                                                   .filter(userId -> !students.stream()
+                                                                              .map(NsUser::getId)
+                                                                              .collect(Collectors.toList())
+                                                                              .contains(userId)
+                                                   )
+                                                   .findAny();
+
+        if (nonExistStudent.isPresent()) {
+            throw new NoSuchElementException("[id:" + nonExistStudent.get() + "] 존재하지 않는 수강생입니다.");
+        }
     }
 }

@@ -3,6 +3,7 @@ package nextstep.courses.domain.session.entity;
 import nextstep.courses.domain.session.Session;
 import nextstep.courses.domain.session.SessionInfo;
 import nextstep.courses.domain.session.SessionPeriod;
+import nextstep.courses.domain.session.enrollment.EnrollmentStatus;
 import nextstep.courses.domain.session.enrollment.FreeEnrollment;
 import nextstep.courses.domain.session.enrollment.PayEnrollment;
 import nextstep.courses.domain.session.enrollment.PayType;
@@ -24,6 +25,8 @@ public class SessionEntity {
 
     private final String status;
 
+    private final String enrollmentStatus;
+
     private final long price;
 
     private final String payType;
@@ -38,19 +41,21 @@ public class SessionEntity {
     public SessionEntity(String title,
                          Long creatorId,
                          String status,
+                         String enrollmentStatus,
                          long price,
                          String payType,
                          int maxStudentCount,
                          long coverImageId,
                          LocalDateTime startDateTime,
                          LocalDateTime endDateTime) {
-        this(0L, title, creatorId, status, price, payType, maxStudentCount, coverImageId, startDateTime, endDateTime);
+        this(0L, title, creatorId, status, enrollmentStatus, price, payType, maxStudentCount, coverImageId, startDateTime, endDateTime);
     }
 
     public SessionEntity(Long id,
                          String title,
                          Long creatorId,
                          String status,
+                         String enrollmentStatus,
                          long price,
                          String payType,
                          int maxStudentCount,
@@ -61,6 +66,7 @@ public class SessionEntity {
         this.title = title;
         this.creatorId = creatorId;
         this.status = status;
+        this.enrollmentStatus = enrollmentStatus;
         this.price = price;
         this.payType = payType;
         this.maxStudentCount = maxStudentCount;
@@ -83,6 +89,10 @@ public class SessionEntity {
 
     public String getStatus() {
         return status;
+    }
+
+    public String getEnrollmentStatus() {
+        return enrollmentStatus;
     }
 
     public long getPrice() {
@@ -125,19 +135,22 @@ public class SessionEntity {
             '}';
     }
 
-    public Session toSession(SessionCoverImage sessionCoverImage, List<NsUser> students) {
+    public Session toSession(List<SessionCoverImage> sessionCoverImages, List<NsUser> students) {
         if (PayType.isPay(payType)) {
             return new Session(
-                new SessionInfo(title, sessionCoverImage, creatorId),
+                new SessionInfo(title, sessionCoverImages, creatorId),
                 new PayEnrollment(Status.valueOf(status),
+                                  EnrollmentStatus.valueOf(enrollmentStatus),
                                   new Students(maxStudentCount, students),
                                   new Price(price, PayType.valueOf(payType))),
                 new SessionPeriod(startDateTime, endDateTime));
         }
 
         return new Session(
-            new SessionInfo(title, sessionCoverImage, creatorId),
-            new FreeEnrollment(Status.valueOf(status), new Students(maxStudentCount, students)),
+            new SessionInfo(title, sessionCoverImages, creatorId),
+            new FreeEnrollment(Status.valueOf(status),
+                               EnrollmentStatus.valueOf(enrollmentStatus),
+                               new Students(maxStudentCount, students)),
             new SessionPeriod(startDateTime, endDateTime));
     }
 }

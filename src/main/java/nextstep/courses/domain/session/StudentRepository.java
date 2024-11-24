@@ -10,4 +10,9 @@ public interface StudentRepository {
 
     List<StudentEntity> findBySessionId(long sessionId);
 
+    List<StudentEntity> findByIdAndSessionId(long sessionId, List<Long> userIds);
+
+    int updateApproved(long sessionId, List<Long> userIdList);
+
+    int updateDisapproved(long sessionId, long userId);
 }
