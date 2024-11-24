@@ -1,5 +1,6 @@
 package nextstep.users.domain;
 
+import nextstep.courses.domain.session.EnrollmentStatus;
 import nextstep.qna.exception.UnAuthorizedException;
 
 import java.time.LocalDateTime;
@@ -30,6 +31,16 @@ public class NsUser {
     }
 
     public NsUser(Long id, String userId, String password, String name, String email, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.id = id;
+        this.userId = userId;
+        this.password = password;
+        this.name = name;
+        this.email = email;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
+    public NsUser(Long id, String userId, String password, String name, String email, EnrollmentStatus enrollmentStatus, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.userId = userId;
         this.password = password;

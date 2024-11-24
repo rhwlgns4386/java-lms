@@ -1,11 +1,12 @@
 package nextstep.courses.domain.session;
 
-import nextstep.users.domain.NsUser;
-
 import java.util.Set;
 
 public interface EnrollmentRepository {
-    Set<NsUser> findEnrolledUsersBySessionId(Long sessionId);
+    Set<Student> findEnrolledStudentsBySessionId(long sessionId);
 
-    void save(Long sessionId, NsUser user);
+    void save(long sessionId, Student student);
+
+    void updateEnrollmentStatus(long sessionId, Student student);
+
 }

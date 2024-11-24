@@ -2,9 +2,9 @@ package nextstep.courses.domain.session;
 
 import nextstep.courses.domain.cover.CoverImage;
 import nextstep.payments.domain.Payment;
-import nextstep.users.domain.NsUser;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 public abstract class Session {
@@ -21,20 +21,36 @@ public abstract class Session {
         this.sessionEnrollment = sessionEnrollment;
     }
 
-    public abstract void enroll(NsUser nsUser, Payment payment);
+    public abstract void enroll(Student student, Payment payment);
+
+    public void approve(Student student) {
+        sessionEnrollment.approveStudent(student);
+    }
+
+    public void reject(Student student) {
+        sessionEnrollment.rejectStudent(student);
+    }
 
     public abstract long getFee();
 
     public abstract int getMaxEnrollments();
 
     public void validateSessionStatus() {
-        if (isNotOpen()) {
-            throw new IllegalStateException("모집중인 상태에서만 신청 가능합니다.");
+        if (isInValidSessionStatus()) {
+            throw new IllegalStateException("진행중 또는 모집중인 상태에서만 신청 가능합니다.");
         }
     }
 
-    public boolean isNotOpen() {
-        return sessionEnrollment.isNotOpen();
+    private boolean isInValidSessionStatus() {
+        return isNotInProgress() && isNotRecruiting();
+    }
+
+    private boolean isNotInProgress() {
+        return sessionEnrollment.isNotInProgress();
+    }
+
+    private boolean isNotRecruiting() {
+        return sessionEnrollment.isNotRecruiting();
     }
 
     public long getId() {
@@ -49,12 +65,12 @@ public abstract class Session {
         return sessionBody.getPeriod();
     }
 
-    public CoverImage getCoverImage() {
-        return sessionBody.getCoverImage();
+    public List<CoverImage> getCoverImages() {
+        return sessionBody.getCoverImages();
     }
 
-    public Set<NsUser> getEnrolledUsers() {
-        return sessionEnrollment.getEnrolledUsers();
+    public Set<Student> getEnrolledStudents() {
+        return sessionEnrollment.getEnrolledStudents();
     }
 
     public LocalDateTime getStartDate() {
@@ -65,32 +81,16 @@ public abstract class Session {
         return sessionBody.getPeriod().getEndDate();
     }
 
-    public String getSessionStatus() {
-        return sessionEnrollment.getSessionStatus().name();
+    public String getProgressStatus() {
+        return sessionEnrollment.getProgressStatus().name();
+    }
+
+    public String getRecruitmentStatus() {
+        return sessionEnrollment.getRecruitmentStatus().name();
     }
 
     public long getCourseId() {
         return courseId;
-    }
-
-    public String getFileName() {
-        return sessionBody.getCoverImage().getFileName();
-    }
-
-    public int getImageSize() {
-        return sessionBody.getCoverImage().getImageSize();
-    }
-
-    public String getImageExtension() {
-        return sessionBody.getCoverImage().getExtension().name();
-    }
-
-    public int getWidth() {
-        return sessionBody.getCoverImage().getWidth();
-    }
-
-    public int getHeight() {
-        return sessionBody.getCoverImage().getHeight();
     }
 
 }

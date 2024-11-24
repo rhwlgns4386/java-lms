@@ -1,9 +1,7 @@
 package nextstep.courses.service;
 
-import nextstep.courses.domain.session.EnrollmentRepository;
-import nextstep.courses.domain.session.Session;
-import nextstep.courses.domain.session.SessionRepository;
-import nextstep.payments.service.PaymentService;
+import nextstep.courses.domain.session.*;
+import nextstep.payments.domain.Payment;
 import nextstep.users.domain.NsUser;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,20 +13,44 @@ public class SessionService {
 
     private final EnrollmentRepository enrollmentRepository;
 
-    private final PaymentService paymentService;
 
-    public SessionService(SessionRepository sessionRepository, EnrollmentRepository enrollmentRepository, PaymentService paymentService) {
+    public SessionService(SessionRepository sessionRepository, EnrollmentRepository enrollmentRepository) {
         this.sessionRepository = sessionRepository;
         this.enrollmentRepository = enrollmentRepository;
-        this.paymentService = paymentService;
     }
 
     @Transactional
-    public void enroll(NsUser loginUser, long sessionId) {
-        Session session = sessionRepository.findById(sessionId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 강의입니다."));
+    public void enroll(long nsUserId, long sessionId, Payment payment) {
+        Session session = findSessionById(sessionId);
+        Student student = Student.of(nsUserId, sessionId, EnrollmentStatus.PENDING);
 
-        session.enroll(loginUser, paymentService.payment(loginUser.getUserId()));
-        enrollmentRepository.save(sessionId, loginUser);
+        session.enroll(student, payment);
+
+        enrollmentRepository.save(sessionId, student);
+    }
+
+    @Transactional
+    public void approve(long nsUserId, long sessionId) {
+        Session session = findSessionById(sessionId);
+        Student student = Student.of(nsUserId, sessionId, EnrollmentStatus.PENDING);
+
+        session.approve(student);
+
+        enrollmentRepository.updateEnrollmentStatus(sessionId, student);
+    }
+
+    @Transactional
+    public void reject(long nsUserId, long sessionId) {
+        Session session = findSessionById(sessionId);
+        Student student = Student.of(nsUserId, sessionId, EnrollmentStatus.PENDING);
+
+        session.reject(student);
+
+        enrollmentRepository.updateEnrollmentStatus(sessionId, student);
+    }
+
+    private Session findSessionById(long sessionId) {
+        return sessionRepository.findById(sessionId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 강의입니다."));
     }
 }
