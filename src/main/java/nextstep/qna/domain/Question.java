@@ -8,8 +8,7 @@ import java.time.LocalDateTime;
 
 public class Question extends BaseEntity {
 
-    private String title;
-    private String contents;
+    private QuestionBody questionBody;
     private DeleteRule deleteRule;
     private Answers answers = new Answers();
 
@@ -22,26 +21,25 @@ public class Question extends BaseEntity {
 
     public Question(Long id, NsUser writer, String title, String contents) {
         super(id);
-        this.deleteRule=new DeleteRule(writer,"질문을 삭제할 권한이 없습니다.");
-        this.title = title;
-        this.contents = contents;
+        this.deleteRule = new DeleteRule(writer, "질문을 삭제할 권한이 없습니다.");
+        this.questionBody = new QuestionBody(title, contents);
     }
 
     public String getTitle() {
-        return title;
+        return questionBody.getTitle();
     }
 
     public Question setTitle(String title) {
-        this.title = title;
+        this.questionBody.updateTitle(title);
         return this;
     }
 
     public String getContents() {
-        return contents;
+        return questionBody.getContents();
     }
 
     public Question setContents(String contents) {
-        this.contents = contents;
+        this.questionBody.updateContents(contents);
         return this;
     }
 
@@ -69,7 +67,8 @@ public class Question extends BaseEntity {
 
     @Override
     public String toString() {
-        return "Question [id=" + getId() + ", title=" + title + ", contents=" + contents + ", writer=" + getWriter()
+        return "Question [id=" + getId() + ", title=" + questionBody.getTitle()
+                + ", contents=" + questionBody.getContents() + ", writer=" + getWriter()
                 + "]";
     }
 }
