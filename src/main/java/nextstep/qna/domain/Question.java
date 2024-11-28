@@ -1,9 +1,6 @@
 package nextstep.qna.domain;
 
-import static nextstep.qna.domain.DeleteHistoryFactory.createDeleteHistory;
-
 import java.util.ArrayList;
-import java.util.List;
 import nextstep.qna.CannotDeleteException;
 import nextstep.users.domain.NsUser;
 
@@ -34,18 +31,16 @@ public class Question extends BaseEntity {
         return questionBody.getTitle();
     }
 
-    public Question setTitle(String title) {
-        this.questionBody.updateTitle(title);
-        return this;
+    public void updateTitle(String title) {
+        this.questionBody=this.questionBody.updateTitle(title);
     }
 
     public String getContents() {
         return questionBody.getContents();
     }
 
-    public Question setContents(String contents) {
-        this.questionBody.updateContents(contents);
-        return this;
+    public void updateContents(String contents) {
+        this.questionBody=this.questionBody.updateContents(contents);
     }
 
     public void addAnswer(Answer answer) {
