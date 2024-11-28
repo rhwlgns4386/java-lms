@@ -4,19 +4,16 @@ import nextstep.qna.CannotDeleteException;
 import nextstep.users.domain.NsUser;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
-public class Question {
+public class Question extends UserBaseEntity {
     private Long id;
 
     private String title;
 
     private String contents;
 
-    private NsUser writer;
-
-    private List<Answer> answers = new ArrayList<>();
+    private Answers answers = new Answers();
 
     private boolean deleted = false;
 
@@ -32,8 +29,8 @@ public class Question {
     }
 
     public Question(Long id, NsUser writer, String title, String contents) {
+        super(writer);
         this.id = id;
-        this.writer = writer;
         this.title = title;
         this.contents = contents;
     }
@@ -60,10 +57,6 @@ public class Question {
         return this;
     }
 
-    public NsUser getWriter() {
-        return writer;
-    }
-
     public void addAnswer(Answer answer) {
         answer.toQuestion(this);
         answers.add(answer);
@@ -71,17 +64,14 @@ public class Question {
 
     public void delete(NsUser user) throws CannotDeleteException {
         validOwner(user);
-        setDeleted(true);
+        answers.delete(user);
+
+        this.deleted=true;
     }
 
-    private void validOwner(NsUser user) throws CannotDeleteException {
-        if (!isOwner(user)) {
-            throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
-        }
-    }
-
-    public boolean isOwner(NsUser loginUser) {
-        return writer.equals(loginUser);
+    @Override
+    protected CannotDeleteException createException() {
+        return new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
     }
 
     public Question setDeleted(boolean deleted) {
@@ -94,11 +84,11 @@ public class Question {
     }
 
     public List<Answer> getAnswers() {
-        return answers;
+        return answers.toList();
     }
 
     @Override
     public String toString() {
-        return "Question [id=" + getId() + ", title=" + title + ", contents=" + contents + ", writer=" + writer + "]";
+        return "Question [id=" + getId() + ", title=" + title + ", contents=" + contents + ", writer=" + getWriter() + "]";
     }
 }
