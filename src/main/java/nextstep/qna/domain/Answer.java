@@ -26,8 +26,13 @@ public class Answer extends BaseEntity {
     }
 
     private Answer(Long id, Optional<NsUser> writer, Optional<Question> question, String contents) {
+        this(id, new DeleteRule(writer.orElseThrow(UnAuthorizedException::new), "다른 사람이 쓴 답변이 있어 삭제할 수 없습니다."),
+                question, contents);
+    }
+
+    private Answer(Long id, DeleteRule deleteRule, Optional<Question> question, String contents) {
         super(id);
-        this.deleteRule = new DeleteRule(writer.orElseThrow(UnAuthorizedException::new),"다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
+        this.deleteRule = deleteRule;
         this.question = question.orElseThrow(NotFoundException::new);
         this.contents = contents;
     }

@@ -20,9 +20,13 @@ public class Question extends BaseEntity {
     }
 
     public Question(Long id, NsUser writer, String title, String contents) {
+        this(id,new DeleteRule(writer, "질문을 삭제할 권한이 없습니다."),new QuestionBody(title, contents));
+    }
+
+    private Question(Long id,DeleteRule deleteRule,QuestionBody questionBody){
         super(id);
-        this.deleteRule = new DeleteRule(writer, "질문을 삭제할 권한이 없습니다.");
-        this.questionBody = new QuestionBody(title, contents);
+        this.deleteRule=deleteRule;
+        this.questionBody=questionBody;
     }
 
     public String getTitle() {
