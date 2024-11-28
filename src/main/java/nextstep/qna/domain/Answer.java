@@ -8,24 +8,13 @@ import nextstep.users.domain.NsUser;
 
 import java.time.LocalDateTime;
 
-public class Answer extends UserBaseEntity {
-    private Long id;
+public class Answer extends BaseEntity {
 
+    private DeleteRule deleteRule;
     private Question question;
-
     private String contents;
 
-    private LocalDateTime createdDate = LocalDateTime.now();
-
-    private LocalDateTime updatedDate;
-    private boolean deleted = false;
-
     public Answer() {
-    }
-
-    @Override
-    protected CannotDeleteException createException() {
-        return new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
     }
 
     public Answer(NsUser writer, Question question, String contents) {
@@ -37,19 +26,19 @@ public class Answer extends UserBaseEntity {
     }
 
     private Answer(Long id, Optional<NsUser> writer, Optional<Question> question, String contents) {
-        super(writer.orElseThrow(UnAuthorizedException::new));
-        this.id = id;
+        super(id);
+        this.deleteRule = new DeleteRule(writer.orElseThrow(UnAuthorizedException::new),"다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
         this.question = question.orElseThrow(NotFoundException::new);
         this.contents = contents;
     }
 
-    public void delete(NsUser loginUser) throws CannotDeleteException {
-        validOwner(loginUser);
-        this.deleted = true;
+    public DeleteHistory delete(NsUser loginUser) throws CannotDeleteException {
+        deleteRule.delete(loginUser);
+        return new DeleteHistory(ContentType.ANSWER, getId(), deleteRule.getWriter(), LocalDateTime.now());
     }
 
-    public Long getId() {
-        return id;
+    public NsUser getWriter() {
+        return deleteRule.getWriter();
     }
 
     public String getContents() {
@@ -60,17 +49,13 @@ public class Answer extends UserBaseEntity {
         this.question = question;
     }
 
-    public Answer setDeleted(boolean deleted) {
-        this.deleted = deleted;
-        return this;
-    }
-
     public boolean isDeleted() {
-        return deleted;
+        return deleteRule.isDeleted();
     }
 
     @Override
     public String toString() {
-        return "Answer [id=" + getId() + ", writer=" + getWriter() + ", contents=" + contents + "]";
+        return "Answer [id=" + getId() + ", writer=" + deleteRule.getWriter() + ", contents=" + contents + "]";
     }
+
 }

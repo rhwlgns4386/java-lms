@@ -2,6 +2,7 @@ package nextstep.qna.domain;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import nextstep.qna.CannotDeleteException;
@@ -22,17 +23,15 @@ public class Answers {
         this(new ArrayList<>());
     }
 
-    public void delete(NsUser loginUser) throws CannotDeleteException {
+    public List<DeleteHistory> delete(NsUser loginUser) throws CannotDeleteException {
+        ArrayList<DeleteHistory> result = new ArrayList<>();
         for (Answer answer : answers) {
-            answer.delete(loginUser);
+            result.add(answer.delete(loginUser));
         }
+        return result;
     }
 
     public void add(Answer answer) {
         this.answers.add(answer);
-    }
-
-    public List<Answer> toList() {
-        return Collections.unmodifiableList(answers);
     }
 }
