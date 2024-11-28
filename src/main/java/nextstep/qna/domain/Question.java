@@ -1,10 +1,11 @@
 package nextstep.qna.domain;
 
+import static nextstep.qna.domain.DeleteHistoryFactory.createDeleteHistory;
+
 import java.util.ArrayList;
+import java.util.List;
 import nextstep.qna.CannotDeleteException;
 import nextstep.users.domain.NsUser;
-
-import java.time.LocalDateTime;
 
 public class Question extends BaseEntity {
 
@@ -20,13 +21,13 @@ public class Question extends BaseEntity {
     }
 
     public Question(Long id, NsUser writer, String title, String contents) {
-        this(id,new DeleteRule(writer, "질문을 삭제할 권한이 없습니다."),new QuestionBody(title, contents));
+        this(id, new DeleteRule(writer, "질문을 삭제할 권한이 없습니다."), new QuestionBody(title, contents));
     }
 
-    private Question(Long id,DeleteRule deleteRule,QuestionBody questionBody){
+    private Question(Long id, DeleteRule deleteRule, QuestionBody questionBody) {
         super(id);
-        this.deleteRule=deleteRule;
-        this.questionBody=questionBody;
+        this.deleteRule = deleteRule;
+        this.questionBody = questionBody;
     }
 
     public String getTitle() {
@@ -53,13 +54,16 @@ public class Question extends BaseEntity {
     }
 
     public ArrayList<DeleteHistory> delete(NsUser loginUser) throws CannotDeleteException {
-        deleteRule.delete(loginUser);
-
         ArrayList<DeleteHistory> deleteHistories = new ArrayList<>();
-        deleteHistories.add(new DeleteHistory(ContentType.QUESTION, getId(), getWriter(), LocalDateTime.now()));
-        deleteHistories.addAll(answers.delete(loginUser));
+        deleteHistories.add(deleteRule.delete(loginUser, ContentType.QUESTION, getId()));
+        deleteHistories.addAll(deleteAnswers(loginUser));
         return deleteHistories;
     }
+
+    private List<DeleteHistory> deleteAnswers(NsUser loginUser) throws CannotDeleteException {
+        return answers.delete(loginUser);
+    }
+
 
     public NsUser getWriter() {
         return deleteRule.getWriter();

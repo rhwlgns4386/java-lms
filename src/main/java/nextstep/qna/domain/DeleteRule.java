@@ -1,5 +1,7 @@
 package nextstep.qna.domain;
 
+import static nextstep.qna.domain.DeleteHistoryFactory.createDeleteHistory;
+
 import nextstep.qna.CannotDeleteException;
 import nextstep.users.domain.NsUser;
 
@@ -17,9 +19,10 @@ public class DeleteRule {
         this(new Writer(user), message);
     }
 
-    public void delete(NsUser loginUser) throws CannotDeleteException {
+    public DeleteHistory delete(NsUser loginUser, ContentType contentType, Long id) throws CannotDeleteException {
         writer.validOwner(loginUser,this::createException);
         this.deleted=true;
+        return  createDeleteHistory(contentType, id, writer.toUser());
     }
 
     private CannotDeleteException createException() {

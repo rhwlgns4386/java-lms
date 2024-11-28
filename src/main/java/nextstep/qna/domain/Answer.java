@@ -1,5 +1,7 @@
 package nextstep.qna.domain;
 
+import static nextstep.qna.domain.DeleteHistoryFactory.createDeleteHistory;
+
 import java.util.Optional;
 import nextstep.qna.CannotDeleteException;
 import nextstep.qna.NotFoundException;
@@ -38,8 +40,7 @@ public class Answer extends BaseEntity {
     }
 
     public DeleteHistory delete(NsUser loginUser) throws CannotDeleteException {
-        deleteRule.delete(loginUser);
-        return new DeleteHistory(ContentType.ANSWER, getId(), deleteRule.getWriter(), LocalDateTime.now());
+        return deleteRule.delete(loginUser, ContentType.ANSWER, getId());
     }
 
     public NsUser getWriter() {
