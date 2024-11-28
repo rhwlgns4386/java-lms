@@ -9,19 +9,19 @@ public class QuestionBody {
         this.contents = contents;
     }
 
-    public String getTitle() {
+    public final String getTitle() {
         return title;
     }
 
-    public String getContents() {
+    public final String getContents() {
         return contents;
     }
 
-    public QuestionBody updateContents(String contents) {
+    public final QuestionBody updateContents(String contents) {
         return questionBody(this.title, contents);
     }
 
-    public QuestionBody updateTitle(String title) {
+    public final QuestionBody updateTitle(String title) {
         return questionBody(title, this.contents);
     }
 

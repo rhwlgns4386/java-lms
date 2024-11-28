@@ -39,7 +39,7 @@ public class Answer extends BaseEntity {
         this.contents = contents;
     }
 
-    public DeleteHistory delete(NsUser loginUser) throws CannotDeleteException {
+    public final DeleteHistory delete(NsUser loginUser) throws CannotDeleteException {
         return deleteRule.delete(loginUser, ContentType.ANSWER, getId());
     }
 

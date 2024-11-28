@@ -19,7 +19,7 @@ public class DeleteRule {
         this(new Writer(user), message);
     }
 
-    public DeleteHistory delete(NsUser loginUser, ContentType contentType, Long id) throws CannotDeleteException {
+    public final DeleteHistory delete(NsUser loginUser, ContentType contentType, Long id) throws CannotDeleteException {
         writer.validOwner(loginUser,this::createException);
         this.deleted=true;
         return  createDeleteHistory(contentType, id, writer.toUser());
@@ -29,11 +29,11 @@ public class DeleteRule {
         return new CannotDeleteException(message);
     }
 
-    public NsUser getWriter() {
+    public final NsUser getWriter() {
         return writer.toUser();
     }
 
-    public boolean isDeleted() {
+    public final boolean isDeleted() {
         return deleted;
     }
 }

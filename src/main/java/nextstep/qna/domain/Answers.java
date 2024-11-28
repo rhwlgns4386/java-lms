@@ -9,7 +9,7 @@ import nextstep.qna.CannotDeleteException;
 import nextstep.users.domain.NsUser;
 
 public class Answers {
-    private List<Answer> answers;
+    private final List<Answer> answers;
 
     public Answers(List<Answer> answers) {
         this.answers = answers;
@@ -23,7 +23,7 @@ public class Answers {
         this(new ArrayList<>());
     }
 
-    public List<DeleteHistory> delete(NsUser loginUser) throws CannotDeleteException {
+    public final List<DeleteHistory> delete(NsUser loginUser) throws CannotDeleteException {
         ArrayList<DeleteHistory> result = new ArrayList<>();
         for (Answer answer : answers) {
             result.add(answer.delete(loginUser));
@@ -31,7 +31,7 @@ public class Answers {
         return result;
     }
 
-    public void add(Answer answer) {
+    public final void add(Answer answer) {
         this.answers.add(answer);
     }
 }
