@@ -4,11 +4,11 @@ import java.util.Objects;
 import nextstep.courses.NonPositiveException;
 
 public class Positive {
-    private final int value;
+    private final int number;
 
-    public Positive(int value) {
-        validatePositive(value);
-        this.value = value;
+    public Positive(int number) {
+        validatePositive(number);
+        this.number = number;
     }
 
     private static void validatePositive(int value) {
@@ -17,12 +17,16 @@ public class Positive {
         }
     }
 
-    public boolean isLessThanOrEqualTo(Positive positive) {
-        return this.value <= positive.value;
+    public boolean isLessThanOrEqualTo(Positive value) {
+        return this.number <= value.number;
+    }
+
+    public boolean isLessThan(Positive value) {
+        return this.number < value.number;
     }
 
     public Positive multiply(Positive positive) {
-        return new Positive(this.value * positive.value);
+        return new Positive(this.number * positive.number);
     }
 
     @Override
@@ -34,11 +38,11 @@ public class Positive {
             return false;
         }
         Positive positive = (Positive) o;
-        return value == positive.value;
+        return number == positive.number;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(value);
+        return Objects.hash(number);
     }
 }

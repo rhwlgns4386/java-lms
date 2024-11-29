@@ -21,10 +21,15 @@ public class PositiveTest {
     }
 
     @Test
-    void 숫자가_큰지_검증한다() {
+    void 숫자가_왼쪽숫자가_작거나_같은지_검증한다() {
         assertAll(() -> {
             assertThat(new Positive(300).isLessThanOrEqualTo(new Positive(300))).isTrue();
             assertThat(new Positive(300).isLessThanOrEqualTo(new Positive(301))).isTrue();
         });
+    }
+
+    @Test
+    void 숫자가_왼쪽숫자가_작은지_검증한다() {
+        assertThat(new Positive(300).isLessThan(new Positive(301))).isTrue();
     }
 }
