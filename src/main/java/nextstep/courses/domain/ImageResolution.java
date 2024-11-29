@@ -14,6 +14,7 @@ public class ImageResolution {
     public ImageResolution(Pixel width, Pixel height) {
         validateNull(width, height);
         validateImageResolution(width, height);
+        validateImageProportion(width, height);
     }
 
     private void validateNull(Pixel width, Pixel height) {
@@ -23,6 +24,12 @@ public class ImageResolution {
 
     private static void validateImageResolution(Pixel width, Pixel height) {
         if (!MIN_WIDTH.isLessThanOrEqualTo(width) || !MIN_HEIGHT.isLessThanOrEqualTo(height)) {
+            throw new ImageSizeMissException();
+        }
+    }
+
+    private void validateImageProportion(Pixel width, Pixel height) {
+        if (!width.multiply(MIN_HEIGHT).equals(height.multiply(MIN_WIDTH))) {
             throw new ImageSizeMissException();
         }
     }

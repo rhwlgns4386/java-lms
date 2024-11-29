@@ -21,6 +21,11 @@ public class ImageResolutionTest {
     }
 
     @Test
+    void 이미지의_비율은_3대2가아닌경우_예외() {
+        assertThatThrownBy(() -> new ImageResolution(600, 399)).isInstanceOf(ImageSizeMissException.class);
+    }
+
+    @Test
     void 크기는_null일수_없다() {
         assertAll(() -> {
             assertThatNullPointerException().isThrownBy(() -> new ImageResolution(null, new Pixel(300)));
