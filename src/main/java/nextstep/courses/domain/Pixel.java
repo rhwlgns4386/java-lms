@@ -10,4 +10,8 @@ public class Pixel {
     public Pixel(Positive value) {
         this.value = value;
     }
+
+    public boolean isLessThanOrEqualTo(Pixel pixel) {
+        return this.value.isLessThanOrEqualTo(pixel.value);
+    }
 }

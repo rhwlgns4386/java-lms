@@ -15,4 +15,8 @@ public class Positive {
             throw new NonPositiveException();
         }
     }
+
+    public boolean isLessThanOrEqualTo(Positive positive) {
+        return this.value < positive.value;
+    }
 }
