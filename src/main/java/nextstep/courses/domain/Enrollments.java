@@ -1,6 +1,7 @@
 package nextstep.courses.domain;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import nextstep.courses.DuplicateStudentException;
 import nextstep.users.domain.NsUser;
@@ -21,6 +22,7 @@ public class Enrollments {
     public void enrollment(NsUser student) {
         validateReayStatus();
         validateDuplicateStudent(student);
+        this.enrolledStudents.add(student);
     }
 
     private void validateReayStatus() {
@@ -33,5 +35,22 @@ public class Enrollments {
         if (enrolledStudents.contains(student)) {
             throw new DuplicateStudentException();
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Enrollments that = (Enrollments) o;
+        return sessionStatus == that.sessionStatus && Objects.equals(enrolledStudents, that.enrolledStudents);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(sessionStatus, enrolledStudents);
     }
 }
