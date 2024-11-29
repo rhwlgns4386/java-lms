@@ -5,6 +5,7 @@ import static nextstep.util.NullValidator.validateNull;
 import java.util.Objects;
 
 public class Charge {
+    public static final Charge ZERO = new Charge(0);
     private final Positive value;
 
     public Charge(int charge) {
