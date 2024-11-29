@@ -21,12 +21,12 @@ public class Enrollments {
     }
 
     public void enrollment(NsUser student) {
-        validateReayStatus();
+        validateReadyStatus();
         validateDuplicateStudent(student);
         this.enrolledStudents.add(student);
     }
 
-    private void validateReayStatus() {
+    private void validateReadyStatus() {
         if (!sessionStatus.isEnrolling()) {
             throw new NonReadyException();
         }
@@ -36,6 +36,10 @@ public class Enrollments {
         if (enrolledStudents.contains(student)) {
             throw new DuplicateStudentException();
         }
+    }
+
+    protected int size() {
+        return this.enrolledStudents.size();
     }
 
     @Override
