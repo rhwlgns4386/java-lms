@@ -17,6 +17,6 @@ public class Positive {
     }
 
     public boolean isLessThanOrEqualTo(Positive positive) {
-        return this.value < positive.value;
+        return this.value <= positive.value;
     }
 }

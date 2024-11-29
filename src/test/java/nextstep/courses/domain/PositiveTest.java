@@ -23,8 +23,8 @@ public class PositiveTest {
     @Test
     void 숫자가_큰지_검증한다() {
         assertAll(() -> {
-            assertThat(new Positive(300).isLessThanOrEqualTo(new Positive(300)));
-            assertThat(new Positive(300).isLessThanOrEqualTo(new Positive(301)));
+            assertThat(new Positive(300).isLessThanOrEqualTo(new Positive(300))).isTrue();
+            assertThat(new Positive(300).isLessThanOrEqualTo(new Positive(301))).isTrue();
         });
     }
 }
