@@ -1,15 +1,13 @@
 package nextstep.courses.domain;
 
-import nextstep.courses.NonPositiveException;
-
 public class Pixel {
+    private final Positive value;
+
     public Pixel(int value) {
-        validatePositive(value);
+        this(new Positive(value));
     }
 
-    private static void validatePositive(int value) {
-        if (value < 0) {
-            throw new NonPositiveException();
-        }
+    public Pixel(Positive value) {
+        this.value = value;
     }
 }
