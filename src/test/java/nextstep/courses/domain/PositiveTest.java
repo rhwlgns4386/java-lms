@@ -3,7 +3,6 @@ package nextstep.courses.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 import nextstep.courses.NonPositiveException;
 import org.junit.jupiter.api.Test;
@@ -22,14 +21,19 @@ public class PositiveTest {
 
     @Test
     void 숫자가_왼쪽숫자가_작거나_같은지_검증한다() {
-        assertAll(() -> {
-            assertThat(new Positive(300).isLessThanOrEqualTo(new Positive(300))).isTrue();
-            assertThat(new Positive(300).isLessThanOrEqualTo(new Positive(301))).isTrue();
-        });
+        assertThat(new Positive(300).isLessThanOrEqualTo(new Positive(300))).isTrue();
+        assertThat(new Positive(300).isLessThanOrEqualTo(new Positive(301))).isTrue();
     }
 
     @Test
     void 숫자가_왼쪽숫자가_작은지_검증한다() {
+        assertThat(new Positive(300).isLessThan(new Positive(300))).isFalse();
         assertThat(new Positive(300).isLessThan(new Positive(301))).isTrue();
+    }
+
+    @Test
+    void 숫자가_왼쪽숫자가_큰지_검증한다() {
+        assertThat(new Positive(300).isGraterThan(new Positive(300))).isFalse();
+        assertThat(new Positive(300).isGraterThan(new Positive(299))).isTrue();
     }
 }

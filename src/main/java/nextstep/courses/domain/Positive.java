@@ -25,6 +25,10 @@ public class Positive {
         return this.number < value.number;
     }
 
+    public boolean isGraterThan(Positive value) {
+        return this.number > value.number;
+    }
+
     public Positive multiply(Positive positive) {
         return new Positive(this.number * positive.number);
     }
