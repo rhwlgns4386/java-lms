@@ -1,6 +1,7 @@
 package nextstep.courses.domain;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import nextstep.courses.NonPositiveException;
@@ -16,5 +17,10 @@ public class PixelTest {
     @Test
     void 픽셀은_음수일_수없다() {
         assertThatThrownBy(() -> new Pixel(-1)).isInstanceOf(NonPositiveException.class);
+    }
+
+    @Test
+    void 픽셀은_null을_입력_할_수_없다() {
+        assertThatNullPointerException().isThrownBy(() -> new Pixel(null));
     }
 }

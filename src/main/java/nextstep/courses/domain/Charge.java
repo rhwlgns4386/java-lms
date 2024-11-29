@@ -1,5 +1,7 @@
 package nextstep.courses.domain;
 
+import java.util.Objects;
+
 public class Charge {
     private final Positive value;
 
@@ -8,6 +10,7 @@ public class Charge {
     }
 
     public Charge(Positive value) {
+        Objects.requireNonNull(value);
         this.value = value;
     }
 }

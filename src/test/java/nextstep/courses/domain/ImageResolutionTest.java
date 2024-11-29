@@ -1,7 +1,9 @@
 package nextstep.courses.domain;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import nextstep.courses.ImageSizeMissException;
 import org.junit.jupiter.api.Test;
@@ -16,5 +18,14 @@ public class ImageResolutionTest {
     @Test
     void 크기가_최소값_보다작은_경우_예외() {
         assertThatThrownBy(() -> new ImageResolution(297, 198)).isInstanceOf(ImageSizeMissException.class);
+    }
+
+    @Test
+    void 크기는_null일수_없다() {
+        assertAll(() -> {
+            assertThatNullPointerException().isThrownBy(() -> new ImageResolution(null, new Pixel(300)));
+            assertThatNullPointerException().isThrownBy(() -> new ImageResolution(new Pixel(300), null));
+            assertThatNullPointerException().isThrownBy(() -> new ImageResolution(null, null));
+        });
     }
 }
