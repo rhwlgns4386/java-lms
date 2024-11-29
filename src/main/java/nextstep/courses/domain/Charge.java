@@ -2,6 +2,8 @@ package nextstep.courses.domain;
 
 import static nextstep.util.NullValidator.validateNull;
 
+import java.util.Objects;
+
 public class Charge {
     private final Positive value;
 
@@ -12,5 +14,22 @@ public class Charge {
     public Charge(Positive value) {
         validateNull(value);
         this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Charge charge = (Charge) o;
+        return Objects.equals(value, charge.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
     }
 }
