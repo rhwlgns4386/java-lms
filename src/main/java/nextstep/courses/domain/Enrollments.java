@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import nextstep.courses.DuplicateStudentException;
+import nextstep.courses.NonReadyException;
 import nextstep.users.domain.NsUser;
 
 public class Enrollments {

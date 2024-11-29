@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.Set;
 import nextstep.courses.DuplicateStudentException;
+import nextstep.courses.NonReadyException;
 import nextstep.users.domain.NsUserTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

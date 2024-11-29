@@ -1,4 +1,4 @@
-package nextstep.courses.domain;
+package nextstep.courses;
 
 public class NonReadyException extends IllegalStateException {
     public NonReadyException() {
