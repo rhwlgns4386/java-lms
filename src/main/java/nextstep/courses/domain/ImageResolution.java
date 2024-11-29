@@ -7,6 +7,9 @@ public class ImageResolution {
     private static final Pixel MIN_WIDTH = new Pixel(300);
     private static final Pixel MIN_HEIGHT = new Pixel(200);
 
+    private final Pixel width;
+    private final Pixel height;
+
     public ImageResolution(int width, int height) {
         this(new Pixel(width), new Pixel(height));
     }
@@ -15,6 +18,8 @@ public class ImageResolution {
         validateNull(width, height);
         validateImageResolution(width, height);
         validateImageProportion(width, height);
+        this.width = width;
+        this.height = height;
     }
 
     private void validateNull(Pixel width, Pixel height) {
@@ -32,5 +37,22 @@ public class ImageResolution {
         if (!width.multiply(MIN_HEIGHT).equals(height.multiply(MIN_WIDTH))) {
             throw new ImageSizeMissException();
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        ImageResolution that = (ImageResolution) o;
+        return Objects.equals(width, that.width) && Objects.equals(height, that.height);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(width, height);
     }
 }

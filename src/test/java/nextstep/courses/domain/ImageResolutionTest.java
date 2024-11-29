@@ -1,5 +1,6 @@
 package nextstep.courses.domain;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -9,6 +10,11 @@ import nextstep.courses.ImageSizeMissException;
 import org.junit.jupiter.api.Test;
 
 public class ImageResolutionTest {
+
+    @Test
+    void ImageResolution의_equles테스트() {
+        assertThat(new ImageResolution(300, 200)).isEqualTo(new ImageResolution(new Pixel(300), new Pixel(200)));
+    }
 
     @Test
     void 이미지최소_크기는_가로300_높이_200이다() {
