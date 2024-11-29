@@ -1,6 +1,6 @@
 package nextstep.courses.domain;
 
-import java.util.Objects;
+import static nextstep.util.NullValidator.validateNull;
 
 public class Charge {
     private final Positive value;
@@ -10,7 +10,7 @@ public class Charge {
     }
 
     public Charge(Positive value) {
-        Objects.requireNonNull(value);
+        validateNull(value);
         this.value = value;
     }
 }

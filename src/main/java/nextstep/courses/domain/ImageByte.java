@@ -1,6 +1,7 @@
 package nextstep.courses.domain;
 
-import java.util.Objects;
+import static nextstep.util.NullValidator.validateNull;
+
 import nextstep.courses.ImageSizeMissException;
 
 public class ImageByte {
@@ -12,7 +13,7 @@ public class ImageByte {
     }
 
     public ImageByte(Positive byteSize) {
-        Objects.requireNonNull(byteSize);
+        validateNull(byteSize);
         validateOverMaxSize(byteSize);
         this.byteSize = byteSize;
     }

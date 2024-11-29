@@ -1,5 +1,7 @@
 package nextstep.courses.domain;
 
+import static nextstep.util.NullValidator.validateNull;
+
 import java.util.Objects;
 
 public class Pixel {
@@ -10,7 +12,7 @@ public class Pixel {
     }
 
     public Pixel(Positive value) {
-        Objects.requireNonNull(value);
+        validateNull(value);
         this.value = value;
     }
 
