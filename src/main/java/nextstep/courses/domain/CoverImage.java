@@ -5,7 +5,6 @@ import nextstep.util.NullValidator;
 public class CoverImage {
 
     private final String fileName;
-
     private final ImageSize imageSize;
     private final ImageType imageType;
 

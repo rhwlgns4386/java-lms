@@ -1,7 +1,5 @@
 package nextstep.courses.domain;
 
-import static nextstep.util.NullValidator.validateNull;
-
 import java.util.Objects;
 import nextstep.courses.ImageSizeMissException;
 
@@ -17,7 +15,6 @@ public class ImageResolution {
     }
 
     public ImageResolution(Pixel width, Pixel height) {
-        validateNull(width, height);
         validateImageResolution(width, height);
         validateImageProportion(width, height);
         this.width = width;
