@@ -1,5 +1,7 @@
 package nextstep.courses.domain;
 
+import nextstep.users.domain.NsUser;
+
 public class Session {
 
     private final Charge charge;
@@ -14,8 +16,9 @@ public class Session {
         this.sessionPeriod = sessionPeriod;
     }
 
-    public void enrollment(Charge fee) {
+    public void enrollment(Charge fee, NsUser nsUser) {
         validateCharge(fee);
+        enrollments.enrollment(nsUser);
     }
 
     private void validateCharge(Charge fee) {
