@@ -7,7 +7,7 @@ public class SessionPeriodConverter {
     private SessionPeriodConverter() {
     }
 
-    static SessionPeriod toSessionPeriod(LocalDate startDate, LocalDate endDate) {
+    public static SessionPeriod toSessionPeriod(LocalDate startDate, LocalDate endDate) {
         return new SessionPeriod(startDate, endDate);
     }
 }

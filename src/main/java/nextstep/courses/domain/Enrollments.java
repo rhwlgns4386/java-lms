@@ -3,24 +3,37 @@ package nextstep.courses.domain;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 import nextstep.courses.DuplicateStudentException;
 import nextstep.courses.NonReadyException;
 import nextstep.users.domain.NsUser;
 
 public class Enrollments {
     private SessionStatus sessionStatus;
-    private final Set<NsUser> enrolledStudents;
+    private final Set<EnrollmentStudent> enrolledStudents;
 
     public Enrollments(SessionStatus sessionStatus) {
         this(sessionStatus, Set.of());
     }
 
-    public Enrollments(SessionStatus sessionStatus, Set<NsUser> enrolledStudents) {
+    public Enrollments(Session session, SessionStatus sessionStatus) {
+        this(sessionStatus, session, Set.of());
+    }
+
+    public Enrollments(SessionStatus sessionStatus, Session session, Set<NsUser> enrolledStudents) {
+        this(sessionStatus, toStudentSet(session, enrolledStudents));
+    }
+
+    public Enrollments(SessionStatus sessionStatus, Set<EnrollmentStudent> enrolledStudents) {
         this.sessionStatus = sessionStatus;
         this.enrolledStudents = new HashSet<>(enrolledStudents);
     }
 
-    public void enrollment(NsUser student) {
+    public void enrollment(Session session, NsUser student) {
+        enrollment(new EnrollmentStudent(session, student));
+    }
+
+    public void enrollment(EnrollmentStudent student) {
         validateReadyStatus();
         validateDuplicateStudent(student);
         this.enrolledStudents.add(student);
@@ -32,7 +45,7 @@ public class Enrollments {
         }
     }
 
-    private void validateDuplicateStudent(NsUser student) {
+    private void validateDuplicateStudent(EnrollmentStudent student) {
         if (enrolledStudents.contains(student)) {
             throw new DuplicateStudentException();
         }
@@ -40,6 +53,11 @@ public class Enrollments {
 
     protected int size() {
         return this.enrolledStudents.size();
+    }
+
+    private static Set<EnrollmentStudent> toStudentSet(Session session, Set<NsUser> enrolledStudents) {
+        return enrolledStudents.stream().map((user) -> new EnrollmentStudent(session, user))
+                .collect(Collectors.toSet());
     }
 
     @Override

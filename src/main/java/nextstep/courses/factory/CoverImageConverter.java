@@ -7,7 +7,7 @@ public class CoverImageConverter {
     private CoverImageConverter() {
     }
 
-    static CoverImage toImage(String fileName, int width, int height, int size, ImageType imageType) {
+    public static CoverImage toImage(String fileName, int width, int height, int size, ImageType imageType) {
         return new CoverImage(fileName, width, height, size, imageType);
     }
 }
