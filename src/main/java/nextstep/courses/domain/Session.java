@@ -22,6 +22,10 @@ public class Session {
         this.sessionPeriod = sessionPeriod;
     }
 
+    public void enrollment(int fee, NsUser enrollmentStudent) {
+        enrollment(new Charge(fee), enrollmentStudent);
+    }
+
     public void enrollment(Charge fee, NsUser enrollmentStudent) {
         validateCharge(fee);
         enrollments.enrollment(this, enrollmentStudent);

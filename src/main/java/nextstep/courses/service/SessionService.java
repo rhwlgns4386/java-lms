@@ -1,7 +1,6 @@
 package nextstep.courses.service;
 
 import nextstep.courses.EntityNotFoundException;
-import nextstep.courses.domain.Charge;
 import nextstep.courses.domain.Session;
 import nextstep.courses.domain.SessionRepository;
 import nextstep.users.domain.NsUser;
@@ -16,7 +15,7 @@ public class SessionService {
     @Transactional
     public void enroll(long sessionId, int fee, NsUser user) {
         Session session = findById(sessionId);
-        session.enrollment(new Charge(fee), user);
+        session.enrollment(fee, user);
         sessionRepository.update(session);
     }
 
