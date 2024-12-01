@@ -1,9 +1,10 @@
 package nextstep.courses.domain;
 
+import static nextstep.courses.factory.EnrollmentStudentConverter.enrollmentStudent;
+
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 import nextstep.courses.DuplicateStudentException;
 import nextstep.courses.NonReadyException;
 import nextstep.users.domain.NsUser;
@@ -16,21 +17,13 @@ public class Enrollments {
         this(sessionStatus, Set.of());
     }
 
-    public Enrollments(Session session, SessionStatus sessionStatus) {
-        this(sessionStatus, session, Set.of());
-    }
-
-    public Enrollments(SessionStatus sessionStatus, Session session, Set<NsUser> enrolledStudents) {
-        this(sessionStatus, toStudentSet(session, enrolledStudents));
-    }
-
     public Enrollments(SessionStatus sessionStatus, Set<EnrollmentStudent> enrolledStudents) {
         this.sessionStatus = sessionStatus;
         this.enrolledStudents = new HashSet<>(enrolledStudents);
     }
 
     public void enrollment(Session session, NsUser student) {
-        enrollment(new EnrollmentStudent(session, student));
+        enrollment(enrollmentStudent(session, student));
     }
 
     public void enrollment(EnrollmentStudent student) {
@@ -53,11 +46,6 @@ public class Enrollments {
 
     protected int size() {
         return this.enrolledStudents.size();
-    }
-
-    private static Set<EnrollmentStudent> toStudentSet(Session session, Set<NsUser> enrolledStudents) {
-        return enrolledStudents.stream().map((user) -> new EnrollmentStudent(session, user))
-                .collect(Collectors.toSet());
     }
 
     @Override
