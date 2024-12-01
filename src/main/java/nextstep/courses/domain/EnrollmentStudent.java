@@ -17,6 +17,14 @@ public class EnrollmentStudent {
         this.userId = userId;
     }
 
+    public long getSessionId() {
+        return sessionId;
+    }
+
+    public long getUserId() {
+        return userId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

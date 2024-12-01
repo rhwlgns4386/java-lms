@@ -1,6 +1,8 @@
 package nextstep.courses.infrastructure;
 
 import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Optional;
@@ -11,6 +13,7 @@ import nextstep.courses.domain.ImageType;
 import nextstep.courses.domain.Session;
 import nextstep.courses.domain.SessionRepository;
 import nextstep.courses.domain.SessionStatus;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -68,6 +71,29 @@ public class JdbcSessionRepository implements SessionRepository {
 
     @Override
     public void update(Session session) {
-        Enrollments enrollments = session.getEnrollments();
+        EnrollmentInsertCacheProxy enrollments = toProxy(session.getEnrollments());
+        Set<EnrollmentStudent> enrollmentStudents = enrollments.insertEnrollmentStudents();
+        String sql = "insert into enrollment_students (session_id, user_id) values(?, ?)";
+
+        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+                EnrollmentStudent enrollmentStudent = (EnrollmentStudent) enrollmentStudents.toArray()[i];
+                ps.setLong(1, enrollmentStudent.getSessionId());
+                ps.setLong(2, enrollmentStudent.getUserId());
+            }
+
+            @Override
+            public int getBatchSize() {
+                return enrollmentStudents.size();
+            }
+        });
+    }
+
+    private EnrollmentInsertCacheProxy toProxy(Enrollments enrollments) {
+        if (enrollments instanceof EnrollmentInsertCacheProxy) {
+            return (EnrollmentInsertCacheProxy) enrollments;
+        }
+        throw new IllegalStateException("");
     }
 }

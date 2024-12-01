@@ -14,12 +14,12 @@ public class TestEnrollmentsFactory {
         return enrollments(sessionStatus, session, Set.of());
     }
 
-    static Enrollments enrollments(SessionStatus sessionStatus, Session session, Set<NsUser> enrolledStudents) {
+    public static Enrollments enrollments(SessionStatus sessionStatus, Session session, Set<NsUser> enrolledStudents) {
         return new DefaultEnrollments(sessionStatus, toStudentSet(session, enrolledStudents));
     }
 
-    static Enrollments limitEnrollments(int capacity, SessionStatus sessionStatus, Session session,
-                                        Set<NsUser> users) {
+    public static Enrollments limitEnrollments(int capacity, SessionStatus sessionStatus, Session session,
+                                               Set<NsUser> users) {
         return new LimitedEnrollments(capacity, sessionStatus, toStudentSet(session, users));
     }
 

@@ -4,6 +4,7 @@ import static nextstep.courses.factory.EnrollmentStudentConverter.enrollmentStud
 import static nextstep.util.NullValidator.validateNull;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import nextstep.courses.domain.EnrollmentStudent;
 import nextstep.courses.domain.Enrollments;
@@ -34,5 +35,21 @@ public class EnrollmentInsertCacheProxy implements Enrollments {
 
     Set<EnrollmentStudent> insertEnrollmentStudents() {
         return updateCache;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Enrollments)) {
+            return false;
+        }
+        return enrollments.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(enrollments);
     }
 }
