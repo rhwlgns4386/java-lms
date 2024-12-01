@@ -5,16 +5,18 @@ import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Set;
 import nextstep.courses.domain.EnrollmentStudent;
+import nextstep.courses.domain.Enrollments;
 import nextstep.courses.domain.ImageType;
+import nextstep.courses.domain.LimitedEnrollments;
 import nextstep.courses.domain.Session;
 import nextstep.courses.domain.SessionStatus;
+import nextstep.courses.factory.SessionFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
 public class JdbcSessionDao {
 
     private final JdbcTemplate jdbcTemplate;
-    private SessionEntityMapper sessionEntityMapper = new SessionEntityMapper();
 
     public JdbcSessionDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -24,11 +26,12 @@ public class JdbcSessionDao {
         String sql = "select id, charge, capacity, sessionStatus, image_file_name, image_width, image_height,"
                 + "image_size, imageType, start_date, end_date from session where id = ?";
 
-        RowMapper<Session> rowMapper = ((rs, rowNum) -> sessionEntityMapper.toEntity(
+        RowMapper<Session> rowMapper = ((rs, rowNum) -> SessionFactory.session(
                 rs.getLong(1),
                 rs.getInt(2),
-                (Integer) rs.getObject(3), enrollmentStudents,
-                SessionStatus.findByName(rs.getString(4)),
+                enrollments((Integer) rs.getObject(3),
+                        SessionStatus.findByName(rs.getString(4)),
+                        enrollmentStudents),
                 rs.getString(5),
                 rs.getInt(6),
                 rs.getInt(7),
@@ -39,6 +42,15 @@ public class JdbcSessionDao {
         );
 
         return Optional.of(jdbcTemplate.queryForObject(sql, rowMapper, id));
+    }
+
+    private Enrollments enrollments(Integer capacity, SessionStatus sessionStatus,
+                                    Set<EnrollmentStudent> enrolledStudents) {
+        if (capacity == null) {
+            return new Enrollments(sessionStatus, enrolledStudents);
+        }
+
+        return new LimitedEnrollments(capacity, sessionStatus, enrolledStudents);
     }
 
     private LocalDate toLocalDate(Date date) {
@@ -67,6 +79,5 @@ public class JdbcSessionDao {
                 helper.getId()
         );
     }
-
 
 }
