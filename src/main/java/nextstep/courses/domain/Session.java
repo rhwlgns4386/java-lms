@@ -22,9 +22,9 @@ public class Session {
         this.sessionPeriod = sessionPeriod;
     }
 
-    public void enrollment(Charge fee, NsUser nsUser) {
+    public void enrollment(Charge fee, NsUser enrollmentStudent) {
         validateCharge(fee);
-        enrollments.enrollment(this, nsUser);
+        enrollments.enrollment(this, enrollmentStudent);
     }
 
     private void validateCharge(Charge fee) {
