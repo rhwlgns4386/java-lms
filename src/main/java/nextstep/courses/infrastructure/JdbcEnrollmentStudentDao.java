@@ -16,7 +16,7 @@ public class JdbcEnrollmentStudentDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public Set<EnrollmentStudent> findAllEnrollmentStudentBySessionId(Long id) {
+    Set<EnrollmentStudent> findAllEnrollmentStudentBySessionId(Long id) {
         String sql = "SELECT session_id, user_id FROM enrollment_students where session_id = ?";
 
         RowMapper<EnrollmentStudent> rowMapper = (rs, rowNum) -> {
@@ -28,7 +28,7 @@ public class JdbcEnrollmentStudentDao {
         return new HashSet<>(jdbcTemplate.query(sql, rowMapper, id));
     }
 
-    public void insertItem(Set<EnrollmentStudent> enrollmentStudents) {
+    void insertItem(Set<EnrollmentStudent> enrollmentStudents) {
         String sql = "insert into enrollment_students (session_id, user_id) values(?, ?)";
 
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {

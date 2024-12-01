@@ -22,7 +22,7 @@ public class JdbcSessionDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public Optional<Session> findById(Long id, Set<EnrollmentStudent> enrollmentStudents) {
+    Optional<Session> findById(Long id, Set<EnrollmentStudent> enrollmentStudents) {
         String sql = "select id, charge, capacity, sessionStatus, image_file_name, image_width, image_height,"
                 + "image_size, imageType, start_date, end_date from session where id = ?";
 
@@ -60,7 +60,7 @@ public class JdbcSessionDao {
         return date.toLocalDate();
     }
 
-    public void update(Session session) {
+    void update(Session session) {
         SessionHelper helper = new SessionHelper(session);
         String sql = "update session set charge=?,capacity=?,sessionStatus=?,image_file_name=?,image_width=?,"
                 + "image_height=?,image_size=?,imageType=?,start_date=?,end_date =? where id=?";
