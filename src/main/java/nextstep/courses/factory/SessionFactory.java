@@ -7,7 +7,6 @@ import java.time.LocalDate;
 import nextstep.courses.domain.Capacity;
 import nextstep.courses.domain.Charge;
 import nextstep.courses.domain.CoverImage;
-import nextstep.courses.domain.DefaultEnrollments;
 import nextstep.courses.domain.Enrollments;
 import nextstep.courses.domain.ImageType;
 import nextstep.courses.domain.LimitedEnrollments;
@@ -28,7 +27,7 @@ public class SessionFactory {
 
     public static Session freeSession(SessionStatus sessionStatus, CoverImage coverImage, SessionPeriod sessionPeriod) {
 
-        return session(null, Charge.ZERO, new DefaultEnrollments(sessionStatus), coverImage, sessionPeriod);
+        return session(null, Charge.ZERO, new Enrollments(sessionStatus), coverImage, sessionPeriod);
     }
 
     public static Session paidSession(int charge, int capacity, SessionStatus sessionStatus, String fileName, int width,

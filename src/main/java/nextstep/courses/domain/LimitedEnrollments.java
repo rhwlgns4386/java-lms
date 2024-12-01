@@ -6,7 +6,7 @@ import java.util.Set;
 import nextstep.courses.MaxEnrollmentExceededException;
 import nextstep.users.domain.NsUser;
 
-public class LimitedEnrollments extends DefaultEnrollments {
+public class LimitedEnrollments extends Enrollments {
     private final Capacity capacity;
 
     public LimitedEnrollments(int capacity, SessionStatus sessionStatus) {
@@ -25,6 +25,10 @@ public class LimitedEnrollments extends DefaultEnrollments {
         super(sessionStatus, enrolledStudents);
         validateNull(capacity);
         this.capacity = capacity;
+    }
+
+    public int capacity() {
+        return capacity.toInt();
     }
 
     @Override

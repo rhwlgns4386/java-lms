@@ -26,16 +26,17 @@ public class SessionRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        sessionRepository = new JdbcSessionRepository(jdbcTemplate);
+        sessionRepository = new JdbcSessionRepositoryFacade(new JdbcSessionDao(jdbcTemplate),
+                new JdbcEnrollmentStudentDao(jdbcTemplate));
     }
 
 
     @Test
     void findSession() {
         Session session = sessionRepository.findById(1L).orElseThrow();
-        Enrollments enrollments = session.getEnrollments();
+        Enrollments enrollments = session.enrollments();
 
-        assertThat(session.getId()).isEqualTo(1L);
+        assertThat(session.id()).isEqualTo(1L);
         assertThat(enrollments).isEqualTo(
                 enrollments(SessionStatus.ENROLLING, session, Set.of(NsUserTest.SANJIGI, NsUserTest.JAVAJIGI)));
     }
@@ -47,8 +48,8 @@ public class SessionRepositoryTest {
         sessionRepository.update(session);
 
         Session resultSession = sessionRepository.findById(2L).orElseThrow();
-        assertThat(resultSession.getId()).isEqualTo(2L);
-        assertThat(resultSession.getEnrollments()).isEqualTo(limitEnrollments(6, SessionStatus.ENROLLING, resultSession,
+        assertThat(resultSession.id()).isEqualTo(2L);
+        assertThat(resultSession.enrollments()).isEqualTo(limitEnrollments(6, SessionStatus.ENROLLING, resultSession,
                 Set.of(NsUserTest.SANJIGI, NsUserTest.JAVAJIGI)));
     }
 }

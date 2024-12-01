@@ -18,4 +18,24 @@ public class CoverImage {
         this.imageSize = imageSize;
         this.imageType = imageType;
     }
+
+    public String fileName() {
+        return fileName;
+    }
+
+    public int width() {
+        return imageSize.width();
+    }
+
+    public int height() {
+        return imageSize.height();
+    }
+
+    public int bytes() {
+        return imageSize.bytes();
+    }
+
+    public ImageType type() {
+        return imageType;
+    }
 }

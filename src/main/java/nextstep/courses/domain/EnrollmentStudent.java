@@ -9,7 +9,7 @@ public class EnrollmentStudent {
     private long userId;
 
     public EnrollmentStudent(Session session, NsUser user) {
-        this(session.getId(), user.getId());
+        this(session.id(), user.getId());
     }
 
     public EnrollmentStudent(long sessionId, long userId) {

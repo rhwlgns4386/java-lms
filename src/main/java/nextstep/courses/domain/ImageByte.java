@@ -23,4 +23,8 @@ public class ImageByte {
             throw new ImageSizeMissException();
         }
     }
+
+    public int bytes() {
+        return byteSize.toInt();
+    }
 }

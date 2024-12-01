@@ -1,5 +1,6 @@
 package nextstep.courses.domain;
 
+import java.util.Set;
 import nextstep.users.domain.NsUser;
 
 public class Session {
@@ -37,11 +38,27 @@ public class Session {
         }
     }
 
-    public long getId() {
+    public long id() {
         return id;
     }
 
-    public Enrollments getEnrollments() {
+    public Enrollments enrollments() {
         return enrollments;
+    }
+
+    public Set<EnrollmentStudent> enrollmentStudents() {
+        return enrollments.enrolledStudents();
+    }
+
+    public Charge charge() {
+        return charge;
+    }
+
+    public CoverImage coverImage() {
+        return coverImage;
+    }
+
+    public SessionPeriod sessionPeriod() {
+        return sessionPeriod;
     }
 }
