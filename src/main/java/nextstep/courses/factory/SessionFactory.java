@@ -15,6 +15,8 @@ import nextstep.courses.domain.SessionPeriod;
 import nextstep.courses.domain.SessionStatus;
 
 public class SessionFactory {
+    private SessionFactory() {
+    }
 
     public static Session freeSession(SessionStatus sessionStatus, String fileName, int width, int height, int size,
                                       ImageType imageType, LocalDate startDate, LocalDate endDate) {
