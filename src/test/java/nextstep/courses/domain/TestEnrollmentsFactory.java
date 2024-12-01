@@ -15,7 +15,7 @@ public class TestEnrollmentsFactory {
     }
 
     static Enrollments enrollments(SessionStatus sessionStatus, Session session, Set<NsUser> enrolledStudents) {
-        return new Enrollments(sessionStatus, toStudentSet(session, enrolledStudents));
+        return new DefaultEnrollments(sessionStatus, toStudentSet(session, enrolledStudents));
     }
 
     static Enrollments limitEnrollments(int capacity, SessionStatus sessionStatus, Session session,

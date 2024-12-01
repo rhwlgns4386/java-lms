@@ -36,4 +36,8 @@ public class Session {
     public long getId() {
         return id;
     }
+
+    public Enrollments getEnrollments() {
+        return enrollments;
+    }
 }

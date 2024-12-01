@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-public class EnrollmentsTest {
+public class DefaultEnrollmentsTest {
 
     @Test
     void 등록목록에_등록한다() {

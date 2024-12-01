@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import nextstep.courses.domain.EnrollmentStudent;
+import nextstep.courses.domain.Enrollments;
 import nextstep.courses.domain.ImageType;
 import nextstep.courses.domain.Session;
 import nextstep.courses.domain.SessionRepository;
@@ -58,15 +59,15 @@ public class JdbcSessionRepository implements SessionRepository {
         return new HashSet<>(jdbcTemplate.query(sql, rowMapper, id));
     }
 
-    @Override
-    public void update(Session session) {
-
-    }
-
     private LocalDate toLocalDate(Date date) {
         if (date == null) {
             return null;
         }
         return date.toLocalDate();
+    }
+
+    @Override
+    public void update(Session session) {
+        Enrollments enrollments = session.getEnrollments();
     }
 }

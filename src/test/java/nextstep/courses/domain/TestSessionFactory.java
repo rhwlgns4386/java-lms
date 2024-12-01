@@ -11,7 +11,7 @@ public class TestSessionFactory {
     }
 
     static Session createTestSession() {
-        return session(0, new Enrollments(ENROLLING));
+        return session(0, new DefaultEnrollments(ENROLLING));
     }
 
     static Session createTestSession(int charge) {
