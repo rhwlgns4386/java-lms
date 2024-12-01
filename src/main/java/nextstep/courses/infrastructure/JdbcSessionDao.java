@@ -23,10 +23,21 @@ public class JdbcSessionDao {
     public Optional<Session> findById(Long id, Set<EnrollmentStudent> enrollmentStudents) {
         String sql = "select id, charge, capacity, sessionStatus, image_file_name, image_width, image_height,"
                 + "image_size, imageType, start_date, end_date from session where id = ?";
-        RowMapper<Session> rowMapper = ((rs, rowNum) -> sessionEntityMapper.toEntity(rs.getLong(1), rs.getInt(2),
-                (Integer) rs.getObject(3), enrollmentStudents, SessionStatus.findByName(rs.getString(4)),
-                rs.getString(5), rs.getInt(6), rs.getInt(7), rs.getInt(8), ImageType.findByName(rs.getString(9)),
-                toLocalDate(rs.getDate(10)), toLocalDate(rs.getDate(11))));
+
+        RowMapper<Session> rowMapper = ((rs, rowNum) -> sessionEntityMapper.toEntity(
+                rs.getLong(1),
+                rs.getInt(2),
+                (Integer) rs.getObject(3), enrollmentStudents,
+                SessionStatus.findByName(rs.getString(4)),
+                rs.getString(5),
+                rs.getInt(6),
+                rs.getInt(7),
+                rs.getInt(8),
+                ImageType.findByName(rs.getString(9)),
+                toLocalDate(rs.getDate(10)),
+                toLocalDate(rs.getDate(11)))
+        );
+
         return Optional.of(jdbcTemplate.queryForObject(sql, rowMapper, id));
     }
 
@@ -42,9 +53,19 @@ public class JdbcSessionDao {
         String sql = "update session set charge=?,capacity=?,sessionStatus=?,image_file_name=?,image_width=?,"
                 + "image_height=?,image_size=?,imageType=?,start_date=?,end_date =? where id=?";
 
-        jdbcTemplate.update(sql, helper.getCharge(), helper.getCapacity(), helper.getSessionStatus(),
-                helper.getImageFileName(), helper.getImageWidth(), helper.getImageHeight(), helper.getImageBytes(),
-                helper.getImageType(), helper.getStartDate(), helper.getEndDate(), helper.getId());
+        jdbcTemplate.update(sql,
+                helper.getCharge(),
+                helper.getCapacity(),
+                helper.getSessionStatus(),
+                helper.getImageFileName(),
+                helper.getImageWidth(),
+                helper.getImageHeight(),
+                helper.getImageBytes(),
+                helper.getImageType(),
+                helper.getStartDate(),
+                helper.getEndDate(),
+                helper.getId()
+        );
     }
 
 
