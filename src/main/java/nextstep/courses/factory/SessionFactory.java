@@ -27,7 +27,7 @@ public class SessionFactory {
 
     public static Session freeSession(SessionStatus sessionStatus, CoverImage coverImage, SessionPeriod sessionPeriod) {
 
-        return new Session(Charge.ZERO, new Enrollments(sessionStatus), coverImage, sessionPeriod);
+        return session(null, Charge.ZERO, new Enrollments(sessionStatus), coverImage, sessionPeriod);
     }
 
     public static Session paidSession(int charge, int capacity, SessionStatus sessionStatus, String fileName, int width,
@@ -43,6 +43,18 @@ public class SessionFactory {
                                       CoverImage coverImage,
                                       SessionPeriod sessionPeriod) {
 
-        return new Session(charge, new LimitedEnrollments(capacity, sessionStatus), coverImage, sessionPeriod);
+        return session(null, charge, new LimitedEnrollments(capacity, sessionStatus), coverImage, sessionPeriod);
+    }
+
+    public static Session session(long id, int charge, Enrollments enrollments, String fileName, int width, int height,
+                                  int size, ImageType imageType, LocalDate startDate,
+                                  LocalDate endDate) {
+        return session(id, new Charge(charge), enrollments, toImage(fileName, width, height, size, imageType),
+                toSessionPeriod(startDate, endDate));
+    }
+
+    public static Session session(Long id, Charge charge, Enrollments enrollments, CoverImage coverImage,
+                                  SessionPeriod sessionPeriod) {
+        return new Session(id, charge, enrollments, coverImage, sessionPeriod);
     }
 }
