@@ -29,11 +29,16 @@ public class LimitedEnrollments extends Enrollments {
 
     @Override
     public void enrollment(Session session, NsUser student) {
-        validateMaxEnrollmentExceeded2();
         super.enrollment(session, student);
     }
 
-    private void validateMaxEnrollmentExceeded2() {
+    @Override
+    public void enrollment(EnrollmentStudent student) {
+        validateMaxEnrollmentExceeded();
+        super.enrollment(student);
+    }
+
+    private void validateMaxEnrollmentExceeded() {
         if (!capacity.canEnroll(size())) {
             throw new MaxEnrollmentExceededException();
         }
