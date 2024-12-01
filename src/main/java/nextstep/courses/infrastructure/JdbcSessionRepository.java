@@ -94,6 +94,6 @@ public class JdbcSessionRepository implements SessionRepository {
         if (enrollments instanceof EnrollmentInsertCacheProxy) {
             return (EnrollmentInsertCacheProxy) enrollments;
         }
-        throw new IllegalStateException("");
+        throw new IllegalStateException("업데이트를 진행 할 수 없습니다");
     }
 }
