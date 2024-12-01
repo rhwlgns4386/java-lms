@@ -32,7 +32,7 @@ public class JdbcSessionRepositoryFacade implements SessionRepository {
     private Set<EnrollmentStudent> newEnrolledStudents(Session session) {
         Set<EnrollmentStudent> before = jdbcEnrollmentStudentDao.findAllEnrollmentStudentBySessionId(
                 session.id());
-        Set<EnrollmentStudent> newItem = session.enrollments().enrolledStudents();
+        Set<EnrollmentStudent> newItem = session.enrollmentStudents();
         return Sets.difference(newItem, before);
     }
 }
