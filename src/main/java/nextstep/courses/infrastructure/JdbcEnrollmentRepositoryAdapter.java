@@ -23,8 +23,12 @@ public class JdbcEnrollmentRepositoryAdapter implements EnrollmentStudentReposit
 
     @Override
     public void update(Enrollments enrollments) {
+        jdbcEnrollmentStudentDao.insertItem(updatedItems(enrollments));
+    }
+
+    protected Set<EnrollmentStudent> updatedItems(Enrollments enrollments) {
         Set<EnrollmentStudent> enrollmentStudents = enrollments.enrolledStudents();
-        jdbcEnrollmentStudentDao.insertItem(newEnrolledStudents(enrollmentStudents, sessionId(enrollmentStudents)));
+        return newEnrolledStudents(enrollmentStudents, sessionId(enrollmentStudents));
     }
 
     private long sessionId(Set<EnrollmentStudent> students) {

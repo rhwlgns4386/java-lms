@@ -3,7 +3,7 @@ package nextstep.courses.infrastructure;
 import java.time.LocalDate;
 import nextstep.courses.domain.Charge;
 import nextstep.courses.domain.CoverImage;
-import nextstep.courses.domain.Enrollments;
+import nextstep.courses.domain.DefaultEnrollments;
 import nextstep.courses.domain.ImageType;
 import nextstep.courses.domain.LimitedEnrollments;
 import nextstep.courses.domain.Session;
@@ -13,7 +13,7 @@ import nextstep.courses.domain.SessionStatus;
 class SessionHelper {
     private final Long id;
     private final Charge charge;
-    private final Enrollments enrollments;
+    private final DefaultEnrollments enrollments;
     private final CoverImage coverImage;
     private final SessionPeriod sessionPeriod;
 

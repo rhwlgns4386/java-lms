@@ -8,15 +8,15 @@ public class Session {
     private Long id;
     private Charge charge;
     private SessionStatus sessionStatus;
-    private Enrollments enrollments;
+    private DefaultEnrollments enrollments;
     private CoverImage coverImage;
     private SessionPeriod sessionPeriod;
 
-    public Session(Charge charge, Enrollments enrollments, CoverImage coverImage, SessionPeriod sessionPeriod) {
+    public Session(Charge charge, DefaultEnrollments enrollments, CoverImage coverImage, SessionPeriod sessionPeriod) {
         this(null, charge, enrollments, coverImage, sessionPeriod);
     }
 
-    public Session(Long id, Charge charge, Enrollments enrollments, CoverImage coverImage,
+    public Session(Long id, Charge charge, DefaultEnrollments enrollments, CoverImage coverImage,
                    SessionPeriod sessionPeriod) {
         this(id, charge, null, null, enrollments, coverImage, sessionPeriod);
     }
@@ -28,7 +28,7 @@ public class Session {
     }
 
     public Session(Long id, Charge charge, SessionStatus sessionStatus, EnrollmentsFactory enrollmentsFactory,
-                   Enrollments enrollments, CoverImage coverImage,
+                   DefaultEnrollments enrollments, CoverImage coverImage,
                    SessionPeriod sessionPeriod) {
         this.id = id;
         this.charge = charge;
@@ -78,7 +78,7 @@ public class Session {
         return id;
     }
 
-    public Enrollments enrollments() {
+    public DefaultEnrollments enrollments() {
         return enrollments;
     }
 

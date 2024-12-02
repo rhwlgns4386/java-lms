@@ -13,8 +13,8 @@ public class PaidSession extends Session {
     }
 
     @Override
-    protected Enrollments enrollments(EnrollmentsFactory enrollmentsFactory, SessionStatus sessionStatus,
-                                      Set<EnrollmentStudent> enrollmentStudents) {
+    protected DefaultEnrollments enrollments(EnrollmentsFactory enrollmentsFactory, SessionStatus sessionStatus,
+                                             Set<EnrollmentStudent> enrollmentStudents) {
         return enrollmentsFactory.enrollments(capacity, sessionStatus, enrollmentStudents);
     }
 }

@@ -6,7 +6,9 @@ import nextstep.courses.infrastructure.JdbcEnrollmentRepositoryAdapter;
 import nextstep.courses.infrastructure.JdbcEnrollmentStudentDao;
 import nextstep.courses.infrastructure.JdbcSession2Repository;
 import nextstep.courses.infrastructure.JdbcSessionDao;
+import nextstep.courses.infrastructure.JdbcSessionProxyRepository;
 import nextstep.courses.infrastructure.JdbcSessionRepositoryFacade;
+import nextstep.courses.infrastructure.ProxyEnrollmentStudentRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -26,7 +28,17 @@ public class RepositoryConfig {
     }
 
     @Bean
+    public SessionRepository proxySessionRepository(JdbcTemplate jdbcTemplate) {
+        return new JdbcSessionProxyRepository(jdbcTemplate);
+    }
+
+    @Bean
     public EnrollmentStudentRepository enrollmentStudentRepository(JdbcTemplate jdbcTemplate) {
         return new JdbcEnrollmentRepositoryAdapter(new JdbcEnrollmentStudentDao(jdbcTemplate));
+    }
+
+    @Bean
+    public EnrollmentStudentRepository proxyEnrollmentStudentRepository(JdbcTemplate jdbcTemplate) {
+        return new ProxyEnrollmentStudentRepository(new JdbcEnrollmentStudentDao(jdbcTemplate));
     }
 }

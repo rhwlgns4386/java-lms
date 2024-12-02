@@ -7,7 +7,7 @@ public class EnrollmentsFactory {
     }
 
     protected Enrollments enrollments(SessionStatus sessionStatus, Set<EnrollmentStudent> enrollmentStudents) {
-        return new Enrollments(sessionStatus, enrollmentStudents);
+        return new DefaultEnrollments(sessionStatus, enrollmentStudents);
     }
 
     public Enrollments enrollments(Capacity capacity, SessionStatus sessionStatus,

@@ -5,7 +5,7 @@ import static nextstep.courses.domain.TestEnrollmentsFactory.limitEnrollments;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Set;
-import nextstep.courses.domain.Enrollments;
+import nextstep.courses.domain.DefaultEnrollments;
 import nextstep.courses.domain.Session;
 import nextstep.courses.domain.SessionRepository;
 import nextstep.courses.domain.SessionStatus;
@@ -34,7 +34,7 @@ public class SessionRepositoryTest {
     @Test
     void findSession() {
         Session session = sessionRepository.findById(1L).orElseThrow();
-        Enrollments enrollments = session.enrollments();
+        DefaultEnrollments enrollments = session.enrollments();
 
         assertThat(session.id()).isEqualTo(1L);
         assertThat(enrollments).isEqualTo(

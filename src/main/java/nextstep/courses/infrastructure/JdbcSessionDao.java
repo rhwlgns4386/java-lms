@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Set;
 import nextstep.courses.domain.EnrollmentStudent;
-import nextstep.courses.domain.Enrollments;
+import nextstep.courses.domain.DefaultEnrollments;
 import nextstep.courses.domain.ImageType;
 import nextstep.courses.domain.LimitedEnrollments;
 import nextstep.courses.domain.Session;
@@ -44,10 +44,10 @@ public class JdbcSessionDao {
         return Optional.of(jdbcTemplate.queryForObject(sql, rowMapper, id));
     }
 
-    private Enrollments enrollments(Integer capacity, SessionStatus sessionStatus,
-                                    Set<EnrollmentStudent> enrolledStudents) {
+    private DefaultEnrollments enrollments(Integer capacity, SessionStatus sessionStatus,
+                                           Set<EnrollmentStudent> enrolledStudents) {
         if (capacity == null) {
-            return new Enrollments(sessionStatus, enrolledStudents);
+            return new DefaultEnrollments(sessionStatus, enrolledStudents);
         }
 
         return new LimitedEnrollments(capacity, sessionStatus, enrolledStudents);

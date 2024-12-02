@@ -18,7 +18,7 @@ public class EnrollmentsTest {
     @Test
     void 등록목록에_등록한다() {
         Session session = createTestSession();
-        Enrollments enrollments = enrollments(SessionStatus.ENROLLING, session,
+        DefaultEnrollments enrollments = enrollments(SessionStatus.ENROLLING, session,
                 Set.of(NsUserTest.JAVAJIGI));
         enrollments.enrollment(session, NsUserTest.SANJIGI);
 
@@ -29,7 +29,7 @@ public class EnrollmentsTest {
     @Test
     void 이미추가된_사용자면_예외가_발생한다() {
         Session session = createTestSession();
-        Enrollments enrollments = enrollments(SessionStatus.ENROLLING, session, Set.of(NsUserTest.JAVAJIGI));
+        DefaultEnrollments enrollments = enrollments(SessionStatus.ENROLLING, session, Set.of(NsUserTest.JAVAJIGI));
         assertThatThrownBy(() -> enrollments.enrollment(session, NsUserTest.JAVAJIGI)).isInstanceOf(
                 DuplicateStudentException.class);
     }
@@ -38,7 +38,7 @@ public class EnrollmentsTest {
     @CsvSource(value = {"PREPARING", "CLOSED"})
     void 진행상태가_아니라면_예외(SessionStatus sessionStatus) {
         Session session = createTestSession();
-        Enrollments enrollments = enrollments(sessionStatus, session);
+        DefaultEnrollments enrollments = enrollments(sessionStatus, session);
         assertThatThrownBy(() -> enrollments.enrollment(session, NsUserTest.JAVAJIGI)).isInstanceOf(
                 NonReadyException.class);
     }

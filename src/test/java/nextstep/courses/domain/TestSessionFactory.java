@@ -11,7 +11,7 @@ public class TestSessionFactory {
     }
 
     static Session createTestSession() {
-        return session(0, new Enrollments(ENROLLING));
+        return session(0, new DefaultEnrollments(ENROLLING));
     }
 
     static Session createTestSession2() {
@@ -36,7 +36,7 @@ public class TestSessionFactory {
         return session(charge, new LimitedEnrollments(new Capacity(2), ENROLLING));
     }
 
-    private static Session session(int charge, Enrollments enrollments) {
+    private static Session session(int charge, DefaultEnrollments enrollments) {
         return new Session(0L, new Charge(charge), enrollments,
                 toImage("test", 300, 200, 100, ImageType.JPEG), toSessionPeriod(LocalDate.now(), LocalDate.now()));
     }

@@ -21,7 +21,7 @@ public class JdbcSession2Repository implements SessionRepository {
     }
 
     @Override
-    public Optional<Session> findById(Long id) {
+    public final Optional<Session> findById(Long id) {
         String sql = "select id, charge, capacity, sessionStatus, image_file_name, image_width, image_height,"
                 + "image_size, imageType, start_date, end_date from session where id = ?";
 
@@ -30,7 +30,7 @@ public class JdbcSession2Repository implements SessionRepository {
                 rs.getInt(2),
                 (Integer) rs.getObject(3),
                 SessionStatus.findByName(rs.getString(4)),
-                new EnrollmentsFactory(),
+                enrollmentFactory(),
                 rs.getString(5),
                 rs.getInt(6),
                 rs.getInt(7),
@@ -43,6 +43,10 @@ public class JdbcSession2Repository implements SessionRepository {
         return Optional.of(jdbcTemplate.queryForObject(sql, rowMapper, id));
     }
 
+    protected EnrollmentsFactory enrollmentFactory() {
+        return new EnrollmentsFactory();
+    }
+
 
     private LocalDate toLocalDate(Date date) {
         if (date == null) {
@@ -52,7 +56,7 @@ public class JdbcSession2Repository implements SessionRepository {
     }
 
     @Override
-    public void update(Session session) {
+    public final void update(Session session) {
         SessionHelper helper = new SessionHelper(session);
         String sql = "update session set charge=?,capacity=?,sessionStatus=?,image_file_name=?,image_width=?,"
                 + "image_height=?,image_size=?,imageType=?,start_date=?,end_date =? where id=?";

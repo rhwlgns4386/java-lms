@@ -14,12 +14,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class Session2Service {
+public class ProxySessionService {
 
-    @Resource(name = "session2Repository")
+    @Resource(name = "proxySessionRepository")
     private SessionRepository sessionRepository;
 
-    @Resource(name = "enrollmentStudentRepository")
+    @Resource(name = "proxyEnrollmentStudentRepository")
     private EnrollmentStudentRepository enrollmentStudentRepository;
 
     @Transactional
