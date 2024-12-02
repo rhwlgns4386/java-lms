@@ -19,7 +19,7 @@ public class TestSessionFactory {
     }
 
     private static Session session(int charge, SessionStatus sessionStatus) {
-        return new Session(0L, new Charge(charge), sessionStatus,
+        return new Session(0L, new Charge(charge), sessionStatus, new EnrollmentsFactory(),
                 toImage("test", 300, 200, 100, ImageType.JPEG), toSessionPeriod(LocalDate.now(), LocalDate.now()));
     }
 
@@ -28,7 +28,7 @@ public class TestSessionFactory {
     }
 
     private static Session paidSession(int charge, int capacity, SessionStatus sessionStatus) {
-        return new PaidSession(0L, new Charge(charge), new Capacity(capacity), sessionStatus,
+        return new PaidSession(0L, new Charge(charge), new Capacity(capacity), sessionStatus, new EnrollmentsFactory(),
                 toImage("test", 300, 200, 100, ImageType.JPEG), toSessionPeriod(LocalDate.now(), LocalDate.now()));
     }
 

@@ -5,6 +5,7 @@ import static nextstep.courses.factory.SessionFactory.session;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Optional;
+import nextstep.courses.domain.EnrollmentsFactory;
 import nextstep.courses.domain.ImageType;
 import nextstep.courses.domain.Session;
 import nextstep.courses.domain.SessionRepository;
@@ -29,6 +30,7 @@ public class JdbcSession2Repository implements SessionRepository {
                 rs.getInt(2),
                 (Integer) rs.getObject(3),
                 SessionStatus.findByName(rs.getString(4)),
+                new EnrollmentsFactory(),
                 rs.getString(5),
                 rs.getInt(6),
                 rs.getInt(7),
