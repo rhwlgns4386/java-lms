@@ -14,6 +14,24 @@ public class TestSessionFactory {
         return session(0, new Enrollments(ENROLLING));
     }
 
+    static Session createTestSession2() {
+        return session(0, ENROLLING);
+    }
+
+    private static Session session(int charge, SessionStatus sessionStatus) {
+        return new Session(0L, new Charge(charge), sessionStatus,
+                toImage("test", 300, 200, 100, ImageType.JPEG), toSessionPeriod(LocalDate.now(), LocalDate.now()));
+    }
+
+    public static Session createTestSession2(int charge, int capacity) {
+        return paidSession(charge, capacity, ENROLLING);
+    }
+
+    private static Session paidSession(int charge, int capacity, SessionStatus sessionStatus) {
+        return new PaidSession(0L, new Charge(charge), new Capacity(capacity), sessionStatus,
+                toImage("test", 300, 200, 100, ImageType.JPEG), toSessionPeriod(LocalDate.now(), LocalDate.now()));
+    }
+
     static Session createTestSession(int charge) {
         return session(charge, new LimitedEnrollments(new Capacity(2), ENROLLING));
     }

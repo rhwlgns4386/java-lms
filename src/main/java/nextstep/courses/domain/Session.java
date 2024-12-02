@@ -6,7 +6,8 @@ import nextstep.users.domain.NsUser;
 public class Session {
     private Long id;
     private Charge charge;
-    private final Enrollments enrollments;
+    private SessionStatus sessionStatus;
+    private Enrollments enrollments;
     private CoverImage coverImage;
     private SessionPeriod sessionPeriod;
 
@@ -16,8 +17,19 @@ public class Session {
 
     public Session(Long id, Charge charge, Enrollments enrollments, CoverImage coverImage,
                    SessionPeriod sessionPeriod) {
+        this(id, charge, null, enrollments, coverImage, sessionPeriod);
+    }
+
+    public Session(long id, Charge charge, SessionStatus sessionStatus, CoverImage coverImage,
+                   SessionPeriod sessionPeriod) {
+        this(id, charge, sessionStatus, null, coverImage, sessionPeriod);
+    }
+
+    public Session(Long id, Charge charge, SessionStatus sessionStatus, Enrollments enrollments, CoverImage coverImage,
+                   SessionPeriod sessionPeriod) {
         this.id = id;
         this.charge = charge;
+        this.sessionStatus = sessionStatus;
         this.enrollments = enrollments;
         this.coverImage = coverImage;
         this.sessionPeriod = sessionPeriod;
@@ -30,6 +42,19 @@ public class Session {
     public void enrollment(Charge fee, NsUser enrollmentStudent) {
         validateCharge(fee);
         enrollments.enrollment(this, enrollmentStudent);
+    }
+
+    public Enrollments enrollments(int fee, Set<EnrollmentStudent> enrollmentStudents) {
+        return enrollments(new Charge(fee), enrollmentStudents);
+    }
+
+    public Enrollments enrollments(Charge charge, Set<EnrollmentStudent> enrollmentStudents) {
+        validateCharge(charge);
+        return enrollments(sessionStatus, enrollmentStudents);
+    }
+
+    protected Enrollments enrollments(SessionStatus sessionStatus, Set<EnrollmentStudent> enrollmentStudents) {
+        return new Enrollments(sessionStatus, enrollmentStudents);
     }
 
     private void validateCharge(Charge fee) {

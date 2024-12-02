@@ -27,10 +27,6 @@ public class LimitedEnrollments extends Enrollments {
         this.capacity = capacity;
     }
 
-    public int capacity() {
-        return capacity.toInt();
-    }
-
     @Override
     public void enrollment(Session session, NsUser student) {
         super.enrollment(session, student);
@@ -46,5 +42,9 @@ public class LimitedEnrollments extends Enrollments {
         if (!capacity.canEnroll(size())) {
             throw new MaxEnrollmentExceededException();
         }
+    }
+
+    public int capacity() {
+        return capacity.toInt();
     }
 }
