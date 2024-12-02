@@ -28,7 +28,16 @@ public class Session2Service {
 
         Enrollments enrollments = session.enrollments(fee, enrollmentStudents);
         enrollments.enrollment(session, user);
-        enrollmentStudentRepository.update(session);
+        enrollmentStudentRepository.update(enrollments);
+    }
+
+    @Transactional
+    public void enroll2(long sessionId, int fee, NsUser user) {
+        Session session = findById(sessionId);
+        Set<EnrollmentStudent> enrollmentStudents = enrollmentStudentRepository.findBySessionId(sessionId);
+
+        Enrollments enrollments = session.enrollments(fee, enrollmentStudents, user);
+        enrollmentStudentRepository.update(enrollments);
     }
 
     @Transactional(readOnly = true)

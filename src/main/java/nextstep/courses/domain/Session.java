@@ -44,6 +44,12 @@ public class Session {
         enrollments.enrollment(this, enrollmentStudent);
     }
 
+    public Enrollments enrollments(int fee, Set<EnrollmentStudent> enrollmentStudents, NsUser user) {
+        Enrollments enrollments = enrollments(fee, enrollmentStudents);
+        enrollments.enrollment(this, user);
+        return enrollments;
+    }
+
     public Enrollments enrollments(int fee, Set<EnrollmentStudent> enrollmentStudents) {
         return enrollments(new Charge(fee), enrollmentStudents);
     }

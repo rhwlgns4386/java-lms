@@ -5,5 +5,5 @@ import java.util.Set;
 public interface EnrollmentStudentRepository {
     Set<EnrollmentStudent> findBySessionId(long sessionId);
 
-    void update(Session session);
+    void update(Enrollments session);
 }
