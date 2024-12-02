@@ -10,6 +10,7 @@ import nextstep.courses.domain.CoverImage;
 import nextstep.courses.domain.Enrollments;
 import nextstep.courses.domain.ImageType;
 import nextstep.courses.domain.LimitedEnrollments;
+import nextstep.courses.domain.PaidSession;
 import nextstep.courses.domain.Session;
 import nextstep.courses.domain.SessionPeriod;
 import nextstep.courses.domain.SessionStatus;
@@ -40,18 +41,51 @@ public class SessionFactory {
 
 
     public static Session paidSession(Charge charge, Capacity capacity, SessionStatus sessionStatus,
-                                      CoverImage coverImage,
-                                      SessionPeriod sessionPeriod) {
+                                      CoverImage coverImage, SessionPeriod sessionPeriod) {
 
         return session(null, charge, new LimitedEnrollments(capacity, sessionStatus), coverImage, sessionPeriod);
     }
 
-    public static Session session(long id, int charge, Enrollments enrollments, String fileName, int width,
-                                  int height,
-                                  int size, ImageType imageType, LocalDate startDate,
-                                  LocalDate endDate) {
+    public static Session session(long id, int charge, Enrollments enrollments, String fileName, int width, int height,
+                                  int size, ImageType imageType, LocalDate startDate, LocalDate endDate) {
         return session(id, new Charge(charge), enrollments, toImage(fileName, width, height, size, imageType),
                 toSessionPeriod(startDate, endDate));
+    }
+
+    public static Session session(long id, int charge, Integer capacity, SessionStatus sessionStatus, String fileName,
+                                  int width, int height, int size, ImageType imageType, LocalDate startDate,
+                                  LocalDate endDate) {
+        if (capacity == null) {
+            return session(id, new Charge(charge), sessionStatus, toImage(fileName, width, height,
+                            size, imageType),
+                    toSessionPeriod(startDate, endDate));
+        }
+        return paidSession(id, new Charge(charge), new Capacity(capacity), sessionStatus,
+                toImage(fileName, width,
+                        height, size, imageType), toSessionPeriod(startDate, endDate));
+    }
+
+    public static Session session(long id, int charge, SessionStatus sessionStatus, String fileName, int width,
+                                  int height, int size, ImageType imageType, LocalDate startDate, LocalDate endDate) {
+        return session(id, new Charge(charge), sessionStatus, toImage(fileName, width, height, size, imageType),
+                toSessionPeriod(startDate, endDate));
+    }
+
+    public static Session session(long id, int charge, int capacity, SessionStatus sessionStatus, String fileName,
+                                  int width, int height, int size, ImageType imageType, LocalDate startDate,
+                                  LocalDate endDate) {
+        return paidSession(id, new Charge(charge), new Capacity(capacity), sessionStatus,
+                toImage(fileName, width, height, size, imageType), toSessionPeriod(startDate, endDate));
+    }
+
+    public static Session paidSession(long id, Charge charge, Capacity capacity, SessionStatus sessionStatus,
+                                      CoverImage coverImage, SessionPeriod sessionPeriod) {
+        return new PaidSession(id, charge, capacity, sessionStatus, coverImage, sessionPeriod);
+    }
+
+    public static Session session(long id, Charge charge, SessionStatus sessionStatus, CoverImage coverImage,
+                                  SessionPeriod sessionPeriod) {
+        return new Session(id, charge, sessionStatus, coverImage, sessionPeriod);
     }
 
     public static Session session(Long id, Charge charge, Enrollments enrollments, CoverImage coverImage,
