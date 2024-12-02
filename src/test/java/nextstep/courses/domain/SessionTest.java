@@ -20,7 +20,7 @@ public class SessionTest {
         Session session = TestSessionFactory.createTestSession2();
         Set<EnrollmentStudent> enrollmentStudents = Set.of(new EnrollmentStudent(0L, 0L));
 
-        DefaultEnrollments enrollments = session.enrollments(0, enrollmentStudents);
+        Enrollments enrollments = session.enrollments(0, enrollmentStudents);
 
         assertThat(enrollments).isEqualTo(new DefaultEnrollments(SessionStatus.ENROLLING, enrollmentStudents));
     }
@@ -30,7 +30,7 @@ public class SessionTest {
         Session session = TestSessionFactory.createTestSession2(500, 2);
         Set<EnrollmentStudent> enrollmentStudents = Set.of(new EnrollmentStudent(0L, 0L));
 
-        DefaultEnrollments enrollments = session.enrollments(500, enrollmentStudents);
+        Enrollments enrollments = session.enrollments(500, enrollmentStudents);
 
         assertThat(enrollments).isEqualTo(new LimitedEnrollments(2, SessionStatus.ENROLLING, enrollmentStudents));
     }
@@ -40,7 +40,7 @@ public class SessionTest {
         Session session = TestSessionFactory.createTestSession2(500, 2);
         Set<EnrollmentStudent> enrollmentStudents = Set.of(new EnrollmentStudent(0L, 0L));
 
-        DefaultEnrollments enrollments = session.enrollments(500, enrollmentStudents, NsUserTest.JAVAJIGI);
+        Enrollments enrollments = session.enrollments(500, enrollmentStudents, NsUserTest.JAVAJIGI);
 
         assertThat(enrollments).isEqualTo(new LimitedEnrollments(2, SessionStatus.ENROLLING,
                 Set.of(new EnrollmentStudent(0L, 0L), new EnrollmentStudent(0L, 1L))));
