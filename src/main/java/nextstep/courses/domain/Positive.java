@@ -25,12 +25,20 @@ public class Positive {
         return this.number < value.number;
     }
 
+    public boolean isGraterThan(int value) {
+        return isGraterThan(new Positive(value));
+    }
+
     public boolean isGraterThan(Positive value) {
         return this.number > value.number;
     }
 
     public Positive multiply(Positive positive) {
         return new Positive(this.number * positive.number);
+    }
+
+    public int toInt() {
+        return number;
     }
 
     @Override

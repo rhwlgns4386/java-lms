@@ -15,6 +15,10 @@ public class Capacity {
     }
 
     public boolean canEnroll(int size) {
-        return capacity.isGraterThan(new Positive(size));
+        return capacity.isGraterThan(size);
+    }
+
+    public int toInt() {
+        return capacity.toInt();
     }
 }

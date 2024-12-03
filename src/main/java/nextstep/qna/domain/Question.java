@@ -1,6 +1,7 @@
 package nextstep.qna.domain;
 
 import java.util.ArrayList;
+import java.util.List;
 import nextstep.qna.CannotDeleteException;
 import nextstep.users.domain.NsUser;
 
@@ -32,7 +33,7 @@ public class Question extends BaseEntity {
     }
 
     public void updateTitle(String title) {
-        this.questionBody=this.questionBody.updateTitle(title);
+        this.questionBody = this.questionBody.updateTitle(title);
     }
 
     public String getContents() {
@@ -40,7 +41,7 @@ public class Question extends BaseEntity {
     }
 
     public void updateContents(String contents) {
-        this.questionBody=this.questionBody.updateContents(contents);
+        this.questionBody = this.questionBody.updateContents(contents);
     }
 
     public void addAnswer(Answer answer) {
@@ -48,7 +49,7 @@ public class Question extends BaseEntity {
         answers.add(answer);
     }
 
-    public final ArrayList<DeleteHistory> delete(NsUser loginUser) throws CannotDeleteException {
+    public final List<DeleteHistory> delete(NsUser loginUser) throws CannotDeleteException {
         ArrayList<DeleteHistory> deleteHistories = new ArrayList<>();
         deleteHistories.add(deleteRule.delete(loginUser, ContentType.QUESTION, getId()));
         deleteHistories.addAll(answers.delete(loginUser));

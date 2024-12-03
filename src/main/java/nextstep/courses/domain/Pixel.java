@@ -28,6 +28,10 @@ public class Pixel {
         return this.value.multiply(positive);
     }
 
+    public int toInt() {
+        return value.toInt();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

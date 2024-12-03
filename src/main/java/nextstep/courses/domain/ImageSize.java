@@ -20,4 +20,15 @@ public class ImageSize {
         this.imageByte = imageByte;
     }
 
+    public int width() {
+        return imageResolution.width();
+    }
+
+    public int height() {
+        return imageResolution.height();
+    }
+
+    public int bytes() {
+        return imageByte.bytes();
+    }
 }

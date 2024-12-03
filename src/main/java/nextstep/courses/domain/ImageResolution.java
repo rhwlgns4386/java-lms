@@ -33,6 +33,14 @@ public class ImageResolution {
         }
     }
 
+    public int width() {
+        return width.toInt();
+    }
+
+    public int height() {
+        return height.toInt();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

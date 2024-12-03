@@ -17,6 +17,10 @@ public class Charge {
         this.value = value;
     }
 
+    public int toInt() {
+        return value.toInt();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
