@@ -2,15 +2,21 @@ package nextstep.courses.infrastructure;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import nextstep.courses.domain.EnrollmentStudent;
+import nextstep.courses.domain.CoverImage;
 import nextstep.courses.domain.DefaultEnrollments;
+import nextstep.courses.domain.EnrollmentStudent;
+import nextstep.courses.domain.Image;
 import nextstep.courses.domain.ImageType;
 import nextstep.courses.domain.LimitedEnrollments;
 import nextstep.courses.domain.Session;
+import nextstep.courses.domain.SessionPeriod;
 import nextstep.courses.domain.SessionStatus;
+import nextstep.courses.factory.ImageConverter;
 import nextstep.courses.factory.SessionFactory;
+import nextstep.courses.factory.SessionPeriodConverter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -22,9 +28,9 @@ public class JdbcSessionDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    Optional<Session> findById(Long id, Set<EnrollmentStudent> enrollmentStudents) {
-        String sql = "select id, charge, capacity, sessionStatus, image_file_name, image_width, image_height,"
-                + "image_size, imageType, start_date, end_date from session where id = ?";
+
+    Optional<Session> findById(Long id, Set<EnrollmentStudent> enrollmentStudents, List<CoverImage> coverImages) {
+        String sql = "select id, charge, capacity, sessionStatus, start_date, end_date from session where id = ?";
 
         RowMapper<Session> rowMapper = ((rs, rowNum) -> SessionFactory.session(
                 rs.getLong(1),
@@ -32,16 +38,20 @@ public class JdbcSessionDao {
                 enrollments((Integer) rs.getObject(3),
                         SessionStatus.findByName(rs.getString(4)),
                         enrollmentStudents),
-                rs.getString(5),
-                rs.getInt(6),
-                rs.getInt(7),
-                rs.getInt(8),
-                ImageType.findByName(rs.getString(9)),
-                toLocalDate(rs.getDate(10)),
-                toLocalDate(rs.getDate(11)))
+                coverImages,
+                toPeriod(toLocalDate(rs.getDate(5)),
+                        toLocalDate(rs.getDate(6))))
         );
 
         return Optional.of(jdbcTemplate.queryForObject(sql, rowMapper, id));
+    }
+
+    private Image toImage(String fileName, int width, int height, int size, ImageType imageType) {
+        return ImageConverter.toImage(fileName, width, height, size, imageType);
+    }
+
+    private SessionPeriod toPeriod(LocalDate startDate, LocalDate endDate) {
+        return SessionPeriodConverter.toSessionPeriod(startDate, endDate);
     }
 
     private DefaultEnrollments enrollments(Integer capacity, SessionStatus sessionStatus,
@@ -62,18 +72,12 @@ public class JdbcSessionDao {
 
     void update(Session session) {
         SessionHelper helper = new SessionHelper(session);
-        String sql = "update session set charge=?,capacity=?,sessionStatus=?,image_file_name=?,image_width=?,"
-                + "image_height=?,image_size=?,imageType=?,start_date=?,end_date =? where id=?";
+        String sql = "update session set charge=?,capacity=?,sessionStatus=?,start_date=?,end_date =? where id=?";
 
         jdbcTemplate.update(sql,
                 helper.getCharge(),
                 helper.getCapacity(),
                 helper.getSessionStatus(),
-                helper.getImageFileName(),
-                helper.getImageWidth(),
-                helper.getImageHeight(),
-                helper.getImageBytes(),
-                helper.getImageType(),
                 helper.getStartDate(),
                 helper.getEndDate(),
                 helper.getId()

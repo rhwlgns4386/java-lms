@@ -27,7 +27,7 @@ public class SessionRepositoryTest {
     @BeforeEach
     void setUp() {
         sessionRepository = new JdbcSessionRepositoryFacade(new JdbcSessionDao(jdbcTemplate),
-                new JdbcEnrollmentStudentDao(jdbcTemplate));
+                new JdbcEnrollmentStudentDao(jdbcTemplate), new JdbcImageDao(jdbcTemplate));
     }
 
 

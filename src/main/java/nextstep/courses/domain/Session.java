@@ -1,43 +1,59 @@
 package nextstep.courses.domain;
 
+import java.util.List;
 import java.util.Set;
 import nextstep.users.domain.NsUser;
 
 public class Session {
-    private EnrollmentsFactory enrollmentsFactory;
     private Long id;
     private Charge charge;
+    private EnrollmentsFactory enrollmentsFactory;
     private SessionStatus sessionStatus;
     private DefaultEnrollments enrollments;
-    private CoverImage coverImage;
+    private CoverImages coverImages;
     private SessionPeriod sessionPeriod;
 
-    public Session(Charge charge, DefaultEnrollments enrollments, CoverImage coverImage, SessionPeriod sessionPeriod) {
-        this(null, charge, enrollments, coverImage, sessionPeriod);
+    public Session(Charge charge, DefaultEnrollments enrollments, SessionPeriod sessionPeriod) {
+        this(null, charge, enrollments, null, sessionPeriod);
     }
 
-    public Session(Long id, Charge charge, DefaultEnrollments enrollments, CoverImage coverImage,
+    public Session(Long id, Charge charge, DefaultEnrollments enrollments, SessionPeriod sessionPeriod) {
+        this(id, charge, enrollments, List.of(), sessionPeriod);
+    }
+
+    public Session(Long id, Charge charge, DefaultEnrollments enrollments, List<CoverImage> coverImages,
                    SessionPeriod sessionPeriod) {
-        this(id, charge, null, null, enrollments, coverImage, sessionPeriod);
+        this(id, charge, null, null, enrollments, coverImages, sessionPeriod);
     }
 
     public Session(long id, Charge charge, SessionStatus sessionStatus, EnrollmentsFactory enrollmentsFactory,
-                   CoverImage coverImage,
                    SessionPeriod sessionPeriod) {
-        this(id, charge, sessionStatus, enrollmentsFactory, null, coverImage, sessionPeriod);
+        this(id, charge, sessionStatus, enrollmentsFactory, null, List.of(), sessionPeriod);
+    }
+
+    public Session(long id, Charge charge, SessionStatus sessionStatus, EnrollmentsFactory enrollmentsFactory,
+                   List<CoverImage> coverImages, SessionPeriod sessionPeriod) {
+        this(id, charge, sessionStatus, enrollmentsFactory, null, coverImages, sessionPeriod);
     }
 
     public Session(Long id, Charge charge, SessionStatus sessionStatus, EnrollmentsFactory enrollmentsFactory,
-                   DefaultEnrollments enrollments, CoverImage coverImage,
+                   DefaultEnrollments enrollments, List<CoverImage> coverImages,
+                   SessionPeriod sessionPeriod) {
+        this(id, charge, sessionStatus, enrollmentsFactory, enrollments, new CoverImages(coverImages), sessionPeriod);
+    }
+
+    public Session(Long id, Charge charge, SessionStatus sessionStatus, EnrollmentsFactory enrollmentsFactory,
+                   DefaultEnrollments enrollments, CoverImages coverImages,
                    SessionPeriod sessionPeriod) {
         this.id = id;
         this.charge = charge;
         this.sessionStatus = sessionStatus;
         this.enrollmentsFactory = enrollmentsFactory;
         this.enrollments = enrollments;
-        this.coverImage = coverImage;
+        this.coverImages = coverImages;
         this.sessionPeriod = sessionPeriod;
     }
+
 
     public void enrollment(int fee, NsUser enrollmentStudent) {
         enrollment(new Charge(fee), enrollmentStudent);
@@ -88,10 +104,6 @@ public class Session {
 
     public Charge charge() {
         return charge;
-    }
-
-    public CoverImage coverImage() {
-        return coverImage;
     }
 
     public SessionPeriod sessionPeriod() {

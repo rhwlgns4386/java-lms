@@ -23,14 +23,21 @@ VALUES (2, 2, 'runtime 에 reflect 발동 주체 객체가 뭔지 알 방법이 
         '설계를 희한하게 하는 바람에 꼬인 문제같긴 합니다만. 여쭙습니다. 상황은 mybatis select 실행될 시에 return object 의 getter 가 호출되면서인데요. getter 안에 다른 property 에 의존중인 코드가 삽입되어 있어서, 만약 다른 mybatis select 구문에 해당 property 가 없다면 exception 이 발생하게 됩니다.',
         CURRENT_TIMESTAMP(), false);
 
-INSERT into session(id, charge, capacity, sessionStatus, image_file_name, image_width, image_height, image_size,
-                    imageType, start_date, end_date)
-values (1, 0, null, 'ENROLLING', '소희는 귀엽다', 300, 200, 100, 'jpeg', '2024-10-18', '2024-11-25');
+INSERT into session(id, charge, capacity, sessionStatus, start_date, end_date)
+values (1, 0, null, 'ENROLLING', '2024-10-18', '2024-11-25');
 
-INSERT into session(id, charge, capacity, sessionStatus, image_file_name, image_width, image_height, image_size,
-                    imageType, start_date, end_date)
-values (2, 100, 10, 'ENROLLING', '소희는 귀엽다', 300, 200, 100, 'jpeg',
-        '2024-10-18', '2024-11-25');
+INSERT into session(id, charge, capacity, sessionStatus, start_date, end_date)
+values (2, 100, 10, 'ENROLLING', '2024-10-18', '2024-11-25');
+
+INSERT into image(id, file_name, width, height, size, type)
+values (1, 'testImage1', 300, 200, 100, 'jpeg');
+INSERT into image(id, file_name, width, height, size, type)
+values (2, 'testImage2', 300, 200, 100, 'jpeg');
+
+insert into cover_image(session_id, image_id)
+values (1, 1);
+insert into cover_image(session_id, image_id)
+values (2, 2);
 
 INSERT into ENROLLMENT_STUDENTS (session_id, user_id)
 values (1, 1);
