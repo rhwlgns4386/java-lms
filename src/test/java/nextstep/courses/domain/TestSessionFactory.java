@@ -31,7 +31,7 @@ public class TestSessionFactory {
     }
 
     private static Session session(int charge, EnrollmentsInfo enrollmentsInfo) {
-        return new Session(0L, new Charge(charge), enrollmentsInfo, new CoverImages(List.of()),
+        return new Session(new SessionId(0L), new Charge(charge), enrollmentsInfo, new CoverImages(List.of()),
                 toSessionPeriod(LocalDate.now(), LocalDate.now()));
     }
 }

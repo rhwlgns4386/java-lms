@@ -12,6 +12,7 @@ import nextstep.courses.domain.EnrollmentsFactory;
 import nextstep.courses.domain.EnrollmentsInfo;
 import nextstep.courses.domain.LimitEnrollmentsInfo;
 import nextstep.courses.domain.Session;
+import nextstep.courses.domain.SessionId;
 import nextstep.courses.domain.SessionPeriod;
 import nextstep.courses.domain.SessionStatus;
 
@@ -31,14 +32,14 @@ public class SessionFactory {
     public static Session session(long id, Charge charge, SessionStatus sessionStatus,
                                   EnrollmentsFactory enrollmentsFactory,
                                   SessionPeriod sessionPeriod) {
-        return new Session(id, charge, sessionStatus, enrollmentsFactory, sessionPeriod);
+        return new Session(new SessionId(id), charge, sessionStatus, enrollmentsFactory, sessionPeriod);
     }
 
     public static Session session(long id, Charge charge, SessionStatus sessionStatus,
                                   EnrollmentsFactory enrollmentsFactory,
                                   List<CoverImage> coverImages,
                                   SessionPeriod sessionPeriod) {
-        return new Session(id, charge, sessionStatus, enrollmentsFactory, coverImages, sessionPeriod);
+        return new Session(new SessionId(id), charge, sessionStatus, enrollmentsFactory, coverImages, sessionPeriod);
     }
 
     public static Session session(long id, int charge, int capacity, SessionStatus sessionStatus,
@@ -53,6 +54,6 @@ public class SessionFactory {
                                       EnrollmentsFactory enrollmentsFactory,
                                       List<CoverImage> coverImages, SessionPeriod sessionPeriod) {
         EnrollmentsInfo paidSession = new LimitEnrollmentsInfo(capacity, enrollmentsFactory, sessionStatus);
-        return new Session(id, charge, paidSession, new CoverImages(coverImages), sessionPeriod);
+        return new Session(new SessionId(id), charge, paidSession, new CoverImages(coverImages), sessionPeriod);
     }
 }
