@@ -11,9 +11,8 @@ import nextstep.courses.NonReadyException;
 import nextstep.users.domain.NsUser;
 
 public class Enrollments {
-    private Charge charge;
-    private SessionStatus sessionStatus;
     private EnrollmentStatus enrollmentStatus;
+    private Charge charge;
     private Set<EnrollmentStudent> enrolledStudents;
 
     public Enrollments(SessionStatus sessionStatus) {
@@ -26,8 +25,7 @@ public class Enrollments {
 
     public Enrollments(Charge charge, SessionStatus sessionStatus, Set<EnrollmentStudent> enrollmentStudents) {
         this.charge = charge;
-        this.sessionStatus = sessionStatus;
-        this.enrollmentStatus = EnrollmentStatus.findBySessionStatus(sessionStatus);
+        this.enrollmentStatus = new EnrollmentStatus(sessionStatus);
         this.enrolledStudents = new HashSet<>(enrollmentStudents);
     }
 
@@ -79,7 +77,7 @@ public class Enrollments {
     }
 
     public SessionStatus sessionStatus() {
-        return sessionStatus;
+        return enrollmentStatus.sessionStatus();
     }
 
     public Set<EnrollmentStudent> enrolledStudents() {
@@ -95,13 +93,12 @@ public class Enrollments {
             return false;
         }
         Enrollments that = (Enrollments) o;
-        return Objects.equals(charge, that.charge) && sessionStatus == that.sessionStatus
-                && enrollmentStatus == that.enrollmentStatus && Objects.equals(
-                that.enrolledStudents, enrolledStudents);
+        return Objects.equals(enrollmentStatus, that.enrollmentStatus) && Objects.equals(charge,
+                that.charge) && Objects.equals(that.enrolledStudents, enrolledStudents);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(charge, sessionStatus, enrollmentStatus, enrolledStudents);
+        return Objects.hash(enrollmentStatus, charge, enrolledStudents);
     }
 }

@@ -1,21 +1,38 @@
 package nextstep.courses.domain;
 
-public enum EnrollmentStatus {
-    NOT_RECRUITING,
-    RECRUITING;
+import java.util.Objects;
 
-    public static EnrollmentStatus findBySessionStatus(SessionStatus sessionStatus) {
-        if (isRecruiting(sessionStatus)) {
-            return RECRUITING;
+public class EnrollmentStatus {
+    private SessionStatus sessionStatus;
+    private RecruitmentStatus recruitmentStatus;
+
+    public EnrollmentStatus(SessionStatus sessionStatus) {
+        this.sessionStatus = sessionStatus;
+        this.recruitmentStatus = RecruitmentStatus.findBySessionStatus(sessionStatus);
+    }
+
+    boolean isRecruiting() {
+        return recruitmentStatus.isRecruiting();
+    }
+
+    public SessionStatus sessionStatus() {
+        return sessionStatus;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
         }
-        return NOT_RECRUITING;
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        EnrollmentStatus that = (EnrollmentStatus) o;
+        return sessionStatus == that.sessionStatus && recruitmentStatus == that.recruitmentStatus;
     }
 
-    private static boolean isRecruiting(SessionStatus sessionStatus) {
-        return sessionStatus == SessionStatus.PROGRESS;
-    }
-
-    public boolean isRecruiting() {
-        return this == RECRUITING;
+    @Override
+    public int hashCode() {
+        return Objects.hash(sessionStatus, recruitmentStatus);
     }
 }
