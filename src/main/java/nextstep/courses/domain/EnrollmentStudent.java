@@ -8,13 +8,32 @@ public class EnrollmentStudent {
 
     private long userId;
 
+    private RequestStatus requestStatus;
+
     public EnrollmentStudent(Session session, NsUser user) {
         this(session.id(), user.getId());
     }
 
+    public EnrollmentStudent(Session session, NsUser user, RequestStatus requestStatus) {
+        this(session.id(), user.getId(), requestStatus);
+    }
+
     public EnrollmentStudent(long sessionId, long userId) {
+        this(sessionId, userId, RequestStatus.PENDING);
+    }
+
+    public EnrollmentStudent(long sessionId, long userId, RequestStatus requestStatus) {
         this.sessionId = sessionId;
         this.userId = userId;
+        this.requestStatus = requestStatus;
+    }
+
+    public void accept() {
+        this.requestStatus = RequestStatus.ACCEPTED;
+    }
+
+    public boolean matchesUserId(Long id) {
+        return this.userId == id;
     }
 
     public long getSessionId() {
@@ -23,6 +42,10 @@ public class EnrollmentStudent {
 
     public long getUserId() {
         return userId;
+    }
+
+    public String getRequestStatusString() {
+        return requestStatus.name();
     }
 
     @Override
@@ -34,11 +57,11 @@ public class EnrollmentStudent {
             return false;
         }
         EnrollmentStudent that = (EnrollmentStudent) o;
-        return sessionId == that.sessionId && userId == that.userId;
+        return sessionId == that.sessionId && userId == that.userId && requestStatus == that.requestStatus;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(sessionId, userId);
+        return Objects.hash(sessionId, userId, requestStatus);
     }
 }

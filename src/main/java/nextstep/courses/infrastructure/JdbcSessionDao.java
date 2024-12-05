@@ -1,16 +1,14 @@
 package nextstep.courses.infrastructure;
 
+
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import nextstep.courses.domain.CoverImage;
-import nextstep.courses.domain.DefaultEnrollments;
-import nextstep.courses.domain.EnrollmentStudent;
+import nextstep.courses.domain.EnrollmentsFactory;
 import nextstep.courses.domain.Image;
 import nextstep.courses.domain.ImageType;
-import nextstep.courses.domain.LimitedEnrollments;
 import nextstep.courses.domain.Session;
 import nextstep.courses.domain.SessionPeriod;
 import nextstep.courses.domain.SessionStatus;
@@ -21,23 +19,21 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
 public class JdbcSessionDao {
-
     private final JdbcTemplate jdbcTemplate;
 
     public JdbcSessionDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-
-    Optional<Session> findById(Long id, Set<EnrollmentStudent> enrollmentStudents, List<CoverImage> coverImages) {
+    public final Optional<Session> findById(Long id, List<CoverImage> coverImages) {
         String sql = "select id, charge, capacity, sessionStatus, start_date, end_date from session where id = ?";
 
         RowMapper<Session> rowMapper = ((rs, rowNum) -> SessionFactory.session(
                 rs.getLong(1),
                 rs.getInt(2),
-                enrollments((Integer) rs.getObject(3),
-                        SessionStatus.findByName(rs.getString(4)),
-                        enrollmentStudents),
+                (Integer) rs.getObject(3),
+                SessionStatus.findByName(rs.getString(4)),
+                enrollmentFactory(),
                 coverImages,
                 toPeriod(toLocalDate(rs.getDate(5)),
                         toLocalDate(rs.getDate(6))))
@@ -54,14 +50,10 @@ public class JdbcSessionDao {
         return SessionPeriodConverter.toSessionPeriod(startDate, endDate);
     }
 
-    private DefaultEnrollments enrollments(Integer capacity, SessionStatus sessionStatus,
-                                           Set<EnrollmentStudent> enrolledStudents) {
-        if (capacity == null) {
-            return new DefaultEnrollments(sessionStatus, enrolledStudents);
-        }
-
-        return new LimitedEnrollments(capacity, sessionStatus, enrolledStudents);
+    protected EnrollmentsFactory enrollmentFactory() {
+        return new EnrollmentsFactory();
     }
+
 
     private LocalDate toLocalDate(Date date) {
         if (date == null) {
@@ -70,7 +62,7 @@ public class JdbcSessionDao {
         return date.toLocalDate();
     }
 
-    void update(Session session) {
+    public final void update(Session session) {
         SessionHelper helper = new SessionHelper(session);
         String sql = "update session set charge=?,capacity=?,sessionStatus=?,start_date=?,end_date =? where id=?";
 
@@ -83,5 +75,4 @@ public class JdbcSessionDao {
                 helper.getId()
         );
     }
-
 }

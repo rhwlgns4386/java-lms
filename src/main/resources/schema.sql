@@ -59,8 +59,9 @@ create table ns_user
 
 CREATE TABLE enrollment_students
 (
-    session_id BIGINT,
-    user_id    BIGINT,
+    session_id     BIGINT,
+    user_id        BIGINT,
+    request_status varchar(20),
     PRIMARY KEY (session_id, user_id),
     CONSTRAINT fk_session
         FOREIGN KEY (session_id)

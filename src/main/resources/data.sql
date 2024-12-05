@@ -39,9 +39,9 @@ values (1, 1);
 insert into cover_image(session_id, image_id)
 values (2, 2);
 
-INSERT into ENROLLMENT_STUDENTS (session_id, user_id)
-values (1, 1);
-INSERT into ENROLLMENT_STUDENTS (session_id, user_id)
-values (1, 2);
-INSERT into ENROLLMENT_STUDENTS (session_id, user_id)
-values (2, 1);
+INSERT into ENROLLMENT_STUDENTS (session_id, user_id, request_status)
+values (1, 1, 'PENDING');
+INSERT into ENROLLMENT_STUDENTS (session_id, user_id, request_status)
+values (1, 2, 'ACCEPTED');
+INSERT into ENROLLMENT_STUDENTS (session_id, user_id, request_status)
+values (2, 1, 'PENDING');

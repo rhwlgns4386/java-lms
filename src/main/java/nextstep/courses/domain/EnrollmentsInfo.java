@@ -1,46 +1,28 @@
 package nextstep.courses.domain;
 
 import java.util.Set;
-import nextstep.users.domain.NsUser;
 
 public class EnrollmentsInfo {
     private EnrollmentsFactory enrollmentsFactory;
     private SessionStatus sessionStatus;
-    private DefaultEnrollments enrollments;
 
-    public EnrollmentsInfo(DefaultEnrollments enrollments) {
-        this(null, null, enrollments);
-    }
 
     public EnrollmentsInfo(EnrollmentsFactory enrollmentsFactory, SessionStatus sessionStatus) {
-        this(enrollmentsFactory, sessionStatus, null);
-    }
-
-    public EnrollmentsInfo(EnrollmentsFactory enrollmentsFactory, SessionStatus sessionStatus,
-                           DefaultEnrollments enrollments) {
         this.enrollmentsFactory = enrollmentsFactory;
         this.sessionStatus = sessionStatus;
-        this.enrollments = enrollments;
     }
 
-    void enrollment(Session session, NsUser enrollmentStudent) {
-        enrollments.enrollment(session, enrollmentStudent);
+
+    public Enrollments enrollments(Charge charge, Set<EnrollmentStudent> enrollmentStudents) {
+        return enrollments(enrollmentsFactory, charge, sessionStatus, enrollmentStudents);
     }
 
-    Enrollments enrollments(Set<EnrollmentStudent> enrollmentStudents) {
-        return enrollments(this.enrollmentsFactory, sessionStatus, enrollmentStudents);
-    }
-
-    protected Enrollments enrollments(EnrollmentsFactory enrollmentsFactory, SessionStatus sessionStatus,
+    protected Enrollments enrollments(EnrollmentsFactory enrollmentsFactory, Charge charge, SessionStatus sessionStatus,
                                       Set<EnrollmentStudent> enrollmentStudents) {
-        return enrollmentsFactory.enrollments(sessionStatus, enrollmentStudents);
+        return enrollmentsFactory.enrollments(charge, sessionStatus, enrollmentStudents);
     }
 
-    public DefaultEnrollments enrollments() {
-        return enrollments;
-    }
-
-    public Set<EnrollmentStudent> enrollmentStudents() {
-        return enrollments.enrolledStudents();
+    public SessionStatus sessionStatus() {
+        return sessionStatus;
     }
 }

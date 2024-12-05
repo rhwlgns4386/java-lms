@@ -6,15 +6,17 @@ public class EnrollmentsFactory {
     public EnrollmentsFactory() {
     }
 
-    protected Enrollments enrollments(SessionStatus sessionStatus, Set<EnrollmentStudent> enrollmentStudents) {
-        return new DefaultEnrollments(sessionStatus, enrollmentStudents);
+
+    public Enrollments enrollments(Charge charge, SessionStatus sessionStatus,
+                                   Set<EnrollmentStudent> enrollmentStudents) {
+        return new Enrollments(charge, sessionStatus, enrollmentStudents);
     }
 
-    public Enrollments enrollments(Capacity capacity, SessionStatus sessionStatus,
+    public Enrollments enrollments(Capacity capacity, Charge charge, SessionStatus sessionStatus,
                                    Set<EnrollmentStudent> enrollmentStudents) {
         if (capacity == null) {
-            enrollments(sessionStatus, enrollmentStudents);
+            enrollments(charge, sessionStatus, enrollmentStudents);
         }
-        return new LimitedEnrollments(capacity, sessionStatus, enrollmentStudents);
+        return new LimitedEnrollments(capacity, charge, sessionStatus, enrollmentStudents);
     }
 }

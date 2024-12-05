@@ -4,38 +4,27 @@ import static nextstep.util.NullValidator.validateNull;
 
 import java.util.Set;
 import nextstep.courses.MaxEnrollmentExceededException;
-import nextstep.users.domain.NsUser;
 
-public class LimitedEnrollments extends DefaultEnrollments {
+public class LimitedEnrollments extends Enrollments {
     private final Capacity capacity;
 
-    public LimitedEnrollments(int capacity, SessionStatus sessionStatus) {
-        this(new Capacity(capacity), sessionStatus, Set.of());
+
+    public LimitedEnrollments(int capacity, Charge charge, SessionStatus sessionStatus,
+                              Set<EnrollmentStudent> enrolledStudents) {
+        this(new Capacity(capacity), charge, sessionStatus, enrolledStudents);
     }
 
-    public LimitedEnrollments(Capacity capacity, SessionStatus sessionStatus) {
-        this(capacity, sessionStatus, Set.of());
-    }
-
-    public LimitedEnrollments(int capacity, SessionStatus sessionStatus, Set<EnrollmentStudent> enrolledStudents) {
-        this(new Capacity(capacity), sessionStatus, enrolledStudents);
-    }
-
-    public LimitedEnrollments(Capacity capacity, SessionStatus sessionStatus, Set<EnrollmentStudent> enrolledStudents) {
-        super(sessionStatus, enrolledStudents);
+    public LimitedEnrollments(Capacity capacity, Charge charge, SessionStatus sessionStatus,
+                              Set<EnrollmentStudent> enrolledStudents) {
+        super(charge, sessionStatus, enrolledStudents);
         validateNull(capacity);
         this.capacity = capacity;
     }
 
     @Override
-    public void enrollment(Session session, NsUser student) {
-        super.enrollment(session, student);
-    }
-
-    @Override
-    public void enrollment(EnrollmentStudent student) {
+    public void enrollment(Charge fee, EnrollmentStudent student) {
         validateMaxEnrollmentExceeded();
-        super.enrollment(student);
+        super.enrollment(fee, student);
     }
 
     private void validateMaxEnrollmentExceeded() {

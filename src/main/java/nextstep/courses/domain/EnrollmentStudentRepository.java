@@ -6,4 +6,6 @@ public interface EnrollmentStudentRepository {
     Set<EnrollmentStudent> findBySessionId(long sessionId);
 
     void update(Enrollments session);
+
+    Set<EnrollmentStudent> findByPendingStudentSessionId(long sessionId);
 }
