@@ -63,6 +63,22 @@ public class EnrollmentsTest {
     }
 
     @Test
+    void 신청자를_반려한다() {
+        Session session = TestSessionFactory.createTestSession();
+        Enrollments enrollments = enrollments(SessionStatus.PROGRESS, session,
+                Set.of(NsUserTest.JAVAJIGI, NsUserTest.SANJIGI));
+
+        enrollments.reject(NsUserTest.JAVAJIGI);
+
+        Set<EnrollmentStudent> enrollmentStudents = new HashSet<>(
+                Set.of(new EnrollmentStudent(session, NsUserTest.JAVAJIGI
+                        , RequestStatus.REJECT), new EnrollmentStudent(session, NsUserTest.SANJIGI)));
+        Enrollments result = enrollments(SessionStatus.PROGRESS, enrollmentStudents);
+        assertThat(enrollments).isEqualTo(result);
+    }
+
+
+    @Test
     void 구매_금액과_일치하지않으면_예외() {
         Session session = TestSessionFactory.createTestSession();
         Enrollments enrollments = enrollments(SessionStatus.PROGRESS, session,

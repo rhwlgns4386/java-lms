@@ -3,7 +3,7 @@ package nextstep.courses.domain;
 import java.util.Arrays;
 
 public enum RequestStatus {
-    PENDING, ACCEPTED;
+    PENDING, ACCEPTED, REJECT;
 
     public static RequestStatus findByName(String requestStatus) {
         return Arrays.stream(values()).filter((v) -> v.name().equalsIgnoreCase(requestStatus)).findAny()

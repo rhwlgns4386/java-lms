@@ -52,6 +52,18 @@ public class SessionService {
         enrollmentStudentRepository.update(enrollments);
     }
 
+    @Transactional
+    public void reject(long sessionId, NsUser user) {
+        Session session = findById(sessionId);
+        Set<EnrollmentStudent> enrollmentStudents = enrollmentStudentRepository.findByPendingStudentSessionId(
+                sessionId);
+
+        Enrollments enrollments = session.enrollments(enrollmentStudents);
+        enrollments.reject(user);
+
+        enrollmentStudentRepository.update(enrollments);
+    }
+
     @Transactional(readOnly = true)
     public Session findById(long sessionId) {
         return sessionRepository.findById(sessionId).orElseThrow(() -> new EntityNotFoundException(Session.class));

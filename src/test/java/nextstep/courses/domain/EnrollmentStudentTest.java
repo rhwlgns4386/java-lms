@@ -15,6 +15,14 @@ class EnrollmentStudentTest {
     }
 
     @Test
+    void reject() {
+        EnrollmentStudent enrollmentStudent = new EnrollmentStudent(0, 0, RequestStatus.PENDING);
+        enrollmentStudent.reject();
+
+        assertThat(enrollmentStudent).isEqualTo(new EnrollmentStudent(0, 0, RequestStatus.REJECT));
+    }
+
+    @Test
     void matchesUserId() {
         EnrollmentStudent enrollmentStudent = new EnrollmentStudent(1, 0, RequestStatus.PENDING);
 

@@ -32,6 +32,10 @@ public class EnrollmentStudent {
         this.requestStatus = RequestStatus.ACCEPTED;
     }
 
+    public void reject() {
+        this.requestStatus = RequestStatus.REJECT;
+    }
+
     public boolean matchesUserId(Long id) {
         return this.userId == id;
     }

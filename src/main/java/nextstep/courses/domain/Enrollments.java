@@ -50,15 +50,24 @@ public class Enrollments {
         }
     }
 
-    public void accept(NsUser student) {
-        EnrollmentStudent enrollmentStudent = enrollmentStudentStore.findByUserId(student.getId());
-        enrollmentStudent.accept();
-    }
-
     private void validateReadyStatus() {
         if (!enrollmentStatus.isRecruiting()) {
             throw new NonReadyException();
         }
+    }
+
+    public void accept(NsUser student) {
+        EnrollmentStudent enrollmentStudent = findByUserId(student);
+        enrollmentStudent.accept();
+    }
+
+    public void reject(NsUser student) {
+        EnrollmentStudent enrollmentStudent = findByUserId(student);
+        enrollmentStudent.reject();
+    }
+
+    private EnrollmentStudent findByUserId(NsUser student) {
+        return enrollmentStudentStore.findByUserId(student.getId());
     }
 
     protected int size() {
