@@ -24,10 +24,10 @@ VALUES (2, 2, 'runtime 에 reflect 발동 주체 객체가 뭔지 알 방법이 
         CURRENT_TIMESTAMP(), false);
 
 INSERT into session(id, charge, capacity, sessionStatus, start_date, end_date)
-values (1, 0, null, 'ENROLLING', '2024-10-18', '2024-11-25');
+values (1, 0, null, 'PROGRESS', '2024-10-18', '2024-11-25');
 
 INSERT into session(id, charge, capacity, sessionStatus, start_date, end_date)
-values (2, 100, 10, 'ENROLLING', '2024-10-18', '2024-11-25');
+values (2, 100, 10, 'PROGRESS', '2024-10-18', '2024-11-25');
 
 INSERT into image(id, file_name, width, height, size, type)
 values (1, 'testImage1', 300, 200, 100, 'jpeg');

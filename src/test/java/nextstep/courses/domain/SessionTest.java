@@ -22,7 +22,7 @@ public class SessionTest {
 
         Enrollments enrollments = session.enrollments(0, enrollmentStudents);
 
-        assertThat(enrollments).isEqualTo(new DefaultEnrollments(SessionStatus.ENROLLING, enrollmentStudents));
+        assertThat(enrollments).isEqualTo(new DefaultEnrollments(SessionStatus.PROGRESS, enrollmentStudents));
     }
 
     @Test
@@ -32,7 +32,7 @@ public class SessionTest {
 
         Enrollments enrollments = session.enrollments(500, enrollmentStudents);
 
-        assertThat(enrollments).isEqualTo(new LimitedEnrollments(2, SessionStatus.ENROLLING, enrollmentStudents));
+        assertThat(enrollments).isEqualTo(new LimitedEnrollments(2, SessionStatus.PROGRESS, enrollmentStudents));
     }
 
     @Test
@@ -42,7 +42,7 @@ public class SessionTest {
 
         Enrollments enrollments = session.enrollments(500, enrollmentStudents, NsUserTest.JAVAJIGI);
 
-        assertThat(enrollments).isEqualTo(new LimitedEnrollments(2, SessionStatus.ENROLLING,
+        assertThat(enrollments).isEqualTo(new LimitedEnrollments(2, SessionStatus.PROGRESS,
                 Set.of(new EnrollmentStudent(0L, 0L), new EnrollmentStudent(0L, 1L))));
     }
 

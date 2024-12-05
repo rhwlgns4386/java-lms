@@ -1,6 +1,6 @@
 package nextstep.courses.domain;
 
-import static nextstep.courses.domain.SessionStatus.ENROLLING;
+import static nextstep.courses.domain.SessionStatus.PROGRESS;
 import static nextstep.courses.factory.SessionPeriodConverter.toSessionPeriod;
 
 import java.time.LocalDate;
@@ -11,11 +11,11 @@ public class TestSessionFactory {
     }
 
     static Session createTestSession() {
-        return session(0, new DefaultEnrollments(ENROLLING));
+        return session(0, new DefaultEnrollments(PROGRESS));
     }
 
     static Session createTestSession2() {
-        return session(0, ENROLLING);
+        return session(0, PROGRESS);
     }
 
     private static Session session(int charge, SessionStatus sessionStatus) {
@@ -24,7 +24,7 @@ public class TestSessionFactory {
     }
 
     public static Session createTestSession2(int charge, int capacity) {
-        return paidSession(charge, capacity, ENROLLING);
+        return paidSession(charge, capacity, PROGRESS);
     }
 
     private static Session paidSession(int charge, int capacity, SessionStatus sessionStatus) {
@@ -33,7 +33,7 @@ public class TestSessionFactory {
     }
 
     static Session createTestSession(int charge) {
-        return session(charge, new LimitedEnrollments(new Capacity(2), ENROLLING));
+        return session(charge, new LimitedEnrollments(new Capacity(2), PROGRESS));
     }
 
     private static Session session(int charge, DefaultEnrollments enrollments) {

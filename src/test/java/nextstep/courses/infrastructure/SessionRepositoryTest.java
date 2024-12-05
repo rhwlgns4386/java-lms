@@ -38,7 +38,7 @@ public class SessionRepositoryTest {
 
         assertThat(session.id()).isEqualTo(1L);
         assertThat(enrollments).isEqualTo(
-                enrollments(SessionStatus.ENROLLING, session, Set.of(NsUserTest.SANJIGI, NsUserTest.JAVAJIGI)));
+                enrollments(SessionStatus.PROGRESS, session, Set.of(NsUserTest.SANJIGI, NsUserTest.JAVAJIGI)));
     }
 
     @Test
@@ -49,7 +49,7 @@ public class SessionRepositoryTest {
 
         Session resultSession = sessionRepository.findById(2L).orElseThrow();
         assertThat(resultSession.id()).isEqualTo(2L);
-        assertThat(resultSession.enrollments()).isEqualTo(limitEnrollments(6, SessionStatus.ENROLLING, resultSession,
+        assertThat(resultSession.enrollments()).isEqualTo(limitEnrollments(6, SessionStatus.PROGRESS, resultSession,
                 Set.of(NsUserTest.SANJIGI, NsUserTest.JAVAJIGI)));
     }
 }

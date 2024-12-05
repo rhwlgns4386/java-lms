@@ -18,18 +18,18 @@ public class EnrollmentsTest {
     @Test
     void 등록목록에_등록한다() {
         Session session = createTestSession();
-        DefaultEnrollments enrollments = enrollments(SessionStatus.ENROLLING, session,
+        DefaultEnrollments enrollments = enrollments(SessionStatus.PROGRESS, session,
                 Set.of(NsUserTest.JAVAJIGI));
         enrollments.enrollment(session, NsUserTest.SANJIGI);
 
         assertThat(enrollments).isEqualTo(
-                enrollments(SessionStatus.ENROLLING, session, Set.of(NsUserTest.JAVAJIGI, NsUserTest.SANJIGI)));
+                enrollments(SessionStatus.PROGRESS, session, Set.of(NsUserTest.JAVAJIGI, NsUserTest.SANJIGI)));
     }
 
     @Test
     void 이미추가된_사용자면_예외가_발생한다() {
         Session session = createTestSession();
-        DefaultEnrollments enrollments = enrollments(SessionStatus.ENROLLING, session, Set.of(NsUserTest.JAVAJIGI));
+        DefaultEnrollments enrollments = enrollments(SessionStatus.PROGRESS, session, Set.of(NsUserTest.JAVAJIGI));
         assertThatThrownBy(() -> enrollments.enrollment(session, NsUserTest.JAVAJIGI)).isInstanceOf(
                 DuplicateStudentException.class);
     }

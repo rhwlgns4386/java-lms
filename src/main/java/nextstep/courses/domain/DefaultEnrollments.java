@@ -11,6 +11,7 @@ import nextstep.users.domain.NsUser;
 
 public class DefaultEnrollments implements Enrollments {
     private SessionStatus sessionStatus;
+    private EnrollmentStatus enrollmentStatus;
     private final Set<EnrollmentStudent> enrolledStudents;
 
     public DefaultEnrollments(SessionStatus sessionStatus) {
@@ -19,6 +20,7 @@ public class DefaultEnrollments implements Enrollments {
 
     public DefaultEnrollments(SessionStatus sessionStatus, Set<EnrollmentStudent> enrolledStudents) {
         this.sessionStatus = sessionStatus;
+        this.enrollmentStatus = EnrollmentStatus.findBySessionStatus(sessionStatus);
         this.enrolledStudents = new HashSet<>(enrolledStudents);
     }
 
@@ -35,7 +37,7 @@ public class DefaultEnrollments implements Enrollments {
     }
 
     private void validateReadyStatus() {
-        if (!sessionStatus.isEnrolling()) {
+        if (!enrollmentStatus.isRecruiting()) {
             throw new NonReadyException();
         }
     }
