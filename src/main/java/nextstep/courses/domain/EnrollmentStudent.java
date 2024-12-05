@@ -4,9 +4,7 @@ import java.util.Objects;
 import nextstep.users.domain.NsUser;
 
 public class EnrollmentStudent {
-    private long sessionId;
-
-    private long userId;
+    private ErollmentStudentId id;
 
     private RequestStatus requestStatus;
 
@@ -23,8 +21,11 @@ public class EnrollmentStudent {
     }
 
     public EnrollmentStudent(long sessionId, long userId, RequestStatus requestStatus) {
-        this.sessionId = sessionId;
-        this.userId = userId;
+        this(new ErollmentStudentId(sessionId, userId), requestStatus);
+    }
+
+    private EnrollmentStudent(ErollmentStudentId id, RequestStatus requestStatus) {
+        this.id = id;
         this.requestStatus = requestStatus;
     }
 
@@ -37,15 +38,15 @@ public class EnrollmentStudent {
     }
 
     public boolean matchesUserId(Long id) {
-        return this.userId == id;
+        return this.id.matchesUserId(id);
     }
 
     public long getSessionId() {
-        return sessionId;
+        return id.getSessionId();
     }
 
     public long getUserId() {
-        return userId;
+        return id.getUserId();
     }
 
     public String getRequestStatusString() {
@@ -61,11 +62,11 @@ public class EnrollmentStudent {
             return false;
         }
         EnrollmentStudent that = (EnrollmentStudent) o;
-        return sessionId == that.sessionId && userId == that.userId && requestStatus == that.requestStatus;
+        return Objects.equals(id, that.id) && requestStatus == that.requestStatus;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(sessionId, userId, requestStatus);
+        return Objects.hash(id, requestStatus);
     }
 }
