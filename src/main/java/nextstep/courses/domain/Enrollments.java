@@ -2,18 +2,15 @@ package nextstep.courses.domain;
 
 import static nextstep.courses.factory.EnrollmentStudentConverter.enrollmentStudent;
 
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import nextstep.courses.DuplicateStudentException;
-import nextstep.courses.EntityNotFoundException;
 import nextstep.courses.NonReadyException;
 import nextstep.users.domain.NsUser;
 
 public class Enrollments {
+    private EnrollmentStudentStore enrollmentStudentStore;
     private EnrollmentStatus enrollmentStatus;
     private Charge charge;
-    private Set<EnrollmentStudent> enrolledStudents;
 
     public Enrollments(SessionStatus sessionStatus) {
         this(sessionStatus, Set.of());
@@ -24,9 +21,13 @@ public class Enrollments {
     }
 
     public Enrollments(Charge charge, SessionStatus sessionStatus, Set<EnrollmentStudent> enrollmentStudents) {
+        this(charge, new EnrollmentStatus(sessionStatus), new EnrollmentStudentStore(enrollmentStudents));
+    }
+
+    private Enrollments(Charge charge, EnrollmentStatus enrollmentStatus, EnrollmentStudentStore studentStore) {
         this.charge = charge;
-        this.enrollmentStatus = new EnrollmentStatus(sessionStatus);
-        this.enrolledStudents = new HashSet<>(enrollmentStudents);
+        this.enrollmentStatus = enrollmentStatus;
+        this.enrollmentStudentStore = studentStore;
     }
 
     public void enrollment(int fee, Session session, NsUser user) {
@@ -40,8 +41,7 @@ public class Enrollments {
     public void enrollment(Charge fee, EnrollmentStudent student) {
         validateCharge(fee);
         validateReadyStatus();
-        validateDuplicateStudent(student);
-        this.enrolledStudents.add(student);
+        this.enrollmentStudentStore.add(student);
     }
 
     private void validateCharge(Charge fee) {
@@ -51,13 +51,8 @@ public class Enrollments {
     }
 
     public void accept(NsUser student) {
-        EnrollmentStudent enrollmentStudent = findByUserId(student.getId());
+        EnrollmentStudent enrollmentStudent = enrollmentStudentStore.findByUserId(student.getId());
         enrollmentStudent.accept();
-    }
-
-    private EnrollmentStudent findByUserId(Long id) {
-        return enrolledStudents.stream().filter(enrollmentStudent -> enrollmentStudent.matchesUserId(id)).findAny()
-                .orElseThrow(() -> new EntityNotFoundException(EnrollmentStudent.class));
     }
 
     private void validateReadyStatus() {
@@ -66,14 +61,8 @@ public class Enrollments {
         }
     }
 
-    private void validateDuplicateStudent(EnrollmentStudent student) {
-        if (enrolledStudents.contains(student)) {
-            throw new DuplicateStudentException();
-        }
-    }
-
     protected int size() {
-        return this.enrolledStudents.size();
+        return this.enrollmentStudentStore.size();
     }
 
     public SessionStatus sessionStatus() {
@@ -81,7 +70,7 @@ public class Enrollments {
     }
 
     public Set<EnrollmentStudent> enrolledStudents() {
-        return Set.copyOf(enrolledStudents);
+        return enrollmentStudentStore.enrolledStudents();
     }
 
     @Override
@@ -94,11 +83,12 @@ public class Enrollments {
         }
         Enrollments that = (Enrollments) o;
         return Objects.equals(enrollmentStatus, that.enrollmentStatus) && Objects.equals(charge,
-                that.charge) && Objects.equals(that.enrolledStudents, enrolledStudents);
+                that.charge) && Objects.equals(that.enrolledStudents(),
+                enrollmentStudentStore.enrolledStudents());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(enrollmentStatus, charge, enrolledStudents);
+        return Objects.hash(enrollmentStatus, charge, enrollmentStudentStore.enrolledStudents());
     }
 }
