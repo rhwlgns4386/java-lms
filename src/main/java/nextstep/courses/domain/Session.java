@@ -7,9 +7,7 @@ import nextstep.users.domain.NsUser;
 public class Session {
     private Long id;
     private Charge charge;
-    private EnrollmentsFactory enrollmentsFactory;
-    private SessionStatus sessionStatus;
-    private DefaultEnrollments enrollments;
+    private EnrollmentsInfo enrollmentsInfo;
     private CoverImages coverImages;
     private SessionPeriod sessionPeriod;
 
@@ -45,11 +43,15 @@ public class Session {
     public Session(Long id, Charge charge, SessionStatus sessionStatus, EnrollmentsFactory enrollmentsFactory,
                    DefaultEnrollments enrollments, CoverImages coverImages,
                    SessionPeriod sessionPeriod) {
+        this(id, charge, new EnrollmentsInfo(enrollmentsFactory, sessionStatus, enrollments), coverImages,
+                sessionPeriod);
+    }
+
+    public Session(Long id, Charge charge, EnrollmentsInfo enrollmentsInfo, CoverImages coverImages,
+                   SessionPeriod sessionPeriod) {
         this.id = id;
         this.charge = charge;
-        this.sessionStatus = sessionStatus;
-        this.enrollmentsFactory = enrollmentsFactory;
-        this.enrollments = enrollments;
+        this.enrollmentsInfo = enrollmentsInfo;
         this.coverImages = coverImages;
         this.sessionPeriod = sessionPeriod;
     }
@@ -61,7 +63,7 @@ public class Session {
 
     public void enrollment(Charge fee, NsUser enrollmentStudent) {
         validateCharge(fee);
-        enrollments.enrollment(this, enrollmentStudent);
+        enrollmentsInfo.enrollment(this, enrollmentStudent);
     }
 
     public Enrollments enrollments(int fee, Set<EnrollmentStudent> enrollmentStudents, NsUser user) {
@@ -76,12 +78,7 @@ public class Session {
 
     public Enrollments enrollments(Charge charge, Set<EnrollmentStudent> enrollmentStudents) {
         validateCharge(charge);
-        return enrollments(enrollmentsFactory, sessionStatus, enrollmentStudents);
-    }
-
-    protected Enrollments enrollments(EnrollmentsFactory enrollmentsFactory, SessionStatus sessionStatus,
-                                      Set<EnrollmentStudent> enrollmentStudents) {
-        return enrollmentsFactory.enrollments(sessionStatus, enrollmentStudents);
+        return enrollmentsInfo.enrollments(enrollmentStudents);
     }
 
     private void validateCharge(Charge fee) {
@@ -95,11 +92,11 @@ public class Session {
     }
 
     public DefaultEnrollments enrollments() {
-        return enrollments;
+        return enrollmentsInfo.enrollments();
     }
 
     public Set<EnrollmentStudent> enrollmentStudents() {
-        return enrollments.enrolledStudents();
+        return enrollmentsInfo.enrollmentStudents();
     }
 
     public Charge charge() {

@@ -7,8 +7,10 @@ import java.util.List;
 import nextstep.courses.domain.Capacity;
 import nextstep.courses.domain.Charge;
 import nextstep.courses.domain.CoverImage;
+import nextstep.courses.domain.CoverImages;
 import nextstep.courses.domain.EnrollmentsFactory;
-import nextstep.courses.domain.PaidSession;
+import nextstep.courses.domain.EnrollmentsInfo;
+import nextstep.courses.domain.ErollmnetsInfoSession;
 import nextstep.courses.domain.Session;
 import nextstep.courses.domain.SessionPeriod;
 import nextstep.courses.domain.SessionStatus;
@@ -50,7 +52,7 @@ public class Session2Factory {
     public static Session paidSession(long id, Charge charge, Capacity capacity, SessionStatus sessionStatus,
                                       EnrollmentsFactory enrollmentsFactory,
                                       List<CoverImage> coverImages, SessionPeriod sessionPeriod) {
-        return new PaidSession(id, charge, capacity, sessionStatus, enrollmentsFactory, coverImages,
-                sessionPeriod);
+        EnrollmentsInfo paidSession = new ErollmnetsInfoSession(capacity, enrollmentsFactory, sessionStatus);
+        return new Session(id, charge, paidSession, new CoverImages(coverImages), sessionPeriod);
     }
 }

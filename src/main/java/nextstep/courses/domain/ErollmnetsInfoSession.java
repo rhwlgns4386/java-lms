@@ -1,15 +1,13 @@
 package nextstep.courses.domain;
 
-import java.util.List;
 import java.util.Set;
 
-public class PaidSession extends Session {
+public class ErollmnetsInfoSession extends EnrollmentsInfo {
     private Capacity capacity;
 
-    public PaidSession(long id, Charge charge, Capacity capacity, SessionStatus sessionStatus,
-                       EnrollmentsFactory enrollmentsFactory, List<CoverImage> coverImages,
-                       SessionPeriod sessionPeriod) {
-        super(id, charge, sessionStatus, enrollmentsFactory, coverImages, sessionPeriod);
+    public ErollmnetsInfoSession(Capacity capacity, EnrollmentsFactory enrollmentsFactory,
+                                 SessionStatus sessionStatus) {
+        super(enrollmentsFactory, sessionStatus);
         this.capacity = capacity;
     }
 

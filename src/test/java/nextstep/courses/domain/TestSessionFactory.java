@@ -28,8 +28,10 @@ public class TestSessionFactory {
     }
 
     private static Session paidSession(int charge, int capacity, SessionStatus sessionStatus) {
-        return new PaidSession(0L, new Charge(charge), new Capacity(capacity), sessionStatus, new EnrollmentsFactory(),
-                List.of(), toSessionPeriod(LocalDate.now(), LocalDate.now()));
+        EnrollmentsInfo paidSession = new ErollmnetsInfoSession(new Capacity(capacity), new EnrollmentsFactory(),
+                sessionStatus);
+        return new Session(0L, new Charge(charge), paidSession, new CoverImages(List.of()),
+                toSessionPeriod(LocalDate.now(), LocalDate.now()));
     }
 
     static Session createTestSession(int charge) {
@@ -37,7 +39,6 @@ public class TestSessionFactory {
     }
 
     private static Session session(int charge, DefaultEnrollments enrollments) {
-        return new Session(0L, new Charge(charge), enrollments,
-                toSessionPeriod(LocalDate.now(), LocalDate.now()));
+        return new Session(0L, new Charge(charge), enrollments, toSessionPeriod(LocalDate.now(), LocalDate.now()));
     }
 }
